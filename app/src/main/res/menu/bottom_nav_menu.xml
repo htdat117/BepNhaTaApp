@@ -5,18 +5,18 @@
         android:title="Trang chủ" />
     <item
         android:id="@+id/nav_ingredient"
-        android:icon="@drawable/ic_ingredient"
+        android:icon="@drawable/ic_launcher_background"
         android:title="Nguyên liệu" />
     <item
         android:id="@+id/nav_recipe"
-        android:icon="@drawable/ic_recipe"
+        android:icon="@drawable/ic_launcher_background"
         android:title="Công thức" />
     <item
         android:id="@+id/nav_menu"
-        android:icon="@drawable/ic_menu"
+        android:icon="@drawable/ic_launcher_background"
         android:title="Lên thực đơn" />
     <item
         android:id="@+id/nav_tool"
-        android:icon="@drawable/ic_tool"
+        android:icon="@drawable/ic_launcher_background"
         android:title="Công cụ" />
 </menu> 
