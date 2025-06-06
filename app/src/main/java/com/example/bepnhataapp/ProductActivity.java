@@ -1,5 +1,6 @@
 package com.example.bepnhataapp;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,12 @@ import com.example.models.Category;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -60,5 +67,76 @@ public class ProductActivity extends AppCompatActivity {
         // Thêm sản phẩm mẫu khác nếu muốn
         ProductAdapter adapter = new ProductAdapter(this, productList);
         rvProducts.setAdapter(adapter);
+
+        // Sắp xếp
+        TextView tvSortOption = findViewById(R.id.tvSortOption);
+        tvSortOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(ProductActivity.this, v);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_sort, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.sort_price_high_low) {
+                            tvSortOption.setText("Cao nhất - Thấp nhất");
+                            Collections.sort(productList, new Comparator<Product>() {
+                                @Override
+                                public int compare(Product o1, Product o2) {
+                                    int price1 = getPriceValue(o1.price);
+                                    int price2 = getPriceValue(o2.price);
+                                    return price2 - price1;
+                                }
+                            });
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        } else if (id == R.id.sort_price_low_high) {
+                            tvSortOption.setText("Thấp nhất - Cao nhất");
+                            Collections.sort(productList, new Comparator<Product>() {
+                                @Override
+                                public int compare(Product o1, Product o2) {
+                                    int price1 = getPriceValue(o1.price);
+                                    int price2 = getPriceValue(o2.price);
+                                    return price1 - price2;
+                                }
+                            });
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        } else if (id == R.id.sort_name_az) {
+                            tvSortOption.setText("Tên: A-Z");
+                            Collections.sort(productList, new Comparator<Product>() {
+                                @Override
+                                public int compare(Product o1, Product o2) {
+                                    return o1.name.compareToIgnoreCase(o2.name);
+                                }
+                            });
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        } else if (id == R.id.sort_name_za) {
+                            tvSortOption.setText("Tên: Z-A");
+                            Collections.sort(productList, new Comparator<Product>() {
+                                @Override
+                                public int compare(Product o1, Product o2) {
+                                    return o2.name.compareToIgnoreCase(o1.name);
+                                }
+                            });
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+    }
+
+    // Hàm lấy giá trị số từ chuỗi giá (vd: "140.000đ" -> 140000)
+    private int getPriceValue(String priceStr) {
+        if (priceStr == null || priceStr.isEmpty()) return 0;
+        String number = priceStr.replaceAll("[^0-9]", "");
+        if (number.isEmpty()) return 0;
+        return Integer.parseInt(number);
     }
 }

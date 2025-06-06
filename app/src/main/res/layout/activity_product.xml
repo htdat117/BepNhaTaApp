@@ -39,6 +39,7 @@
                 android:textColor="@color/dark1"
                 android:textSize="@dimen/body3"/>
             <TextView
+                android:id="@+id/tvSortOption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cao nhất - Thấp nhất"
@@ -55,7 +56,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_filter"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="24dp"/>
     </LinearLayout>
 
 
