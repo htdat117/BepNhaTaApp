@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.model;
+package com.example.bepnhataapp.common.models;
 
 public class Blog {
     private String title;

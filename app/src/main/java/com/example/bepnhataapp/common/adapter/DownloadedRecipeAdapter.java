@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.adapter;
+package com.example.bepnhataapp.common.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.model.DownloadedRecipe;
+import com.example.bepnhataapp.common.models.DownloadedRecipe;
 import java.util.List;
 
 public class DownloadedRecipeAdapter extends RecyclerView.Adapter<DownloadedRecipeAdapter.ViewHolder> {

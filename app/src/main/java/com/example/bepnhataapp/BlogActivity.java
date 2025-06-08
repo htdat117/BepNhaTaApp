@@ -5,8 +5,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.bepnhataapp.adapter.BlogAdapter;
-import com.example.bepnhataapp.model.Blog;
+import com.example.bepnhataapp.common.adapter.BlogAdapter;
+import com.example.bepnhataapp.common.models.Blog;
 import java.util.ArrayList;
 import java.util.List;
 

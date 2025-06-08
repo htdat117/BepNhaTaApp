@@ -1,6 +1,5 @@
-package com.example.bepnhataapp.adapter;
+package com.example.bepnhataapp.common.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.model.Blog;
+import com.example.bepnhataapp.common.models.Blog;
 import java.util.List;
 
 public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
