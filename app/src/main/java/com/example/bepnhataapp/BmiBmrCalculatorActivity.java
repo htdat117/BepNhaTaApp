@@ -27,15 +27,7 @@ public class BmiBmrCalculatorActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_bmi_bmr_calo);
 
         // Ánh xạ các View từ layout
-        radioGroupGender = findViewById(R.id.radioGroupGender);
-        radioMale = findViewById(R.id.radioMale);
-        radioFemale = findViewById(R.id.radioFemale);
-        editTextAge = findViewById(R.id.editTextAge);
-        editTextHeight = findViewById(R.id.editTextHeight);
-        editTextWeight = findViewById(R.id.editTextWeight);
-        btnCalculateBmi = findViewById(R.id.btnCalculateBmi);
-        btnCalculateBmr = findViewById(R.id.btnCalculateBmr);
-        btnReset = findViewById(R.id.btnReset);
+
 
         // Ánh xạ các nút tab (nếu cần thiết cho xử lý chuyển tab)
         tabIndicator = findViewById(R.id.tabIndicator);

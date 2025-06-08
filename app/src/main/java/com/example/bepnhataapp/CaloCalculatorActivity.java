@@ -16,15 +16,14 @@ public class CaloCalculatorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calo_calculator);
+        setContentView(R.layout.fragment_calo_calculator);
 
         // Ánh xạ các View từ layout
         editTextFoodName = findViewById(R.id.editTextFoodName);
         editTextWeight = findViewById(R.id.editTextWeight);
         btnSave = findViewById(R.id.btnSave);
         btnDelete = findViewById(R.id.btnDelete);
-        btnBmiBmrTab = findViewById(R.id.btnBmiBmrTab);
-        btnCaloTab = findViewById(R.id.btnCaloTab);
+
 
         // Chuyển sang trang BMI/BMR khi bấm tab
         btnBmiBmrTab.setOnClickListener(new View.OnClickListener() {
