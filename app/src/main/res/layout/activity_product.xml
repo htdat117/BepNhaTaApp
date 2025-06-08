@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductActivity"
+    tools:context=".features.ingredients.ProductActivity"
     android:orientation="vertical">
 
     <!-- Thanh danh mục ngang -->
@@ -53,12 +53,12 @@
                 android:layout_marginLeft="8dp"/>
         </LinearLayout>
         <ImageView
+            android:id="@+id/btnFilterProduct"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_filter"
             android:layout_marginRight="24dp"/>
     </LinearLayout>
-
 
     <!-- Danh sách sản phẩm -->
     <androidx.recyclerview.widget.RecyclerView
@@ -69,4 +69,11 @@
         android:clipToPadding="false"
         android:paddingLeft="24dp"
         android:paddingRight="24dp" />
+
+    <!-- Bottom Navigation Bar -->
+    <include layout="@layout/layout_bottom_navigation"
+        android:id="@+id/bottom_navigation_container"
+        android:layout_width="match_parent"
+        android:layout_height="58dp" />
+
 </LinearLayout>

@@ -1,6 +1,8 @@
-package com.example.bepnhataapp;
+package com.example.bepnhataapp.features.ingredients;
+
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,10 +12,18 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adapters.ProductAdapter;
-import com.example.models.Product;
-import com.example.adapters.CategoryAdapter;
-import com.example.models.Category;
+import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.adapter.ProductAdapter;
+import com.example.bepnhataapp.databinding.ActivityProductBinding;
+import com.example.bepnhataapp.common.models.Product;
+import com.example.bepnhataapp.common.adapter.CategoryAdapter;
+import com.example.bepnhataapp.common.models.Category;
+import com.example.bepnhataapp.common.base.BaseActivity;
+import com.example.bepnhataapp.features.home.HomeActivity;
+import com.example.bepnhataapp.features.mealplan.MealPlanActivity;
+import com.example.bepnhataapp.features.recipes.RecipesActivity;
+import com.example.bepnhataapp.features.tools.ToolsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +34,20 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class ProductActivity extends AppCompatActivity {
+public class ProductActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
+
+    ActivityProductBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_product);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        binding = ActivityProductBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        toFilter();
+        
+        // Setup the bottom navigation fragment
+        setupBottomNavigationFragment(R.id.nav_ingredients);
 
         // Danh mục
         RecyclerView rvCategories = findViewById(R.id.rvCategories);
@@ -132,11 +144,31 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
+    private void toFilter() {
+        binding.btnFilterProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductActivity.this, FilterProductActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     // Hàm lấy giá trị số từ chuỗi giá (vd: "140.000đ" -> 140000)
     private int getPriceValue(String priceStr) {
         if (priceStr == null || priceStr.isEmpty()) return 0;
         String number = priceStr.replaceAll("[^0-9]", "");
         if (number.isEmpty()) return 0;
         return Integer.parseInt(number);
+    }
+
+    @Override
+    protected int getBottomNavigationContainerId() {
+        return R.id.bottom_navigation_container;
+    }
+
+    @Override
+    public void onNavigationItemReselected(int itemId) {
+        handleNavigation(itemId);
     }
 }
