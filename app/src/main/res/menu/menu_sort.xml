@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sort_price_high_low"
+        android:title="Giá: Cao nhất - Thấp nhất"/>
+    <item
+        android:id="@+id/sort_price_low_high"
+        android:title="Giá: Thấp nhất - Cao nhất"/>
+    <item
+        android:id="@+id/sort_name_az"
+        android:title="Tên: A-Z"/>
+    <item
+        android:id="@+id/sort_name_za"
+        android:title="Tên: Z-A"/>
+</menu>
