@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1. Giới thiệu chung"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bếp Nhà Ta là nền tảng kết nối giữa người bán (đầu bếp gia đình, cơ sở kinh doanh nhỏ) và người mua có nhu cầu đặt món ăn tươi, chất lượng tại nhà. Ứng dụng hỗ trợ đặt món, thanh toán và vận chuyển trong khu vực được chỉ định."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2. Tài khoản người dùng"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2.1. Đăng ký và xác minh\nNgười dùng cần cung cấp thông tin chính xác: họ tên, số điện thoại, địa chỉ, email.\nMột người chỉ được tạo một tài khoản duy nhất.\nBếp Nhà Ta có quyền tạm khoá hoặc xoá tài khoản nếu phát hiện thông tin sai lệch hoặc gian lận.\n\n2.2. Bảo mật tài khoản\nNgười dùng có trách nhiệm giữ an toàn thông tin đăng nhập.\nMọi hoạt động phát sinh từ tài khoản sẽ được xem là do chính chủ thực hiện."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3. Sử dụng dịch vụ"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3.1. Quy trình đặt món\nNgười dùng chọn món, xác nhận đơn và thanh toán qua các phương thức hỗ trợ.\nĐơn sẽ được chuyển tới người bán và xác nhận thời gian chuẩn bị.\n3.2. Hủy đơn hàng\nChỉ được hủy đơn nếu món chưa được xác nhận/chế biến.\nNếu đơn đã vào bếp mà vẫn hủy, người dùng có thể bị hạn chế tính năng.\n3.3. Nhận hàng và phản hồi\nNgười dùng nên kiểm tra món ngay khi nhận để báo lỗi (nếu có).\nCó thể gửi đánh giá, phản hồi qua app hoặc email: hotro@bepnhata.vn"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="4. Hành vi bị cấm"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Người dùng không được phép thực hiện các hành vi sau:\nĐặt hàng giả, spam đơn, phá hoại hệ thống.\nXúc phạm, đe dọa người bán hoặc nhân viên hỗ trợ.\nCan thiệp, xâm nhập trái phép vào hệ thống app/server.\nDùng app để phát tán nội dung phản cảm, vi phạm pháp luật."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="5. Quyền và trách nhiệm của người dùng"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Người dùng có quyền:\nĐặt món, sử dụng các dịch vụ mà app cung cấp.\nGửi yêu cầu hỗ trợ, khiếu nại liên quan đến trải nghiệm.\nYêu cầu chỉnh sửa hoặc xoá thông tin cá nhân.\nNgười dùng có trách nhiệm:\nCung cấp thông tin đúng và cập nhật khi có thay đổi.\nNhận hàng đúng giờ, kiểm tra và phản hồi đúng thực tế.\nThanh toán đầy đủ, đúng thời hạn theo chính sách thanh toán."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="6. Quyền và trách nhiệm của Bếp Nhà Ta"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bếp Nhà Ta cam kết:\nCung cấp nền tảng hoạt động ổn định, minh bạch.\nBảo mật thông tin cá nhân người dùng.\nHỗ trợ, xử lý khiếu nại nhanh chóng, công bằng.\nBếp Nhà Ta có quyền:\nTạm ngừng hoặc chấm dứt tài khoản nếu vi phạm điều khoản.\nĐiều chỉnh nội dung dịch vụ, biểu phí, và chính sách bất cứ lúc nào (sẽ có thông báo)."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="7. Giới hạn trách nhiệm"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bếp Nhà Ta không chịu trách nhiệm với sự chậm trễ hoặc thiệt hại do bên vận chuyển hoặc người bán gây ra ngoài tầm kiểm soát.\nTrong mọi trường hợp, trách nhiệm của Bếp Nhà Ta với người dùng không vượt quá giá trị đơn hàng bị ảnh hưởng."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="8. Sở hữu trí tuệ"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mọi nội dung, thiết kế, hình ảnh, mã nguồn của ứng dụng thuộc quyền sở hữu của Bếp Nhà Ta.\nKhông ai được sao chép, tái sử dụng hoặc khai thác vì mục đích thương mại nếu không có sự cho phép bằng văn bản."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="9. Luật áp dụng và Giải quyết tranh chấp"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Điều khoản sử dụng được điều chỉnh bởi pháp luật Việt Nam.\nMọi tranh chấp phát sinh sẽ được thương lượng trong vòng 15 ngày. Nếu không đạt được thoả thuận, sẽ giải quyết tại Tòa án Nhân dân có thẩm quyền tại TP.HCM."
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="10. Thông tin liên hệ"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="12dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Công ty phát triển ứng dụng Bếp Nhà Ta\nEmail: hotro@bepnhata.vn\nHotline: 1900 1234\nTrụ sở: 669 Đỗ Mười, Khu phố 6, Phường Linh Xuân, TP. Thủ Đức, TP. Hồ Chí Minh"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="12dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+</LinearLayout> 

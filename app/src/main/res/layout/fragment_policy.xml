@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="CHÍNH SÁCH ĐỔI TRẢ"
+                android:text="CHÍNH SÁCH"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF" />
@@ -54,6 +54,7 @@
                 android:paddingLeft="16dp">
 
                 <Button
+                    android:id="@+id/btnDieuKhoan"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:text="ĐIỀU KHOẢN SỬ DỤNG"
@@ -64,6 +65,7 @@
                     android:paddingRight="16dp" />
 
                 <Button
+                    android:id="@+id/btnBaoMat"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:text="CHÍNH SÁCH BẢO MẬT"
@@ -74,6 +76,7 @@
                     android:paddingRight="16dp" />
 
                 <Button
+                    android:id="@+id/btnGiaoHang"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:text="CHÍNH SÁCH GIAO HÀNG"
@@ -84,11 +87,12 @@
                     android:paddingRight="16dp" />
 
                 <Button
+                    android:id="@+id/btnDoiTra"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:text="CHÍNH SÁCH ĐỔI TRẢ"
-                    android:backgroundTint="#FF6D3D"
-                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#E0E0E0"
+                    android:textColor="#000000"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
             </LinearLayout>
@@ -96,6 +100,7 @@
 
         <!-- Hình minh họa -->
         <ImageView
+            android:id="@+id/imgPolicy"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:src="@drawable/contact"
@@ -103,87 +108,11 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp" />
 
-        <!-- Nội dung chính sách đổi trả -->
-        <TextView
+        <!-- Nội dung động -->
+        <FrameLayout
+            android:id="@+id/content_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1. Điều kiện áp dụng đổi/trả"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sản phẩm bị giao sai món, món bị hư hỏng, đổ vỡ trong quá trình vận chuyển.\nKhách hàng cần phản hồi trong vòng 30 phút kể từ khi nhận hàng."
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2. Quy trình xử lý"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Gửi hình ảnh/video xác nhận lỗi sản phẩm qua khung chat hỗ trợ trong app.\nĐội ngũ CSKH xác nhận lỗi và phản hồi trong 15 phút."
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="3. Hình thức hoàn tiền/đổi món"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Đổi lại món tương đương (miễn phí giao lại).\nHoàn tiền vào Ví Bếp Nhà Ta trong vòng 24 giờ.\nKhông hoàn tiền mặt hoặc chuyển khoản ngân hàng."
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4. Trường hợp không được đổi trả"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Món đã được sử dụng quá 50%.\nKhách cung cấp thông tin không hợp lệ hoặc phản hồi quá hạn.\nKhông đúng lỗi từ phía hệ thống/cửa hàng."
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="12dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </ScrollView> 
