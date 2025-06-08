@@ -1,0 +1,10 @@
+<resources>
+    <style name="NoActiveIndicator">
+        <item name="android:background">@drawable/nav_active_indicator_background</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+    <style name="BottomNavTextActive" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textStyle">bold</item>
+        <!-- You can add more text style properties here if needed -->
+    </style>
+</resources> 
