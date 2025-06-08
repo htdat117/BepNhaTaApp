@@ -25,10 +25,7 @@ public class DownloadedContentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         list = new ArrayList<>();
-        list.add(new DownloadedRecipe("Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút", R.drawable.sample_recipe));
-        list.add(new DownloadedRecipe("Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút", R.drawable.sample_recipe));
-        list.add(new DownloadedRecipe("Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút", R.drawable.sample_recipe));
-        list.add(new DownloadedRecipe("Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút", R.drawable.sample_recipe));
+
 
         adapter = new DownloadedRecipeAdapter(list, new DownloadedRecipeAdapter.OnRecipeActionListener() {
             @Override

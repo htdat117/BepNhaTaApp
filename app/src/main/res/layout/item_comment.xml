@@ -9,7 +9,7 @@
         android:id="@+id/imgAvatar"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@drawable/ic_avatar"
+        android:src="@drawable/blog"
         android:scaleType="centerCrop"
         android:background="@drawable/bg_item_radius8"/>
 

@@ -24,7 +24,7 @@ public class BmiBmrCalculatorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bmi_bmr_calculator);
+        setContentView(R.layout.fragment_bmi_bmr_calo);
 
         // Ánh xạ các View từ layout
         radioGroupGender = findViewById(R.id.radioGroupGender);

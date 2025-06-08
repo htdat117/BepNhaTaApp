@@ -25,10 +25,7 @@ public class BlogActivity extends AppCompatActivity {
 
         blogList = new ArrayList<>();
         // Thêm dữ liệu mẫu
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "Bữa tối ngày mùa đông trời se se lạnh mà có một đĩa chả cá chiên nóng hổi cùng một tô canh vị chua chua ngọt ngọt thì ngon phải biết luôn đó nha! Bếp Nhà Ta phải rủ Mẹ vào bếp trổ tài nhanh một thực đơn xuất sắc với toàn món ngon mùa đông ngay thôi!", "Mẹo hay - Nấu chuẩn", R.drawable.sample_blog, false));
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "", "Mẹo hay - Nấu chuẩn", R.drawable.sample_blog, false));
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "", "Mẹo hay - Nấu chuẩn", R.drawable.sample_blog, false));
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "", "Mẹo hay - Nấu chuẩn", R.drawable.sample_blog, false));
+
         // ... thêm các blog nhỏ khác nếu muốn
 
         blogAdapter = new BlogAdapter(blogList);

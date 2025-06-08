@@ -47,7 +47,7 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             vh.tvTitleHeader.setText(blog.getTitle());
             vh.tvDescHeader.setText(blog.getDescription());
             vh.tvCategoryHeader.setText(blog.getCategory());
-            vh.imgFavoriteHeader.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
+            vh.imgFavoriteHeader.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
             vh.imgFavoriteHeader.setOnClickListener(v -> {
                 blog.setFavorite(!blog.isFavorite());
                 notifyItemChanged(position);
@@ -57,7 +57,7 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             vh.imgBlog.setImageResource(blog.getImageResId());
             vh.tvTitle.setText(blog.getTitle());
             vh.tvCategory.setText(blog.getCategory());
-            vh.imgFavorite.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
+            vh.imgFavorite.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
             vh.imgFavorite.setOnClickListener(v -> {
                 blog.setFavorite(!blog.isFavorite());
                 notifyItemChanged(position);

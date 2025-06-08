@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/sample_blog" />
+        android:src="@drawable/blog" />
 
     <TextView
         android:id="@+id/tvTitleHeader"
@@ -43,6 +43,6 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="end"
-        android:src="@drawable/ic_heart"
+        android:src="@drawable/ic_like"
         android:layout_marginTop="4dp"/>
 </LinearLayout> 
