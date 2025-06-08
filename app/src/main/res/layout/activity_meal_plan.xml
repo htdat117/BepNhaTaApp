@@ -31,6 +31,6 @@
     <include layout="@layout/layout_bottom_navigation"
         android:id="@+id/bottom_navigation_container"
         android:layout_width="match_parent"
-        android:layout_height="58dp" />
+        android:layout_height="56dp" />
 
 </LinearLayout>
