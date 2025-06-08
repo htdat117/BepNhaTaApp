@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!-- Thanh chuyển đổi BMI/BMR vs Calo -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBmiBmrTab"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Tính BMI/BMR"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_tab_unselected"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCaloTab"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Tính Calo"
+            android:textColor="@color/dark1"
+            android:background="@drawable/bg_tab_selected"/>
+
+
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp">
+
+            <!-- Icon barcode, mic, camera -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+                <ImageView
+                    android:src="@drawable/ic_barcode"
+                    android:id="@+id/ivBarcode"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="24dp"/>
+                <ImageView
+                    android:src="@drawable/ic_mic"
+                    android:id="@+id/ivMic"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+
+                    android:layout_marginEnd="24dp"/>
+                <ImageView
+                    android:src="@drawable/ic_cam"
+                    android:id="@+id/ivCamera"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                   />
+            </LinearLayout>
+
+            <!-- Tên món ăn -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên món ăn"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/editTextFoodName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhập tên nguyên liệu hoặc món ăn"
+                android:background="@drawable/bg_edittext_outline_orange"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Khối lượng -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Khối lượng (g)"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/editTextWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhập khối lượng của nguyên liệu, món ăn"
+                android:inputType="numberDecimal"
+                android:background="@drawable/bg_edittext_outline_orange"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Nút Lưu và Xóa -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lưu"
+                android:textColor="@color/white"
+                android:background="@drawable/button_rounded_orange"
+                android:backgroundTint="@null"
+                android:stateListAnimator="@null"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Xóa"
+                android:textColor="@color/dark1"
+                android:background="@drawable/button_rounded_gray"
+                android:backgroundTint="@null"
+                android:stateListAnimator="@null"
+                android:minHeight="48dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Lịch sử -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lịch sử"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout> 

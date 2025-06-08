@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Thanh trạng thái màu cam -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="64dp"
+        android:paddingBottom="64dp">
+
+        <ImageView
+            android:id="@+id/imgNoInternet"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/no_internet"
+            android:contentDescription="Không có kết nối mạng"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/tvTitleOffline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Không có kết nối mạng"
+            android:textColor="#FF6D3D"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvDescOffline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xem nội dung tải xuống của bạn mà không cần kết nối internet"
+            android:textColor="#888888"
+            android:textStyle="italic"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginBottom="32dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOffline"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:text="Xem ngoại tuyến"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_button_orange"
+            android:minHeight="48dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRetry"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:text="Nhấn để thử lại"
+            android:textColor="#FF6D3D"
+            android:background="@drawable/bg_button_outline_orange"
+            android:minHeight="48dp"/>
+
+    </LinearLayout>
+
+</LinearLayout> 
