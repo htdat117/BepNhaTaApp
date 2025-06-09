@@ -15,7 +15,6 @@ public class TermsOfUseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_terms_of_use);
 
         // Ánh xạ các nút
         btnDieuKhoan = findViewById(R.id.btnDieuKhoan);

@@ -15,7 +15,7 @@ public class ReturnPolicyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_return_policy);
+
 
         // Ánh xạ các nút
         btnDieuKhoan = findViewById(R.id.btnDieuKhoan);
