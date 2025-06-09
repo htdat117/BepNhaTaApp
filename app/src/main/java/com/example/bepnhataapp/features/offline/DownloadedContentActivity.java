@@ -1,4 +1,4 @@
-package com.example.bepnhataapp;
+package com.example.bepnhataapp.features.offline;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -6,6 +6,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.DownloadedRecipeAdapter;
 import com.example.bepnhataapp.common.models.DownloadedRecipe;
 import java.util.ArrayList;

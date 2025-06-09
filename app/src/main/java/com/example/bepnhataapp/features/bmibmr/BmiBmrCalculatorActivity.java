@@ -1,4 +1,4 @@
-package com.example.bepnhataapp;
+package com.example.bepnhataapp.features.bmibmr;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.ObjectAnimator;
 import android.graphics.Color;
 import android.view.ViewGroup;
+
+import com.example.bepnhataapp.features.calocal.CaloCalculatorActivity;
+import com.example.bepnhataapp.R;
 
 public class BmiBmrCalculatorActivity extends AppCompatActivity {
 

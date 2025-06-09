@@ -1,10 +1,12 @@
-package com.example.bepnhataapp;
+package com.example.bepnhataapp.features.blog;
 
 import android.os.Bundle;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.BlogAdapter;
 import com.example.bepnhataapp.common.models.Blog;
 import java.util.ArrayList;

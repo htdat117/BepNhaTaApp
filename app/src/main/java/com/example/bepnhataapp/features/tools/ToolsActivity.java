@@ -1,12 +1,10 @@
 package com.example.bepnhataapp.features.tools;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.BmiBmrCalculatorActivity;
 import com.example.bepnhataapp.common.base.BaseActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 

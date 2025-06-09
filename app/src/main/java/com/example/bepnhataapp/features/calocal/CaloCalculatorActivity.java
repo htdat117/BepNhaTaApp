@@ -1,4 +1,4 @@
-package com.example.bepnhataapp;
+package com.example.bepnhataapp.features.calocal;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.features.bmibmr.BmiBmrCalculatorActivity;
 
 public class CaloCalculatorActivity extends AppCompatActivity {
 
