@@ -4,252 +4,127 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="#FFF">
 
-    <!-- Header cam -->
-    <RelativeLayout
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#F36B22">
-
+        android:background="#FF6B1A"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
         <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="12dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_back"
-            android:contentDescription="Quay lại" />
-
+            android:layout_marginStart="8dp"
+            android:contentDescription="Back" />
         <TextView
-            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Voucher của tôi"
-            android:textStyle="bold"
+            android:text="Điểm tích lũy"
+            android:textColor="#FFF"
             android:textSize="20sp"
-            android:textColor="#FFFFFF" />
-    </RelativeLayout>
+            android:textStyle="bold"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
-
+        android:layout_weight="1">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Khung voucher -->
-            <LinearLayout
+            <!-- Card Voucher -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/bg_voucher_detail_border"
-                android:padding="16dp">
-
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#FFF"
+                app:cardStrokeColor="#FF6B1A"
+                app:cardStrokeWidth="1dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
                     <ImageView
-                        android:id="@+id/imgVoucher"
                         android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ticket"
-                        android:contentDescription="Voucher"
-                        android:layout_gravity="center_vertical" />
-
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_voucher_orange"
+                        android:contentDescription="Voucher" />
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_marginStart="12dp">
-
                         <TextView
-                            android:id="@+id/tvVoucherTitle"
+                            android:id="@+id/tvVoucherCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GIAM20%"
                             android:textStyle="bold"
                             android:textSize="16sp"
-                            android:textColor="#222222" />
-
+                            android:textColor="#222" />
                         <TextView
                             android:id="@+id/tvVoucherDesc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GIẢM 20% ĐƠN HÀNG CHÀO MỪNG THÁNG 4, GIẢM TỐI ĐA 60K"
-                            android:textSize="14sp"
-                            android:textColor="#222222"
-                            android:layout_marginTop="2dp"
-                            android:maxLines="2" />
+                            android:textSize="13sp"
+                            android:textColor="#222"
+                            android:layout_marginTop="2dp" />
                     </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="12dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_time"
-
-                        android:contentDescription="Hiệu lực" />
-
-                    <TextView
-                        android:id="@+id/tvVoucherActive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hiệu lực sau: 5 giờ"
-                        android:textColor="#F36B22"
-                        android:textSize="15sp"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="12dp" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnUse"
-                        android:layout_width="100dp"
-                        android:layout_height="36dp"
-                        android:text="Sử dụng"
-                        android:textColor="#FFFFFF"
+                    <Button
+                        android:id="@+id/btnExchange"
+                        android:layout_width="96dp"
+                        android:layout_height="40dp"
+                        android:text="Đổi điểm"
+                        android:textColor="#FFF"
+                        android:backgroundTint="#FF6B1A"
                         android:textStyle="bold"
-                        android:backgroundTint="#F36B22"
-                        android:background="@drawable/bg_button_rounded_orange"
-                        android:textSize="15sp"/>
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="0dp" />
                 </LinearLayout>
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tvVoucherPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="500 điểm"
+                    android:textColor="#FF2D2D"
+                    android:textStyle="bold"
+                    android:drawableStart="@drawable/ic_point"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_gravity="start" />
+            </androidx.cardview.widget.CardView>
 
-            <!-- Nội dung chi tiết -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hạn sử dụng mã"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Từ ngày 01/04/2025 đến 30/04/2025. Áp dụng trong khung giờ 10:00 – 22:00 mỗi ngày."
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ưu đãi"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Giảm ngay 20% tổng giá trị đơn hàng, tối đa 60.000đ cho mỗi đơn hàng."
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Áp dụng cho sản phẩm"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tất cả các món ăn có mặt trên ứng dụng Bếp Nhà Ta. Không áp dụng cho combo hoặc món đã giảm giá."
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Phương thức thanh toán"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Áp dụng khi thanh toán qua:\n• Ví Momo, ZaloPay, ShopeePay\n• Thẻ ngân hàng (ATM, Visa/Master)\n• Không áp dụng với thanh toán khi nhận hàng (COD)"
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Đơn vị vận chuyển"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Áp dụng với mọi đơn vị vận chuyển đối tác trong khu vực hỗ trợ của Bếp Nhà Ta (GrabExpress, AhaMove, Giao Hàng Nhanh). Không áp dụng cho các đơn tự đến lấy."
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Thiết bị"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Chỉ áp dụng khi đặt hàng thông qua app Bếp Nhà Ta trên điện thoại (iOS/Android). Không áp dụng trên website."
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Điều kiện"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Mỗi tài khoản chỉ được sử dụng 1 lần.\n• Không áp dụng đồng thời với các mã giảm giá khác.\n• Mã có thể hết lượt sử dụng sớm nếu đủ số lượng.\n• Bếp Nhà Ta có quyền từ chối đơn hàng nếu phát hiện hành vi gian lận hoặc sử dụng mã không đúng mục đích."
-                android:textSize="15sp"
-                android:layout_marginBottom="20dp"/>
+            <!-- Thông tin chi tiết -->
+            <TextView android:text="Hạn sử dụng mã" style="@style/TitleInfo" />
+            <TextView android:id="@+id/tvVoucherTime" android:text="Từ ngày 01/04/2025 đến 30/04/2025. Áp dụng trong khung giờ 10:00 – 22:00 mỗi ngày." style="@style/ContentInfo" />
+            <TextView android:text="Ưu đãi" style="@style/TitleInfo" />
+            <TextView android:id="@+id/tvVoucherBenefit" android:text="Giảm ngay 20% tổng giá trị đơn hàng, tối đa 60.000đ cho mỗi đơn hàng." style="@style/ContentInfo" />
+            <TextView android:text="Áp dụng cho sản phẩm" style="@style/TitleInfo" />
+            <TextView android:id="@+id/tvVoucherProduct" android:text="Tất cả các món ăn có mặt trên ứng dụng Bếp Nhà Ta..." style="@style/ContentInfo" />
+            <TextView android:text="Phương thức thanh toán" style="@style/TitleInfo" />
+            <TextView android:id="@+id/tvVoucherPayment" android:text="Áp dụng khi thanh toán qua:..." style="@style/ContentInfo" />
+            <TextView android:text="Đơn vị vận chuyển" style="@style/TitleInfo" />
+            <TextView android:id="@+id/tvVoucherShipping" android:text="Áp dụng với mọi đơn vị vận chuyển đối tác..." style="@style/ContentInfo" />
+            <TextView android:text="Thiết bị" style="@style/TitleInfo" />
+            <TextView android:id="@+id/tvVoucherDevice" android:text="Chỉ áp dụng khi đặt hàng thông qua app..." style="@style/ContentInfo" />
+            <TextView android:text="Điều kiện" style="@style/TitleInfo" />
+            <TextView android:id="@+id/tvVoucherCondition" android:text="• Mỗi tài khoản chỉ được sử dụng 1 lần..." style="@style/ContentInfo" />
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation Bar -->
-    <include
-        layout="@layout/layout_bottom_navigation"
-        android:id="@+id/bottom_navigation_container"
-        android:layout_width="match_parent"
-        android:layout_height="56dp" />
-
+    <!-- Bottom navigation -->
+    <include layout="@layout/layout_bottom_navigation" />
 </LinearLayout> 
