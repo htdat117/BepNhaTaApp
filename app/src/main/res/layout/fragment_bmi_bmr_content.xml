@@ -142,6 +142,65 @@
                 android:stateListAnimator="@null"/>
         </LinearLayout>
 
+        <!-- Bảng kết quả chỉ số cơ thể -->
+        <LinearLayout
+            android:id="@+id/resultCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_result_card"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textViewResultTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="KẾT QUẢ CHỈ SỐ CƠ THỂ"
+                android:textStyle="bold"
+                android:textColor="#D35400"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewBmiResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BMI của bạn là: "
+                android:textSize="16sp"
+                android:textColor="#222222"
+                android:paddingBottom="2dp"/>
+
+            <TextView
+                android:id="@+id/textViewBmiCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phân loại: "
+                android:textSize="16sp"
+                android:textColor="#222222"
+                android:paddingBottom="2dp"/>
+
+            <TextView
+                android:id="@+id/textViewBmrResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BMR của bạn là: "
+                android:textSize="16sp"
+                android:textColor="#222222"
+                android:paddingBottom="2dp"/>
+
+            <TextView
+                android:id="@+id/textViewAdvice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lời khuyên: "
+                android:textSize="15sp"
+                android:textColor="#444444"
+                android:paddingTop="8dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView> 

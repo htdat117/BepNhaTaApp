@@ -98,6 +98,36 @@
             android:minHeight="48dp"
             android:layout_marginBottom="16dp"/>
 
+        <!-- Nút tính toán calo -->
+        <Button
+            android:id="@+id/btnCalculate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tính tổng calo"
+            android:background="@drawable/bg_button_rounded_orange"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Danh sách món ăn -->
+        <ListView
+            android:id="@+id/listViewFoods"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Tổng calo -->
+        <TextView
+            android:id="@+id/textViewTotalCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tổng calo: 0 kcal"
+            android:textSize="16sp"
+            android:textColor="#E7642F"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="8dp"/>
+
         <!-- Lịch sử -->
         <TextView
             android:layout_width="wrap_content"
