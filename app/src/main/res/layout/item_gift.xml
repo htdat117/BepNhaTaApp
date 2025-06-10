@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_voucher_detail_border"
+    android:padding="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="8dp">
+
+    <ImageView
+        android:id="@+id/imgGift"
+        android:layout_width="160dp"
+        android:layout_height="111dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="Gift"
+        android:src="@drawable/gift_voucher" />
+
+    <TextView
+        android:id="@+id/tvGiftTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mã giảm 8%"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="#222222"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tvGiftPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="36 điểm"
+        android:textSize="14sp"
+        android:textColor="#222222"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnExchangeGift"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:text="Đổi điểm"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:backgroundTint="#F36B22"
+        android:background="@drawable/bg_button_rounded_orange"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
+
+</LinearLayout> 
