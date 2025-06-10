@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.features;
+package com.example.bepnhataapp.features.voucher;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.R;
+import com.example.bepnhataapp.R;
 
 public class VoucherListActivity extends AppCompatActivity {
     public static final String EXTRA_TITLE = "extra_title";
