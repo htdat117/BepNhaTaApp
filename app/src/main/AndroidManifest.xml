@@ -22,7 +22,7 @@
             android:name=".features.ingredients.FilterProductActivity"
             android:exported="false" />
         <activity
-            android:name=".features.customeridea.CustomerIdeaActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +31,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.login.AuthenticationActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.customeridea.CustomerIdeaActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
