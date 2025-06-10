@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="NoActiveIndicator">
         <item name="android:background">@drawable/nav_active_indicator_background</item>
@@ -6,5 +7,28 @@
     <style name="BottomNavTextActive" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textStyle">bold</item>
         <!-- You can add more text style properties here if needed -->
+    </style>
+
+    <!-- Base button style -->
+    <style name="BaseButton" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:textSize">@dimen/header4</item>
+        <item name="android:paddingVertical">10dp</item>
+    </style>
+
+    <!-- Primary Button Style -->
+    <style name="PrimaryButton" parent="BaseButton">
+        <item name="android:background">@drawable/button_bordered_orange</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Secondary Button Style -->
+    <style name="SecondaryButton" parent="BaseButton">
+        <item name="android:background">@drawable/bordered_button_background</item>
+        <item name="android:textColor">@color/primary1</item>
     </style>
 </resources> 
