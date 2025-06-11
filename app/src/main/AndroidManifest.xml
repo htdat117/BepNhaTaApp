@@ -12,32 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BepNhaTaApp"
         tools:targetApi="31">
+
+        <!-- Activity khởi động -->
         <activity
-            android:name=".features.ingredients.ProductActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.voucher.VoucherActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.ingredients.FilterProductActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.customeridea.CustomerIdeaActivity"
+            android:name=".features.bmibmr.BmiBmrCalculatorActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Các activity công cụ -->
         <activity
             android:name=".features.home.HomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".features.tools.ToolsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".features.calocal.CaloCalculatorActivity"
+            android:exported="true" />
+
+        <!-- Các activity khác -->
+        <activity
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".features.customeridea.CustomerIdeaActivity"
             android:exported="false" />
         <activity
             android:name=".features.mealplan.MealPlanActivity"
@@ -46,7 +51,13 @@
             android:name=".features.recipes.RecipesActivity"
             android:exported="false" />
         <activity
-            android:name=".features.tools.ToolsActivity"
+            android:name=".features.ingredients.FilterProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.ingredients.ProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.voucher.VoucherActivity"
             android:exported="false" />
 
         <meta-data
