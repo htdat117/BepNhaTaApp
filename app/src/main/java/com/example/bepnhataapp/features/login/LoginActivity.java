@@ -1,26 +1,30 @@
 package com.example.bepnhataapp.features.login;
 
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.example.bepnhataapp.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements PhoneNumberFragment.OnPhoneNumberSubmittedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new PhoneNumberFragment())
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onPhoneNumberSubmitted(String phoneNumber) {
+        // Navigate to password screen
+        PasswordFragment passwordFragment = PasswordFragment.newInstance(phoneNumber);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, passwordFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

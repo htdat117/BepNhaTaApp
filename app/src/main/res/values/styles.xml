@@ -1,49 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base Text Style -->
+    <style name="BaseTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Font Family Base Styles -->
+    <style name="Font.Bold" parent="BaseTextStyle">
+        <item name="android:fontFamily">@font/inter_bold</item>
+    </style>
+
+    <style name="Font.Medium" parent="BaseTextStyle">
+        <item name="android:fontFamily">@font/inter_medium</item>
+    </style>
+
+    <style name="Font.Regular" parent="BaseTextStyle">
+        <item name="android:fontFamily">@font/inter_regular</item>
+    </style>
+
+    <!-- Header Text Styles -->
+    <style name="Header.Ag1" parent="Font.Bold">
+        <item name="android:textSize">@dimen/header1</item>
+    </style>
+    <style name="Header.Ag2" parent="Font.Bold">
+        <item name="android:textSize">@dimen/header2</item>
+    </style>
+    <style name="Header.Ag3" parent="Font.Bold">
+        <item name="android:textSize">@dimen/header3</item>
+    </style>
+    <style name="Header.Ag4" parent="Font.Bold">
+        <item name="android:textSize">@dimen/header4</item>
+    </style>
+
+    <!-- Heading Styles -->
+    <style name="Heading.Bold.Ag1" parent="Header.Ag1" />
+
+    <!-- Body Text Styles -->
+    <style name="Body.Medium.Ag1" parent="Font.Medium">
+        <item name="android:textSize">@dimen/body1</item>
+    </style>
+    <style name="Body.Medium.Ag2" parent="Font.Medium">
+        <item name="android:textSize">@dimen/body2</item>
+    </style>
+    <style name="Body.Medium.Ag3" parent="Font.Medium">
+        <item name="android:textSize">@dimen/body3</item>
+    </style>
+    <style name="Body.Medium.Ag4" parent="Font.Medium">
+        <item name="android:textSize">@dimen/body4</item>
+    </style>
+
+    <style name="Body.Regular.Ag1" parent="Font.Regular">
+        <item name="android:textSize">@dimen/body1</item>
+    </style>
+    <style name="Body.Regular.Ag2" parent="Font.Regular">
+        <item name="android:textSize">@dimen/body2</item>
+    </style>
+    <style name="Body.Regular.Ag3" parent="Font.Regular">
+        <item name="android:textSize">@dimen/body3</item>
+    </style>
+    <style name="Body.Regular.Ag4" parent="Font.Regular">
+        <item name="android:textSize">@dimen/body4</item>
+    </style>
+
+    <style name="Body.Bold.Ag1" parent="Font.Bold">
+        <item name="android:textSize">@dimen/body1</item>
+    </style>
+    <style name="Body.Bold.Ag2" parent="Font.Bold">
+        <item name="android:textSize">@dimen/body2</item>
+    </style>
+    <style name="Body.Bold.Ag3" parent="Font.Bold">
+        <item name="android:textSize">@dimen/body3</item>
+    </style>
+    <style name="Body.Bold.Ag4" parent="Font.Bold">
+        <item name="android:textSize">@dimen/body4</item>
+    </style>
+
+    <!-- Button Styles -->
+    <style name="BaseButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:textSize">@dimen/header4</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="App.Button" parent="BaseButton">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="App.Button.Primary" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:backgroundTint">@color/primary1</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="PrimaryButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:background">@drawable/bg_button_primary</item>
+    </style>
+
+    <style name="SecondaryButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/primary1</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:background">@drawable/bg_button_outline_orange</item>
+    </style>
+
+    <!-- Navigation Styles -->
     <style name="NoActiveIndicator">
         <item name="android:background">@drawable/nav_active_indicator_background</item>
         <item name="android:elevation">4dp</item>
     </style>
+
     <style name="BottomNavTextActive" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textStyle">bold</item>
-        <!-- You can add more text style properties here if needed -->
     </style>
 
-    <!-- Base button style -->
-    <style name="BaseButton" parent="Widget.AppCompat.Button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">14dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/inter_bold</item>
-        <item name="android:textSize">@dimen/header4</item>
-        <item name="android:paddingVertical">10dp</item>
-    </style>
-
-    <!-- Primary Button Style -->
-    <style name="PrimaryButton" parent="BaseButton">
-        <item name="android:background">@drawable/button_bordered_orange</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <!-- Secondary Button Style -->
-    <style name="SecondaryButton" parent="BaseButton">
-        <item name="android:background">@drawable/bordered_button_background</item>
-        <item name="android:textColor">@color/primary1</item>
-    </style>
-
-    <!-- Style cho tiêu đề thông tin voucher -->
+    <!-- Info Styles -->
     <style name="TitleInfo">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#222222</item>
         <item name="android:paddingTop">12dp</item>
     </style>
-    <!-- Style cho nội dung thông tin voucher -->
+
     <style name="ContentInfo">
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">#222222</item>
         <item name="android:paddingTop">2dp</item>
+    </style>
+
+    <style name="OtpInputBox">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:background">@drawable/otp_input_box_background</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/dark1</item>
     </style>
 </resources> 

@@ -22,38 +22,32 @@
             android:name=".features.ingredients.FilterProductActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.customeridea.CustomerIdeaActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".features.home.HomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".features.customeridea.CustomerIdeaActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".features.mealplan.MealPlanActivity"
             android:exported="false" />
         <activity
             android:name=".features.recipes.RecipesActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".features.tools.ToolsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".features.bmibmr.BmiBmrCalculatorActivity"
-            android:exported="true" />
-        <activity
-            android:name=".features.calocal.CaloCalculatorActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
