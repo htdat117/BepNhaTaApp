@@ -21,8 +21,7 @@ import com.example.bepnhataapp.features.bmibmr.BmiBmrCalculatorActivity;
 public class CaloCalculatorActivity extends AppCompatActivity {
 
     private EditText editTextFoodName, editTextWeight;
-    private Button btnSave, btnDelete, btnCalculate;
-    private Button btnBmiBmrTab, btnCaloTab;
+    private Button btnSave, btnDelete;
     private ListView listViewFoods;
     private TextView textViewTotalCalories;
     
@@ -41,9 +40,6 @@ public class CaloCalculatorActivity extends AppCompatActivity {
         editTextWeight = findViewById(R.id.editTextWeight);
         btnSave = findViewById(R.id.btnSave);
         btnDelete = findViewById(R.id.btnDelete);
-        btnCalculate = findViewById(R.id.btnCalculateBmi);
-        btnBmiBmrTab = findViewById(R.id.btnBmiBmrTab);
-        btnCaloTab = findViewById(R.id.btnCaloTab);
         listViewFoods = findViewById(R.id.listViewFoods);
         textViewTotalCalories = findViewById(R.id.textViewTotalCalories);
 
@@ -68,24 +64,6 @@ public class CaloCalculatorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 deleteSelectedFood();
-            }
-        });
-
-        // Xử lý sự kiện click cho nút Calculate
-        btnCalculate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calculateCalories();
-            }
-        });
-
-        // Xử lý sự kiện click cho nút BMI/BMR Tab
-        btnBmiBmrTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CaloCalculatorActivity.this, BmiBmrCalculatorActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
 
@@ -129,13 +107,20 @@ public class CaloCalculatorActivity extends AppCompatActivity {
             // Kiểm tra xem món ăn có trong danh sách không
             if (!foodCaloriesMap.containsKey(foodName)) {
                 showAddNewFoodDialog(foodName, weight);
-            } else {
-                String foodEntry = String.format("%s - %.1fg", foodName, weight);
-                foodList.add(foodEntry);
-                adapter.notifyDataSetChanged();
-                calculateTotalCalories();
-                clearInputs();
+                return;
             }
+            // Đảm bảo lấy được calo/100g
+            Double caloriesPer100g = foodCaloriesMap.get(foodName);
+            if (caloriesPer100g == null) {
+                Toast.makeText(this, "Không tìm thấy thông tin calo cho món này", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            double calories = weight * caloriesPer100g / 100.0;
+            String foodEntry = String.format("%s - %.1fg ........ %.1f kcal", foodName, weight, calories);
+            foodList.add(foodEntry);
+            adapter.notifyDataSetChanged();
+            calculateTotalCalories();
+            clearInputs();
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Vui lòng nhập số hợp lệ", Toast.LENGTH_SHORT).show();
         }
@@ -162,10 +147,11 @@ public class CaloCalculatorActivity extends AppCompatActivity {
             .setView(input)
             .setPositiveButton("Lưu", (dialog, which) -> {
                 try {
-                    double calories = Double.parseDouble(input.getText().toString());
-                    if (calories > 0) {
-                        foodCaloriesMap.put(foodName, calories);
-                        String foodEntry = String.format("%s - %.1fg", foodName, weight);
+                    double caloriesPer100g = Double.parseDouble(input.getText().toString());
+                    if (caloriesPer100g > 0) {
+                        foodCaloriesMap.put(foodName, caloriesPer100g);
+                        double calories = weight * caloriesPer100g / 100.0;
+                        String foodEntry = String.format("%s - %.1fg ........ %.1f kcal", foodName, weight, calories);
                         foodList.add(foodEntry);
                         adapter.notifyDataSetChanged();
                         calculateTotalCalories();
