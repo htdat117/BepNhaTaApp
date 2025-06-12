@@ -12,7 +12,7 @@
     <include layout="@layout/layout_custom_header"
         android:id="@+id/custom_header"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="wrap_content" />
 
     <!-- Main Content Area - Content specific to HomeActivity will go here -->
     <ScrollView

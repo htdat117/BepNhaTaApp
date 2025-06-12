@@ -1,39 +1,36 @@
 package com.example.bepnhataapp.features.blog;
 
 import android.os.Bundle;
-import android.widget.ImageView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.adapter.BlogAdapter;
-import com.example.bepnhataapp.common.models.Blog;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.bepnhataapp.common.base.BaseActivity;
 
-public class BlogActivity extends AppCompatActivity {
-    private RecyclerView recyclerViewBlog;
-    private BlogAdapter blogAdapter;
-    private List<Blog> blogList;
+public class BlogActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog);
 
-        recyclerViewBlog = findViewById(R.id.recyclerViewBlog);
-        recyclerViewBlog.setLayoutManager(new LinearLayoutManager(this));
+        // Load BlogFeedFragment into content_container
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_container, new BlogFeedFragment());
+        fragmentTransaction.commit();
 
-        blogList = new ArrayList<>();
-        // Thêm dữ liệu mẫu
+        // Setup the bottom navigation fragment
+        setupBottomNavigationFragment(R.id.nav_recipes);
+    }
 
-        // ... thêm các blog nhỏ khác nếu muốn
+    @Override
+    protected int getBottomNavigationContainerId() {
+        return R.id.bottom_navigation_container;
+    }
 
-        blogAdapter = new BlogAdapter(blogList);
-        recyclerViewBlog.setAdapter(blogAdapter);
-
-        ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
+    @Override
+    public void onNavigationItemReselected(int itemId) {
+        handleNavigation(itemId);
     }
 } 

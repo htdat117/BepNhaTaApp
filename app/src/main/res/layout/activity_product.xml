@@ -8,6 +8,12 @@
     tools:context=".features.ingredients.ProductActivity"
     android:orientation="vertical">
 
+    <!-- Placeholder for Custom Header View -->
+    <include layout="@layout/layout_custom_header"
+        android:id="@+id/custom_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <!-- Thanh danh mục ngang -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"
