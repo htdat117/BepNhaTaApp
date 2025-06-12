@@ -36,20 +36,35 @@ public class BmiBmrContentFragment extends Fragment {
         // Ánh xạ các View
         try {
             radioGroupGender = view.findViewById(R.id.radioGroupGender);
+            Log.d(TAG, "radioGroupGender: " + (radioGroupGender != null ? "Found" : "Null"));
             radioMale = view.findViewById(R.id.radioMale);
+            Log.d(TAG, "radioMale: " + (radioMale != null ? "Found" : "Null"));
             radioFemale = view.findViewById(R.id.radioFemale);
+            Log.d(TAG, "radioFemale: " + (radioFemale != null ? "Found" : "Null"));
             editTextAge = view.findViewById(R.id.editTextAge);
+            Log.d(TAG, "editTextAge: " + (editTextAge != null ? "Found" : "Null"));
             editTextHeight = view.findViewById(R.id.editTextHeight);
+            Log.d(TAG, "editTextHeight: " + (editTextHeight != null ? "Found" : "Null"));
             editTextWeight = view.findViewById(R.id.editTextWeight);
+            Log.d(TAG, "editTextWeight: " + (editTextWeight != null ? "Found" : "Null"));
             btnCalculateBmi = view.findViewById(R.id.btnCalculateBmi);
+            Log.d(TAG, "btnCalculateBmi: " + (btnCalculateBmi != null ? "Found" : "Null"));
             btnCalculateBmr = view.findViewById(R.id.btnCalculateBmr);
+            Log.d(TAG, "btnCalculateBmr: " + (btnCalculateBmr != null ? "Found" : "Null"));
             btnReset = view.findViewById(R.id.btnReset);
+            Log.d(TAG, "btnReset: " + (btnReset != null ? "Found" : "Null"));
             textViewBmiResult = view.findViewById(R.id.textViewBmiResult);
+            Log.d(TAG, "textViewBmiResult: " + (textViewBmiResult != null ? "Found" : "Null"));
             textViewBmrResult = view.findViewById(R.id.textViewBmrResult);
+            Log.d(TAG, "textViewBmrResult: " + (textViewBmrResult != null ? "Found" : "Null"));
             textViewBmiCategory = view.findViewById(R.id.textViewBmiCategory);
+            Log.d(TAG, "textViewBmiCategory: " + (textViewBmiCategory != null ? "Found" : "Null"));
             textViewAdvice = view.findViewById(R.id.textViewAdvice);
+            Log.d(TAG, "textViewAdvice: " + (textViewAdvice != null ? "Found" : "Null"));
             textViewResultTitle = view.findViewById(R.id.textViewResultTitle);
+            Log.d(TAG, "textViewResultTitle: " + (textViewResultTitle != null ? "Found" : "Null"));
             resultCardView = view.findViewById(R.id.resultCardView);
+            Log.d(TAG, "resultCardView: " + (resultCardView != null ? "Found" : "Null"));
 
             // Kiểm tra xem tất cả các view đã được tìm thấy chưa
             if (radioGroupGender == null || radioMale == null || radioFemale == null ||

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#E7642F"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_back_arrow" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chia sẻ cảm nhận của bạn"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Phần nhập bình luận -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewCurrentUserProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/profile_placeholder" /> <!-- Sẽ cần placeholder hoặc ảnh người dùng thực -->
+
+            <EditText
+                android:id="@+id/editTextComment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Viết bình luận của bạn..."
+                android:background="@drawable/bg_edittext_outline_gray"
+                android:padding="12dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <ImageView
+                android:id="@+id/imageViewSendComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_send" /> <!-- Sẽ cần icon gửi -->
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sắp xếp theo: Hữu ích nhất \u2304"
+            android:textSize="14sp"
+            android:textColor="#E7642F"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Phần phân trang -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/imageViewPrevPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_left" /> <!-- Cần icon mũi tên trái -->
+
+            <TextView
+                android:id="@+id/textViewPage1"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="1"
+                android:gravity="center"
+                android:background="@drawable/bg_pagination_selected"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewPage2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="2"
+                android:gravity="center"
+                android:background="@drawable/bg_pagination_unselected"
+                android:textColor="#E7642F"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewPage3"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="3"
+                android:gravity="center"
+                android:background="@drawable/bg_pagination_unselected"
+                android:textColor="#E7642F"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewPage4"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="4"
+                android:gravity="center"
+                android:background="@drawable/bg_pagination_unselected"
+                android:textColor="#E7642F"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewPage5"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="5"
+                android:gravity="center"
+                android:background="@drawable/bg_pagination_unselected"
+                android:textColor="#E7642F"
+                android:layout_marginEnd="8dp"/>
+
+            <ImageView
+                android:id="@+id/imageViewNextPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_right" /> <!-- Cần icon mũi tên phải -->
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout> 
