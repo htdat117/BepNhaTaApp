@@ -5,27 +5,323 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F5F5F5"
     tools:context=".features.mealplan.MealPlanActivity">
 
-    <!-- Placeholder for Custom Header View -->
-    <include layout="@layout/layout_custom_header"
-        android:id="@+id/custom_header"
+    <!-- Custom Header for Meal Plan Screen -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:elevation="2dp">
 
-    <!-- Main Content Area - Content specific to MealPlanActivity -->
-    <FrameLayout
-        android:id="@+id/content_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Meal Plan Activity Content"
-            android:textSize="24sp" />
-    </FrameLayout>
+            android:text="MEAL PLAN"
+            android:textColor="#FF5722"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <!-- Scrollable Content Area -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Personalized Meal Plan Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#FF5722"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cá nhân hoá kế hoạch nấu ăn"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Để hoàn tất việc cá nhân hóa thực đơn của bạn, chúng tôi đang thiếu một số thông tin. Bạn có thể giúp chúng tôi không?"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="20dp">
+
+                        <ImageView
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/banner_mealplan1"
+                            android:scaleType="centerCrop"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/image_background_rounded"/>
+
+                        <ImageView
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/banner_mealplan2"
+                            android:scaleType="centerCrop"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/image_background_rounded"/>
+
+                        <ImageView
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/banner_mealplan3"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/image_background_rounded"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Điền thông tin"
+                        android:paddingHorizontal="24dp"
+                        android:paddingVertical="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:drawableStart="@drawable/ic_fork_knife"
+                        android:drawablePadding="8dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Kế hoạch bữa ăn thủ công Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kế hoạch bữa ăn thủ công"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Các món ngon phổ biến Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Các món ngon phổ biến"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xem ngay"
+                    android:textColor="#FF5722"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <!-- Meal Cards Grid -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="24dp">
+
+                <!-- Meal Card 1 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    android:layout_marginEnd="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="12dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:src="@drawable/placeholder_banner_background"
+                            android:scaleType="centerCrop"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Healthy Taco Salad with fresh vegetable"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="8dp"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_fire_icon"
+                                android:layout_marginEnd="4dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="120 Kcal"
+                                android:textColor="#666666"
+                                android:textSize="12sp"/>
+
+                            <View
+                                android:layout_width="4dp"
+                                android:layout_height="4dp"
+                                android:background="@drawable/dot_separator"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"/>
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_timer_icon"
+                                android:layout_marginEnd="4dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20 Min"
+                                android:textColor="#666666"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Meal Card 2 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    android:layout_marginStart="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="12dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:src="@drawable/placeholder_banner_background"
+                            android:scaleType="centerCrop"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Japanese-style Pancakes Recip"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="8dp"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_fire_icon"
+                                android:layout_marginEnd="4dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="64 Kcal"
+                                android:textColor="#666666"
+                                android:textSize="12sp"/>
+
+                            <View
+                                android:layout_width="4dp"
+                                android:layout_height="4dp"
+                                android:background="@drawable/dot_separator"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"/>
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_timer_icon"
+                                android:layout_marginEnd="4dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="15 Min"
+                                android:textColor="#666666"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- Create Menu Button -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tạo thực đơn ngay"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_orange_rounded"
+                android:paddingVertical="14dp"
+                android:layout_marginBottom="24dp"/>
+
+        </LinearLayout>
+    </ScrollView>
 
     <!-- Bottom Navigation Bar -->
     <include layout="@layout/layout_bottom_navigation"
