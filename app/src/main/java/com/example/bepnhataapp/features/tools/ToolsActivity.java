@@ -1,5 +1,6 @@
 package com.example.bepnhataapp.features.tools;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.bepnhataapp.R;
@@ -7,6 +8,7 @@ import com.example.bepnhataapp.common.base.BaseActivity;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import com.example.bepnhataapp.features.tools.ToolsContainerFragment;
 
 public class ToolsActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -15,10 +17,10 @@ public class ToolsActivity extends BaseActivity implements BaseActivity.OnNaviga
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tools);
 
-        // Hiển thị fragment BMI/BMR vào content_container
+        // Tải ToolsContainerFragment vào content_container
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content_container, new BmiBmrFragment());
+        fragmentTransaction.replace(R.id.content_container, new ToolsContainerFragment());
         fragmentTransaction.commit();
 
         // Giữ nguyên thanh bottom navigation như cũ
