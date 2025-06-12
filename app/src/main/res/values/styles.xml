@@ -163,4 +163,28 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+
+    <style name="Widget.BepNhaTa.AllergyChip" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary1</item>
+        <item name="strokeColor">@color/primary1</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:backgroundTint">@android:color/white</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">96dp</item>
+    </style>
+
+    <style name="Widget.BepNhaTa.ChoiceChip" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary1</item>
+        <item name="strokeColor">@color/orange</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:backgroundTint">@android:color/white</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">96dp</item>
+    </style>
 </resources> 

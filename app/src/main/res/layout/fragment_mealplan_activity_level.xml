@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mức độ hoạt động" style="@style/Header.Ag2" />
+
+        <!-- example options -->
+        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ít vận động" android:layout_marginTop="16dp" />
+        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động nhẹ" android:layout_marginTop="8dp" />
+        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động vừa phải" android:layout_marginTop="8dp" />
+        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động mạnh" android:layout_marginTop="8dp" />
+
+        <Button style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Tiếp theo" android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView> 
