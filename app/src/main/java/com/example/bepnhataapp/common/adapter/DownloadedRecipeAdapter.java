@@ -58,13 +58,13 @@ public class DownloadedRecipeAdapter extends RecyclerView.Adapter<DownloadedReci
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgRecipe = itemView.findViewById(R.id.imgRecipe);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvCal = itemView.findViewById(R.id.tvCal);
-            tvType = itemView.findViewById(R.id.tvType);
-            tvTime = itemView.findViewById(R.id.tvTime);
-            btnView = itemView.findViewById(R.id.btnView);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            imgRecipe = itemView.findViewById(R.id.imageViewRecipe);
+            tvTitle = itemView.findViewById(R.id.textViewRecipeName);
+            tvCal = itemView.findViewById(R.id.textViewCalories);
+            tvType = itemView.findViewById(R.id.textViewProtein);
+            tvTime = itemView.findViewById(R.id.textViewTime);
+            btnView = itemView.findViewById(R.id.btnViewRecipe);
+            btnDelete = itemView.findViewById(R.id.btnDeleteRecipe);
         }
     }
 } 

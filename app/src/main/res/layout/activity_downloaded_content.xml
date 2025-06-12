@@ -22,6 +22,7 @@
             android:contentDescription="Quay lại" />
 
         <TextView
+            android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -36,5 +37,30 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="0dp"/>
+        android:padding="0dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/layoutNoData"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_no_data_placeholder"
+            android:contentDescription="Chưa có dữ liệu" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Chưa có dữ liệu"
+            android:textSize="18sp"
+            android:textColor="#666666" />
+    </LinearLayout>
 </LinearLayout> 

@@ -4,7 +4,8 @@ import android.os.Bundle;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class RecipesActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -12,6 +13,12 @@ public class RecipesActivity extends BaseActivity implements BaseActivity.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
+
+        // Tải OfflineRecipesFragment vào content_container
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_container, new OfflineRecipesFragment());
+        fragmentTransaction.commit();
 
         // Setup the bottom navigation fragment
         setupBottomNavigationFragment(R.id.nav_recipes);
