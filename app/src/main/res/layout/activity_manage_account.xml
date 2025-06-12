@@ -8,120 +8,137 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="0dp">
+        android:orientation="vertical">
 
         <!-- Đơn mua -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/rounded_bg_primary4"
             android:orientation="vertical"
-            android:background="#FFE3D2"
-            android:padding="16dp"
-            android:layout_marginTop="0dp">
+            android:padding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/inter_medium"
                     android:text="Đơn mua"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#000" />
+                    android:textColor="@color/dark1"
+                    android:textSize="@dimen/body2" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:text="Xem lịch sử mua hàng"
-                    android:textColor="#F36B21"
-                    android:textSize="14sp"
-                    android:layout_gravity="end" />
+                    android:textColor="@color/primary1"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <!-- Trạng thái đơn hàng -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
                 android:gravity="center"
-                android:layout_marginTop="12dp">
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:src="@drawable/ic_processing" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:paddingTop="4dp"
                         android:text="Chờ xác nhận"
-                        android:textSize="13sp"
-                        android:textColor="#F36B21" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body3" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:src="@drawable/ic_box" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:paddingTop="4dp"
                         android:text="Chờ lấy hàng"
-                        android:textSize="13sp"
-                        android:textColor="#F36B21" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body3" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:src="@drawable/ic_truck" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:paddingTop="4dp"
                         android:text="Chờ giao hàng"
-                        android:textSize="13sp"
-                        android:textColor="#F36B21" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body3" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:src="@drawable/ic_rating_manage_customer" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:paddingTop="4dp"
                         android:text="Đánh giá"
-                        android:textSize="13sp"
-                        android:textColor="#F36B21" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body3" />
                 </LinearLayout>
             </LinearLayout>
-
-            <!-- Danh sách chức năng -->
-            <View android:layout_width="match_parent" android:layout_height="16dp" android:background="@android:color/transparent" />
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
 
             <!-- Danh sách các mục -->
             <LinearLayout
@@ -134,203 +151,281 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:paddingTop="8dp">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_avatar" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Thông tin tài khoản"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Địa chỉ giao hàng -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_location" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Địa chỉ giao hàng"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Điểm thành viên -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_loyalty_points" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Điểm thành viên"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Voucher của tôi -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_voucher" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Voucher của tôi"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Món yêu thích -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_favorite" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Món yêu thích"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Chính sách và điều khoản -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_policy_customer" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Chính sách và điều khoản"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Câu hỏi thường gặp -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_faq" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Câu hỏi thường gặp"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Ý kiến khách hàng -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_customer_idea" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Ý kiến khách hàng"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_right_arrow_customer" />
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F36B21" android:alpha="0.1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary1" />
                 <!-- Đăng xuất -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_log_out" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
                         android:text="Đăng xuất"
-                        android:textSize="16sp"
-                        android:layout_marginStart="12dp" />
+                        android:textColor="@color/dark1"
+                        android:textSize="@dimen/body1" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -342,53 +437,90 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_medium"
                 android:text="Mọi thắc mắc vui lòng liên hệ bộ phận CSKH:"
-                android:textSize="14sp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000" />
-            <TextView
-                android:layout_width="match_parent"
+                android:textColor="@color/dark1"
+                android:textSize="@dimen/body2" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hotline: 0909-868-686"
-                android:textColor="#F36B21"
-                android:textSize="16sp"
-                android:layout_marginTop="4dp" />
-            <TextView
-                android:layout_width="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Hotline:"
+                    android:textColor="@color/dark1"
+                    android:textSize="@dimen/body2" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text=" 0909-868-686"
+                    android:textColor="@color/primary1"
+                    android:textSize="@dimen/body2" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email: bepnhta@gmail.com"
-                android:textColor="#F36B21"
-                android:textSize="16sp"
-                android:layout_marginTop="2dp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Email: "
+                    android:textColor="@color/dark1"
+                    android:textSize="@dimen/body2" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="bepnhata@gmail.com"
+                    android:textColor="@color/primary1"
+                    android:textSize="@dimen/body2" />
+            </LinearLayout>
 
             <!-- Social -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
                 android:gravity="start|center_vertical"
-                android:layout_marginTop="8dp">
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_medium"
                     android:text="Theo dõi Bếp Nhà Ta qua: "
-                    android:textSize="14sp"
-                    android:textColor="#000" />
+                    android:textColor="@color/dark1"
+                    android:textSize="@dimen/body2" />
+
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_facebook"
-                    android:layout_marginStart="8dp" />
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_facebook" />
+
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_insta"
-                    android:layout_marginStart="8dp" />
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_insta" />
+
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_tiktok"
-                    android:layout_marginStart="8dp" />
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_tiktok" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -18,7 +18,7 @@
 
         <!-- Activity khởi động chính -->
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.manage_account.ManageAccountActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".features.manage_account.ManageAccountActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.LoginActivity"
