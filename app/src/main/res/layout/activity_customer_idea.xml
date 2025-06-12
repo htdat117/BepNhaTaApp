@@ -7,141 +7,292 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
+    android:background="@color/white"
     tools:context=".features.customeridea.CustomerIdeaActivity">
 
-    <ImageView
+    <!-- Header -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_gravity="center_horizontal"
-        android:paddingHorizontal="16dp"
-        android:src="@drawable/ic_customer_idea_banner" />
+        android:layout_height="56dp"
+        android:background="@color/primary1"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ý KIẾN CỦA QUÝ KHÁCH LÀ CƠ HỘI ĐỂ CHÚNG TÔI CẢI TIẾN CHẤT LƯỢNG DỊCH VỤ "
-        android:textSize="@dimen/body2"
-        android:fontFamily="@font/inter_medium"
-        android:gravity="center"/>
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Back"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_medium"
-        android:paddingTop="24dp"
-        android:paddingHorizontal="16dp"
-        android:text="Họ Tên"
-        android:textSize="@dimen/body2" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Ý kiến khách hàng"
+            android:textColor="@color/white"
+            android:textSize="@dimen/header3"
+            android:fontFamily="@font/inter_bold"/>
+    </RelativeLayout>
 
-    <EditText
-        android:id="@+id/edtName"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:layout_marginHorizontal="16dp"
-        android:backgroundTint="@color/primary4"
-        android:hint="Vui lòng nhập"
-        android:textColorHint="#757575"
-        android:textColor="#222"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:background="@color/primary4"
-        android:padding="12dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_medium"
-        android:paddingTop="8dp"
-        android:paddingHorizontal="16dp"
-        android:text="Điện thoại"
-        android:textSize="@dimen/body2" />
-    <EditText
-        android:id="@+id/edtPhone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:layout_marginHorizontal="16dp"
-        android:backgroundTint="@color/primary4"
-        android:hint="Vui lòng nhập"
-        android:textColorHint="#757575"
-        android:textColor="#222"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:background="@color/primary4"
-        android:padding="12dp" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_medium"
-        android:paddingTop="8dp"
-        android:paddingHorizontal="16dp"
-        android:text="Email"
-        android:textSize="@dimen/body2" />
-    <EditText
-        android:id="@+id/edtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:layout_marginHorizontal="16dp"
-        android:backgroundTint="@color/primary4"
-        android:hint="Vui lòng nhập"
-        android:textColorHint="#757575"
-        android:textColor="#222"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:background="@color/primary4"
-        android:padding="12dp" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_medium"
-        android:paddingTop="8dp"
-        android:paddingHorizontal="16dp"
-        android:text="Vấn đề"
-        android:textSize="@dimen/body2" />
-    <EditText
-        android:id="@+id/edtProblem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:layout_marginHorizontal="16dp"
-        android:backgroundTint="@color/primary4"
-        android:hint="Vui lòng nhập"
-        android:textColorHint="#757575"
-        android:textColor="#222"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:background="@color/primary4"
-        android:padding="12dp" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_medium"
-        android:paddingTop="8dp"
-        android:paddingHorizontal="16dp"
-        android:text="Nội dung"
-        android:textSize="@dimen/body2" />
-    <EditText
-        android:id="@+id/edtContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:layout_marginHorizontal="16dp"
-        android:backgroundTint="@color/primary4"
-        android:hint="Vui lòng nhập"
-        android:textColorHint="#757575"
-        android:textColor="#222"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:background="@color/primary4"
-        android:padding="12dp" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_medium"
-        android:paddingTop="8dp"
-        android:paddingHorizontal="16dp"
-        android:text="Hình ảnh"
-        android:textSize="@dimen/body2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Banner -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_customer_idea_banner"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ý KIẾN CỦA QUÝ KHÁCH LÀ CƠ HỘI ĐỂ CHÚNG TÔI CẢI TIẾN CHẤT LƯỢNG DỊCH VỤ "
+                android:textSize="@dimen/body2"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:paddingTop="24dp"
+                android:paddingHorizontal="16dp"
+                android:text="Họ Tên"
+                android:paddingBottom="8dp"
+                android:textSize="@dimen/body2" />
+
+            <EditText
+                android:id="@+id/edtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:backgroundTint="@color/primary4"
+                android:hint="Vui lòng nhập"
+                android:textColorHint="@color/dark2"
+                android:textColor="@color/dark1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/body2"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:drawableEnd="@drawable/delete_all"
+                android:drawablePadding="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingHorizontal="16dp"
+                android:text="Điện thoại"
+                android:textSize="@dimen/body2" />
+            <EditText
+                android:id="@+id/edtPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:backgroundTint="@color/primary4"
+                android:hint="Vui lòng nhập"
+                android:textColorHint="@color/dark2"
+                android:textColor="@color/dark1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/body2"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:drawableEnd="@drawable/delete_all"
+                android:drawablePadding="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingHorizontal="@dimen/body2"
+                android:text="Email"
+                android:textSize="@dimen/body2" />
+            <EditText
+                android:id="@+id/edtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:backgroundTint="@color/primary4"
+                android:hint="Vui lòng nhập"
+                android:textColorHint="@color/dark2"
+                android:textColor="@color/dark1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/body2"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:drawableEnd="@drawable/delete_all"
+                android:drawablePadding="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingHorizontal="16dp"
+                android:text="Vấn đề"
+                android:textSize="@dimen/body2" />
+            <EditText
+                android:id="@+id/edtProblem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:backgroundTint="@color/primary4"
+                android:hint="Vui lòng nhập"
+                android:textColorHint="@color/dark2"
+                android:textColor="@color/dark1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/body2"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:drawableEnd="@drawable/delete_all"
+                android:drawablePadding="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingHorizontal="16dp"
+                android:text="Nội dung"
+                android:textSize="@dimen/body2" />
+            <EditText
+                android:id="@+id/edtContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:backgroundTint="@color/primary4"
+                android:hint="Vui lòng nhập"
+                android:textColorHint="@color/dark2"
+                android:textColor="@color/dark1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/body2"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:drawableEnd="@drawable/delete_all"
+                android:drawablePadding="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:paddingTop="8dp"
+                android:paddingHorizontal="16dp"
+                android:text="Hình ảnh"
+                android:textSize="@dimen/body2" />
+
+            <!-- Nút tải ảnh lên -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tải ảnh lên"
+                    android:drawableLeft="@drawable/ic_camera"
+                    android:backgroundTint="@color/primary1"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kích thước tệp tối đa: 5MB\nType: jpg | gif | png"
+                    android:textSize="@dimen/body4"
+                    android:textColor="@color/dark2"
+                    android:fontFamily="@font/inter_regular"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <!-- RadioButton nhận phản hồi -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quý khách mong muốn nhận phản hồi qua"
+                android:textSize="@dimen/body2"
+                android:paddingHorizontal="16dp"
+                android:layout_marginTop="8dp"/>
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:paddingRight="24dp"
+                    android:textColor="@color/dark2"
+                    android:fontFamily="@font/inter_medium"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Số điện thoại"
+                    android:textColor="@color/dark2"
+                    android:fontFamily="@font/inter_medium"/>
+
+            </RadioGroup>
+
+
+            <!-- Dòng cảm ơn -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:text="Cảm ơn ý kiến đóng góp của quý khách!"
+                android:textColor="@color/primary1"
+                android:textSize="@dimen/body1"
+                android:fontFamily="@font/inter_bold"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:text="(trong trường hợp cần thiết, chúng tôi sẽ liên lạc với quý khách)"
+                android:textColor="@color/dark2"
+                android:textSize="@dimen/body4"
+                android:fontFamily="@font/inter_regular"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Nút gửi -->
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingHorizontal="16dp"
+                android:text="Gửi ngay"
+                android:backgroundTint="@color/primary1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/body1"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
