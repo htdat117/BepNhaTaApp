@@ -15,7 +15,7 @@
 
         <!-- Activity khởi động -->
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.mealplan.MealPlanActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +45,7 @@
             android:name=".features.customeridea.CustomerIdeaActivity"
             android:exported="false" />
         <activity
-            android:name=".features.mealplan.MealPlanActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".features.recipes.RecipesActivity"
