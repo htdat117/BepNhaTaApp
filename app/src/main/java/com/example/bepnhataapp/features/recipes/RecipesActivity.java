@@ -1,6 +1,8 @@
 package com.example.bepnhataapp.features.recipes;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
