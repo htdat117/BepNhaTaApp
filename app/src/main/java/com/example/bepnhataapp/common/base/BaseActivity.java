@@ -58,9 +58,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
-        if (ivCart != null) ivCart.setOnClickListener(goToManageAccount);
-        if (ivMessage != null) ivMessage.setOnClickListener(goToManageAccount);
-        if (ivNotification != null) ivNotification.setOnClickListener(goToManageAccount);
         if (ivLogo != null) ivLogo.setOnClickListener(goToManageAccount);
         if (tvLogin != null) tvLogin.setOnClickListener(goToManageAccount);
     }

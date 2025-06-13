@@ -156,6 +156,7 @@
                 <!-- Mỗi mục là một LinearLayout ngang -->
                 <!-- Thông tin tài khoản -->
                 <LinearLayout
+                    android:id="@+id/layout_account_info"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
@@ -189,6 +190,7 @@
                     android:background="@color/primary1" />
                 <!-- Địa chỉ giao hàng -->
                 <LinearLayout
+                    android:id="@+id/layout_shipping_address"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
@@ -221,6 +223,7 @@
                     android:background="@color/primary1" />
                 <!-- Điểm thành viên -->
                 <LinearLayout
+                    android:id="@+id/layout_member_points"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
@@ -253,6 +256,7 @@
                     android:background="@color/primary1" />
                 <!-- Voucher của tôi -->
                 <LinearLayout
+                    android:id="@+id/layout_my_voucher"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
@@ -285,6 +289,7 @@
                     android:background="@color/primary1" />
                 <!-- Món yêu thích -->
                 <LinearLayout
+                    android:id="@+id/layout_favorite_dishes"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
@@ -413,6 +418,7 @@
                     android:background="@color/primary1" />
                 <!-- Đăng xuất -->
                 <LinearLayout
+                    android:id="@+id/layout_logout"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"

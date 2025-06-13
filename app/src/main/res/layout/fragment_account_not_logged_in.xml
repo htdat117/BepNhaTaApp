@@ -6,13 +6,6 @@
     android:gravity="center_horizontal"
     android:padding="24dp">
 
-    <ImageView
-        android:id="@+id/imgLogo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/ic_logo"
-        android:layout_marginBottom="16dp"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,6 +44,7 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:text="Đăng ký"
+            style="@style/Body.Medium.Ag1"
             android:backgroundTint="@color/primary1"
             android:textColor="@android:color/white"
             android:layout_marginEnd="12dp"/>
@@ -61,6 +55,7 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:text="Đăng nhập"
+            style="@style/Body.Medium.Ag1"
             android:backgroundTint="@color/primary1"
             android:textColor="@android:color/white"/>
     </LinearLayout>
