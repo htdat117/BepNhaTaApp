@@ -3,6 +3,7 @@ package com.example.bepnhataapp.features.mealplan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
@@ -27,6 +28,13 @@ public class MealPlanActivity extends BaseActivity implements BaseActivity.OnNav
                 Intent intent = new Intent(MealPlanActivity.this, MealPlanWizardActivity.class);
                 startActivity(intent);
             }
+        });
+
+        // Setup "Tạo thực đơn ngay" button listener
+        Button btnCreateMenu = findViewById(R.id.btnCreateMenuNow);
+        btnCreateMenu.setOnClickListener(v -> {
+            Intent intent = new Intent(MealPlanActivity.this, MealPlanContentActivity.class);
+            startActivity(intent);
         });
     }
 

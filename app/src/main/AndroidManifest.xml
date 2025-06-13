@@ -69,6 +69,12 @@
         <activity
             android:name=".features.voucher.VoucherActivity"
             android:exported="false" />
+        <activity
+            android:name=".features.mealplan.MealPlanWizardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.mealplan.MealPlanContentActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

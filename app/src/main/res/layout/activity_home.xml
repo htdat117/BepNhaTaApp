@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Gói nguyên liệu hot"
-                    style="@style/Header.Ag2"
+                    style="@style/Header.Ag3"
                     android:textColor="@color/primary1" />
 
                 <TextView
@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Công thức dành cho bạn"
-                    style="@style/Header.Ag2"
+                    style="@style/Header.Ag3"
                     android:textColor="@color/primary1" />
 
                 <TextView
@@ -257,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Mẹo vặt bí quyết nấu ăn"
-                    style="@style/Header.Ag2"
+                    style="@style/Header.Ag3"
                     android:textColor="@color/primary1" />
 
                 <TextView

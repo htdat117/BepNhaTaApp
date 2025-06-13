@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Back"
+            app:tint="@color/primary1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="MEAL PLAN"
+            android:textColor="@color/primary1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAction"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:text="Action"
+            android:textAllCaps="false"
+            android:textColor="@color/primary1"
+            style="@style/Body.Bold.Ag3"
+            app:icon="@drawable/ic_3dot"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/primary1"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/primary1"
+            app:cornerRadius="8dp"
+            android:backgroundTint="@android:color/transparent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/orange" />
+
+    <!-- Tabs Ngày / Tuần -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDayTab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Ngày"
+            style="@style/Body.Bold.Ag3"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_segment_left_selector"
+            android:textColor="@color/text_segment_selector"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnWeekTab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Tuần"
+            style="@style/Body.Bold.Ag3"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_segment_right_selector"
+            android:textColor="@color/text_segment_selector"/>
+    </LinearLayout>
+
+    <!-- Navigation arrows + date -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="8dp">
+        <ImageButton
+            android:id="@+id/btnPrevDay"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_left"
+            android:background="@android:color/transparent"
+            android:contentDescription="Prev" />
+        <TextView
+            android:id="@+id/tvCurrentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Body.Medium.Ag2"
+            android:layout_marginHorizontal="16dp"
+            android:text="Hôm nay, 3 tháng 6" />
+        <ImageButton
+            android:id="@+id/btnNextDay"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_right"
+            android:background="@android:color/transparent"
+            android:contentDescription="Next" />
+    </LinearLayout>
+
+    <!-- Scrollable body -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Summary KPI card placeholder -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_piechart"
+                        android:contentDescription="Chart" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+                        <TextView android:id="@+id/tvCalories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Body.Bold.Ag3"
+                            android:text="2281 Calories" />
+                        <TextView android:id="@+id/tvMacros"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Body.Regular.Ag4"
+                            android:text="229g Carbs, 95g Fat, 143g Protein" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Details" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Timeline label -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Theo dõi 0/4 bữa ăn"
+                style="@style/Body.Medium.Ag3"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Timeline RecyclerView placeholder -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTimeline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Recommended section header -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thực đơn dành cho bạn"
+                style="@style/Header.Ag3"
+                android:textColor="@color/orange"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Additional recommended RecyclerView placeholder -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecommended"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Hidden container for compatibility -->
+    <FrameLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
+</LinearLayout> 

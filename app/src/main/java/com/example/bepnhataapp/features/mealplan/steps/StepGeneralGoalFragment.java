@@ -57,8 +57,8 @@ public class StepGeneralGoalFragment extends Fragment {
             }
         });
 
-        // Setup next button at bottom - using TextView instead of Button
-        TextView btnNextBottom = root.findViewById(R.id.btnNext);
+        // Setup next button at bottom (PrimaryButton)
+        Button btnNextBottom = root.findViewById(R.id.btnNextBottom);
         btnNextBottom.setOnClickListener(v -> {
             if (getActivity() instanceof MealPlanWizardActivity) {
                 // Check if we're in specific goal tab

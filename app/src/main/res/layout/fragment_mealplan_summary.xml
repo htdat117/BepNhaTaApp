@@ -1,36 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
-    <LinearLayout
+    <!-- Header (just a close button) -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="56dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thành công!" style="@style/Header.Ag1" android:textColor="@color/primary1" />
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_close"
+            app:tint="@color/primary1"
+            android:contentDescription="Close" />
+    </RelativeLayout>
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Đây là bản tóm tắt các mục tiêu dinh dưỡng hằng ngày của bạn..." style="@style/Body.Regular.Ag2" android:layout_marginTop="8dp" />
+    <!-- Scrollable body -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <!-- Placeholder summary card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#EEEEEE"
-            android:padding="12dp"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:padding="24dp">
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cal: 2663" style="@style/Body.Regular.Ag3" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Carb: 366" style="@style/Body.Regular.Ag3" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Protein: 133g" style="@style/Body.Regular.Ag3" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fat: 74g" style="@style/Body.Regular.Ag3" />
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thành công!"
+                style="@style/Header.Ag1"
+                android:textColor="@color/primary1" />
+
+            <!-- Intro text -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hồ sơ của bạn đã hoàn tất và chúng tôi rất hào hứng để giúp bạn đưa ra những lựa chọn bữa ăn dinh dưỡng, được cá nhân hóa dành riêng cho bạn."
+                style="@style/Body.Regular.Ag2"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đây là bản tóm tắt các mục tiêu dinh dưỡng hằng ngày tùy chỉnh của bạn:"
+                style="@style/Body.Bold.Ag3"
+                android:layout_marginTop="16dp" />
+
+            <!-- Summary Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#EEEEEE"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Mục tiêu dinh dưỡng mỗi ngày"
+                            style="@style/Body.Bold.Ag3" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnEdit"
+                            android:layout_width="80dp"
+                            android:layout_height="40dp"
+                            android:backgroundTint="@android:color/transparent"
+                            android:text="Sửa"
+                            app:strokeColor="@color/dark2"
+                            app:strokeWidth="1dp"
+                            app:cornerRadius="8dp"
+                            android:textColor="@color/dark2"
+                            style="@style/Body.Bold.Ag2"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Custom Macros"
+                        style="@style/Body.Medium.Ag3"
+                        android:textColor="@color/dark2"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Stats Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical">
+
+                        <!-- Cal -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/circle_blue" android:layout_marginEnd="4dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cal" style="@style/Body.Medium.Ag3" />
+                            </LinearLayout>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2663" style="@style/Header.Ag4" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <!-- Carb -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/circle_orange" android:layout_marginEnd="4dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Carb" style="@style/Body.Medium.Ag3" />
+                            </LinearLayout>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="366" style="@style/Header.Ag4" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <!-- Protein -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/circle_green" android:layout_marginEnd="4dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Protein" style="@style/Body.Medium.Ag3" />
+                            </LinearLayout>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="133g" style="@style/Header.Ag4" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <!-- Fat -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/circle_pink" android:layout_marginEnd="4dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fat" style="@style/Body.Medium.Ag3" />
+                            </LinearLayout>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="74g" style="@style/Header.Ag4" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Outro text -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chúng tôi biết rằng việc tạo thói quen ăn uống lành mạnh không phải lúc nào cũng dễ dàng. Nhưng việc dành một chút thời gian để lên kế hoạch cho các bữa ăn của bạn là một bước tiến lớn để đạt được mục tiêu của bạn."
+                style="@style/Body.Regular.Ag2" />
+
         </LinearLayout>
+    </ScrollView>
 
-        <Button
-            android:id="@+id/btnShowMenu"
-            style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hiển thị thực đơn gợi ý" android:layout_marginTop="24dp" />
+    <!-- Bottom button -->
+    <Button
+        android:id="@+id/btnShowMenu"
+        style="@style/PrimaryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hiển thị thực đơn gợi ý"
+        android:layout_margin="24dp" />
 
-    </LinearLayout>
-</ScrollView> 
+</LinearLayout> 

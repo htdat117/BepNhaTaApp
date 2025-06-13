@@ -1,29 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mức độ hoạt động" style="@style/Header.Ag2" />
-
-        <!-- example options -->
-        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ít vận động" android:layout_marginTop="16dp" />
-        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động nhẹ" android:layout_marginTop="8dp" />
-        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động vừa phải" android:layout_marginTop="8dp" />
-        <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động mạnh" android:layout_marginTop="8dp" />
-
-        <Button
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"
+            app:tint="@color/primary1"
+            android:contentDescription="Back"/>
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mục tiêu"
+            style="@style/Header.Ag3"
+            android:gravity="center"/>
+        <TextView
             android:id="@+id/btnNext"
-            style="@style/PrimaryButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tiếp theo"
-            android:layout_marginTop="24dp" />
-
+            android:textColor="@color/primary1"
+            style="@style/Body.Bold.Ag4"
+            android:gravity="center_vertical"/>
     </LinearLayout>
-</ScrollView> 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/orange" />
+
+    <!-- Question -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bạn hoạt động như thế nào?"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        style="@style/Body.Regular.Ag3"/>
+
+    <!-- Options list -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSedentary"
+                android:paddingVertical="16dp"
+                app:cornerRadius="16dp"
+                android:backgroundTint="@android:color/transparent"
+                style="@style/Body.Medium.Ag1"
+                android:textColor="@color/dark2"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/dark2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ít vận động\nÍt hoặc không tập thể dục với công việc ngồi bàn giấy"
+                android:gravity="start|center_vertical"
+                android:paddingStart="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLight"
+                android:paddingVertical="16dp"
+                app:cornerRadius="16dp"
+                android:backgroundTint="@android:color/transparent"
+                style="@style/Body.Medium.Ag1"
+                android:textColor="@color/dark2"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/dark2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Hoạt động nhẹ\nÍt hoặc không tập thể dục với công việc ngồi bàn giấy"
+                android:gravity="start|center_vertical"
+                android:paddingStart="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnModerate"
+                android:paddingVertical="16dp"
+                app:cornerRadius="16dp"
+                android:backgroundTint="@android:color/transparent"
+                style="@style/Body.Medium.Ag1"
+                android:textColor="@color/dark2"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/dark2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Hoạt động vừa phải\nCuộc sống hàng ngày vừa phải với tập thể dục 3 - 5 ngày mỗi tuần"
+                android:gravity="start|center_vertical"
+                android:paddingStart="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnActive"
+                android:paddingVertical="16dp"
+                app:cornerRadius="16dp"
+                android:backgroundTint="@android:color/transparent"
+                style="@style/Body.Medium.Ag1"
+                android:textColor="@color/dark2"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/dark2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Hoạt động mạnh\nLối sống đòi hỏi thể chất với tập thể dục hoặc thể thao 6 - 7 ngày mỗi tuần"
+                android:gravity="start|center_vertical"
+                android:paddingStart="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVeryActive"
+                android:paddingVertical="16dp"
+                app:cornerRadius="16dp"
+                android:backgroundTint="@android:color/transparent"
+                style="@style/Body.Medium.Ag1"
+                android:textColor="@color/dark2"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/dark2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Hoạt động cực kỳ cao\nTập thể dục hoặc thể thao nặng hàng ngày và công việc thể chất"
+                android:gravity="start|center_vertical"
+                android:paddingStart="12dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Next Button -->
+    <Button
+        android:id="@+id/btnNextBottom"
+        style="@style/PrimaryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tiếp theo"
+        android:layout_margin="24dp" />
+
+</LinearLayout> 

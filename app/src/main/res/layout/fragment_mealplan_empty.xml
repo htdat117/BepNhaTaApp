@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ngày này chưa có bữa ăn nào được lên kế hoạch."
+        style="@style/Body.Regular.Ag2"
+        android:gravity="center"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAutoGenerate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tạo tự động ngay"
+        style="@style/PrimaryButton"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sao chép ngày trước đó\nTải kế hoạch đã lưu\nTạo kế hoạch trống"
+        android:gravity="center"
+        style="@style/Body.Medium.Ag3"
+        android:layout_marginTop="24dp"/>
+
+</LinearLayout> 
