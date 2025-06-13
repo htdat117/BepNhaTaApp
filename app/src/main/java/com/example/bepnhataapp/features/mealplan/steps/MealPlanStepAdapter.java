@@ -17,7 +17,6 @@ public class MealPlanStepAdapter extends FragmentStateAdapter {
         fragments = new ArrayList<>();
         fragments.add(new StepPhysicalProfileFragment());
         fragments.add(new StepGeneralGoalFragment());
-        fragments.add(new StepSpecificGoalFragment());
         fragments.add(new StepAllergyFragment());
         fragments.add(new StepActivityLevelFragment());
         fragments.add(new StepSummaryFragment());

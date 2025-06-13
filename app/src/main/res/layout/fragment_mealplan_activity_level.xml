@@ -17,7 +17,13 @@
         <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động vừa phải" android:layout_marginTop="8dp" />
         <Button style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hoạt động mạnh" android:layout_marginTop="8dp" />
 
-        <Button style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Tiếp theo" android:layout_marginTop="24dp" />
+        <Button
+            android:id="@+id/btnNext"
+            style="@style/PrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tiếp theo"
+            android:layout_marginTop="24dp" />
 
     </LinearLayout>
 </ScrollView> 

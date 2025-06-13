@@ -6,17 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.features.mealplan.MealPlanWizardActivity;
 
 public class StepGeneralGoalFragment extends Fragment {
 
-    private View btnGeneralGoalTab;
-    private View btnSpecificGoalTab;
+    private Button btnGeneralGoalTab;
+    private Button btnSpecificGoalTab;
     private FrameLayout goalContentContainer;
     private View generalGoalView;
     private View specificGoalView;
@@ -25,9 +28,59 @@ public class StepGeneralGoalFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mealplan_general_goal, container, false);
-        Button btnGeneralGoalTab = root.findViewById(R.id.btnGeneralGoalTab);
-        Button btnSpecificGoalTab = root.findViewById(R.id.btnSpecificGoalTab);
-        FrameLayout goalContentContainer = root.findViewById(R.id.goalContentContainer);
+
+        // Setup back button
+        ImageButton btnBack = root.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            if (getActivity() instanceof MealPlanWizardActivity) {
+                ((MealPlanWizardActivity) getActivity()).moveToPreviousStep();
+            }
+        });
+
+        // Setup next button in header
+        TextView btnNext = root.findViewById(R.id.btnNext);
+        btnNext.setOnClickListener(v -> {
+            if (getActivity() instanceof MealPlanWizardActivity) {
+                // Check if we're in specific goal tab
+                if (btnSpecificGoalTab.isSelected()) {
+                    // If we're in specific goal tab, switch back to general goal tab
+                    btnGeneralGoalTab.setSelected(true);
+                    btnSpecificGoalTab.setSelected(false);
+                    btnGeneralGoalTab.refreshDrawableState();
+                    btnSpecificGoalTab.refreshDrawableState();
+                    goalContentContainer.removeAllViews();
+                    goalContentContainer.addView(generalGoalView);
+                } else {
+                    // If we're in general goal tab, proceed to next step
+                    ((MealPlanWizardActivity) getActivity()).moveToNextStep();
+                }
+            }
+        });
+
+        // Setup next button at bottom - using TextView instead of Button
+        TextView btnNextBottom = root.findViewById(R.id.btnNext);
+        btnNextBottom.setOnClickListener(v -> {
+            if (getActivity() instanceof MealPlanWizardActivity) {
+                // Check if we're in specific goal tab
+                if (btnSpecificGoalTab.isSelected()) {
+                    // If we're in specific goal tab, switch back to general goal tab
+                    btnGeneralGoalTab.setSelected(true);
+                    btnSpecificGoalTab.setSelected(false);
+                    btnGeneralGoalTab.refreshDrawableState();
+                    btnSpecificGoalTab.refreshDrawableState();
+                    goalContentContainer.removeAllViews();
+                    goalContentContainer.addView(generalGoalView);
+                } else {
+                    // If we're in general goal tab, proceed to next step
+                    ((MealPlanWizardActivity) getActivity()).moveToNextStep();
+                }
+            }
+        });
+
+        // Setup goal type tabs
+        btnGeneralGoalTab = root.findViewById(R.id.btnGeneralGoalTab);
+        btnSpecificGoalTab = root.findViewById(R.id.btnSpecificGoalTab);
+        goalContentContainer = root.findViewById(R.id.goalContentContainer);
 
         // Inflate 2 nội dung
         generalGoalView = inflater.inflate(R.layout.fragment_mealplan_general_goal_content, goalContentContainer, false);
@@ -50,6 +103,7 @@ public class StepGeneralGoalFragment extends Fragment {
             goalContentContainer.removeAllViews();
             goalContentContainer.addView(generalGoalView);
         });
+
         btnSpecificGoalTab.setOnClickListener(v -> {
             btnGeneralGoalTab.setSelected(false);
             btnSpecificGoalTab.setSelected(true);
@@ -61,6 +115,7 @@ public class StepGeneralGoalFragment extends Fragment {
             goalContentContainer.removeAllViews();
             goalContentContainer.addView(specificGoalView);
         });
+
         return root;
     }
 

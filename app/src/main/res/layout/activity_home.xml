@@ -65,16 +65,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Gói nguyên liệu hot"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    style="@style/Header.Ag2"
+                    android:textColor="@color/primary1" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem tất cả "
-                    android:textSize="14sp"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    style="@style/Body.Medium.Ag2"
+                    android:textColor="@color/primary1" />
 
                 <ImageView
                     android:layout_width="16dp"
@@ -109,16 +108,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Công thức dành cho bạn"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    style="@style/Header.Ag2"
+                    android:textColor="@color/primary1" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem tất cả "
-                    android:textSize="14sp"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    style="@style/Body.Medium.Ag2"
+                    android:textColor="@color/primary1" />
 
                 <ImageView
                     android:layout_width="16dp"
@@ -259,16 +257,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Mẹo vặt bí quyết nấu ăn"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    style="@style/Header.Ag2"
+                    android:textColor="@color/primary1" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem tất cả "
-                    android:textSize="14sp"
-                    android:textColor="@android:color/holo_orange_dark" />
+                    style="@style/Body.Medium.Ag2"
+                    android:textColor="@color/primary1" />
 
                 <ImageView
                     android:layout_width="16dp"
@@ -293,8 +290,6 @@
 
     <!-- Bottom Navigation Bar -->
     <include layout="@layout/layout_bottom_navigation"
-        android:id="@+id/bottom_navigation_container"
-        android:layout_width="match_parent"
-        android:layout_height="56dp" />
+        android:id="@+id/bottom_navigation_container"/>
 
 </LinearLayout>

@@ -34,7 +34,7 @@
 
         <!-- Các activity khác -->
         <activity
-            android:name=".features.manage_account.ManageAccountActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".features.blog.BlogCommentsActivity"
@@ -46,7 +46,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.manage_account.ManageAccountActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.LoginActivity"
@@ -68,6 +68,9 @@
             android:exported="false" />
         <activity
             android:name=".features.voucher.VoucherActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.mealplan.MealPlanWizardActivity"
             android:exported="false" />
 
         <meta-data

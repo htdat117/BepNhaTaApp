@@ -59,6 +59,8 @@
         <TextView
             android:id="@+id/tvDesc"
             style="@style/Body.Regular.Ag3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Bếp Nhà Ta sử dụng RMR (Tỷ lệ trao đổi chất nghỉ ngơi) để ước tính ngân sách dinh dưỡng của bạn, dựa trên chiều cao, cân nặng, giới tính sinh học và tuổi."
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"/>
@@ -136,6 +138,8 @@
         <!-- Gender -->
         <TextView
             style="@style/Body.Regular.Ag3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Giới tính"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp" />
@@ -223,6 +227,8 @@
         <!-- Body status -->
         <TextView
             style="@style/Body.Regular.Ag3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Tình trạng cơ thể"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp" />
