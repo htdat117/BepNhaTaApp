@@ -3,35 +3,50 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-    <!-- AppBar -->
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Header -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/primary1"
-            android:title="Blog"
-            android:titleTextColor="@android:color/white"/>
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="56dp"
+        android:background="@color/primary1">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Quay lại" />
+
+        <TextView
+            android:id="@+id/tvToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Blog"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
 
     <!-- Nội dung chính -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:padding="0dp"
         android:clipToPadding="false"
-        android:layout_marginBottom="120dp">
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="56dp">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:background="@android:color/white">
 
             <!-- Tiêu đề, ngày, lượt thích, chia sẻ -->
             <TextView
@@ -40,7 +55,9 @@
                 android:layout_height="wrap_content"
                 android:text="Mẹo hay - Nấu chuẩn"
                 android:textColor="#6F6F6F"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
@@ -49,14 +66,18 @@
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="31/3/2025"
                 android:textColor="#BFBFBF"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
 
             <!-- Like, comment, share -->
             <LinearLayout
@@ -64,7 +85,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
                 <ImageView android:id="@+id/ivLike"
                     android:src="@drawable/ic_like"
                 android:layout_width="20dp" android:layout_height="20dp"/>
@@ -78,7 +101,6 @@
 
             <!-- Ảnh minh họa lớn -->
 
-            <!-- Nội dung bài viết -->
             <ImageView
                 android:id="@+id/imgMain"
                 android:layout_width="match_parent"
@@ -87,13 +109,16 @@
                 android:scaleType="centerCrop"
            />
 
+            <!-- Nội dung bài viết -->
             <TextView
                 android:id="@+id/tvContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nội dung bài viết..."
                 android:textSize="16sp"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
 
             <!-- Bình luận -->
             <TextView
@@ -102,39 +127,75 @@
                 android:textSize="16sp"
                 android:layout_marginTop="24dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
             <!-- Danh sách bình luận -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"/>
             <!-- Nhập bình luận mới -->
             <EditText
                 android:id="@+id/edtComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Chia sẻ cảm nhận của bạn"
-                android:background="@drawable/bg_edittext_outline_orange"
-                android:layout_marginTop="8dp"/>
+                android:background="@drawable/bg_edittext_thin_outline"
+                android:layout_marginTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
+
+            <!-- Divider after comments -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEEEEE"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"/>
+
+            <!-- Gợi ý bài viết liên quan (Moved back inside NestedScrollView) -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginBottom="56dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Có thể bạn sẽ thích"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="8dp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSuggest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"/>
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Gợi ý bài viết liên quan -->
-    <LinearLayout
-        android:orientation="vertical"
+    <!-- Bottom Navigation Bar -->
+    <include
+        android:id="@+id/bottom_navigation"
+        layout="@layout/layout_bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@android:color/white"
-        android:padding="8dp"
-        android:layout_marginBottom="56dp">
-      
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSuggest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
+        android:layout_height="56dp"
+        android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 

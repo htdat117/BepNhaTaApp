@@ -21,7 +21,7 @@ public class BlogActivity extends BaseActivity implements BaseActivity.OnNavigat
         fragmentTransaction.commit();
 
         // Setup the bottom navigation fragment
-        setupBottomNavigationFragment(R.id.nav_recipes);
+        // Removed setupBottomNavigationFragment to prevent automatic navigation
     }
 
     @Override

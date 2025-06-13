@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.adapter.FoodItemAdapter;
 
 public class CaloCalculatorFragment extends Fragment {
 

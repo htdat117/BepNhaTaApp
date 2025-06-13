@@ -19,6 +19,13 @@
         <item name="android:fontFamily">@font/inter_regular</item>
     </style>
 
+    <!-- Toolbar Title Style for BlogDetailActivity -->
+    <style name="ToolbarTitleStyle.BlogDetail" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <!-- Header Text Styles -->
     <style name="Header.Ag1" parent="Font.Bold">
         <item name="android:textSize">@dimen/header1</item>

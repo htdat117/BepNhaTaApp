@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.features.calocal;
+package com.example.bepnhataapp.common.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.features.calocal.FoodItem;
 
 import java.util.List;
 

@@ -18,8 +18,9 @@
 
         <!-- Activity khởi động chính -->
         <activity
-            android:name=".features.manage_account.ManageAccountActivity"
+            android:name=".features.blog.BlogActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,12 +30,18 @@
         <!-- Các activity công cụ -->
         <activity
             android:name=".features.tools.ToolsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <!-- Các activity khác -->
         <activity
+            android:name=".features.manage_account.ManageAccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.blog.BlogCommentsActivity"
-            android:exported="true" />
+            android:exported="false" />
+        <activity
+            android:name=".features.blog.BlogDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />

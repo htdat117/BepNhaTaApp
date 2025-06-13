@@ -15,14 +15,14 @@ import com.example.bepnhataapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.bepnhataapp.common.adapter.BlogAdapter;
+import com.example.bepnhataapp.common.models.Blog;
 
 public class BlogFeedFragment extends Fragment {
 
     private RecyclerView recyclerViewBlog;
-    private BlogFeedAdapter blogFeedAdapter;
-    private List<BlogPostItem> blogPostList;
-    private ImageView btnBack;
-    private TextView tvHeaderTitle;
+    private BlogAdapter blogAdapter;
+    private List<Blog> blogList;
 
     @Nullable
     @Override
@@ -32,46 +32,30 @@ public class BlogFeedFragment extends Fragment {
         recyclerViewBlog = view.findViewById(R.id.recyclerViewBlog);
         recyclerViewBlog.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        blogPostList = new ArrayList<>();
+        blogList = new ArrayList<>();
         addSampleBlogPosts(); // Add sample data
 
-        blogFeedAdapter = new BlogFeedAdapter(blogPostList);
-        recyclerViewBlog.setAdapter(blogFeedAdapter);
-
-        // Ánh xạ và xử lý header
-        btnBack = view.findViewById(R.id.btnBack);
-        tvHeaderTitle = view.findViewById(R.id.tvHeaderTitle);
-
-        if (tvHeaderTitle != null) {
-            tvHeaderTitle.setText("Blog"); // Đặt tiêu đề là "Blog"
-        }
-
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> {
-                // Logic quay lại, có thể là popBackStack nếu có fragment trước đó
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
-            });
-        }
+        blogAdapter = new BlogAdapter(blogList);
+        recyclerViewBlog.setAdapter(blogAdapter);
 
         return view;
     }
 
     private void addSampleBlogPosts() {
         // Thêm dữ liệu mẫu
-        blogPostList.add(new BlogPostItem(R.drawable.food_placeholder, "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
+        // Item đầu tiên sẽ là header
+        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
                 "Bữa tối ngày mùa đông trời se se lạnh mà có một đĩa chả cá chiên nóng hổi cùng một tô canh vị chua chua ngọt ngọt thì ngon phải biết luôn đó nha! Bếp Nhà Ta phải rủ Mẹ vào bếp trổ tài nhanh một thực đơn xuất sắc với toàn món ngon mùa đông ngay thôi!",
-                "Mẹo hay - Nấu chuẩn", "31/3/2025", 20, 15));
-        blogPostList.add(new BlogPostItem(R.drawable.food_placeholder, "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
-                "Bữa tối ngày mùa đông trời se se lạnh mà có một đĩa chả cá chiên nóng hổi cùng một tô canh vị chua chua ngọt ngọt thì ngon phải biết luôn đó nha! Bếp Nhà Ta phải rủ Mẹ vào bếp trổ tài nhanh một thực đơn xuất sắc với toàn món ngon mùa đông ngay thôi!",
-                "Mẹo hay - Nấu chuẩn", "31/3/2025", 20, 15));
-        blogPostList.add(new BlogPostItem(R.drawable.food_placeholder, "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
-                "Bữa tối ngày mùa đông trời se se lạnh mà có một đĩa chả cá chiên nóng hổi cùng một tô canh vị chua chua ngọt ngọt thì ngon phải biết luôn đó nha! Bếp Nhà Ta phải rủ Mẹ vào bếp trổ tài nhanh một thực đơn xuất sắc với toàn món ngon mùa đông ngay thôi!",
-                "Mẹo hay - Nấu chuẩn", "31/3/2025", 20, 15));
-        blogPostList.add(new BlogPostItem(R.drawable.food_placeholder, "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
-                "Bữa tối ngày mùa đông trời se se lạnh mà có một đĩa chả cá chiên nóng hổi cùng một tô canh vị chua chua ngọt ngọt thì ngon phải biết luôn đó nha! Bếp Nhà Ta phải rủ Mẹ vào bếp trổ tài nhanh một thực đơn xuất sắc với toàn món ngon mùa đông ngay thôi!",
-                "Mẹo hay - Nấu chuẩn", "31/3/2025", 20, 15));
+                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false)); // Giả định R.drawable.blog là ảnh lớn cho header
 
+        // Các item tiếp theo sẽ là dạng nhỏ
+        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
+                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
+        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
+                "Mẹo hay - Nấu chuẩn", R.drawable.blog, true)); // Thêm một item có isFavorite = true để thử nghiệm
+        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
+                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
+        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
+                "Mẹo hay - Nấu chuẩn", R.drawable.blog, true));
     }
 } 

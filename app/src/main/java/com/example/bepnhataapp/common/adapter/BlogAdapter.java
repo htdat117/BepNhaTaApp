@@ -1,5 +1,7 @@
 package com.example.bepnhataapp.common.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.features.blog.BlogDetailActivity;
+
 import java.util.List;
 
 public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
     private List<Blog> blogList;
+    private Context context;
 
     public BlogAdapter(List<Blog> blogList) {
         this.blogList = blogList;
@@ -28,9 +33,10 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        context = parent.getContext(); // Lấy context từ parent
+        LayoutInflater inflater = LayoutInflater.from(context);
         if (viewType == TYPE_HEADER) {
-            View view = inflater.inflate(R.layout.item_blog_header, parent, false);
+            View view = inflater.inflate(R.layout.item_blog_post, parent, false);
             return new HeaderViewHolder(view);
         } else {
             View view = inflater.inflate(R.layout.item_blog_small, parent, false);
@@ -43,14 +49,22 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Blog blog = blogList.get(position);
         if (getItemViewType(position) == TYPE_HEADER) {
             HeaderViewHolder vh = (HeaderViewHolder) holder;
-            vh.imgBlogHeader.setImageResource(blog.getImageResId());
-            vh.tvTitleHeader.setText(blog.getTitle());
-            vh.tvDescHeader.setText(blog.getDescription());
-            vh.tvCategoryHeader.setText(blog.getCategory());
-            vh.imgFavoriteHeader.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
-            vh.imgFavoriteHeader.setOnClickListener(v -> {
+            vh.imageViewPost.setImageResource(blog.getImageResId());
+            vh.textViewCategory.setText(blog.getCategory());
+            vh.textViewTitle.setText(blog.getTitle());
+            vh.textViewDescription.setText(blog.getDescription());
+            vh.textViewDate.setText(blog.getDate());
+            vh.textViewViews.setText(String.valueOf(blog.getViews()));
+            vh.textViewLikes.setText(String.valueOf(blog.getLikes()));
+            vh.imageViewLike.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+            vh.imageViewLike.setOnClickListener(v -> {
                 blog.setFavorite(!blog.isFavorite());
                 notifyItemChanged(position);
+            });
+            vh.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, BlogDetailActivity.class);
+                intent.putExtra(BlogDetailActivity.EXTRA_BLOG, blog);
+                context.startActivity(intent);
             });
         } else {
             ItemViewHolder vh = (ItemViewHolder) holder;
@@ -62,6 +76,11 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 blog.setFavorite(!blog.isFavorite());
                 notifyItemChanged(position);
             });
+            vh.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, BlogDetailActivity.class);
+                intent.putExtra(BlogDetailActivity.EXTRA_BLOG, blog);
+                context.startActivity(intent);
+            });
         }
     }
 
@@ -71,15 +90,18 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgBlogHeader, imgFavoriteHeader;
-        TextView tvTitleHeader, tvDescHeader, tvCategoryHeader;
+        ImageView imageViewPost, imageViewLike;
+        TextView textViewCategory, textViewTitle, textViewDescription, textViewDate, textViewViews, textViewLikes;
         HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgBlogHeader = itemView.findViewById(R.id.imgBlogHeader);
-            imgFavoriteHeader = itemView.findViewById(R.id.imgFavoriteHeader);
-            tvTitleHeader = itemView.findViewById(R.id.tvTitleHeader);
-            tvDescHeader = itemView.findViewById(R.id.tvDescHeader);
-            tvCategoryHeader = itemView.findViewById(R.id.tvCategoryHeader);
+            imageViewPost = itemView.findViewById(R.id.imageViewPost);
+            imageViewLike = itemView.findViewById(R.id.imageViewLike);
+            textViewCategory = itemView.findViewById(R.id.textViewCategory);
+            textViewTitle = itemView.findViewById(R.id.textViewTitle);
+            textViewDescription = itemView.findViewById(R.id.textViewDescription);
+            textViewDate = itemView.findViewById(R.id.textViewDate);
+            textViewViews = itemView.findViewById(R.id.textViewViews);
+            textViewLikes = itemView.findViewById(R.id.textViewLikes);
         }
     }
 

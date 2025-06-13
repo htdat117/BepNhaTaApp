@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#A5D6A7"/> <!-- Màu xanh lá cây nhạt -->
+    <solid android:color="#A5D6A7"/> <!-- Màu xanh lá cây nhạt để làm placeholder -->
     <corners android:radius="8dp"/> <!-- Bo tròn góc -->
-    <size android:width="50dp" android:height="50dp"/> <!-- Kích thước placeholder -->
 </shape> 

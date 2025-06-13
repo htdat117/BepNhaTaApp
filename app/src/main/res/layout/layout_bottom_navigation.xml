@@ -12,7 +12,4 @@
     app:itemPaddingTop="8dp"
     app:itemPaddingBottom="8dp"
     app:labelVisibilityMode="labeled"
-    app:elevation="8dp"
-    app:itemTextAppearanceActive="@style/BottomNavTextActive"
-    app:itemActiveIndicatorStyle="@style/NoActiveIndicator"
     app:itemRippleColor="@android:color/transparent" />
