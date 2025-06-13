@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:maxWidth="320dp"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/bg_dialog_rounded_white">
+
+    <!-- Nút đóng -->
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_close_popup"
+        android:contentDescription="Đóng" />
+
+    <!-- Ảnh minh họa -->
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="140dp"
+        android:layout_height="163dp"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_popup_login_require" />
+
+    <!-- Nội dung -->
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Vui lòng đăng nhập \nđể sử dụng tính năng này"
+        style="@style/Body.Medium.Ag1"
+        android:singleLine="false"
+        android:lines="2"
+        android:textColor="@color/dark2"
+        android:gravity="center" />
+
+    <!-- Button OK -->
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:text="Vô luôn bạn ơi!"
+        style="@style/Body.Medium.Ag1"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/primary1" />
+
+</LinearLayout> 
