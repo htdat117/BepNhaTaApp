@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.example.bepnhataapp.features.ingredients.ProductActivity;
 import com.example.bepnhataapp.features.mealplan.MealPlanActivity;
 import com.example.bepnhataapp.features.recipes.RecipesActivity;
 import com.example.bepnhataapp.features.tools.ToolsActivity;
+import com.example.bepnhataapp.features.manage_account.ManageAccountActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -29,6 +32,37 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Thiết lập sự kiện click cho header (nếu header tồn tại trong layout)
+        setupHeaderClicks();
+    }
+
+    private void setupHeaderClicks() {
+        // Tìm các icon trên header (nếu layout hiện tại có include header)
+        View root = findViewById(android.R.id.content);
+        if (root == null) return;
+        ImageView ivCart = root.findViewById(R.id.iv_cart);
+        ImageView ivMessage = root.findViewById(R.id.iv_message);
+        ImageView ivNotification = root.findViewById(R.id.iv_notification);
+        ImageView ivLogo = root.findViewById(R.id.iv_logo);
+        TextView tvLogin = root.findViewById(R.id.tv_login);
+
+        View.OnClickListener goToManageAccount = v -> {
+            if (!(BaseActivity.this instanceof ManageAccountActivity)) {
+                Intent intent = new Intent(BaseActivity.this, ManageAccountActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        };
+        if (ivCart != null) ivCart.setOnClickListener(goToManageAccount);
+        if (ivMessage != null) ivMessage.setOnClickListener(goToManageAccount);
+        if (ivNotification != null) ivNotification.setOnClickListener(goToManageAccount);
+        if (ivLogo != null) ivLogo.setOnClickListener(goToManageAccount);
+        if (tvLogin != null) tvLogin.setOnClickListener(goToManageAccount);
     }
 
     // Method to be implemented by child activities to get the container ID for the bottom navigation fragment
