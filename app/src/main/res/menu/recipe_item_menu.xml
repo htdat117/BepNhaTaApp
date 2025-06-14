@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_change_recipe" android:title="Thay đổi món" android:icon="@android:drawable/ic_menu_rotate"/>
+    <item android:id="@+id/menu_change_day" android:title="Thay đổi ngày" android:icon="@android:drawable/ic_menu_edit"/>
+    <item android:id="@+id/menu_move_meal" android:title="Đổi bữa" android:icon="@drawable/ic_fork_knife"/>
+    <item android:id="@+id/menu_buy_ingredients" android:title="Mua nguyên liệu" android:icon="@android:drawable/ic_menu_agenda"/>
+    <item android:id="@+id/menu_delete_recipe" android:title="Xoá thực đơn" android:icon="@android:drawable/ic_menu_delete"/>
+</menu> 

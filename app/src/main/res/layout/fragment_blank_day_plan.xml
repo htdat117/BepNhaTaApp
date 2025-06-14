@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- KPI block -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_piechart"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="8dp">
+
+            <TextView
+                android:id="@+id/tvTotalCal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 Calories"
+                style="@style/Body.Bold.Ag2"/>
+
+            <TextView
+                android:id="@+id/tvMacro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0g Carbs, 0g Fat, 0g Protein"
+                style="@style/Body.Regular.Ag4"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_right"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary4"/>
+
+    <TextView
+        android:id="@+id/tvTracked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Theo dõi 0/0 bữa ăn"
+        android:gravity="center_horizontal"
+        android:padding="4dp"
+        style="@style/Body.Bold.Ag3"/>
+
+    <!-- Meal rows -->
+    <LinearLayout
+        android:id="@+id/containerMeals"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+</LinearLayout> 

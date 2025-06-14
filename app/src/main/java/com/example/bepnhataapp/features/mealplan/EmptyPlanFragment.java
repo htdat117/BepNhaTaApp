@@ -1,5 +1,6 @@
 package com.example.bepnhataapp.features.mealplan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,20 @@ public class EmptyPlanFragment extends Fragment {
             MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
             vm.autoGenerate();
         });
+
+        MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+
+        view.findViewById(R.id.btnLoadBlank).setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.dayPlanContainer, new BlankDayPlanFragment())
+                    .commit();
+        });
+
+        view.findViewById(R.id.btnLoadSaved).setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), LoadMealPlanActivity.class);
+            startActivity(intent);
+        });
+
         return view;
     }
 } 

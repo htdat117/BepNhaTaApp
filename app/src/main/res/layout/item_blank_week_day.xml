@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Header day row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:background="@color/dark3">
+
+        <TextView
+            android:id="@+id/tvDayLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Body.Bold.Ag1"
+            android:text="Monday,"/>
+
+        <TextView
+            android:id="@+id/tvDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            style="@style/Body.Regular.Ag3"
+            android:textColor="@color/dark2"
+            android:text="June 23"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/btnMealOptions"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_3dot"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+    <!-- KPI row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingBottom="8dp"
+        android:background="@color/dark3"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_piechart"/>
+
+        <TextView
+            android:id="@+id/tvCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            style="@style/Body.Regular.Ag3"
+            android:textColor="@color/dark2"
+            android:text="0 Calories"/>
+    </LinearLayout>
+
+    <TextView
+        style="@style/Body.Regular.Ag4"
+        android:layout_width="match_parent"
+        android:layout_height="13dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Ngày này chưa được lên kế hoạch" />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:text="Tạo tự động ngày"
+        android:gravity="center"
+        app:cornerRadius="8dp"
+        app:strokeColor="@color/primary1"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Sao chép thực đơn ngày trước"
+        android:gravity="center"
+        app:cornerRadius="8dp"
+        app:strokeColor="@color/primary1"
+        android:textColor="@color/dark2"
+        android:layout_marginTop="8dp"
+        android:background="#00000000"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tạo thực đơn trống"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:cornerRadius="8dp"
+        app:strokeColor="@color/primary1"
+        android:textColor="@color/dark2"
+        android:layout_marginTop="8dp"
+        android:background="#00000000"/>
+
+</LinearLayout> 

@@ -6,5 +6,6 @@ public interface MealPlanRepository {
     boolean hasPlan();
     WeekPlan getWeekPlan();
     WeekPlan generateWeekPlan(LocalDate start);
+    WeekPlan generateEmptyWeekPlan(LocalDate start);
     void clear();
 } 

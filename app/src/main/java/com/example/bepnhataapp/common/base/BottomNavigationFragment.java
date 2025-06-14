@@ -59,23 +59,19 @@ public class BottomNavigationFragment extends Fragment {
             return view;
         }
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Log.d(TAG, "onNavigationItemSelected: Item selected: " + item.getItemId());
-                if (mListener != null) {
-                    mListener.onNavigationItemReselected(item.getItemId());
-                    Log.d(TAG, "onNavigationItemSelected: Called listener with item ID: " + item.getItemId());
-                } else {
-                    Log.e(TAG, "onNavigationItemSelected: Listener is null.");
-                }
+        // Set the initial selected item without triggering callback
+        bottomNavigationView.setSelectedItemId(initialSelectedItemId);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == initialSelectedItemId && getParentFragmentManager().isStateSaved()) {
+                // Ignore first automatic selection
                 return true;
             }
+            if (mListener != null) {
+                mListener.onNavigationItemReselected(item.getItemId());
+            }
+            return true;
         });
-
-        // Set the initial selected item
-        bottomNavigationView.setSelectedItemId(initialSelectedItemId);
-        Log.d(TAG, "onCreateView: Set selected item ID: " + initialSelectedItemId);
 
         return view;
     }

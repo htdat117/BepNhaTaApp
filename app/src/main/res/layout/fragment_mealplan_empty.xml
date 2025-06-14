@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:padding="8dp">
@@ -16,39 +17,42 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAutoGenerate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:text="Tạo tự động ngay"
-        style="@style/PrimaryButton"
+        app:cornerRadius="16dp"
         android:layout_marginTop="8dp"
         android:minHeight="0dp"
         android:paddingVertical="8dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:text="Sao chép ngày trước đó"
-        style="@style/PrimaryButton"
+        app:cornerRadius="16dp"
         android:gravity="center"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:minHeight="0dp"
         android:paddingVertical="8dp"/>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLoadSaved"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tải ké hoạch đã lưu"
+        android:layout_height="48dp"
+        android:text="Tải kế hoạch đã lưu"
+        app:cornerRadius="16dp"
         android:gravity="center"
-        style="@style/PrimaryButton"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:minHeight="0dp"
         android:paddingVertical="8dp"/>
+
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLoadBlank"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tải kế hoạch trống"
-        style="@style/PrimaryButton"
+        android:layout_height="48dp"
+        android:text="Tạo thực đơn trống"
+        app:cornerRadius="16dp"
         android:gravity="center"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:minHeight="0dp"
         android:paddingVertical="8dp"/>
 

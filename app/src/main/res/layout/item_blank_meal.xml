@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="8dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/ic_remove"
+        android:tint="@color/dark5"/>
+
+    <TextView
+        android:id="@+id/tvMealTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingStart="8dp"
+        style="@style/Body.Bold.Ag3"
+        android:text="Buổi sáng"/>
+
+    <TextView
+        android:id="@+id/tvChoose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn món"
+        android:textColor="@color/primary1"
+        style="@style/Body.Regular.Ag3"/>
+
+    <ImageButton
+        android:id="@+id/btnMealOptions"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_3dot"
+        android:background="@android:color/transparent"/>
+</LinearLayout> 

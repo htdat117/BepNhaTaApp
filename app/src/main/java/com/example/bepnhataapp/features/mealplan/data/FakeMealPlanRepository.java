@@ -37,6 +37,16 @@ public class FakeMealPlanRepository implements MealPlanRepository {
     }
 
     @Override
+    public WeekPlan generateEmptyWeekPlan(LocalDate start) {
+        List<DayPlan> days = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            days.add(new DayPlan(start.plusDays(i), new ArrayList<>()));
+        }
+        cached = new WeekPlan(start, days);
+        return cached;
+    }
+
+    @Override
     public void clear() {
         cached = null;
     }

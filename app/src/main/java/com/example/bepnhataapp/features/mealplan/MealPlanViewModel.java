@@ -34,4 +34,9 @@ public class MealPlanViewModel extends ViewModel {
         repository.generateWeekPlan(LocalDate.now());
         refresh();
     }
+
+    public void generateEmpty() {
+        repository.generateEmptyWeekPlan(LocalDate.now());
+        refresh();
+    }
 } 

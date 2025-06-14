@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_refresh_day"
+        android:title="Làm mới ngày"
+        android:icon="@android:drawable/ic_menu_rotate"/>
+
+    <item
+        android:id="@+id/menu_edit_layout"
+        android:title="Chỉnh sửa bố cục"
+        android:icon="@android:drawable/ic_menu_edit"/>
+
+    <item
+        android:id="@+id/menu_save_template"
+        android:title="Lưu mẫu thực đơn"
+        android:icon="@android:drawable/ic_menu_save"/>
+
+    <item
+        android:id="@+id/menu_load_template"
+        android:title="Tải mẫu thực đơn"
+        android:icon="@android:drawable/ic_menu_upload"/>
+
+    <item
+        android:id="@+id/menu_share_template"
+        android:title="Chia sẻ mẫu thực đơn"
+        android:icon="@android:drawable/ic_menu_share"/>
+
+    <item
+        android:id="@+id/menu_add_note"
+        android:title="Thêm ghi chú"
+        android:icon="@android:drawable/ic_menu_edit"/>
+
+    <item
+        android:id="@+id/menu_delete_day"
+        android:title="Xoá thực đơn"
+        android:icon="@android:drawable/ic_menu_delete"/>
+
+</menu> 

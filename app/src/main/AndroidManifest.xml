@@ -78,6 +78,12 @@
         <activity
             android:name=".features.manage_account.ManageAccountActivity"
             android:exported="false" />
+        <activity
+            android:name=".features.mealplan.LoadMealPlanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.mealplan.LoadMealPlanReviewActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
