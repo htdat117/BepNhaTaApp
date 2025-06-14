@@ -17,7 +17,7 @@
             android:name=".features.ingredients.FilterProductActivity"
             android:exported="false" />
         <activity
-            android:name=".features.cart.CartActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
             android:name=".features.ingredients.ProductActivity"
             android:exported="false" />
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.cart.CartActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.LoginActivity"

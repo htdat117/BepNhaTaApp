@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ngày này chưa có bữa ăn nào được lên kế hoạch."
+        android:text="Ngày này chưa có bữa ăn nào được lên kế hoạch"
         style="@style/Body.Regular.Ag2"
         android:gravity="center"/>
 
@@ -19,14 +19,37 @@
         android:layout_height="wrap_content"
         android:text="Tạo tự động ngay"
         style="@style/PrimaryButton"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"
+        android:minHeight="0dp"
+        android:paddingVertical="8dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sao chép ngày trước đó\nTải kế hoạch đã lưu\nTạo kế hoạch trống"
+        android:text="Sao chép ngày trước đó"
+        style="@style/PrimaryButton"
         android:gravity="center"
-        style="@style/Body.Medium.Ag3"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="8dp"
+        android:minHeight="0dp"
+        android:paddingVertical="8dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tải ké hoạch đã lưu"
+        android:gravity="center"
+        style="@style/PrimaryButton"
+        android:layout_marginTop="8dp"
+        android:minHeight="0dp"
+        android:paddingVertical="8dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tải kế hoạch trống"
+        style="@style/PrimaryButton"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:minHeight="0dp"
+        android:paddingVertical="8dp"/>
 
 </LinearLayout> 

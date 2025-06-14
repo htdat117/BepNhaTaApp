@@ -1,23 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginEnd="8dp">
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginBottom="16dp">
 
+    <!-- Back card 1 -->
+    <View
+        android:id="@+id/cardBack1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/imgReco"
+        app:layout_constraintStart_toStartOf="@id/imgReco"
+        app:layout_constraintEnd_toEndOf="@id/imgReco"
+        app:layout_constraintDimensionRatio="1:1"
+        android:background="@color/orange"
+        android:translationX="-6dp"
+        android:translationY="-6dp"/>
+
+    <!-- Back card 2 -->
+    <View
+        android:id="@+id/cardBack2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/imgReco"
+        app:layout_constraintStart_toStartOf="@id/imgReco"
+        app:layout_constraintEnd_toEndOf="@id/imgReco"
+        app:layout_constraintDimensionRatio="1:1"
+        android:background="@color/primary1"
+        android:translationX="-3dp"
+        android:translationY="-3dp"/>
+
+    <!-- Main image -->
     <ImageView
         android:id="@+id/imgReco"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/placeholder_banner_background"
-        android:scaleType="centerCrop" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        android:scaleType="centerCrop"
+        android:background="@drawable/rounded_corner_8"
+        android:src="@drawable/placeholder_banner_background" />
 
+    <!-- Badge -->
+    <TextView
+        android:id="@+id/tvBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="2dp"
+        android:text="7 thực đơn"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:background="@drawable/bg_badge_orange"
+        app:layout_constraintBottom_toBottomOf="@id/imgReco"
+        app:layout_constraintEnd_toEndOf="@id/imgReco"
+        android:layout_margin="4dp"/>
+
+    <!-- Title -->
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="120dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/imgReco"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="6dp"
+        style="@style/Body.Bold.Ag1"
         android:text="Tiêu đề"
-        style="@style/Body.Regular.Ag3"
+        android:minHeight="40dp"
         android:maxLines="2"
         android:ellipsize="end" />
-</LinearLayout> 
+
+</androidx.constraintlayout.widget.ConstraintLayout> 

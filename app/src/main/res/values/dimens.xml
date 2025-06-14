@@ -9,4 +9,5 @@
     <dimen name="header3">22sp</dimen>
     <dimen name="header4">18sp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="grid_spacing">8dp</dimen>
 </resources>
