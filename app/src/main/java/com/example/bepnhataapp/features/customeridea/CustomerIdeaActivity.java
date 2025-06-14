@@ -34,6 +34,9 @@ public class CustomerIdeaActivity extends AppCompatActivity {
         setupClearButtonWithAction((EditText) findViewById(R.id.edtEmail));
         setupClearButtonWithAction((EditText) findViewById(R.id.edtProblem));
         setupClearButtonWithAction((EditText) findViewById(R.id.edtContent));
+
+        // Back button
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
     private void setupClearButtonWithAction(EditText editText) {
