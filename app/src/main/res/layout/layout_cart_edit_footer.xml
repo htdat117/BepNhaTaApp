@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutEditFooter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#FFF3E9"
+    android:padding="12dp"
+    android:gravity="center_vertical">
+
+    <!-- Select all checkbox and label -->
+    <CheckBox
+        android:id="@+id/checkboxSelectAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn tất cả"
+        android:textColor="@color/dark2"
+        android:textSize="14sp"
+        android:layout_marginStart="8dp"/>
+
+    <!-- Spacer -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"/>
+
+    <!-- Favorite button -->
+    <Button
+        android:id="@+id/btnFavorite"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:text="Lưu vào yêu thích"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/primary1"
+        android:layout_marginEnd="8dp"/>
+
+    <!-- Delete button -->
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:text="Xoá"
+        android:backgroundTint="@color/primary1"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout> 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark3">
+
+    <include layout="@layout/layout_back_header" android:id="@+id/header"/>
+
+    <!-- input row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="8dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_rounded_8"
+        android:layout_marginVertical="16dp">
+        <EditText
+            android:id="@+id/edtVoucher"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:hint="Nhập mã Voucher"
+            android:background="@drawable/bg_card_round"
+            android:paddingHorizontal="12dp"/>
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:text="Áp dụng"
+            android:textSize="@dimen/body2"
+            android:background="@drawable/bg_button_primary"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerVoucher"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="16dp"/>
+
+    <!-- bottom bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/primary4"
+        android:padding="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đã áp dụng mã giảm giá "
+                android:textColor="@color/dark2"/>
+            <TextView
+                android:id="@+id/tvVoucherCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GIAM20%"
+                android:textColor="@color/primary1"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=", giảm "
+                android:textColor="@color/dark2"/>
+            <TextView
+                android:id="@+id/tvVoucherDiscount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-30.000đ"
+                android:textColor="@color/primary1"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/btnAgree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Đồng ý"
+            android:background="@drawable/bg_button_primary"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</LinearLayout> 

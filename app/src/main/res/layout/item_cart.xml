@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="16dp"
+    android:paddingRight="16dp">
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:src="@drawable/sample_img"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="0dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp">
+<!--        Tên sản phẩm -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gói nguyên liệu Bò kho"
+            android:textStyle="bold"
+            android:textColor="#222222"
+            android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <!--            Phân loại sản phẩm -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/btnServing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="2 người"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/body3"
+                    android:backgroundTint="@color/primary1"
+                    android:padding="2dp"
+                    android:layout_marginTop="4dp"
+                    android:drawableEnd="@drawable/ic_drop_down"
+                    android:paddingEnd="8dp"/>
+                <!--            Chọn số lượng -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_quantity_box"
+                    android:padding="0dp">
+                    <ImageButton
+                        android:id="@+id/btnMinus"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/bg_quantity_btn"
+                        android:src="@drawable/ic_remove"
+                        android:tint="@android:color/black"
+                        android:scaleType="center"
+                        android:contentDescription="Giảm số lượng"/>
+                    <TextView
+                        android:id="@+id/tvQuantity"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:text="1"
+                        android:fontFamily="@font/inter_medium"
+                        android:textSize="@dimen/body1"
+                        android:textColor="#222222"/>
+                    <ImageButton
+                        android:id="@+id/btnPlus"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/bg_quantity_btn"
+                        android:src="@drawable/ic_add"
+                        android:tint="#222222"
+                        android:scaleType="center"
+                        android:contentDescription="Tăng số lượng"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="end|bottom"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tvOldPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="150.000đ"
+                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/body3"/>
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="90.000đ"
+                    android:textColor="@color/primary1"
+                    android:fontFamily="@font/inter_bold"
+                    android:textSize="@dimen/body1"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout> 

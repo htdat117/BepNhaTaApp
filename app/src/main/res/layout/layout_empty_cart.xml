@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_empty_cart"
+        android:contentDescription="empty cart"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Giỏ hàng của bạn đang trống"
+        android:textColor="@color/primary1"
+        android:textSize="@dimen/header2"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nhấn vào nút để chọn sản phẩm yêu thích"
+        android:textColor="@color/dark2"
+        android:textStyle="italic"
+        android:textSize="@dimen/body2"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnViewProducts"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="XEM SẢN PHẨM"
+        android:backgroundTint="@color/primary1"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

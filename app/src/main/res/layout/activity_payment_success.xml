@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <!-- Custom header with avatar and icons -->
+    <include layout="@layout/layout_custom_header_no_search" android:id="@+id/header"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="24dp">
+
+            <ImageView
+                android:id="@+id/imgIllustration"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:src="@drawable/ic_payment_successful"
+                android:contentDescription="success"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đặt hàng thành công"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/primary1"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cảm ơn bạn đã tin tưởng và lựa chọn \nsản phẩm của Bếp Nhà Ta"
+                android:textAlignment="center"
+                android:textColor="@color/dark2"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"/>
+
+            <Button
+                android:id="@+id/btnTrackOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="THEO DÕI ĐƠN"
+                android:background="@drawable/bg_button_primary"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_marginTop="32dp"/>
+
+            <Button
+                android:id="@+id/btnGoHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TRANG CHỦ"
+                android:background="@drawable/bg_button_primary"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- bottom navigation -->
+    <include layout="@layout/layout_bottom_navigation"/>
+</LinearLayout> 
