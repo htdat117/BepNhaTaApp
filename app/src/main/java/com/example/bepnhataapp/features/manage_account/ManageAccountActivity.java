@@ -45,6 +45,15 @@ public class ManageAccountActivity extends BaseActivity {
                 startActivity(intent);
             });
         }
+
+        // Mở trang Ý kiến khách hàng
+        android.view.View ideaView = findViewById(R.id.layout_customer_idea);
+        if (ideaView != null) {
+            ideaView.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.customeridea.CustomerIdeaActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private boolean isLoggedIn() {

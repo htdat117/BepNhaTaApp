@@ -387,6 +387,7 @@
                     android:background="@color/primary1" />
                 <!-- Ý kiến khách hàng -->
                 <LinearLayout
+                    android:id="@+id/layout_customer_idea"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
