@@ -173,16 +173,16 @@
 
     <style name="Widget.BepNhaTa.AllergyChip" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/primary1</item>
         <item name="strokeColor">@color/primary1</item>
         <item name="strokeWidth">2dp</item>
         <item name="cornerRadius">16dp</item>
         <item name="android:backgroundTint">@android:color/white</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="android:minWidth">96dp</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
     </style>
 
     <style name="Widget.BepNhaTa.ChoiceChip" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -192,8 +192,9 @@
         <item name="strokeColor">@color/orange</item>
         <item name="strokeWidth">2dp</item>
         <item name="cornerRadius">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center</item>
         <item name="android:backgroundTint">@android:color/white</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="android:minWidth">96dp</item>
+        <item name="android:paddingHorizontal">16dp</item>
     </style>
 </resources> 

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -46,10 +49,10 @@
             android:name=".features.tools.ToolsActivity"
             android:exported="false" />
         <activity
-            android:name=".features.mealplan.MealPlanWizardActivity"
+            android:name=".features.mealplan.MealPlanContentActivity"
             android:exported="false" />
         <activity
-            android:name=".features.mealplan.MealPlanContentActivity"
+            android:name=".features.mealplan.MealPlanWizardActivity"
             android:exported="false" />
         <activity
             android:name=".features.checkout.CheckoutActivity"
@@ -71,6 +74,9 @@
             android:exported="false" />
         <activity
             android:name=".features.faq.FAQActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.manage_account.ManageAccountActivity"
             android:exported="false" />
 
         <meta-data
