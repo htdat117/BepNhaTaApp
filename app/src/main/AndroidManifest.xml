@@ -55,9 +55,6 @@
             android:name=".features.checkout.CheckoutActivity"
             android:exported="false" />
         <activity
-            android:name=".features.address.AddressActivity"
-            android:exported="false" />
-        <activity
             android:name=".features.address.AddressSelectActivity"
             android:exported="false" />
         <activity
