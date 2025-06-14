@@ -354,6 +354,7 @@
                     android:background="@color/primary1" />
                 <!-- Câu hỏi thường gặp -->
                 <LinearLayout
+                    android:id="@+id/layout_faq"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"

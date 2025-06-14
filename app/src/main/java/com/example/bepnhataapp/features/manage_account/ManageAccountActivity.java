@@ -36,6 +36,15 @@ public class ManageAccountActivity extends BaseActivity {
 
         // Thiết lập click cho các mục cần đăng nhập
         setupItemClicks();
+
+        // Sau khi setup item clicks dành cho login prompt
+        android.view.View faqView = findViewById(R.id.layout_faq);
+        if (faqView != null) {
+            faqView.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.faq.FAQActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private boolean isLoggedIn() {

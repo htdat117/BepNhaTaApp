@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BepNhaTaApp</string>
+    <string name="back">Back</string>
+    <string name="faq_title">Câu hỏi thường gặp</string>
 </resources>
