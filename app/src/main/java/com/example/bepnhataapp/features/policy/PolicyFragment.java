@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,12 +23,9 @@ public class PolicyFragment extends Fragment {
     public static final int TYPE_RETURN = 3;
 
     private int policyType = 0;
-
-    // Declare TextViews instead of Buttons
     private TextView btnDieuKhoan, btnBaoMat, btnGiaoHang, btnDoiTra;
-
-    // Listener for communicating with the hosting Activity
     private OnPolicyTabSelectedListener mListener;
+    private Fragment currentFragment;
 
     public interface OnPolicyTabSelectedListener {
         void onPolicyTabSelected(String title);
@@ -45,158 +42,165 @@ public class PolicyFragment extends Fragment {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_policy_content, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             policyType = getArguments().getInt(ARG_POLICY_TYPE, 0);
         }
+    }
 
-        // Initialize TextViews
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_policy_content, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initializeViews(view);
+        setupClickListeners();
+        if (savedInstanceState == null) {
+            showPolicyContent();
+            updateButtonStates();
+            updateInitialTitle();
+        }
+    }
+
+    private void initializeViews(View view) {
         btnDieuKhoan = view.findViewById(R.id.btnDieuKhoan);
         btnBaoMat = view.findViewById(R.id.btnBaoMat);
         btnGiaoHang = view.findViewById(R.id.btnGiaoHang);
         btnDoiTra = view.findViewById(R.id.btnDoiTra);
+    }
 
-        // Set OnClickListeners
+    private void setupClickListeners() {
         if (btnDieuKhoan != null) {
-            btnDieuKhoan.setOnClickListener(v -> {
-                policyType = TYPE_TERMS;
-                showPolicyContent();
-                updateButtonStates(); // Update button states after click
-                if (mListener != null) mListener.onPolicyTabSelected("ĐIỀU KHOẢN SỬ DỤNG");
-            });
+            btnDieuKhoan.setOnClickListener(v -> handleTabClick(TYPE_TERMS, "ĐIỀU KHOẢN SỬ DỤNG"));
         }
         if (btnBaoMat != null) {
-            btnBaoMat.setOnClickListener(v -> {
-                policyType = TYPE_PRIVACY;
-                showPolicyContent();
-                updateButtonStates(); // Update button states after click
-                if (mListener != null) mListener.onPolicyTabSelected("CHÍNH SÁCH BẢO MẬT");
-            });
+            btnBaoMat.setOnClickListener(v -> handleTabClick(TYPE_PRIVACY, "CHÍNH SÁCH BẢO MẬT"));
         }
         if (btnGiaoHang != null) {
-            btnGiaoHang.setOnClickListener(v -> {
-                policyType = TYPE_SHIPPING;
-                showPolicyContent();
-                updateButtonStates(); // Update button states after click
-                if (mListener != null) mListener.onPolicyTabSelected("CHÍNH SÁCH GIAO HÀNG");
-            });
+            btnGiaoHang.setOnClickListener(v -> handleTabClick(TYPE_SHIPPING, "CHÍNH SÁCH GIAO HÀNG"));
         }
         if (btnDoiTra != null) {
-            btnDoiTra.setOnClickListener(v -> {
-                policyType = TYPE_RETURN;
-                showPolicyContent();
-                updateButtonStates(); // Update button states after click
-                if (mListener != null) mListener.onPolicyTabSelected("CHÍNH SÁCH ĐỔI TRẢ");
-            });
+            btnDoiTra.setOnClickListener(v -> handleTabClick(TYPE_RETURN, "CHÍNH SÁCH ĐỔI TRẢ"));
         }
+    }
 
+    private void handleTabClick(int type, String title) {
+        if (policyType == type) return;
+        
+        policyType = type;
         showPolicyContent();
-        updateButtonStates(); // Initial update when view is created
-        // Set initial title based on current policyType
+        updateButtonStates();
         if (mListener != null) {
-            String initialTitle = "CHÍNH SÁCH"; // Default title
-            switch (policyType) {
-                case TYPE_TERMS:
-                    initialTitle = "ĐIỀU KHOẢN SỬ DỤNG";
-                    break;
-                case TYPE_PRIVACY:
-                    initialTitle = "CHÍNH SÁCH BẢO MẬT";
-                    break;
-                case TYPE_SHIPPING:
-                    initialTitle = "CHÍNH SÁCH GIAO HÀNG";
-                    break;
-                case TYPE_RETURN:
-                    initialTitle = "CHÍNH SÁCH ĐỔI TRẢ";
-                    break;
-            }
-            mListener.onPolicyTabSelected(initialTitle);
+            mListener.onPolicyTabSelected(title);
         }
-        return view;
     }
 
     private void showPolicyContent() {
+        if (!isAdded()) return;
+        
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment contentFragment;
+        
+        Fragment newFragment;
         switch (policyType) {
             case TYPE_PRIVACY:
-                contentFragment = new PolicyPrivacyFragment();
+                newFragment = new PolicyPrivacyFragment();
                 break;
             case TYPE_SHIPPING:
-                contentFragment = new PolicyShippingFragment();
+                newFragment = new PolicyShippingFragment();
                 break;
             case TYPE_RETURN:
-                contentFragment = new PolicyReturnFragment();
+                newFragment = new PolicyReturnFragment();
                 break;
             case TYPE_TERMS:
             default:
-                contentFragment = new PolicyTermsFragment();
+                newFragment = new PolicyTermsFragment();
                 break;
         }
-        ft.replace(R.id.content_container, contentFragment);
+
+        if (currentFragment != null) {
+            ft.remove(currentFragment);
+        }
+        
+        currentFragment = newFragment;
+        ft.add(R.id.content_container, currentFragment);
         ft.commit();
     }
 
     private void updateButtonStates() {
-        int radius = (int) getResources().getDimension(R.dimen.corner_radius_8dp);
+        if (!isAdded()) return;
 
-        // Define drawables for selected and unselected states
+        int radius = (int) getResources().getDimension(R.dimen.corner_radius_8dp);
+        Context context = requireContext();
+
         GradientDrawable selectedDrawable = new GradientDrawable();
         selectedDrawable.setShape(GradientDrawable.RECTANGLE);
-        selectedDrawable.setColor(getResources().getColor(R.color.primary1, null));
+        selectedDrawable.setColor(ContextCompat.getColor(context, R.color.primary1));
         selectedDrawable.setCornerRadius(radius);
 
         GradientDrawable unselectedDrawable = new GradientDrawable();
         unselectedDrawable.setShape(GradientDrawable.RECTANGLE);
-        unselectedDrawable.setColor(getResources().getColor(R.color.dark3, null));
+        unselectedDrawable.setColor(ContextCompat.getColor(context, R.color.dark3));
         unselectedDrawable.setCornerRadius(radius);
 
-        // Apply background and text color based on selected state
-        // Điều khoản sử dụng
-        if (btnDieuKhoan != null) {
-            if (policyType == TYPE_TERMS) {
-                btnDieuKhoan.setBackground(selectedDrawable);
-                btnDieuKhoan.setTextColor(getResources().getColor(R.color.white, null));
-            } else {
-                btnDieuKhoan.setBackground(unselectedDrawable);
-                btnDieuKhoan.setTextColor(getResources().getColor(R.color.dark1, null));
-            }
-        }
+        updateButtonState(btnDieuKhoan, TYPE_TERMS, selectedDrawable, unselectedDrawable);
+        updateButtonState(btnBaoMat, TYPE_PRIVACY, selectedDrawable, unselectedDrawable);
+        updateButtonState(btnGiaoHang, TYPE_SHIPPING, selectedDrawable, unselectedDrawable);
+        updateButtonState(btnDoiTra, TYPE_RETURN, selectedDrawable, unselectedDrawable);
+    }
 
-        // Chính sách bảo mật
-        if (btnBaoMat != null) {
-            if (policyType == TYPE_PRIVACY) {
-                btnBaoMat.setBackground(selectedDrawable);
-                btnBaoMat.setTextColor(getResources().getColor(R.color.white, null));
+    private void updateButtonState(TextView button, int type, GradientDrawable selectedDrawable, GradientDrawable unselectedDrawable) {
+        if (button != null) {
+            if (policyType == type) {
+                button.setBackground(selectedDrawable);
+                button.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
             } else {
-                btnBaoMat.setBackground(unselectedDrawable);
-                btnBaoMat.setTextColor(getResources().getColor(R.color.dark1, null));
+                button.setBackground(unselectedDrawable);
+                button.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark1));
             }
         }
+    }
 
-        // Chính sách giao hàng
-        if (btnGiaoHang != null) {
-            if (policyType == TYPE_SHIPPING) {
-                btnGiaoHang.setBackground(selectedDrawable);
-                btnGiaoHang.setTextColor(getResources().getColor(R.color.white, null));
-            } else {
-                btnGiaoHang.setBackground(unselectedDrawable);
-                btnGiaoHang.setTextColor(getResources().getColor(R.color.dark1, null));
-            }
-        }
+    private void updateInitialTitle() {
+        if (!isAdded() || mListener == null) return;
 
-        // Chính sách đổi trả
-        if (btnDoiTra != null) {
-            if (policyType == TYPE_RETURN) {
-                btnDoiTra.setBackground(selectedDrawable);
-                btnDoiTra.setTextColor(getResources().getColor(R.color.white, null));
-            } else {
-                btnDoiTra.setBackground(unselectedDrawable);
-                btnDoiTra.setTextColor(getResources().getColor(R.color.dark1, null));
-            }
+        String initialTitle = "CHÍNH SÁCH";
+        switch (policyType) {
+            case TYPE_TERMS:
+                initialTitle = "ĐIỀU KHOẢN SỬ DỤNG";
+                break;
+            case TYPE_PRIVACY:
+                initialTitle = "CHÍNH SÁCH BẢO MẬT";
+                break;
+            case TYPE_SHIPPING:
+                initialTitle = "CHÍNH SÁCH GIAO HÀNG";
+                break;
+            case TYPE_RETURN:
+                initialTitle = "CHÍNH SÁCH ĐỔI TRẢ";
+                break;
         }
+        mListener.onPolicyTabSelected(initialTitle);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        btnDieuKhoan = null;
+        btnBaoMat = null;
+        btnGiaoHang = null;
+        btnDoiTra = null;
+        currentFragment = null;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 } 

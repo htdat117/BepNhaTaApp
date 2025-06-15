@@ -15,4 +15,10 @@ public class PolicyShippingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.policy_shipping, container, false);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Clean up any references to views here
+    }
 } 

@@ -15,4 +15,10 @@ public class PolicyReturnFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.policy_return, container, false);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Clean up any references to views here
+    }
 } 
