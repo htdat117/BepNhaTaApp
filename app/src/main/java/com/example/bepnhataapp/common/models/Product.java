@@ -1,6 +1,8 @@
 package com.example.bepnhataapp.common.models;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     public int imageResId;
     public String name;
     public String kcal;

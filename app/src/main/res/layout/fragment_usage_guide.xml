@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Cách bảo quản -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cách bảo quản sản phẩm"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Bảo quản cua và tôm ở ngăn mát tủ lạnh và ở ngăn đá nếu dùng sau 24 giờ. Chả cá, giò sống cùng trứng cút để trong ngăn mát."/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Rau thơm, hành lá có thể để ở nhiệt độ phòng nếu dùng ngay, hoặc bảo quản trong ngăn mát tủ lạnh."/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Gia vị và bánh canh để ở nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp."/>
+
+        <!-- Hạn sử dụng -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hạn sử dụng"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sử dụng trong vòng 4 ngày kể từ khi nhận được hàng. Cua và tôm tươi nên chế biến ngay để giữ được độ ngon."/>
+
+        <!-- Lưu ý -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lưu ý"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Rửa sạch sản phẩm trước khi chế biến để đảm bảo vệ sinh an toàn."/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Không dùng nếu có dấu hiệu hư hỏng, như mùi lạ, màu sắc thay đổi, hoặc có hiện tượng lạ khác."/>
+    </LinearLayout>
+</ScrollView> 
