@@ -37,6 +37,9 @@
             android:name=".features.login.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".features.login.AuthenticationActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -86,6 +89,39 @@
             android:exported="false" />
         <activity
             android:name=".features.policy.PolicyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.login.RegistrationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.login.AccountInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.login.NewPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.voucher.VoucherActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.voucher.VoucherListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.voucher.VoucherDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.offline.OfflineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.offline.DownloadedContentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.customeridea.CustomerIdeaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.blog.BlogDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.blog.BlogCommentsActivity"
             android:exported="false" />
 
         <meta-data

@@ -40,6 +40,10 @@ public class PhoneNumberFragment extends Fragment {
             }
         });
 
+        view.findViewById(R.id.tvRegister).setOnClickListener(v1 -> {
+            startActivity(new android.content.Intent(getActivity(), RegistrationActivity.class));
+        });
+
         return view;
     }
 
