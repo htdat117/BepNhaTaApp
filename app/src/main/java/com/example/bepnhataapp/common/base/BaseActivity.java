@@ -3,23 +3,19 @@ package com.example.bepnhataapp.common.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.features.home.HomeActivity;
-import com.example.bepnhataapp.features.ingredients.ProductActivity;
+import com.example.bepnhataapp.features.products.ProductActivity;
 import com.example.bepnhataapp.features.mealplan.MealPlanActivity;
 import com.example.bepnhataapp.features.recipes.RecipesActivity;
 import com.example.bepnhataapp.features.tools.ToolsActivity;
 import com.example.bepnhataapp.features.manage_account.ManageAccountActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";

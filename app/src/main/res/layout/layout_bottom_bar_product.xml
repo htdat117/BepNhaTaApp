@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary4"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- First row: serving, quantity, price -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Serving toggle -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleGroupServing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:checkedButton="@id/btnServing2">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnServing2"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="2 người"
+                android:textSize="14sp"
+                app:cornerRadius="16dp"
+                app:iconGravity="textStart"
+                app:checkedIcon="@null"
+                app:backgroundTint="@color/segmented_bg"
+                android:textColor="@color/segmented_text"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnServing4"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="4 người"
+                android:textSize="14sp"
+                app:cornerRadius="16dp"
+                app:iconGravity="textStart"
+                app:checkedIcon="@null"
+                app:backgroundTint="@color/segmented_bg"
+                android:textColor="@color/segmented_text"/>
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <!-- Quantity control -->
+        <LinearLayout
+            android:id="@+id/layoutQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_quantity_box"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/btnMinus"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_remove"/>
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:layout_marginHorizontal="8dp"/>
+
+            <ImageView
+                android:id="@+id/btnPlus"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_add"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90000"
+            android:textColor="@color/primary1"
+            android:textStyle="bold"
+            android:textSize="@dimen/header3"/>
+    </LinearLayout>
+
+    <!-- Second row: buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/btnAddToCart"
+            android:layout_width="80dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_addtocart"
+            android:background="@drawable/button_orange_rounded"
+            android:padding="12dp"/>
+
+        <Button
+            android:id="@+id/btnBuyNow"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="Mua ngay"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/button_orange_rounded"
+            android:layout_marginStart="12dp"/>
+    </LinearLayout>
+</LinearLayout> 

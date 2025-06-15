@@ -21,11 +21,12 @@
 
             <!-- Close Icon - Moved inside ScrollView for scrolling -->
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_close"
+                android:id="@+id/closeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:contentDescription="Close button"/>
+                android:contentDescription="Close button"
+                android:src="@drawable/ic_close" />
 
             <!-- Logo and Title -->
             <LinearLayout
@@ -104,7 +105,7 @@
                 <ImageView
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:src="@drawable/ic_facebook"
+                    android:src="@drawable/ic_logoface"
                     android:contentDescription="Facebook Login"
                     android:layout_marginStart="24dp"/>
 

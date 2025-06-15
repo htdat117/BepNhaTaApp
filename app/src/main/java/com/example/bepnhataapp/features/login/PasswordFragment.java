@@ -57,6 +57,7 @@ public class PasswordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
+                intent.putExtra("flow", "reset");
                 startActivity(intent);
             }
         });
@@ -66,8 +67,16 @@ public class PasswordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
+                intent.putExtra("flow", "login");
                 startActivity(intent);
             }
+        });
+
+        // Register link
+        TextView registerLink = view.findViewById(R.id.tvRegister);
+        registerLink.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+            startActivity(intent);
         });
 
         return view;

@@ -2,10 +2,10 @@ package com.example.bepnhataapp.common.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.Product;
+import com.example.bepnhataapp.features.products.ProductDetailActivity;
 
 import java.util.List;
 
@@ -48,6 +49,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.tvRating.setText(String.valueOf(product.rating));
         holder.tvReviewCount.setText("(" + product.reviewCount + ")");
         holder.imgFavorite.setImageResource(product.isFavorite ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, com.example.bepnhataapp.features.products.ProductDetailActivity.class);
+            intent.putExtra("product", product);
+            context.startActivity(intent);
+        });
     }
 
     @Override

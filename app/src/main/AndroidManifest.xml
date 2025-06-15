@@ -64,12 +64,6 @@
             android:name=".features.voucher.VoucherSelectActivity"
             android:exported="false" />
         <activity
-            android:name=".features.voucher.VoucherActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.voucher.VoucherDetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".features.checkout.ConfirmPaymentActivity"
             android:exported="false" />
         <activity
@@ -92,12 +86,6 @@
             android:exported="false" />
         <activity
             android:name=".features.policy.PolicyActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.point.PointActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.point.PointHistoryActivity"
             android:exported="false" />
 
         <meta-data
