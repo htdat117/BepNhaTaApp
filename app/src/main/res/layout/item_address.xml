@@ -12,36 +12,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@android:color/white"
-        android:padding="16dp">
+        android:background="@color/primary4"
+        android:padding="12dp"
+        android:gravity="center_vertical">
 
-        <!-- radio selector -->
         <RadioButton
-            android:id="@+id/radioSelect"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:clickable="false"/>
+            android:id="@+id/rb_default"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:checked="false" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_weight="1"
-            android:layout_marginStart="16dp">
-            <TextView
-                android:id="@+id/tvDefaultLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mặc định"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="2dp"
-                android:textColor="@android:color/white"
-                android:background="@drawable/bg_button_primary"
-                android:fontFamily="@font/inter_bold"
-                android:textSize="@dimen/body3"
-                android:visibility="gone"/>
-            <!-- default label & top row -->
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,44 +36,51 @@
                 android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/tvName"
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Đoàn Kiên"
                     android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:textSize="18sp"/>
 
                 <TextView
-                    android:id="@+id/tvPhone"
+                    android:id="@+id/tv_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="033 523 6269"
-                    android:layout_marginStart="8dp"
-                    android:textSize="14sp"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
+                    android:textSize="16sp"
+                    android:layout_marginStart="8dp"/>
 
                 <TextView
-                    android:id="@+id/tvEdit"
+                    android:id="@+id/tv_default"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sửa"
-                    android:textColor="@color/dark2"
-                    android:textSize="14sp"/>
+                    android:layout_height="12dp"
+                    android:layout_marginStart="8dp"
+                    android:padding="4dp"
+                    android:text="Mặc định"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tvAddress"
+                android:id="@+id/tv_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="312 Quang Trung, Phường 10, Gò Vấp"
-                android:layout_marginTop="4dp"
-                android:textSize="14sp"/>
+                android:layout_marginTop="5dp"
+                android:textSize="16sp"/>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sửa"
+            android:textColor="@color/dark2"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView> 

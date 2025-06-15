@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_popup_rounded"
+    android:padding="32dp"
+    android:clipToOutline="true"
+    android:gravity="center"
+    android:layout_gravity="center_horizontal">
+    
+
+    <!-- Icon vị trí -->
+    <ImageView
+        android:id="@+id/img_location"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_location_popup"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Địa chỉ"
+        android:textStyle="bold"
+        android:textSize="@dimen/header2"
+        android:textColor="#1A1A1A"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Mô tả -->
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:text="Cho phép truy cập vị trí của bạn\ntrong khi bạn đang sử dụng app"
+        android:textSize="18sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"/>
+
+    <!-- Nút Cho phép -->
+    <Button
+        android:id="@+id/btn_allow"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Cho phép"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#F26522"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_button_orange"/>
+
+    <!-- Nút Bỏ qua -->
+    <Button
+        android:id="@+id/btn_skip"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Bỏ qua"
+        android:textSize="18sp"
+        android:textColor="#F26522"
+        android:background="@drawable/bg_button_outline_orange"/>
+</LinearLayout>

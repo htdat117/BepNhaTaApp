@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <!-- Thanh trạng thái màu cam -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#F36F25" />
+
+    <!-- Ảnh món ăn với nút back và skip chồng lên -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Nút back -->
+        <ImageView
+            android:id="@+id/food_image"
+            android:layout_width="match_parent"
+            android:layout_height="340dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_mucxao"/>
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="start|top"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"/>
+
+        <!-- Nút Skip + Icon Skip -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/btn_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skip"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/ic_skip"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_skip"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="5dp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Phần nội dung phía dưới -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Icon lịch -->
+        <ImageView
+            android:id="@+id/ic_calendar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_buy_product"
+            android:layout_marginTop="24dp" />
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mua hàng nhanh chóng"
+            android:textColor="#F36F25"
+            android:textStyle="bold"
+            android:textSize="@dimen/header2"
+            android:layout_marginTop="12dp" />
+
+        <!-- Mô tả -->
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="32dp"
+            android:gravity="center"
+            android:maxLines="3"
+            android:text="Đặt hàng đơn giản, giao tốc hành, nguyên liệu tươi ngon, sẵn sàng cho bữa ăn hoàn hảo của bạn."
+            android:textColor="@color/dark1"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            android:gravity="center">
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="#FFE3D1"
+                android:backgroundTint="#FFE3D1" />
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="#FFE3D1"
+                android:backgroundTint="#FFE3D1" />
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="6dp"
+                android:background="#F36F25"
+                android:backgroundTint="#F36F25" />
+        </LinearLayout>
+
+        <!-- Nút Tiếp theo -->
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="152dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:text="Tiếp theo"
+            android:textSize="20sp" />
+    </LinearLayout>
+</LinearLayout>
