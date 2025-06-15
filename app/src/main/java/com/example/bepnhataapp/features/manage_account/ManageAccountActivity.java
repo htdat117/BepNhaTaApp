@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
+import com.example.bepnhataapp.features.point.PointActivity;
+import com.example.bepnhataapp.features.voucher.VoucherActivity;
 
 public class ManageAccountActivity extends BaseActivity {
 
@@ -63,11 +65,36 @@ public class ManageAccountActivity extends BaseActivity {
                 startActivity(intent);
             });
         }
+
+        // Xử lý click cho Điểm thành viên và Voucher của tôi
+        android.view.View memberPointsView = findViewById(R.id.layout_member_points);
+        if (memberPointsView != null) {
+            memberPointsView.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, PointActivity.class);
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
+
+        android.view.View myVoucherView = findViewById(R.id.layout_my_voucher);
+        if (myVoucherView != null) {
+            myVoucherView.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, VoucherActivity.class);
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
     }
 
     private boolean isLoggedIn() {
         // TODO: Thay thế bằng logic kiểm tra đăng nhập thực tế
-        return false;
+        return true; // Tạm thời trả về true để bỏ qua yêu cầu đăng nhập
     }
 
     @Override
@@ -83,8 +110,6 @@ public class ManageAccountActivity extends BaseActivity {
         int[] clickableIds = {
                 R.id.layout_account_info,
                 R.id.layout_shipping_address,
-                R.id.layout_member_points,
-                R.id.layout_my_voucher,
                 R.id.layout_favorite_dishes,
                 R.id.layout_logout
         };
