@@ -49,11 +49,8 @@
             android:layout_marginBottom="8dp"/>
         <EditText
             android:id="@+id/editTextFoodName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/EditText.Rounded"
             android:hint="Nhập tên nguyên liệu hoặc món ăn"
-            android:background="@drawable/bg_edittext_outline_orange"
-            android:padding="12dp"
             android:layout_marginBottom="16dp"/>
 
         <!-- Khối lượng -->
@@ -66,12 +63,9 @@
             android:layout_marginBottom="8dp"/>
         <EditText
             android:id="@+id/editTextWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/EditText.Rounded"
             android:hint="Nhập khối lượng của nguyên liệu, món ăn"
             android:inputType="numberDecimal"
-            android:background="@drawable/bg_edittext_outline_orange"
-            android:padding="12dp"
             android:layout_marginBottom="16dp"/>
 
         <!-- Nút Lưu và Xóa -->

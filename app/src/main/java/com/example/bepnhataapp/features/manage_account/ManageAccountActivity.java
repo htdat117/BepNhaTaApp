@@ -54,6 +54,15 @@ public class ManageAccountActivity extends BaseActivity {
                 startActivity(intent);
             });
         }
+
+        // Mở trang Chính sách và Điều khoản
+        android.view.View policyTermsView = findViewById(R.id.layout_policy_terms);
+        if (policyTermsView != null) {
+            policyTermsView.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.policy.PolicyActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private boolean isLoggedIn() {

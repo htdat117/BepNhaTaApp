@@ -53,12 +53,9 @@
 
         <EditText
             android:id="@+id/editTextAge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/EditText.Rounded"
             android:hint="Nhập tuổi"
             android:inputType="number"
-            android:background="@drawable/bg_edittext_outline_orange"
-            android:padding="12dp"
             android:layout_marginBottom="16dp"/>
 
         <!-- Chiều cao -->
@@ -72,12 +69,9 @@
 
         <EditText
             android:id="@+id/editTextHeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/EditText.Rounded"
             android:hint="Nhập chiều cao hiện tại"
             android:inputType="numberDecimal"
-            android:background="@drawable/bg_edittext_outline_orange"
-            android:padding="12dp"
             android:layout_marginBottom="16dp"/>
 
         <!-- Cân nặng -->
@@ -91,12 +85,9 @@
 
         <EditText
             android:id="@+id/editTextWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/EditText.Rounded"
             android:hint="Nhập cân nặng hiện tại"
             android:inputType="numberDecimal"
-            android:background="@drawable/bg_edittext_outline_orange"
-            android:padding="12dp"
             android:layout_marginBottom="24dp"/>
 
         <!-- Nút hành động -->

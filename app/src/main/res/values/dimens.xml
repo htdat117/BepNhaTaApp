@@ -10,4 +10,5 @@
     <dimen name="header4">18sp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
     <dimen name="grid_spacing">8dp</dimen>
+    <dimen name="corner_radius_8dp">8dp</dimen>
 </resources>

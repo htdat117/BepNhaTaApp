@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Header cam, icon back ngoài, tiêu đề căn giữa -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#E7642F">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Quay lại" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="CHÍNH SÁCH"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+
+    <!-- Container for PolicyFragment -->
+    <FrameLayout
+        android:id="@+id/fragment_host_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout> 

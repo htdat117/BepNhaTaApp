@@ -13,14 +13,6 @@
         android:layout_height="56dp"
         android:layout_margin="16dp">
 
-        <!-- Nền chuyển động -->
-        <View
-            android:id="@+id/tabIndicator"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@drawable/bg_tab_selected"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -29,20 +21,26 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnBmiBmrTab"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Tính BMI/BMR"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/bg_tab_selected"/>
+                android:textColor="@color/tab_text_color_selector"
+                android:background="@drawable/bg_segment_left_selector"
+                android:backgroundTint="@null"
+                android:paddingVertical="12dp"
+                android:stateListAnimator="@null"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCaloTab"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Tính Calo"
-                android:textColor="@color/dark1"
-                android:background="@drawable/bg_tab_unselected"/>
+                android:textColor="@color/tab_text_color_selector"
+                android:background="@drawable/bg_segment_right_selector"
+                android:backgroundTint="@null"
+                android:paddingVertical="12dp"
+                android:stateListAnimator="@null"/>
         </LinearLayout>
     </FrameLayout>
 

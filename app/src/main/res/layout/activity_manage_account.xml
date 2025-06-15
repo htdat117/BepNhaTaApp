@@ -322,6 +322,7 @@
                     android:background="@color/primary1" />
                 <!-- Chính sách và điều khoản -->
                 <LinearLayout
+                    android:id="@+id/layout_policy_terms"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
