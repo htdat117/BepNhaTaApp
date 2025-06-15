@@ -84,6 +84,9 @@
         <activity
             android:name=".features.mealplan.LoadMealPlanReviewActivity"
             android:exported="false" />
+        <activity
+            android:name=".features.customeridea.CustomerIdeaActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

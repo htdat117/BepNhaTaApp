@@ -68,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_medium"
                 android:paddingTop="24dp"
+                android:textColor="@color/dark1"
                 android:paddingHorizontal="16dp"
                 android:text="Họ Tên"
                 android:paddingBottom="8dp"
@@ -97,6 +98,7 @@
                 android:paddingBottom="8dp"
                 android:paddingHorizontal="16dp"
                 android:text="Điện thoại"
+                android:textColor="@color/dark1"
                 android:textSize="@dimen/body2" />
             <EditText
                 android:id="@+id/edtPhone"
@@ -118,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_medium"
                 android:paddingTop="8dp"
+                android:textColor="@color/dark1"
                 android:paddingBottom="8dp"
                 android:paddingHorizontal="@dimen/body2"
                 android:text="Email"
@@ -142,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_medium"
                 android:paddingTop="8dp"
+                android:textColor="@color/dark1"
                 android:paddingBottom="8dp"
                 android:paddingHorizontal="16dp"
                 android:text="Vấn đề"
@@ -166,6 +170,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_medium"
                 android:paddingTop="8dp"
+                android:textColor="@color/dark1"
                 android:paddingBottom="8dp"
                 android:paddingHorizontal="16dp"
                 android:text="Nội dung"
@@ -189,6 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_medium"
+                android:textColor="@color/dark1"
                 android:paddingTop="8dp"
                 android:paddingHorizontal="16dp"
                 android:text="Hình ảnh"
@@ -241,14 +247,16 @@
                     android:layout_height="wrap_content"
                     android:text="Email"
                     android:paddingRight="24dp"
-                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/body2"
+                    android:textColor="@color/dark1"
                     android:fontFamily="@font/inter_medium"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/body2"
                     android:text="Số điện thoại"
-                    android:textColor="@color/dark2"
+                    android:textColor="@color/dark1"
                     android:fontFamily="@font/inter_medium"/>
 
             </RadioGroup>
