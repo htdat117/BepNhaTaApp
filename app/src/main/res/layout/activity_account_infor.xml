@@ -60,7 +60,7 @@
                     android:id="@+id/img_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/img_Dat"
+                    android:src="@drawable/img_dat"
                     android:scaleType="centerCrop"
                     android:background="@drawable/bg_avatar"
                     android:cropToPadding="true"

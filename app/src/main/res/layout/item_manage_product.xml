@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:elevation="4dp">
+
+    <!-- Ảnh + icon yêu thích -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+
+        <ImageView
+            android:id="@+id/img_product"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_img"
+            android:clipToOutline="true"/>
+
+        <ImageButton
+            android:id="@+id/btn_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="12dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_love_orange"
+            android:contentDescription="Yêu thích"/>
+    </FrameLayout>
+
+    <!-- Nội dung -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="12dp">
+
+        <!-- Tên món + Giá -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Bò xào rau củ"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="bottom"/>
+
+            <TextView
+                android:id="@+id/tv_price_old"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="150.000đ"
+                android:textColor="#888888"
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp"
+                android:paintFlags="16"
+                android:layout_gravity="bottom"/>
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="140.000đ"
+                android:textColor="@color/orange"
+                android:textStyle="bold"
+                android:textSize="22sp"/>
+        </LinearLayout>
+
+        <!-- Tag thông tin -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp">
+
+            <!-- Kcal -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_edittext_outline_orange_pmr4"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_fire_calo"
+                    android:tint="@color/orange"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="500 Kcal"
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+
+            <!-- Chất xơ -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_edittext_outline_orange_pmr4"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_nutrition"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giàu chất xơ"
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+
+            <!-- Thời gian -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_edittext_outline_orange_pmr4"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_time"
+                    android:tint="@color/orange"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20 phút"
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Số lượng + Mua ngay -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Số lượng 2 người -->
+            <TextView
+                android:id="@+id/tv_2_person"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="2 người"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:background="@drawable/bg_segmented_tab_overall"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Số lượng 4 người -->
+            <TextView
+                android:id="@+id/tv_4_person"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="4 người"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:background="@drawable/bg_tab_selected"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Nút mua ngay -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="2"
+                android:orientation="horizontal"
+                android:background="@null"
+                android:gravity="center"
+                android:clipToOutline="true">
+
+                <!-- Phần icon giỏ hàng -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_right_bar_round"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="2dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_cart" />
+                </LinearLayout>
+
+                <!-- Phần chữ "Mua ngay" -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_left_bar_round"
+                    android:gravity="center"
+                    android:text="Mua ngay"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Line dưới -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/orange" />
+</LinearLayout>

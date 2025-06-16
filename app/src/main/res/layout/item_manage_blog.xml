@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <!-- Phần nội dung chính gồm ảnh và text -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+
+        <!-- Cột ảnh bên trái -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_blog"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:src="@drawable/blog" />
+
+        </LinearLayout>
+
+        <!-- Nội dung bên phải -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/tv_blog_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh"
+                android:textColor="@color/dark1"
+                android:textSize="@dimen/header4"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_blog_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mẹo hay - Nấu chuẩn"
+                android:textColor="@color/dark2"
+                android:textSize="@dimen/body2"
+                android:layout_below="@id/tv_blog_title"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="6dp" />
+
+            <ImageView
+                android:id="@+id/img_bookmark"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_bookmark"
+                android:layout_alignBottom="@id/tv_blog_subtitle"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="Bookmark" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Đường gạch dưới phân cách item -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E0E0E0" />
+</LinearLayout>
