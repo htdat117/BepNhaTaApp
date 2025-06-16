@@ -1,14 +1,9 @@
-package com.example.bepnhataapp.features.ingredients;
+package com.example.bepnhataapp.features.products;
 
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,11 +14,6 @@ import com.example.bepnhataapp.common.models.Product;
 import com.example.bepnhataapp.common.adapter.CategoryAdapter;
 import com.example.bepnhataapp.common.models.Category;
 import com.example.bepnhataapp.common.base.BaseActivity;
-import com.example.bepnhataapp.features.home.HomeActivity;
-import com.example.bepnhataapp.features.mealplan.MealPlanActivity;
-import com.example.bepnhataapp.features.recipes.RecipesActivity;
-import com.example.bepnhataapp.features.tools.ToolsActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Quyền truy cập trạng thái mạng -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,53 +15,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BepNhaTaApp"
         tools:targetApi="31">
+
         <activity
-            android:name=".features.manage_pinfor.change_password"
+            android:name=".features.ingredients.FilterProductActivity"
             android:exported="false" />
-        <activity
-            android:name=".features.manage_pinfor.opt_phone"
-            android:exported="false" />
-        <activity
-            android:name=".features.manage_pinfor.change_infor"
-            android:exported="false" />
-        <activity
-            android:name=".features.manage_pinfor.account_infor"
-            android:exported="false" />
-        <activity
-            android:name=".features.manage_pinfor.edit_address"
-            android:exported="false" />
-        <activity
-            android:name=".features.manage_pinfor.address_detail"
-            android:exported="false" />
-        <activity
-            android:name=".features.manage_pinfor.shipping_address"
-            android:exported="false" /> <!-- Activity khởi động chính -->
         <activity
             android:name=".features.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Các activity công cụ -->
+        </activity>
         <activity
-            android:name=".features.tools.ToolsActivity"
-            android:exported="true" /> <!-- Các activity khác -->
-        <activity
-            android:name=".features.blog.BlogCommentsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".features.manage_account.ManageAccountActivity"
+            android:name=".features.ingredients.ProductActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".features.cart.CartActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".features.customeridea.CustomerIdeaActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".features.mealplan.MealPlanActivity"
@@ -72,13 +46,34 @@
             android:name=".features.recipes.RecipesActivity"
             android:exported="false" />
         <activity
-            android:name=".features.ingredients.FilterProductActivity"
+            android:name=".features.tools.ToolsActivity"
             android:exported="false" />
         <activity
-            android:name=".features.ingredients.ProductActivity"
+            android:name=".features.mealplan.MealPlanContentActivity"
             android:exported="false" />
         <activity
-            android:name=".features.voucher.VoucherActivity"
+            android:name=".features.mealplan.MealPlanWizardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.checkout.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.address.AddressSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.voucher.VoucherSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.checkout.ConfirmPaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.checkout.ShippingInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.checkout.PaymentSuccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.faq.FAQActivity"
             android:exported="false" />
         <activity
             android:name=".features.manage_account.ManageAccountActivity"

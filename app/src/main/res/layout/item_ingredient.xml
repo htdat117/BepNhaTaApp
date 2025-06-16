@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@drawable/bg_card_round_ingredient"
+    android:layout_marginBottom="8dp">
+
+    <ImageView
+        android:id="@+id/ivIngredient"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/rounded_img_16"
+        android:clipToOutline="true"
+        android:src="@drawable/food"/>
+
+    <TextView
+        android:id="@+id/tvIngredientName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="8dp"
+        android:text="Cua biển tươi"
+        android:fontFamily="@font/inter_medium"
+        android:textColor="@color/dark1"
+        android:textSize="@dimen/body1"
+        android:gravity="center_vertical"/>
+
+    <TextView
+        android:id="@+id/tvIngredientQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="200 gram"
+        android:textColor="@color/dark1"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/inter_medium"
+        android:textSize="@dimen/body2"/>
+
+</LinearLayout> 

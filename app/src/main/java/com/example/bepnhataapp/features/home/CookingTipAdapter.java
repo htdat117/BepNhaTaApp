@@ -24,7 +24,7 @@ public class CookingTipAdapter extends RecyclerView.Adapter<CookingTipAdapter.Co
     @NonNull
     @Override
     public CookingTipViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cooking_tip, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_suggest_blog, parent, false);
         return new CookingTipViewHolder(view);
     }
 
@@ -50,10 +50,10 @@ public class CookingTipAdapter extends RecyclerView.Adapter<CookingTipAdapter.Co
 
         public CookingTipViewHolder(@NonNull View itemView) {
             super(itemView);
-            tipImage = itemView.findViewById(R.id.tip_image);
-            tipTitle = itemView.findViewById(R.id.tip_title);
-            tipSubtitle = itemView.findViewById(R.id.tip_subtitle);
-            favoriteTipIcon = itemView.findViewById(R.id.favorite_tip_icon);
+            tipImage = itemView.findViewById(R.id.imgThumb);
+            tipTitle = itemView.findViewById(R.id.tvTitle);
+            tipSubtitle = itemView.findViewById(R.id.tvCategory);
+            favoriteTipIcon = itemView.findViewById(R.id.ivFavorite);
         }
     }
 } 

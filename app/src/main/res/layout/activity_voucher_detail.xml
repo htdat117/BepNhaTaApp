@@ -10,10 +10,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#FF6B1A"
+        android:background="#F36B22"
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <ImageView
+            android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_back"
@@ -22,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Điểm tích lũy"
+            android:text="Voucher của tôi"
             android:textColor="#FFF"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -94,7 +95,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Dòng dưới: icon điểm + số điểm + nút đổi điểm -->
+                    <!-- Dòng hiệu lực và nút Sử dụng -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -106,30 +107,22 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_point"
-                            android:contentDescription="Điểm"
-                             />
+                            android:contentDescription="Clock" />
 
                         <TextView
-                            android:id="@+id/tvVoucherPoint"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="500 điểm"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginEnd="8dp" />
-
-                        <View
                             android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="Hiệu lực sau: 5 giờ"
+                            android:textColor="#222222"
+                            android:textSize="14sp" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnExchange"
+                            android:id="@+id/btnUseVoucher"
                             android:layout_width="96dp"
                             android:layout_height="40dp"
-                            android:text="Đổi điểm"
+                            android:text="Sử dụng"
                             android:textColor="#FFF"
                             android:backgroundTint="@color/primary1"
                             android:textStyle="bold"
@@ -139,20 +132,20 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Thông tin chi tiết -->
-            <TextView android:text="Hạn sử dụng mã" style="@style/TitleInfo" />
-            <TextView android:id="@+id/tvVoucherTime" android:text="Từ ngày 01/04/2025 đến 30/04/2025. Áp dụng trong khung giờ 10:00 – 22:00 mỗi ngày." style="@style/ContentInfo" />
-            <TextView android:text="Ưu đãi" style="@style/TitleInfo" />
-            <TextView android:id="@+id/tvVoucherBenefit" android:text="Giảm ngay 20% tổng giá trị đơn hàng, tối đa 60.000đ cho mỗi đơn hàng." style="@style/ContentInfo" />
-            <TextView android:text="Áp dụng cho sản phẩm" style="@style/TitleInfo" />
-            <TextView android:id="@+id/tvVoucherProduct" android:text="Tất cả các món ăn có mặt trên ứng dụng Bếp Nhà Ta..." style="@style/ContentInfo" />
-            <TextView android:text="Phương thức thanh toán" style="@style/TitleInfo" />
-            <TextView android:id="@+id/tvVoucherPayment" android:text="Áp dụng khi thanh toán qua:..." style="@style/ContentInfo" />
-            <TextView android:text="Đơn vị vận chuyển" style="@style/TitleInfo" />
-            <TextView android:id="@+id/tvVoucherShipping" android:text="Áp dụng với mọi đơn vị vận chuyển đối tác..." style="@style/ContentInfo" />
-            <TextView android:text="Thiết bị" style="@style/TitleInfo" />
-            <TextView android:id="@+id/tvVoucherDevice" android:text="Chỉ áp dụng khi đặt hàng thông qua app..." style="@style/ContentInfo" />
-            <TextView android:text="Điều kiện" style="@style/TitleInfo" />
-            <TextView android:id="@+id/tvVoucherCondition" android:text="• Mỗi tài khoản chỉ được sử dụng 1 lần..." style="@style/ContentInfo" />
+            <TextView android:text="Hạn sử dụng mã" style="@style/TitleInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/tvVoucherTime" android:text="Từ ngày 01/04/2025 đến 30/04/2025. Áp dụng trong khung giờ 10:00 – 22:00 mỗi ngày." style="@style/ContentInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:text="Ưu đãi" style="@style/TitleInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/tvVoucherBenefit" android:text="Giảm ngay 20% tổng giá trị đơn hàng, tối đa 60.000đ cho mỗi đơn hàng." style="@style/ContentInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:text="Áp dụng cho sản phẩm" style="@style/TitleInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/tvVoucherProduct" android:text="Tất cả các món ăn có mặt trên ứng dụng Bếp Nhà Ta..." style="@style/ContentInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:text="Phương thức thanh toán" style="@style/TitleInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/tvVoucherPayment" android:text="Áp dụng khi thanh toán qua:..." style="@style/ContentInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:text="Đơn vị vận chuyển" style="@style/TitleInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/tvVoucherShipping" android:text="Áp dụng với mọi đơn vị vận chuyển đối tác..." style="@style/ContentInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:text="Thiết bị" style="@style/TitleInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/tvVoucherDevice" android:text="Chỉ áp dụng khi đặt hàng thông qua app..." style="@style/ContentInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:text="Điều kiện" style="@style/TitleInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/tvVoucherCondition" android:text="• Mỗi tài khoản chỉ được sử dụng 1 lần..." style="@style/ContentInfo" android:layout_width="match_parent" android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 
