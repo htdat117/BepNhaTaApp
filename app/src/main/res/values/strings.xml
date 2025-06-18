@@ -2,4 +2,7 @@
     <string name="app_name">BepNhaTaApp</string>
     <string name="back">Back</string>
     <string name="faq_title">Câu hỏi thường gặp</string>
+    <string name="back_button">Nút quay lại</string>
+    <string name="restaurant_image_description">Hình ảnh nhà hàng</string>
+    <string name="star_icon">Biểu tượng ngôi sao</string>
 </resources>
