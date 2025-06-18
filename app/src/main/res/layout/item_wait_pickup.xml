@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="Chờ xác nhận"
+                android:text="Chờ lấy hàng"
                 android:textColor="@color/primary1"
                 android:textSize="@dimen/body1" />
         </LinearLayout>
@@ -80,7 +80,7 @@
                 android:layout_marginStart="8dp"/>
 
             <TextView
-                android:id="@+id/productPayment"
+                android:id="@+id/totalPayment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="90.000đ"

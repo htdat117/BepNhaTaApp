@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".features.manage_order.wait_confirm">
+    tools:context=".features.manage_order.out_for_delivery">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,11 +63,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/bg_button_orange"
+                    android:background="@drawable/bg_edittext_rounded"
                     android:gravity="center"
                     android:paddingHorizontal="8dp"
                     android:text="Chờ xác nhận"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/primary1"
                     android:textSize="@dimen/body1"/>
 
                 <TextView
@@ -85,11 +85,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/bg_edittext_rounded"
+                    android:background="@drawable/bg_button_orange"
                     android:gravity="center"
                     android:paddingHorizontal="8dp"
                     android:text="Đang vận chuyển"
-                    android:textColor="@color/primary1"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/body1"/>
 
                 <TextView
@@ -134,7 +134,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wait_confirm_Product"
+        android:id="@+id/rc_Product"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>

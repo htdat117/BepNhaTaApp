@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="4dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark4"
+            android:layout_marginTop="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng tiền hàng"
+                android:textSize="@dimen/body2"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/totalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="***VND***"
+                android:textSize="@dimen/body2"
+                android:layout_weight="1"
+                android:gravity="end"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phí vận chuyển"
+                android:textSize="@dimen/body2"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/shippingCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="***VND***"
+                android:textSize="@dimen/body2"
+                android:layout_weight="1"
+                android:gravity="end"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ưu đãi phí vận chuyển"
+                android:textSize="@dimen/body2"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/shippingDiscount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="***VND***"
+                android:textSize="@dimen/body2"
+                android:layout_weight="1"
+                android:gravity="end"/>
+        </LinearLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark4"
+            android:layout_marginTop="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="end">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thành tiền:"
+                android:textSize="@dimen/body1"
+                android:textColor="@color/dark1"
+                android:layout_marginEnd="8dp"
+                />
+
+            <TextView
+                android:id="@+id/totalPayment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="***VND***"
+                android:textSize="@dimen/body1"
+                android:textColor="@color/dark1"
+                style="@style/Body.Bold.Ag2"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

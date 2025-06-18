@@ -3,9 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Quyền truy cập trạng thái mạng -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BepNhaTaApp"
         tools:targetApi="31">
+        <activity
+            android:name=".features.manage_order.out_for_delivery"
+            android:exported="false" />
+        <activity
+            android:name=".features.manage_order.wait_pickup"
+            android:exported="false" />
+        <activity
+            android:name=".features.manage_order.order_detail"
+            android:exported="false" />
         <activity
             android:name=".features.manage_pinfor.change_password"
             android:exported="false" />
@@ -57,6 +65,9 @@
             android:name=".features.manage_account.ManageAccountActivity"
             android:exported="false" />
         <activity
+            android:name=".features.manage_account.ManageAccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -79,9 +90,6 @@
             android:exported="false" />
         <activity
             android:name=".features.voucher.VoucherActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.manage_account.ManageAccountActivity"
             android:exported="false" />
         <activity
             android:name=".features.mealplan.LoadMealPlanActivity"

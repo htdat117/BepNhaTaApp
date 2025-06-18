@@ -18,15 +18,13 @@
             android:src="@drawable/sample_img"
             android:clipToOutline="true"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/btn_favorite"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="top|end"
             android:layout_margin="12dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_love_orange"
-            android:contentDescription="Yêu thích"/>
+            android:src="@drawable/ic_favorite_checked" />
     </FrameLayout>
 
     <!-- Nội dung -->
@@ -64,7 +62,6 @@
                 android:textColor="#888888"
                 android:textSize="16sp"
                 android:layout_marginEnd="8dp"
-                android:paintFlags="16"
                 android:layout_gravity="bottom"/>
 
             <TextView
@@ -99,8 +96,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_fire_calo"
-                    android:tint="@color/orange"/>
+                    android:src="@drawable/ic_fire_calo" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -147,8 +143,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_time"
-                    android:tint="@color/orange"/>
+                    android:src="@drawable/ic_time" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

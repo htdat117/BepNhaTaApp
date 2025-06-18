@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="Chờ xác nhận"
+                android:text="Đang vận chuyển"
                 android:textColor="@color/primary1"
                 android:textSize="@dimen/body1" />
         </LinearLayout>
@@ -55,21 +55,11 @@
             android:nestedScrollingEnabled="false" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="4dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Huỷ đơn hàng"
-                android:textColor="@color/primary1"
-                android:backgroundTint="@color/white"
-                android:textSize="@dimen/body2"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/primary1" />
+            android:layout_marginTop="4dp"
+            android:layout_gravity="end">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,11 +76,42 @@
                 android:text="90.000đ"
                 android:textSize="@dimen/body1"
                 android:layout_marginStart="4dp"
-                android:layout_weight="1"
                 android:textColor="@color/dark1"
                 android:gravity="end"
                 style="@style/Body.Bold.Ag4"/>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReceive"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Đã nhận được hàng"
+                android:textColor="@color/primary1"
+                android:backgroundTint="@color/white"
+                android:textSize="@dimen/body2"
+                app:strokeWidth="1dp"
+                android:layout_marginTop="8dp"
+                app:strokeColor="@color/primary1"
+                android:layout_marginEnd="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTrack"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Theo dõi"
+                android:textColor="@color/primary1"
+                android:backgroundTint="@color/white"
+                android:textSize="@dimen/body2"
+                app:strokeWidth="1dp"
+                android:layout_marginTop="8dp"
+                app:strokeColor="@color/primary1" />
         </LinearLayout>
 
     </LinearLayout>
