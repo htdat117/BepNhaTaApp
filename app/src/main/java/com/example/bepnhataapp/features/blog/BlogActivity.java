@@ -1,6 +1,7 @@
 package com.example.bepnhataapp.features.blog;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -19,6 +20,12 @@ public class BlogActivity extends BaseActivity implements BaseActivity.OnNavigat
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_container, new BlogFeedFragment());
         fragmentTransaction.commit();
+
+        // Sự kiện nút back
+        ImageView btnBack = findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         // Setup the bottom navigation fragment
         // Removed setupBottomNavigationFragment to prevent automatic navigation

@@ -82,13 +82,21 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         cookingTipsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cookingTipsRecyclerView.setNestedScrollingEnabled(false);
 
+        // Dữ liệu mẹo vặt đồng bộ với blog mẫu
         List<CookingTip> cookingTipList = new ArrayList<>();
-        cookingTipList.add(new CookingTip(R.drawable.placeholder_banner_background, "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "Mẹo hay - Nấu chuẩn"));
-        cookingTipList.add(new CookingTip(R.drawable.placeholder_banner_background, "Bí quyết làm thịt kho tàu chuẩn vị", "Mẹo hay - Nấu chuẩn"));
-        cookingTipList.add(new CookingTip(R.drawable.placeholder_banner_background, "Cách làm bánh flan mềm mịn không tanh", "Mẹo hay - Nấu chuẩn"));
-
+        cookingTipList.add(new CookingTip(R.drawable.blog, "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "Mẹo hay - Nấu chuẩn"));
+        cookingTipList.add(new CookingTip(R.drawable.blog, "Bí quyết làm thịt kho tàu chuẩn vị", "Mẹo hay - Nấu chuẩn"));
+        cookingTipList.add(new CookingTip(R.drawable.blog, "Cách làm bánh flan mềm mịn không tanh", "Mẹo hay - Nấu chuẩn"));
         CookingTipAdapter cookingTipAdapter = new CookingTipAdapter(cookingTipList);
         cookingTipsRecyclerView.setAdapter(cookingTipAdapter);
+
+        // Thêm sự kiện click cho nút 'Xem tất cả' phần mẹo vặt bí quyết nấu ăn
+        TextView xemTatCaCookingTips = findViewById(R.id.tvSeeAllCookingTips);
+        if (xemTatCaCookingTips != null) {
+            xemTatCaCookingTips.setOnClickListener(v -> {
+                startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.blog.BlogActivity.class));
+            });
+        }
     }
 
     private void setupRecipeCategories() {

@@ -42,20 +42,20 @@ public class BlogFeedFragment extends Fragment {
     }
 
     private void addSampleBlogPosts() {
-        // Thêm dữ liệu mẫu
-        // Item đầu tiên sẽ là header
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
+        // Thêm dữ liệu mẫu giống hình minh họa
+        blogList.add(new Blog(
+                "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
                 "Bữa tối ngày mùa đông trời se se lạnh mà có một đĩa chả cá chiên nóng hổi cùng một tô canh vị chua chua ngọt ngọt thì ngon phải biết luôn đó nha! Bếp Nhà Ta phải rủ Mẹ vào bếp trổ tài nhanh một thực đơn xuất sắc với toàn món ngon mùa đông ngay thôi!",
-                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false)); // Giả định R.drawable.blog là ảnh lớn cho header
+                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
 
-        // Các item tiếp theo sẽ là dạng nhỏ
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
+        blogList.add(new Blog(
+                "Bí quyết làm thịt kho tàu chuẩn vị",
+                "",
                 "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
-                "Mẹo hay - Nấu chuẩn", R.drawable.blog, true)); // Thêm một item có isFavorite = true để thử nghiệm
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
+
+        blogList.add(new Blog(
+                "Cách làm bánh flan mềm mịn không tanh",
+                "",
                 "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
-        blogList.add(new Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "",
-                "Mẹo hay - Nấu chuẩn", R.drawable.blog, true));
     }
 } 
