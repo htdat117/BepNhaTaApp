@@ -43,5 +43,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
     @Override public int getItemCount(){return items==null?0:items.size();}
     static class AddressViewHolder extends RecyclerView.ViewHolder{
         android.widget.RadioButton radio; TextView tvName,tvPhone,tvAddress,tvDefault;
-        AddressViewHolder(@NonNull View v){super(v);radio=v.findViewById(R.id.radioSelect);tvName=v.findViewById(R.id.tvName);tvPhone=v.findViewById(R.id.tvPhone);tvAddress=v.findViewById(R.id.tvAddress);tvDefault=v.findViewById(R.id.tvDefaultLabel);} }
+        AddressViewHolder(@NonNull View v){super(v);
+            radio = v.findViewById(R.id.rb_default);
+            tvName = v.findViewById(R.id.tv_name);
+            tvPhone = v.findViewById(R.id.tv_phone);
+            tvAddress = v.findViewById(R.id.tv_address);
+            tvDefault = v.findViewById(R.id.tv_default);
+        }
+    }
 } 

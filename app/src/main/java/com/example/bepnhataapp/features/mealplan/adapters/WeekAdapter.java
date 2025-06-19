@@ -40,20 +40,26 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.DayVH> {
     public void onBindViewHolder(@NonNull DayVH holder, int position) {
         DayTimeline day = days.get(position);
         holder.tvHeader.setText(dateFmt.format(day.date));
-        MealTimeListAdapter adapter = new MealTimeListAdapter(day.mealTimes);
-        holder.rvMealTimes.setAdapter(adapter);
+        boolean hasData = day.mealTimes != null && !day.mealTimes.isEmpty();
+        holder.rvMealTimes.setVisibility(hasData ? View.VISIBLE : View.GONE);
+        holder.placeholder.setVisibility(hasData ? View.GONE : View.VISIBLE);
+        if (hasData) {
+            MealTimeListAdapter adapter = new MealTimeListAdapter(day.mealTimes);
+            holder.rvMealTimes.setAdapter(adapter);
+        }
     }
 
     @Override
     public int getItemCount() { return days.size(); }
 
     static class DayVH extends RecyclerView.ViewHolder {
-        TextView tvHeader; RecyclerView rvMealTimes;
+        TextView tvHeader; RecyclerView rvMealTimes; View placeholder;
         DayVH(@NonNull View itemView){
             super(itemView);
             tvHeader = itemView.findViewById(R.id.tvDayLabel);
             rvMealTimes = itemView.findViewById(R.id.rvMealTimes);
             rvMealTimes.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+            placeholder = itemView.findViewById(R.id.placeholderContainer);
         }
     }
 } 

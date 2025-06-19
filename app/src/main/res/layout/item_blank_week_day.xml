@@ -68,47 +68,58 @@
             android:text="0 Calories"/>
     </LinearLayout>
 
-    <TextView
-        style="@style/Body.Regular.Ag4"
+    <LinearLayout
+        android:id="@+id/placeholderContainer"
         android:layout_width="match_parent"
-        android:layout_height="13dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Ngày này chưa được lên kế hoạch" />
-
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:text="Tạo tự động ngày"
-        android:gravity="center"
-        app:cornerRadius="8dp"
-        app:strokeColor="@color/primary1"
-        android:textColor="@color/white"
-        android:layout_marginTop="8dp"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Sao chép thực đơn ngày trước"
-        android:gravity="center"
-        app:cornerRadius="8dp"
-        app:strokeColor="@color/primary1"
-        android:textColor="@color/dark2"
-        android:layout_marginTop="8dp"
-        android:background="#00000000"/>
+        android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tạo thực đơn trống"
-        android:layout_gravity="center"
-        android:gravity="center"
-        app:cornerRadius="8dp"
-        app:strokeColor="@color/primary1"
-        android:textColor="@color/dark2"
-        android:layout_marginTop="8dp"
-        android:background="#00000000"/>
+        <TextView
+            android:id="@+id/tvEmptyMessage"
+            style="@style/Body.Regular.Ag4"
+            android:layout_width="match_parent"
+            android:layout_height="13dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Ngày này chưa được lên kế hoạch" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAutoGenerate"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:text="Tạo tự động ngày"
+            android:gravity="center"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/primary1"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCopyPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Sao chép thực đơn ngày trước"
+            android:gravity="center"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/primary1"
+            android:textColor="@color/dark2"
+            android:layout_marginTop="8dp"
+            android:background="#00000000"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreateBlank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tạo thực đơn trống"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/primary1"
+            android:textColor="@color/dark2"
+            android:layout_marginTop="8dp"
+            android:background="#00000000"/>
+    </LinearLayout>
 
 </LinearLayout> 

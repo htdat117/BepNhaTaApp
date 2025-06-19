@@ -46,21 +46,18 @@ public class WeekTimelineFragment extends Fragment {
             Date date = cal.getTime();
             List<MealTimeListAdapter.MealTimeWithMeals> mealTimes = new ArrayList<>();
 
-            // Breakfast example meals
-            List<MealAdapter.MealRow> breakfastMeals = new ArrayList<>();
-            breakfastMeals.add(new MealAdapter.MealRow("Trứng ốp la", R.drawable.placeholder_banner_background));
-            breakfastMeals.add(new MealAdapter.MealRow("Bánh mì", R.drawable.placeholder_banner_background));
-            mealTimes.add(new MealTimeListAdapter.MealTimeWithMeals("Bữa sáng", breakfastMeals));
+            if (i % 2 == 0) { // giả định ngày chẵn có dữ liệu
+                List<MealAdapter.MealRow> breakfastMeals = new ArrayList<>();
+                breakfastMeals.add(new MealAdapter.MealRow("Trứng ốp la", R.drawable.placeholder_banner_background));
+                breakfastMeals.add(new MealAdapter.MealRow("Bánh mì", R.drawable.placeholder_banner_background));
+                mealTimes.add(new MealTimeListAdapter.MealTimeWithMeals("Bữa sáng", breakfastMeals));
 
-            // Lunch
-            List<MealAdapter.MealRow> lunchMeals = new ArrayList<>();
-            lunchMeals.add(new MealAdapter.MealRow("Cơm gà", R.drawable.placeholder_banner_background));
-            mealTimes.add(new MealTimeListAdapter.MealTimeWithMeals("Bữa trưa", lunchMeals));
+                List<MealAdapter.MealRow> lunchMeals = new ArrayList<>();
+                lunchMeals.add(new MealAdapter.MealRow("Cơm gà", R.drawable.placeholder_banner_background));
+                mealTimes.add(new MealTimeListAdapter.MealTimeWithMeals("Bữa trưa", lunchMeals));
+            }
 
-            // Dinner
-            List<MealAdapter.MealRow> dinnerMeals = new ArrayList<>();
-            mealTimes.add(new MealTimeListAdapter.MealTimeWithMeals("Bữa tối", dinnerMeals));
-
+            // nếu mealTimes rỗng => ngày trống
             list.add(new WeekAdapter.DayTimeline(date, mealTimes));
             cal.add(Calendar.DATE, 1);
         }

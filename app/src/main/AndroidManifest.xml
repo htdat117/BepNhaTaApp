@@ -101,6 +101,64 @@
             android:name=".features.policy.PolicyActivity"
             android:exported="false" />
 
+        <!-- Meal Plan new screens -->
+        <activity android:name=".features.mealplan.MealPlanContentActivity" android:exported="false" />
+        <activity android:name=".features.mealplan.MealPlanWizardActivity" android:exported="false" />
+
+        <!-- Voucher additional screens -->
+        <activity android:name=".features.voucher.VoucherSelectActivity" android:exported="false" />
+        <activity android:name=".features.voucher.VoucherListActivity" android:exported="false" />
+        <activity android:name=".features.voucher.VoucherDetailActivity" android:exported="false" />
+
+        <!-- Checkout flow -->
+        <activity android:name=".features.checkout.CheckoutActivity" android:exported="false" />
+        <activity android:name=".features.checkout.ShippingInfoActivity" android:exported="false" />
+        <activity android:name=".features.checkout.ConfirmPaymentActivity" android:exported="false" />
+        <activity android:name=".features.checkout.PaymentSuccessActivity" android:exported="false" />
+
+        <!-- Point system -->
+        <activity android:name=".features.point.PointActivity" android:exported="false" />
+        <activity android:name=".features.point.PointHistoryActivity" android:exported="false" />
+
+        <!-- Product detail / reviews -->
+        <activity android:name=".features.products.ProductDetailActivity" android:exported="false" />
+        <activity android:name=".features.products.AllReviewsActivity" android:exported="false" />
+
+        <!-- Address selection -->
+        <activity android:name=".features.address.AddressSelectActivity" android:exported="false" />
+
+        <!-- Opening / onboarding sequence -->
+        <activity android:name=".features.opening.first_opening" android:exported="false" />
+        <activity android:name=".features.opening.second_opening" android:exported="false" />
+        <activity android:name=".features.opening.third_opening" android:exported="false" />
+        <activity android:name=".features.opening.fourth_opening" android:exported="false" />
+
+        <!-- Offline mode screens -->
+        <activity android:name=".features.offline.OfflineActivity" android:exported="false" />
+        <activity android:name=".features.offline.DownloadedContentActivity" android:exported="false" />
+
+        <!-- Messaging -->
+        <activity android:name=".features.message.notification_list" android:exported="false" />
+        <activity android:name=".features.message.conversation" android:exported="false" />
+
+        <!-- FAQ -->
+        <activity android:name=".features.faq.FAQActivity" android:exported="false" />
+
+        <!-- Product management (admin) -->
+        <activity android:name=".features.manage_r_p_b.manage_recipe" android:exported="false" />
+        <activity android:name=".features.manage_r_p_b.manage_product" android:exported="false" />
+        <activity android:name=".features.manage_r_p_b.manage_blog" android:exported="false" />
+
+        <!-- Blog detail -->
+        <activity android:name=".features.blog.BlogActivity" android:exported="false" />
+        <activity android:name=".features.blog.BlogDetailActivity" android:exported="false" />
+
+        <!-- Authentication / Registration -->
+        <activity android:name=".features.login.RegistrationActivity" android:exported="false" />
+        <activity android:name=".features.login.NewPasswordActivity" android:exported="false" />
+        <activity android:name=".features.login.AuthenticationActivity" android:exported="false" />
+        <activity android:name=".features.login.AccountInfoActivity" android:exported="false" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
