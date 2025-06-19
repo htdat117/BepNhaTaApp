@@ -29,6 +29,10 @@ public class AuthenticationActivity extends AppCompatActivity {
                 next = new android.content.Intent(this, NewPasswordActivity.class);
             } else if ("register".equals(flow)) {
                 next = new android.content.Intent(this, AccountInfoActivity.class);
+                // close this activity so it is not on back stack
+                startActivity(next);
+                finish();
+                return;
             } else {
                 // default just finish
                 finish();

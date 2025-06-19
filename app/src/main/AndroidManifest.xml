@@ -7,12 +7,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.BepNhaTaApp"
         tools:targetApi="31">
@@ -47,7 +48,7 @@
             android:name=".features.manage_pinfor.shipping_address"
             android:exported="false" /> <!-- Activity khởi động chính -->
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.login.RegistrationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,9 +67,6 @@
             android:exported="false" />
         <activity
             android:name=".features.manage_account.ManageAccountActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.LoginActivity"
@@ -154,7 +152,7 @@
         <activity android:name=".features.blog.BlogDetailActivity" android:exported="false" />
 
         <!-- Authentication / Registration -->
-        <activity android:name=".features.login.RegistrationActivity" android:exported="false" />
+        <activity android:name=".features.home.HomeActivity" android:exported="false" />
         <activity android:name=".features.login.NewPasswordActivity" android:exported="false" />
         <activity android:name=".features.login.AuthenticationActivity" android:exported="false" />
         <activity android:name=".features.login.AccountInfoActivity" android:exported="false" />
