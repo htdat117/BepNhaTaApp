@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@drawable/bg_primary4"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bạn chỉ được hoàn trả hàng trong vòng 03 giờ sau khi nhận hàng công!"
+            android:textSize="@dimen/body1"
+            style="@style/Body.Bold.Ag1"
+            android:textAlignment="center"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="8dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thời gian còn lại:"
+                android:textSize="@dimen/body1"
+                android:textColor="@color/primary1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03:00:00"
+                android:layout_marginStart="4dp"
+                android:textSize="@dimen/body1"
+                android:textColor="@color/primary1"
+                style="@style/Body.Bold.Ag1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thoát"
+                android:textColor="@color/primary1"
+                android:backgroundTint="@color/white"
+                android:textSize="@dimen/body1"
+                app:strokeWidth="1dp"
+                android:layout_marginTop="8dp"
+                app:strokeColor="@color/primary1"
+                android:layout_marginEnd="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAccept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đồng ý"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/primary1"
+                android:textSize="@dimen/body1"
+                app:strokeWidth="1dp"
+                android:layout_marginTop="8dp"
+                app:strokeColor="@color/primary1"
+                android:layout_marginEnd="8dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

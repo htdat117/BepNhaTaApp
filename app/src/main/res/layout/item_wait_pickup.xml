@@ -52,7 +52,8 @@
             android:id="@+id/rvProductInner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            android:nestedScrollingEnabled="false"
+            android:layout_marginVertical="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

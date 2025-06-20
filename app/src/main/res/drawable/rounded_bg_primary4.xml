@@ -3,5 +3,5 @@
     android:shape="rectangle">
     <solid android:color="@color/primary4" /> <!-- Màu nền -->
     <corners
-        android:radius="8dp" /> <!-- Bo tròn 2 góc trên 24dp -->
+        android:radius="24dp" /> <!-- Bo tròn 2 góc trên 24dp -->
 </shape>

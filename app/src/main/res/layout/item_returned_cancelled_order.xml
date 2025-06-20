@@ -38,12 +38,13 @@
                 android:textSize="@dimen/body1" />
 
             <TextView
+                android:id="@+id/orderStatus"
                 style="@style/Body.Regular.Ag1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="Đã giao"
+                android:text="Trả hàng"
                 android:textColor="@color/primary1"
                 android:textSize="@dimen/body1" />
         </LinearLayout>
@@ -56,63 +57,51 @@
             android:layout_marginVertical="8dp"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="4dp"
-            android:layout_gravity="end">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tổng số tiền:"
-                android:textSize="@dimen/body1"
-                android:textColor="@color/dark1"
-                android:layout_marginStart="8dp"/>
-
-            <TextView
-                android:id="@+id/productPayment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="90.000đ"
-                android:textSize="@dimen/body1"
-                android:layout_marginStart="4dp"
-                android:textColor="@color/dark1"
-                android:gravity="end"
-                style="@style/Body.Bold.Ag4"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:orientation="horizontal">
+            android:gravity="center_vertical">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnReceive"
+                android:id="@+id/btnReorder"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="Đã nhận được hàng"
+                android:text="Mua lại"
                 android:textColor="@color/primary1"
                 android:backgroundTint="@color/white"
                 android:textSize="@dimen/body2"
                 app:strokeWidth="1dp"
-                android:layout_marginTop="8dp"
-                app:strokeColor="@color/primary1"
-                android:layout_marginEnd="8dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnTrack"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Theo dõi"
-                android:textColor="@color/primary1"
-                android:backgroundTint="@color/white"
-                android:textSize="@dimen/body2"
-                app:strokeWidth="1dp"
-                android:layout_marginTop="8dp"
                 app:strokeColor="@color/primary1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số tiền:"
+                    android:textSize="@dimen/body1"
+                    android:textColor="@color/dark1"
+                    android:layout_marginStart="8dp"/>
+
+                <TextView
+                    android:id="@+id/totalPayment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="90.000đ"
+                    android:textSize="@dimen/body1"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/dark1"
+                    android:gravity="end"
+                    style="@style/Body.Bold.Ag4" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </LinearLayout>
