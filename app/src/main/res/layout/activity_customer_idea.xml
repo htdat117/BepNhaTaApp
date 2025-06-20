@@ -283,7 +283,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:layout_marginTop="4dp"/>
 
-            <!-- Nút gửi -->
+<!--             Nút gửi -->
             <Button
                 android:id="@+id/btnSend"
                 android:layout_width="match_parent"
@@ -294,6 +294,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/body1"
                 android:layout_marginTop="16dp"/>
+
         </LinearLayout>
     </ScrollView>
 
