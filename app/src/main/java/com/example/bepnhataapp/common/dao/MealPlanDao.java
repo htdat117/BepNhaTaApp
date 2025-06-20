@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.example.bepnhataapp.common.database.DBHelper;
-import com.example.bepnhataapp.common.models.MealPlan;
+import com.example.bepnhataapp.common.model.MealPlan;
 
 import java.util.ArrayList;
 import java.util.List;

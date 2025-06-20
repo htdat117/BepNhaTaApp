@@ -96,10 +96,10 @@
             android:name=".features.recipes.RecipesActivity"
             android:exported="false" />
         <activity
-            android:name=".features.ingredients.FilterProductActivity"
+            android:name=".features.products.FilterProductActivity"
             android:exported="false" />
         <activity
-            android:name=".features.ingredients.ProductActivity"
+            android:name=".features.products.ProductActivity"
             android:exported="false" />
         <activity
             android:name=".features.voucher.VoucherActivity"

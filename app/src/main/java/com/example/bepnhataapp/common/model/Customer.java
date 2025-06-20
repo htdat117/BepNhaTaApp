@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.common.models;
+package com.example.bepnhataapp.common.model;
 
 public class Customer {
     private long customerID;

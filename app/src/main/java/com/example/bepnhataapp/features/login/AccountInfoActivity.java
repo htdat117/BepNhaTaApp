@@ -3,6 +3,7 @@ package com.example.bepnhataapp.features.login;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.model.Customer;
 
 public class AccountInfoActivity extends AppCompatActivity {
 
@@ -66,15 +67,15 @@ public class AccountInfoActivity extends AppCompatActivity {
             com.example.bepnhataapp.common.dao.CustomerDao dao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
 
             // Check email duplication
-            java.util.List<com.example.bepnhataapp.common.models.Customer> existing = dao.getAll();
-            for (com.example.bepnhataapp.common.models.Customer c0 : existing) {
+            java.util.List<Customer> existing = dao.getAll();
+            for (Customer c0 : existing) {
                 if (email.equalsIgnoreCase(c0.getEmail())) {
                     android.widget.Toast.makeText(this, "Email đã tồn tại", android.widget.Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
 
-            com.example.bepnhataapp.common.models.Customer c = new com.example.bepnhataapp.common.models.Customer();
+            Customer c = new Customer();
             c.setFullName(name);
             c.setGender(""); // chưa chọn giới tính
             c.setBirthday(dob);
