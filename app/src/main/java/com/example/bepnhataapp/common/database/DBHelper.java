@@ -398,6 +398,32 @@ public class DBHelper extends SQLiteOpenHelper {
     private final Context ctx;
     private static final String TAG = "DBHelper";
 
+    /* ---------------------------------------------------------
+     *  Simple in-memory cache for small seed images so that each
+     *  drawable resource is decoded/compressed only once during
+     *  the initial database population. This dramatically
+     *  reduces allocations and CPU time when onCreate() seeds a
+     *  large number of rows that reuse the same drawable.
+     * --------------------------------------------------------- */
+    private final java.util.Map<Integer, byte[]> imageBlobCache = new java.util.HashMap<>();
+
+    private byte[] getImageBlobCached(int resId) {
+        if (resId == 0) return null;
+        byte[] cached = imageBlobCache.get(resId);
+        if (cached != null) return cached;
+
+        android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(ctx.getResources(), resId);
+        if (bmp == null) return null; // resource not found
+
+        java.io.ByteArrayOutputStream os = new java.io.ByteArrayOutputStream();
+        bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 90, os);
+        byte[] blob = os.toByteArray();
+
+        imageBlobCache.put(resId, blob);
+        bmp.recycle(); // free native memory ASAP
+        return blob;
+    }
+
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         ctx = context.getApplicationContext();
@@ -441,8 +467,15 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_FAVOURITE_PRODUCT);
         db.execSQL(SQL_CREATE_FOOD_CALO);
 
-        // Seed initial data but do NOT allow any runtime-exception here to abort DB creation
+        /*
+         * Seed initial demo data.  We wrap the entire seeding phase inside a single
+         * transaction so that the DB is only fsynced once, improving performance
+         * significantly on low-end devices.  The helper beginSafeTransaction() will
+         * detect that we are already inside a transaction and skip nested calls.
+         */
         try {
+            db.beginTransaction();
+
             seedCustomers(db);
             seedMealPlans(db);
             seedMealDays(db);
@@ -472,9 +505,12 @@ public class DBHelper extends SQLiteOpenHelper {
             seedProductIngredients(db);
             seedFavouriteProducts(db);
             seedFoodCalo(db);
+
+            db.setTransactionSuccessful();
         } catch (Exception e) {
-            android.util.Log.e(TAG, "Error seeding initial customers. Database schema is still created.", e);
-            // Optionally you could decide to delete all partially inserted rows here.
+            android.util.Log.e(TAG, "Error seeding initial data. Database schema is still created.", e);
+        } finally {
+            if (db.inTransaction()) db.endTransaction();
         }
     }
 
@@ -539,11 +575,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("phone",         (String) r[5]);
 
                 int resId = (Integer) r[6];
-                Bitmap bmp = BitmapFactory.decodeResource(ctx.getResources(), resId);
-                if (bmp != null) {
-                    ByteArrayOutputStream os = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 90, os);
-                    cv.put("avatar", os.toByteArray());
+                byte[] avatarBlob = getImageBlobCached(resId);
+                if (avatarBlob != null) {
+                    cv.put("avatar", avatarBlob);
                 } else {
                     android.util.Log.w(TAG, "Cannot decode avatar resource id=" + resId + ". Skipping avatar blob.");
                 }
@@ -900,11 +934,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("createdAt", (String) r[3]);
 
                 int resId = (Integer) r[4];
-                Bitmap bmp = BitmapFactory.decodeResource(ctx.getResources(), resId);
-                if (bmp != null) {
-                    java.io.ByteArrayOutputStream osImg = new java.io.ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 90, osImg);
-                    cv.put("imageThumb", osImg.toByteArray());
+                byte[] imgBlob = getImageBlobCached(resId);
+                if (imgBlob != null) {
+                    cv.put("imageThumb", imgBlob);
                 }
 
                 cv.put("category", (String) r[5]);
@@ -1102,6 +1134,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("recipeID", (Integer) r[1]);
                 cv.put("quantity", ((Number) r[2]).doubleValue());
                 cv.put("nameIngredient", (String) r[3]);
+                cv.put("image", getImageBlobCached((Integer) r[4]));
                 db.insert(TBL_RECIPE_INGREDIENTS, null, cv);
             }
             if (startedHere) db.setTransactionSuccessful();
@@ -1574,11 +1607,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("productPrice", (Integer) r[3]);
                 cv.put("salePercent", (Integer) r[4]);
                 int resId = (Integer) r[5];
-                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(ctx.getResources(), resId);
-                if (bmp != null) {
-                    java.io.ByteArrayOutputStream osImg = new java.io.ByteArrayOutputStream();
-                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 90, osImg);
-                    cv.put("productThumb", osImg.toByteArray());
+                byte[] prodThumb = getImageBlobCached(resId);
+                if (prodThumb != null) {
+                    cv.put("productThumb", prodThumb);
                 } else {
                     cv.putNull("productThumb");
                     android.util.Log.w(TAG, "Cannot decode product thumb resource id=" + resId);
@@ -1699,11 +1730,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("ingredientName", (String) r[0]);
                 cv.put("unit", (String) r[1]);
                 int resId = (Integer) r[2];
-                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(ctx.getResources(), resId);
-                if (bmp != null) {
-                    java.io.ByteArrayOutputStream osImg = new java.io.ByteArrayOutputStream();
-                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 90, osImg);
-                    cv.put("image", osImg.toByteArray());
+                byte[] ingImg = getImageBlobCached(resId);
+                if (ingImg != null) {
+                    cv.put("image", ingImg);
                 } else {
                     cv.putNull("image");
                     android.util.Log.w(TAG, "Cannot decode ingredient thumb resId=" + resId);
@@ -1827,11 +1856,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 android.content.ContentValues cv = new android.content.ContentValues();
                 cv.put("foodName", (String) r[0]);
                 int resId = (Integer) r[1];
-                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(ctx.getResources(), resId);
-                if (bmp != null) {
-                    java.io.ByteArrayOutputStream osImg = new java.io.ByteArrayOutputStream();
-                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 90, osImg);
-                    cv.put("foodThumb", osImg.toByteArray());
+                byte[] foodImg = getImageBlobCached(resId);
+                if (foodImg != null) {
+                    cv.put("foodThumb", foodImg);
                 } else cv.putNull("foodThumb");
                 cv.put("caloPerOneHundredGrams", (Integer) r[2]);
                 db.insert(TBL_FOOD_CALO, null, cv);
