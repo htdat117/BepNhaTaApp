@@ -7,6 +7,11 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,20 +56,27 @@ public class CustomerIdeaActivity extends AppCompatActivity {
         com.google.android.material.textfield.TextInputLayout tilEmail = findViewById(R.id.tilEmail);
         com.google.android.material.textfield.TextInputLayout tilProblem = findViewById(R.id.tilProblem);
         com.google.android.material.textfield.TextInputLayout tilContent = findViewById(R.id.tilContent);
+        android.widget.HorizontalScrollView hsPreview = findViewById(R.id.hsPreview);
+        android.widget.LinearLayout llPreview = findViewById(R.id.llPreview);
+        android.widget.RadioGroup rgChannel = findViewById(R.id.rgChannel);
+        android.widget.TextView tvChannelError = findViewById(R.id.tvChannelError);
 
-        // Keep a reference to selected image
-        final android.net.Uri[] selectedImage = {null};
+        java.util.List<android.net.Uri> selectedImages = new java.util.ArrayList<>();
 
-        // ========= Image picker =========
-        ActivityResultLauncher<String> pickImageLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetContent(), uri -> {
-                    if (uri != null) {
-                        selectedImage[0] = uri;
-                        android.widget.Toast.makeText(this, "Đã chọn ảnh", android.widget.Toast.LENGTH_SHORT).show();
+        // ========= Image picker (multiple) =========
+        ActivityResultLauncher<String[]> pickImagesLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.OpenMultipleDocuments(), uris -> {
+                    if (uris == null || uris.isEmpty()) return;
+                    for (android.net.Uri uri : uris) {
+                        if (!selectedImages.contains(uri)) {
+                            selectedImages.add(uri);
+                            addPreviewImage(uri, llPreview, selectedImages);
+                        }
                     }
+                    hsPreview.setVisibility(View.VISIBLE);
                 });
 
-        btnUpload.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
+        btnUpload.setOnClickListener(v -> pickImagesLauncher.launch(new String[]{"image/*"}));
 
         // ========= Validation helper =========
         final java.util.regex.Pattern phonePattern = java.util.regex.Pattern.compile("^(\\+84|0)\\d{9}$");
@@ -145,31 +157,35 @@ public class CustomerIdeaActivity extends AppCompatActivity {
             if (problem.isEmpty()) { tilProblem.setHelperTextColor(android.content.res.ColorStateList.valueOf(android.graphics.Color.RED)); tilProblem.setHelperText("Vui lòng nhập vấn đề"); valid = false; } else { tilProblem.setHelperText(null); }
             if (content.isEmpty()) { tilContent.setHelperTextColor(android.content.res.ColorStateList.valueOf(android.graphics.Color.RED)); tilContent.setHelperText("Vui lòng nhập nội dung"); valid = false; } else { tilContent.setHelperText(null); }
 
+            if (rgChannel.getCheckedRadioButtonId() == -1) {
+                tvChannelError.setVisibility(View.VISIBLE);
+                valid = false;
+            } else {
+                tvChannelError.setVisibility(View.GONE);
+            }
+
             if (!valid) return;
 
-            // Gửi email tới chủ app
-            android.content.Intent emailIntent = new android.content.Intent(android.content.Intent.ACTION_SEND);
-            emailIntent.setType("message/rfc822");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"hungtn22411@st.uel.edu.vn"});
-            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Ý kiến khách hàng - " + name);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Họ tên: ").append(name).append('\n');
-            sb.append("Số điện thoại: ").append(phone).append('\n');
-            sb.append("Email: ").append(email).append('\n');
-            sb.append("Vấn đề: ").append(problem).append('\n');
-            sb.append("Nội dung: \n").append(content).append('\n');
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, sb.toString());
+            // Hiển thị thông báo gửi thành công và reset biểu mẫu
+            android.widget.Toast.makeText(this, "Đã gửi thành công", android.widget.Toast.LENGTH_SHORT).show();
 
-            if (selectedImage[0] != null) {
-                emailIntent.putExtra(android.content.Intent.EXTRA_STREAM, selectedImage[0]);
-                emailIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
+            // Reset tất cả các trường nhập và thông báo trợ giúp
+            edtName.setText("");
+            edtPhone.setText("");
+            edtEmail.setText("");
+            edtProblem.setText("");
+            edtContent.setText("");
+            selectedImages.clear();
+            llPreview.removeAllViews();
+            hsPreview.setVisibility(View.GONE);
+            rgChannel.clearCheck();
+            tvChannelError.setVisibility(View.GONE);
 
-            try {
-                startActivity(android.content.Intent.createChooser(emailIntent, "Chọn ứng dụng email"));
-            } catch (android.content.ActivityNotFoundException ex) {
-                android.widget.Toast.makeText(this, "Không tìm thấy ứng dụng email trên thiết bị", android.widget.Toast.LENGTH_SHORT).show();
-            }
+            tilName.setHelperText(null);
+            tilPhone.setHelperText(null);
+            tilEmail.setHelperText(null);
+            tilProblem.setHelperText(null);
+            tilContent.setHelperText(null);
         });
 
         // Setup clear buttons for edit texts
@@ -206,5 +222,43 @@ public class CustomerIdeaActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void addPreviewImage(android.net.Uri uri, android.widget.LinearLayout container, java.util.List<android.net.Uri> selectedImages) {
+        android.content.Context ctx = this;
+        android.widget.FrameLayout frame = new android.widget.FrameLayout(ctx);
+        android.widget.ImageView img = new android.widget.ImageView(ctx);
+        int sizePx = (int) (180 * getResources().getDisplayMetrics().density);
+        img.setLayoutParams(new android.widget.FrameLayout.LayoutParams(sizePx, sizePx));
+        img.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+        img.setImageURI(uri);
+
+        android.widget.ImageButton btnRemove = new android.widget.ImageButton(ctx);
+        int btnSize = (int) (24 * getResources().getDisplayMetrics().density);
+        android.widget.FrameLayout.LayoutParams lpBtn = new android.widget.FrameLayout.LayoutParams(btnSize, btnSize);
+        int margin = (int) (16 * getResources().getDisplayMetrics().density);
+        lpBtn.setMargins(0, margin, margin, 0);
+        lpBtn.gravity = android.view.Gravity.END | android.view.Gravity.TOP;
+        btnRemove.setLayoutParams(lpBtn);
+        btnRemove.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+        btnRemove.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        btnRemove.setColorFilter(androidx.core.content.ContextCompat.getColor(ctx, R.color.primary1), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        btnRemove.setOnClickListener(v -> {
+            selectedImages.remove(uri);
+            container.removeView(frame);
+            if (selectedImages.isEmpty()) {
+                findViewById(R.id.hsPreview).setVisibility(View.GONE);
+            }
+        });
+
+        frame.addView(img);
+        frame.addView(btnRemove);
+
+        android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(sizePx, sizePx);
+        lp.setMargins(8, 0, 8, 0);
+        frame.setLayoutParams(lp);
+
+        container.addView(frame);
     }
 }

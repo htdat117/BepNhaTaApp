@@ -109,25 +109,67 @@ public class FAQActivity extends AppCompatActivity {
     }
 
     private void seedSampleData() {
+        faqList.clear();
+
         // Tài khoản
-        faqList.add(new Faq("Tài khoản", "Tôi quên mật khẩu, phải làm sao?", "Chọn \"Quên mật khẩu\" tại màn đăng nhập và làm theo hướng dẫn để đặt lại mật khẩu."));
-        faqList.add(new Faq("Tài khoản", "Làm sao thay đổi thông tin cá nhân?", "Vào mục Tài khoản > Thông tin cá nhân để chỉnh sửa tên, số điện thoại, địa chỉ ..."));
+        faqList.add(new Faq("Tài khoản", "Tôi có cần đăng ký tài khoản để đặt hàng không?", "Không bắt buộc, nhưng đăng ký giúp bạn quản lý đơn hàng và nhận ưu đãi dễ dàng hơn."));
+        faqList.add(new Faq("Tài khoản", "Làm sao để đăng ký tài khoản?", "Bạn nhấn “Đăng ký” ở góc phải màn hình và điền thông tin cơ bản như tên, email, mật khẩu."));
+        faqList.add(new Faq("Tài khoản", "Tôi quên mật khẩu, phải làm sao?", "Nhấn “Quên mật khẩu” ở trang đăng nhập, sau đó làm theo hướng dẫn để đặt lại mật khẩu."));
+        faqList.add(new Faq("Tài khoản", "Tôi có thể thay đổi thông tin cá nhân không?", "Có. Truy cập “Tài khoản của tôi” để chỉnh sửa thông tin bất kỳ lúc nào."));
+        faqList.add(new Faq("Tài khoản", "Tài khoản của tôi có bị xóa nếu lâu không dùng?", "Không. Tài khoản sẽ được lưu trữ trừ khi bạn yêu cầu xóa."));
+        faqList.add(new Faq("Tài khoản", "Tôi có thể dùng một tài khoản để đặt hàng cho nhiều người không?", "Có thể. Bạn chỉ cần thay đổi địa chỉ nhận hàng khi đặt đơn."));
+        faqList.add(new Faq("Tài khoản", "Làm sao để xem lịch sử đơn hàng?", "Truy cập “Đơn hàng của tôi” trong tài khoản để xem toàn bộ đơn đã mua."));
+        faqList.add(new Faq("Tài khoản", "Tài khoản có bảo mật không?", "Chúng tôi sử dụng mã hóa và các biện pháp bảo mật để bảo vệ thông tin cá nhân của bạn."));
 
         // Đặt hàng
-        faqList.add(new Faq("Đặt hàng", "Có thể hủy đơn sau khi đặt không?", "Bạn có thể hủy miễn phí trong vòng 30 phút sau khi đặt hàng."));
+        faqList.add(new Faq("Đặt hàng", "Làm sao để đặt hàng?", "Chọn sản phẩm, nhấn “Thêm vào giỏ”, sau đó “Thanh toán” và điền thông tin cần thiết."));
+        faqList.add(new Faq("Đặt hàng", "Tôi có thể đặt nhiều món trong một đơn hàng không?", "Có, bạn có thể thêm nhiều món vào giỏ trước khi thanh toán."));
+        faqList.add(new Faq("Đặt hàng", "Làm sao để biết đơn hàng đã được đặt thành công?", "Bạn sẽ nhận email xác nhận và có thể kiểm tra trong mục “Đơn hàng của tôi”."));
+        faqList.add(new Faq("Đặt hàng", "Tôi có thể chỉnh sửa đơn hàng sau khi đã đặt không?", "Bạn có thể chỉnh sửa trong vòng 30 phút sau khi đặt nếu đơn chưa được xử lý."));
+        faqList.add(new Faq("Đặt hàng", "Tôi có thể huỷ đơn hàng không?", "Có, nếu đơn chưa được đóng gói. Vui lòng liên hệ sớm qua hotline hoặc fanpage."));
+        faqList.add(new Faq("Đặt hàng", "Có giới hạn số lượng sản phẩm trong một đơn hàng không?", "Không giới hạn, nhưng với số lượng lớn chúng tôi sẽ xác nhận lại với bạn."));
+        faqList.add(new Faq("Đặt hàng", "Tôi có thể đặt hàng trước cho ngày hôm sau không?", "Có. Bạn chọn ngày nhận hàng mong muốn khi thanh toán."));
+        faqList.add(new Faq("Đặt hàng", "Tôi có thể đặt hàng qua điện thoại hoặc fanpage không?", "Có thể. Inbox fanpage hoặc gọi hotline để được hỗ trợ đặt hàng thủ công."));
 
         // Thanh toán
-        faqList.add(new Faq("Thanh toán", "Những phương thức thanh toán nào được hỗ trợ?", "Chúng tôi hỗ trợ thẻ tín dụng, chuyển khoản và COD."));
-        faqList.add(new Faq("Thanh toán", "Tôi có thể xuất hoá đơn VAT không?", "Có, vui lòng điền thông tin công ty ở bước thanh toán."));
+        faqList.add(new Faq("Thanh toán", "Có những hình thức thanh toán nào?", "Chúng tôi hỗ trợ chuyển khoản ngân hàng, ví điện tử (Momo, ZaloPay), và tiền mặt khi nhận hàng (COD)."));
+        faqList.add(new Faq("Thanh toán", "Tôi có được xác nhận thanh toán không?", "Có. Sau khi thanh toán, bạn sẽ nhận được email hoặc tin nhắn xác nhận."));
+        faqList.add(new Faq("Thanh toán", "Thanh toán có an toàn không?", "Có. Mọi giao dịch được mã hóa và bảo mật theo tiêu chuẩn cao."));
+        faqList.add(new Faq("Thanh toán", "Tôi có thể xuất hóa đơn không?", "Có, vui lòng ghi chú yêu cầu hóa đơn khi thanh toán."));
+        faqList.add(new Faq("Thanh toán", "Chuyển khoản nhưng chưa thấy xác nhận?", "Vui lòng gửi minh chứng thanh toán qua fanpage hoặc hotline để được hỗ trợ."));
+        faqList.add(new Faq("Thanh toán", "Có áp dụng mã giảm giá khi thanh toán không?", "Có. Bạn nhập mã khuyến mãi ở bước thanh toán để được giảm giá."));
+        faqList.add(new Faq("Thanh toán", "Tôi có thể thanh toán một phần trước, phần còn lại khi nhận không?", "Hiện chưa hỗ trợ hình thức thanh toán chia nhỏ."));
+        faqList.add(new Faq("Thanh toán", "Có phí phụ thu nào khác không?", "Không. Tổng số tiền hiển thị là số bạn phải thanh toán."));
 
         // Sản phẩm
-        faqList.add(new Faq("Sản phẩm", "Nguồn gốc nguyên liệu?", "Nguyên liệu được nhập trực tiếp từ các nhà cung cấp đạt chuẩn VietGAP."));
+        faqList.add(new Faq("Sản phẩm", "Nguyên liệu có tươi mới không?", "Có. Tất cả nguyên liệu được chuẩn bị trong ngày giao hàng."));
+        faqList.add(new Faq("Sản phẩm", "Các món ăn có sẵn công thức không?", "Có. Mỗi phần ăn kèm công thức hướng dẫn chi tiết, dễ hiểu."));
+        faqList.add(new Faq("Sản phẩm", "Tôi có thể chọn khẩu phần ăn phù hợp không?", "Có. Bạn có thể chọn phần cho 1–4 người tùy món."));
+        faqList.add(new Faq("Sản phẩm", "Có món chay không?", "Có. Mục “Món chay” luôn được cập nhật hàng tuần."));
+        faqList.add(new Faq("Sản phẩm", "Thành phần có ghi rõ dị ứng thực phẩm không?", "Có. Các món đều ghi rõ thành phần để bạn kiểm tra trước."));
+        faqList.add(new Faq("Sản phẩm", "Tôi có thể yêu cầu thay đổi nguyên liệu không?", "Hiện chưa hỗ trợ tuỳ chỉnh nguyên liệu, nhưng bạn có thể chọn món phù hợp nhất."));
+        faqList.add(new Faq("Sản phẩm", "Có combo tiết kiệm không?", "Có. Bạn có thể chọn các combo bữa ăn tiết kiệm theo tuần."));
+        faqList.add(new Faq("Sản phẩm", "Sản phẩm có hạn sử dụng bao lâu?", "Nguyên liệu nên dùng trong ngày. Nếu không, bảo quản lạnh và sử dụng trong 24h."));
 
         // Vận chuyển
-        faqList.add(new Faq("Vận chuyển", "Phí vận chuyển được tính như thế nào?", "Phí phụ thuộc vào trọng lượng và địa chỉ giao hàng, sẽ hiển thị ở bước thanh toán."));
+        faqList.add(new Faq("Vận chuyển", "Bếp Nhà Ta giao hàng ở đâu?", "Hiện tại chúng tôi giao hàng trong khu vực nội thành và một số quận lân cận."));
+        faqList.add(new Faq("Vận chuyển", "Phí giao hàng là bao nhiêu?", "Miễn phí với đơn từ 200.000đ. Dưới mức này, phí từ 15.000–30.000đ tùy khu vực."));
+        faqList.add(new Faq("Vận chuyển", "Thời gian giao hàng như thế nào?", "Giao trong khung 8h–19h mỗi ngày, bạn có thể chọn giờ cụ thể khi thanh toán."));
+        faqList.add(new Faq("Vận chuyển", "Tôi có thể kiểm tra tình trạng giao hàng không?", "Có. Chúng tôi sẽ cập nhật qua email hoặc tin nhắn khi đơn đang được giao."));
+        faqList.add(new Faq("Vận chuyển", "Giao hàng có đúng giờ không?", "Chúng tôi luôn cố gắng giao đúng hẹn, và sẽ thông báo nếu có chậm trễ."));
+        faqList.add(new Faq("Vận chuyển", "Tôi không có nhà lúc giao thì sao?", "Bạn có thể nhờ người nhận thay hoặc liên hệ để dời thời gian giao."));
+        faqList.add(new Faq("Vận chuyển", "Có thể nhận hàng tại địa chỉ khác không?", "Có. Bạn điền địa chỉ mong muốn khi đặt hàng."));
+        faqList.add(new Faq("Vận chuyển", "Có giao hàng vào cuối tuần và ngày lễ không?", "Có. Tuy nhiên, đơn đặt vào dịp lễ nên được đặt sớm để đảm bảo giao đúng hẹn."));
 
         // Hoàn trả
-        faqList.add(new Faq("Hoàn trả", "Thời gian hoàn tiền bao lâu?", "Hoàn tiền về tài khoản ngân hàng trong 3-7 ngày làm việc."));
+        faqList.add(new Faq("Hoàn trả", "Tôi có thể trả lại hàng không?", "Chỉ áp dụng cho sản phẩm lỗi hoặc hư hỏng do vận chuyển."));
+        faqList.add(new Faq("Hoàn trả", "Làm sao để yêu cầu hoàn tiền hoặc đổi hàng?", "Liên hệ hotline hoặc fanpage trong vòng 12h sau khi nhận hàng kèm ảnh sản phẩm."));
+        faqList.add(new Faq("Hoàn trả", "Thời gian xử lý hoàn tiền là bao lâu?", "Trong 3–5 ngày làm việc sau khi xác nhận yêu cầu."));
+        faqList.add(new Faq("Hoàn trả", "Tôi có cần trả lại sản phẩm lỗi không?", "Tuỳ trường hợp. Đội ngũ CSKH sẽ hướng dẫn chi tiết khi tiếp nhận yêu cầu."));
+        faqList.add(new Faq("Hoàn trả", "Nếu nhận thiếu nguyên liệu thì sao?", "Bạn chụp ảnh đơn hàng và liên hệ ngay để được bổ sung hoặc hoàn tiền."));
+        faqList.add(new Faq("Hoàn trả", "Hoàn tiền bằng hình thức nào?", "Chúng tôi hoàn qua tài khoản ngân hàng hoặc mã giảm giá cho đơn sau."));
+        faqList.add(new Faq("Hoàn trả", "Có chính sách đổi món khác nếu không vừa ý không?", "Hiện chưa hỗ trợ đổi vì lý do khẩu vị cá nhân."));
+        faqList.add(new Faq("Hoàn trả", "Tôi phản hồi sau 24h có được hỗ trợ không?", "Tùy trường hợp. Nhưng khuyến khích bạn phản hồi sớm nhất có thể."));
     }
 
     private void renderQuestionList() {

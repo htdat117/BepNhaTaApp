@@ -278,6 +278,24 @@
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
+            <!-- Danh sách ảnh xem trước -->
+            <HorizontalScrollView
+                android:id="@+id/hsPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="8dp"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/llPreview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
             <!-- RadioButton nhận phản hồi -->
             <TextView
                 android:layout_width="wrap_content"
@@ -287,6 +305,7 @@
                 android:paddingHorizontal="16dp"
                 android:layout_marginTop="8dp"/>
             <RadioGroup
+                android:id="@+id/rgChannel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
@@ -308,9 +327,17 @@
                     android:text="Số điện thoại"
                     android:textColor="@color/dark1"
                     android:fontFamily="@font/inter_medium"/>
-
             </RadioGroup>
 
+            <TextView
+                android:id="@+id/tvChannelError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:textColor="#FF0000"
+                android:text="Vui lòng chọn hình thức phản hồi"
+                android:textSize="@dimen/body3"
+                android:visibility="gone"/>
 
             <!-- Dòng cảm ơn -->
             <TextView
