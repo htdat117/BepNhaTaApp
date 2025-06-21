@@ -22,8 +22,15 @@ public class LoginActivity extends AppCompatActivity implements PhoneNumberFragm
         }
 
         if (savedInstanceState == null) {
+            String prefill = getIntent().getStringExtra("phone");
+            PhoneNumberFragment fragment;
+            if (prefill != null && !prefill.isEmpty()) {
+                fragment = PhoneNumberFragment.newInstancePrefill(prefill);
+            } else {
+                fragment = new PhoneNumberFragment();
+            }
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new PhoneNumberFragment())
+                    .replace(R.id.fragment_container, fragment)
                     .commit();
         }
     }

@@ -4,6 +4,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.model.Customer;
+import android.util.Patterns;
+import java.util.regex.Pattern;
+import android.text.TextWatcher;
+import android.text.Editable;
+import android.view.View;
 
 public class AccountInfoActivity extends AppCompatActivity {
 
@@ -26,23 +31,75 @@ public class AccountInfoActivity extends AppCompatActivity {
         android.widget.EditText edtName = findViewById(R.id.editTextFullName);
         android.widget.EditText edtEmail = findViewById(R.id.editTextEmail);
         android.widget.EditText edtBirth = findViewById(R.id.editTextDateOfBirth);
-        android.widget.EditText edtPassword = findViewById(R.id.editTextPassword);
-        android.widget.EditText edtConfirm = findViewById(R.id.editTextConfirmPassword);
-        android.widget.Button btnComplete = findViewById(R.id.button_complete);
+        String phoneRegistered = getIntent().getStringExtra("phone");
 
-        // Simple date picker for DOB
-        android.widget.ImageView dateBtn = findViewById(R.id.datePickerButton);
+        // Calendar & date picker listener
         java.util.Calendar cal = java.util.Calendar.getInstance();
         android.app.DatePickerDialog.OnDateSetListener listener = (view, y, m, d) -> {
             String dob = String.format(java.util.Locale.getDefault(), "%04d-%02d-%02d", y, m + 1, d);
             edtBirth.setText(dob);
         };
+
+        // Prevent keyboard, open date picker on focus/click
+        edtBirth.setInputType(android.text.InputType.TYPE_NULL);
+        View.OnClickListener openDate = v -> {
+            new android.app.DatePickerDialog(this, listener,
+                    cal.get(java.util.Calendar.YEAR),
+                    cal.get(java.util.Calendar.MONTH),
+                    cal.get(java.util.Calendar.DAY_OF_MONTH)).show();
+        };
+        edtBirth.setOnClickListener(openDate);
+        edtBirth.setOnFocusChangeListener((v, hasFocus) -> { if(hasFocus) openDate.onClick(v);} );
+
+        android.widget.EditText edtPassword = findViewById(R.id.editTextPassword);
+        android.widget.EditText edtConfirm = findViewById(R.id.editTextConfirmPassword);
+        android.widget.Button btnComplete = findViewById(R.id.button_complete);
+
+        // Simple date picker button icon
+        android.widget.ImageView dateBtn = findViewById(R.id.datePickerButton);
         dateBtn.setOnClickListener(v -> {
             new android.app.DatePickerDialog(this, listener,
                     cal.get(java.util.Calendar.YEAR),
                     cal.get(java.util.Calendar.MONTH),
                     cal.get(java.util.Calendar.DAY_OF_MONTH)).show();
         });
+
+        // Validation patterns
+        final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"); // >=8, letters+digit
+
+        TextWatcher watcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s,int st,int c,int a){}
+            @Override public void onTextChanged(CharSequence s,int st,int b,int c){}
+            @Override public void afterTextChanged(Editable s){
+                String email = edtEmail.getText().toString().trim();
+                String pass = edtPassword.getText().toString();
+                String confirm = edtConfirm.getText().toString();
+                boolean ok = !edtName.getText().toString().trim().isEmpty()
+                        && !edtBirth.getText().toString().trim().isEmpty()
+                        && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                        && PASSWORD_PATTERN.matcher(pass).matches()
+                        && pass.equals(confirm);
+                btnComplete.setEnabled(ok);
+                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    edtEmail.setError("Email không hợp lệ");
+                } else { edtEmail.setError(null);}   
+                if(!PASSWORD_PATTERN.matcher(pass).matches()){
+                    edtPassword.setError("Mật khẩu ≥8 ký tự, gồm chữ & số");
+                } else { edtPassword.setError(null);} 
+                if(!confirm.equals(pass)){
+                    edtConfirm.setError("Mật khẩu xác nhận không khớp");
+                } else { edtConfirm.setError(null);}  
+            }
+        };
+
+        // disable button initially
+        btnComplete.setEnabled(false);
+
+        edtName.addTextChangedListener(watcher);
+        edtEmail.addTextChangedListener(watcher);
+        edtBirth.addTextChangedListener(watcher);
+        edtPassword.addTextChangedListener(watcher);
+        edtConfirm.addTextChangedListener(watcher);
 
         btnComplete.setOnClickListener(v -> {
             String name = edtName.getText().toString().trim();
@@ -51,8 +108,8 @@ public class AccountInfoActivity extends AppCompatActivity {
             String pass = edtPassword.getText().toString();
             String confirm = edtConfirm.getText().toString();
 
-            if (name.isEmpty() || email.isEmpty() || dob.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
-                android.widget.Toast.makeText(this, "Vui lòng điền đủ thông tin", android.widget.Toast.LENGTH_SHORT).show();
+            if (!PASSWORD_PATTERN.matcher(pass).matches()) {
+                android.widget.Toast.makeText(this, "Mật khẩu phải ≥8 ký tự, gồm chữ & số", android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -81,7 +138,7 @@ public class AccountInfoActivity extends AppCompatActivity {
             c.setBirthday(dob);
             c.setEmail(email);
             c.setPassword(pass);
-            c.setPhone("");
+            c.setPhone( phoneRegistered != null ? phoneRegistered : "" );
             c.setAvatar(null);
             c.setCustomerType("Bạc");
             c.setLoyaltyPoint(0);

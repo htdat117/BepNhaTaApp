@@ -11,14 +11,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.dao.CustomerDao;
+import com.example.bepnhataapp.common.model.Customer;
+import com.example.bepnhataapp.features.manage_account.ManageAccountActivity;
 
 public class PasswordFragment extends Fragment {
 
     private static final String ARG_PHONE_NUMBER = "phone_number";
 
     private String phoneNumber;
+    private CustomerDao customerDao;
 
     public static PasswordFragment newInstance(String phoneNumber) {
         PasswordFragment fragment = new PasswordFragment();
@@ -42,13 +48,30 @@ public class PasswordFragment extends Fragment {
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_password, container, false);
 
+        customerDao = new CustomerDao(requireContext());
+
+        EditText edtPass = view.findViewById(R.id.editTextPassword);
+        ImageView clearBtn = view.findViewById(R.id.clearPasswordButton);
+        clearBtn.setOnClickListener(v -> edtPass.setText(""));
+
         Button loginButton = view.findViewById(R.id.button_login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // In a real app, you would get the password from editTextPassword
-                // and perform login logic with the phoneNumber
-                Toast.makeText(getContext(), "Logging in for phone number: " + phoneNumber, Toast.LENGTH_SHORT).show();
+                String passInput = edtPass.getText().toString();
+                if(passInput.isEmpty()){
+                    Toast.makeText(getContext(), "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Customer c = customerDao.findByPhoneAndPassword(phoneNumber, passInput);
+                if(c==null){
+                    Toast.makeText(getContext(), "Sai số điện thoại hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(getContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ManageAccountActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
@@ -58,6 +81,7 @@ public class PasswordFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
                 intent.putExtra("flow", "reset");
+                intent.putExtra("phone", phoneNumber);
                 startActivity(intent);
             }
         });
@@ -68,6 +92,7 @@ public class PasswordFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
                 intent.putExtra("flow", "login");
+                intent.putExtra("phone", phoneNumber);
                 startActivity(intent);
             }
         });

@@ -44,6 +44,28 @@ public class CustomerDao {
         return list;
     }
 
+    public Customer findByPhone(String phone) {
+        Cursor cursor = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_CUSTOMERS + " WHERE phone=? LIMIT 1", new String[]{phone});
+        if (cursor.moveToFirst()) {
+            Customer c = fromCursor(cursor);
+            cursor.close();
+            return c;
+        }
+        cursor.close();
+        return null;
+    }
+
+    public Customer findByPhoneAndPassword(String phone,String password){
+        android.database.Cursor cur = helper.getReadableDatabase().rawQuery("SELECT * FROM "+DBHelper.TBL_CUSTOMERS+" WHERE phone=? AND password=? LIMIT 1", new String[]{phone,password});
+        if(cur.moveToFirst()){
+            Customer c = fromCursor(cur);
+            cur.close();
+            return c;
+        }
+        cur.close();
+        return null;
+    }
+
     private ContentValues toContentValues(Customer c) {
         ContentValues v = new ContentValues();
         v.put("fullName", c.getFullName());

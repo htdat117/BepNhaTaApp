@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2; // bumped to match latest asset DB
     private static final String DB_NAME = "BepNhaTa.db";
     private static final String DB_PATH_SUFFIX = "/databases/";
     // Alias for teacher-style constant name
@@ -470,5 +470,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
         // No migration logic for now because we rely on the pre-populated DB.
         // Bump DB_VERSION and implement migrations when you need to change schema.
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Prevent crash when DB version is higher than expected (e.g., user keeps old database).
+        // Simply keep existing schema; you could also implement copy-from-asset again.
+        // Here we just log and ignore.
+        Log.w(TAG, "Downgrading database from version " + oldVersion + " to " + newVersion + ". No changes applied.");
     }
 } 

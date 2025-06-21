@@ -59,6 +59,7 @@
 
         <!-- OTP Input Boxes -->
         <LinearLayout
+            android:id="@+id/otpContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -68,31 +69,37 @@
             android:paddingEnd="16dp">
 
             <EditText
+                android:id="@+id/editTextOtp1"
                 style="@style/OtpInputBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"/>
             <EditText
+                android:id="@+id/editTextOtp2"
                 style="@style/OtpInputBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"/>
             <EditText
+                android:id="@+id/editTextOtp3"
                 style="@style/OtpInputBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"/>
             <EditText
+                android:id="@+id/editTextOtp4"
                 style="@style/OtpInputBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"/>
             <EditText
+                android:id="@+id/editTextOtp5"
                 style="@style/OtpInputBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"/>
             <EditText
+                android:id="@+id/editTextOtp6"
                 style="@style/OtpInputBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"/>
