@@ -73,6 +73,7 @@
                     android:layout_weight="1"
                     android:text="Tên sản phẩm"
                     android:textStyle="bold"
+                    android:textColor="@color/dark1"
                     android:textSize="@dimen/header4"/>
 
                 <ImageView
@@ -85,7 +86,9 @@
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="60 phút"/>
+                    android:text="60 phút"
+                    style="@style/Body.Medium.Ag3"
+                    android:textColor="@color/primary1"/>
             </LinearLayout>
 
             <!-- Description title -->
@@ -93,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mô tả món ăn"
+                android:textColor="@color/dark1"
                 android:fontFamily="@font/inter_bold"
                 android:layout_marginTop="8dp"
                 android:textSize="@dimen/body1"/>
@@ -101,6 +105,7 @@
             <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="wrap_content"
+                android:textColor="@color/dark1"
                 android:layout_height="wrap_content"
                 android:text="Mô tả chi tiết về món ăn..."
                 android:layout_marginTop="4dp"/>
@@ -116,6 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/dark1"
                     android:text="Hướng dẫn cách nấu"
                     android:fontFamily="@font/inter_bold"
                     android:textSize="@dimen/body1"/>
@@ -138,6 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@color/dark1"
                 android:text="Thành phần dinh dưỡng"
                 android:fontFamily="@font/inter_bold"
                 android:textSize="@dimen/body1"
@@ -161,12 +168,13 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_carb"
-                            android:background="@drawable/rounded_bg_primary4"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
                             android:padding="8dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="142g carbs"
+                            android:textColor="@color/dark1"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
                             android:layout_marginStart="8dp"/>
@@ -176,15 +184,16 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
                             android:src="@drawable/ic_protein"
-                            android:background="@drawable/rounded_bg_primary4"
-                            android:padding="4dp"/>
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
+                            android:padding="8dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="70g proteins"
+                            android:textColor="@color/dark1"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
                             android:layout_marginStart="8dp"/>
@@ -204,11 +213,12 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_calo"
-                            android:background="@drawable/rounded_bg_primary4"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
                             android:padding="8dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:textColor="@color/dark1"
                             android:text="142g carbs"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
@@ -222,12 +232,13 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_fat"
-                            android:background="@drawable/rounded_bg_primary4"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
                             android:padding="8dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="68g fat"
+                            android:textColor="@color/dark1"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
                             android:layout_marginStart="8dp"/>
@@ -294,6 +305,7 @@
                     android:layout_weight="1"
                     android:textSize="@dimen/body1"
                     android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/dark1"
                     android:text="Đánh giá sản phẩm (2.804)"
                     android:textStyle="bold"/>
 
@@ -301,8 +313,15 @@
                     android:id="@+id/tvAllReviews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/Body.Regular.Ag3"
                     android:text="Tất cả"
-                    android:textColor="@color/primary1"/>
+                    android:textColor="@color/dark2"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_right_arrow_gray"
+                    android:layout_marginStart="4dp"/>
             </LinearLayout>
 
             <!-- Reviews list -->
@@ -319,6 +338,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Có thể bạn sẽ thích"
+                android:textColor="@color/dark1"
                 android:textSize="@dimen/body1"
                 android:fontFamily="@font/inter_bold"
                 android:textStyle="bold"/>
