@@ -99,6 +99,13 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Ensure bottom navigation highlights Home when returning from other tabs
+        setupBottomNavigationFragment(R.id.nav_home);
+    }
+
     private void setupRecipeCategories() {
         TextView categoryMonNuong = findViewById(R.id.category_mon_nuong);
         TextView categoryMonKho = findViewById(R.id.category_mon_kho);
