@@ -12,7 +12,7 @@ import java.io.ByteArrayOutputStream;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 1;
     private static final String DB_NAME = "BepNhaTa.db";
 
     public static final String TBL_CUSTOMERS = "CUSTOMERS";
@@ -527,7 +527,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {"Bùi Văn Cường",   "Nam","1996-06-30","buivancuong@example.com","cuong456789","0979988776", R.drawable.avarta_7,"Vàng", 1800,"2023-06-15","active"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -555,9 +555,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 db.insert(TBL_CUSTOMERS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -593,7 +593,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {1, null, "Thực đơn ăn kiêng cá nhân tuần 2", "2025-07-30", null, 7, 0.0, 0.0, 0.0, 0.0, "2025-07-31", "2025-09-03", "", "Download"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -614,9 +614,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 db.insert(TBL_MEAL_PLANS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -730,7 +730,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {23, "2025-08-05", "Ngày 7"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -740,9 +740,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 db.insert(TBL_MEAL_DAYS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -751,7 +751,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *  Seed demo rows (shortened – extend as needed)
      *  --------------------------------------------------------- */
     private void seedMealTimes(SQLiteDatabase db) {
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             // Build 3 meals (Sáng/Trưa/Tối) for mỗi MealDay có trong bảng MEAL_DAYS
             android.database.Cursor c = db.rawQuery("SELECT mealDayID, note FROM " + TBL_MEAL_DAYS, null);
@@ -769,9 +769,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 } while (c.moveToNext());
             }
             c.close();
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -814,7 +814,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {301,10},{302,11},{303,20},{304,11},{305,18}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (int[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -822,9 +822,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("recipeID", r[1]);
                 db.insert(TBL_MEAL_RECIPES, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -839,7 +839,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {3, "Male", 40, 80.0, 180.0, "Endomorph", "Nuts", "Improve Endurance", 78.0, 0.4, "Low"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -856,9 +856,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("physicalActivityLevel", (String) r[10]);
                 db.insert(TBL_CUSTOMER_HEALTH, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -890,7 +890,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {"Sữa chua dẻo", "Món ăn vặt tốt cho tiêu hóa", "sữa chua, dẻo, healthy", "2025-07-06", R.drawable.recipe20, "Tráng miệng", 84, 6, 5}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -913,9 +913,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("sectionAmount", (Integer) r[8]);
                 db.insert(TBL_RECIPES, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -947,7 +947,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {20,180,5,15,7,"sữa chua, dẻo","Âu",5,"Ngọt nhẹ","Tốt tiêu hóa, ăn nhẹ"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for(Object[] r: rows){
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -963,8 +963,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("benefit", (String) r[9]);
                 db.insert(TBL_RECIPE_DETAILS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     /* =========================================================
@@ -981,7 +981,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {5, 2, 1, "Sơ chế nguyên liệu", "Thái các loại quả thành những miếng vuông nhỏ vừa ăn. Cà chua bi thái đôi. Các loại quả như táo, lê nên ngâm qua nước muối loãng để không bị thâm.", "salad_trai_cay_step1"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -993,9 +993,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("image", (String) r[5]);
                 db.insert(TBL_INSTRUCTION_RECIPES, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1094,7 +1094,7 @@ public class DBHelper extends SQLiteOpenHelper {
         {87,20,50.0,"Sữa đặc"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for(Object[] r: rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1104,9 +1104,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("nameIngredient", (String) r[3]);
                 db.insert(TBL_RECIPE_INGREDIENTS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1117,7 +1117,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {3, 3, "2025-06-11"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1126,9 +1126,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("downloadedAt", (String) r[2]);
                 db.insert(TBL_RECIPE_DOWNLOAD, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1139,7 +1139,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {3, 7, "2025-06-18"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1148,9 +1148,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("createdAt", (String) r[2]);
                 db.insert(TBL_FAVOURITE_RECIPES, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1176,7 +1176,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {14, 4, "2024-03-22 15:10:15"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1185,9 +1185,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("createdAt", (String) r[2]);
                 db.insert(TBL_CARTS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1213,7 +1213,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {12, 10, 1}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1222,9 +1222,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("quantity", (Integer) r[2]);
                 db.insert(TBL_CART_DETAILS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1249,7 +1249,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {13, 7, "Lê Hồng Nhung", "0936225566", "45 Nguyễn Bỉnh Khiêm", "Quận 2", "TP. Hồ Chí Minh", 1, "Giao đúng giờ"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1264,9 +1264,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (r[8] != null) cv.put("note", (String) r[8]); else cv.putNull("note");
                 db.insert(TBL_ADDRESSES, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1284,7 +1284,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {6, 7, 5, 3, "2023-06-18", 90.0, "completed", "Credit Card", null}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1299,9 +1299,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (r[8] != null) cv.put("note", (String) r[8]); else cv.putNull("note");
                 db.insert(TBL_ORDERS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1327,7 +1327,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {14, 6, 6, 3, 400.0}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1338,9 +1338,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("totalPrice", ((Number) r[4]).doubleValue());
                 db.insert(TBL_ORDER_LINES, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1363,7 +1363,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {11, 13, "Nhận sai màu, shop phản hồi chậm, hơi thất vọng với cách xử lý.", null, 2, "2023-11-14 12:50:00"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1375,9 +1375,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("createdAt", (String) r[5]);
                 db.insert(TBL_PRODUCT_FEEDBACK, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1404,7 +1404,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {15, "Làm Bánh Xèo Vàng Giòn Nhân Đầy Đặn", "Blog content", "Bếp Nhà Ta", "2025-06-18", "https://i.ytimg.com/vi/hxI-i5jAeB8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBojnmiQAk3Xll7SREnHLzCPhVJ7w", "Chưa xuất bản", "Món Chính"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1418,9 +1418,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("tag", (String) r[7]);
                 db.insert(TBL_BLOGS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1440,7 +1440,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {15, 4, "2025-06-18"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1449,9 +1449,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("createdAt", (String) r[2]);
                 db.insert(TBL_FAVOURITE_BLOGS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1468,7 +1468,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {5, 2, 3, "Rất mong Bếp chia sẻ nhiều thông tin xịn như này nhá", "2025-06-18", 3, 50}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1481,9 +1481,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("usefulness", (Integer) r[6]);
                 db.insert(TBL_BLOG_COMMENTS, null, cv);
             }
-            db.setTransactionSuccessful();
+            if (startedHere) db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
+            endSafeTransaction(db, startedHere);
         }
     }
 
@@ -1500,7 +1500,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {5, 3, 1, "Rất mong Bếp chia sẻ nhiều thông tin xịn như này nhá", "2025-05-10", null, 50}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1513,8 +1513,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("usefulness", (Integer) r[6]);
                 db.insert(TBL_RECIPE_COMMENTS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     /* =========================================================
@@ -1531,7 +1531,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {6, 3, "Ưu đãi đổi điểm giảm 200K", 500000, "2025-07-01", "2025-07-31", null, 200000, 0, 200}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1547,8 +1547,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (r[9] != null) cv.put("exchangePoints", (Integer) r[9]); else cv.putNull("exchangePoints");
                 db.insert(TBL_COUPONS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     /* =========================================================
@@ -1564,7 +1564,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {5, "Nước mắm nhĩ 40N 500ml", "Truyền thống, không chất bảo quản", 90000, 0, R.drawable.recipe5, 15, "Gia vị", 200, 90, 4.9, "active", "2025-06-15", "2025-06-18"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1593,8 +1593,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("updatedDate", (String) r[13]);
                 db.insert(TBL_PRODUCTS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     /* =========================================================
@@ -1610,7 +1610,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {5, 16, 10.0, 1.0, 0.0, 0.0, "Giàu đạm", "Việt Nam", 0, "Bảo quản nơi khô ráo, tránh nắng", "2025-09-15", "Không dùng cho người dị ứng cá"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1628,8 +1628,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (r[11] != null) cv.put("note", (String) r[11]); else cv.putNull("note");
                 db.insert(TBL_PRODUCT_DETAILS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     /* =========================================================
@@ -1690,7 +1690,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {"Rong biển", "gram", R.drawable.recipe9}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             int id = 1;
             for (Object[] r : rows) {
@@ -1710,8 +1710,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
                 db.insert(TBL_INGREDIENTS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     /* =========================================================
@@ -1732,7 +1732,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {5, 23, 15}    // muối
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (int[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1741,8 +1741,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("quantity", r[2]);
                 db.insert(TBL_PRODUCT_INGREDIENTS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     private void seedFavouriteProducts(SQLiteDatabase db) {
@@ -1754,7 +1754,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {5, 2, "2025-06-24"}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1763,8 +1763,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("createdAt", (String) r[2]);
                 db.insert(TBL_FAVOURITE_PRODUCTS, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
     }
 
     private void seedFoodCalo(SQLiteDatabase db) {
@@ -1821,7 +1821,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 {"Gừng tươi", R.drawable.recipe4, 80}
         };
 
-        db.beginTransaction();
+        boolean startedHere = beginSafeTransaction(db);
         try {
             for (Object[] r : rows) {
                 android.content.ContentValues cv = new android.content.ContentValues();
@@ -1836,7 +1836,22 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("caloPerOneHundredGrams", (Integer) r[2]);
                 db.insert(TBL_FOOD_CALO, null, cv);
             }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+            if (startedHere) db.setTransactionSuccessful();
+        } finally { endSafeTransaction(db, startedHere); }
+    }
+
+    private static boolean beginSafeTransaction(SQLiteDatabase db) {
+        // Starts a new transaction only when we are NOT already inside one (e.g. onCreate already wraps us)
+        if (!db.inTransaction()) {
+            db.beginTransaction();
+            return true;
+        }
+        return false;
+    }
+
+    private static void endSafeTransaction(SQLiteDatabase db, boolean startedHere) {
+        if (startedHere) {
+            db.endTransaction();
+        }
     }
 } 

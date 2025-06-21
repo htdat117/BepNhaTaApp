@@ -63,11 +63,10 @@
             android:name=".features.manage_pinfor.shipping_address"
             android:exported="false" /> <!-- Activity khởi động chính -->
         <activity
-            android:name=".features.login.RegistrationActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Các activity công cụ -->
@@ -195,7 +194,7 @@
             android:name=".features.blog.BlogDetailActivity"
             android:exported="false" /> <!-- Authentication / Registration -->
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.login.RegistrationActivity"
             android:exported="false" />
         <activity
             android:name=".features.login.NewPasswordActivity"
