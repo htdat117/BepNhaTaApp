@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.bepnhataapp.common.database.DBHelper;
+import com.example.bepnhataapp.common.databases.DBHelper;
 import com.example.bepnhataapp.common.model.InstructionRecipe;
 
 import java.util.ArrayList;

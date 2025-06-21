@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.bepnhataapp.common.database.DBHelper;
+import com.example.bepnhataapp.common.databases.DBHelper;
 import com.example.bepnhataapp.common.model.ProductDetail;
 
 public class ProductDetailDao {

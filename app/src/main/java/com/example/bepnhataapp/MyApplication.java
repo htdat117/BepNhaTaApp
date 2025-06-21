@@ -3,7 +3,7 @@ package com.example.bepnhataapp;
 import android.app.Application;
 import android.util.Log;
 
-import com.example.bepnhataapp.common.database.DBHelper;
+import com.example.bepnhataapp.common.databases.DBHelper;
 
 public class MyApplication extends Application {
 

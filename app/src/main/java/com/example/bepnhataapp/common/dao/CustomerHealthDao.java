@@ -4,11 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.bepnhataapp.common.database.DBHelper;
+import com.example.bepnhataapp.common.databases.DBHelper;
 import com.example.bepnhataapp.common.model.CustomerHealth;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CustomerHealthDao {
 
