@@ -57,7 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "email TEXT," +
                     "password TEXT," +
                     "phone TEXT," +
-                    "avatar BLOB," +
+                    "avatar TEXT," +
                     "customerType TEXT," +
                     "loyaltyPoint INTEGER," +
                     "createdAt TEXT," +
@@ -71,7 +71,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "mealCategory TEXT," +
                     "title TEXT," +
                     "createdAt TEXT," +
-                    "imageThumb BLOB," +
+                    "imageThumb TEXT," +
                     "totalDays INTEGER," +
                     "avgCalories REAL," +
                     "avgCarbs REAL," +
@@ -133,7 +133,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "description TEXT," +
                     "tag TEXT," +
                     "createdAt TEXT," +
-                    "imageThumb BLOB," +
+                    "imageThumb TEXT," +
                     "category TEXT," +
                     "commentAmount INTEGER," +
                     "likeAmount INTEGER," +
@@ -332,7 +332,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "productDescription TEXT," +
                     "productPrice INTEGER," +
                     "salePercent INTEGER," +
-                    "productThumb BLOB," +
+                    "productThumb TEXT," +
                     "commentAmount INTEGER," +
                     "category TEXT," +
                     "inventory INTEGER," +
@@ -366,7 +366,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ingredientID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "ingredientName TEXT," +
                     "unit TEXT," +
-                    "image BLOB" +
+                    "image TEXT" +
                     ")";
 
     private static final String SQL_CREATE_PRODUCT_INGREDIENT =
@@ -393,7 +393,7 @@ public class DBHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS " + TBL_FOOD_CALO + " (" +
                     "foodCaloID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "foodName TEXT," +
-                    "foodThumb BLOB," +
+                    "foodThumb TEXT," +
                     "caloPerOneHundredGrams INTEGER" +
                     ")";
 
