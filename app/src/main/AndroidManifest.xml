@@ -81,9 +81,6 @@
             android:name=".features.manage_account.ManageAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".features.manage_account.ManageAccountActivity"
-            android:exported="false" />
-        <activity
             android:name=".features.login.LoginActivity"
             android:exported="false" />
         <activity

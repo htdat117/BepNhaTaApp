@@ -13,7 +13,7 @@ import com.example.bepnhataapp.common.base.BaseActivity;
 import com.example.bepnhataapp.features.point.PointActivity;
 import com.example.bepnhataapp.features.voucher.VoucherActivity;
 
-public class ManageAccountActivity extends BaseActivity {
+public class ManageAccountActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,17 +90,25 @@ public class ManageAccountActivity extends BaseActivity {
                 }
             });
         }
+
+        // Thiết lập Bottom Navigation
+        setupBottomNavigationFragment(R.id.nav_home); // chọn mặc định Trang chủ
     }
 
     private boolean isLoggedIn() {
         // TODO: Thay thế bằng logic kiểm tra đăng nhập thực tế
-        return true; // Tạm thời trả về true để bỏ qua yêu cầu đăng nhập
+        return false; // Mặc định chưa đăng nhập
     }
 
     @Override
     protected int getBottomNavigationContainerId() {
-        // Trang này không có bottom navigation, trả về 0 hoặc layout id không tồn tại
-        return 0;
+        return R.id.bottom_navigation_container;
+    }
+
+    // Xử lý khi người dùng chọn lại item ở Bottom Navigation
+    @Override
+    public void onNavigationItemReselected(int itemId) {
+        handleNavigation(itemId);
     }
 
     // Thêm hàm thiết lập click cho các mục yêu cầu đăng nhập
