@@ -6,6 +6,9 @@ import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.bepnhataapp.R;
@@ -25,6 +28,11 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Đặt màu status bar và icon trắng
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary1));
+        WindowInsetsControllerCompat ic = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (ic != null) ic.setAppearanceLightStatusBars(false);
 
         Fragment fragment;
         if (isLoggedIn()) {

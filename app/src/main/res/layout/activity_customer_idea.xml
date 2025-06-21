@@ -74,21 +74,31 @@
                 android:paddingBottom="8dp"
                 android:textSize="@dimen/body2" />
 
-            <EditText
-                android:id="@+id/edtName"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
                 android:layout_marginHorizontal="16dp"
-                android:hint="Vui lòng nhập"
-                android:textColorHint="@color/dark2"
-                android:textColor="@color/dark1"
-                android:gravity="center_vertical"
-                android:textSize="@dimen/body2"
-                android:background="@drawable/bg_edittext_rounded"
-                android:padding="12dp"
-                android:drawableEnd="@drawable/delete_all"
-                android:drawablePadding="8dp" />
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Vui lòng nhập"
+                    android:paddingHorizontal="16dp"
+                    android:textColorHint="@color/dark2"
+                    android:textColor="@color/dark1"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/body2"
+                    android:background="@drawable/bg_edittext_rounded"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/delete_all"
+                    android:drawablePadding="8dp"
+                    android:backgroundTint="@null" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -100,21 +110,31 @@
                 android:text="Điện thoại"
                 android:textColor="@color/dark1"
                 android:textSize="@dimen/body2" />
-            <EditText
-                android:id="@+id/edtPhone"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
                 android:layout_marginHorizontal="16dp"
-                android:hint="Vui lòng nhập"
-                android:textColorHint="@color/dark2"
-                android:textColor="@color/dark1"
-                android:gravity="center_vertical"
-                android:textSize="@dimen/body2"
-                android:background="@drawable/bg_edittext_rounded"
-                android:padding="12dp"
-                android:drawableEnd="@drawable/delete_all"
-                android:drawablePadding="8dp" />
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Vui lòng nhập"
+                    android:paddingHorizontal="16dp"
+                    android:textColorHint="@color/dark2"
+                    android:textColor="@color/dark1"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/body2"
+                    android:background="@drawable/bg_edittext_rounded"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/delete_all"
+                    android:drawablePadding="8dp"
+                    android:backgroundTint="@null" />
+
+            </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,21 +145,31 @@
                 android:paddingHorizontal="@dimen/body2"
                 android:text="Email"
                 android:textSize="@dimen/body2" />
-            <EditText
-                android:id="@+id/edtEmail"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
                 android:layout_marginHorizontal="16dp"
-                android:hint="Vui lòng nhập"
-                android:textColorHint="@color/dark2"
-                android:textColor="@color/dark1"
-                android:gravity="center_vertical"
-                android:textSize="@dimen/body2"
-                android:background="@drawable/bg_edittext_rounded"
-                android:padding="12dp"
-                android:drawableEnd="@drawable/delete_all"
-                android:drawablePadding="8dp" />
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Vui lòng nhập"
+                    android:paddingHorizontal="16dp"
+                    android:textColorHint="@color/dark2"
+                    android:textColor="@color/dark1"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/body2"
+                    android:background="@drawable/bg_edittext_rounded"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/delete_all"
+                    android:drawablePadding="8dp"
+                    android:backgroundTint="@null" />
+
+            </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -150,21 +180,31 @@
                 android:paddingHorizontal="16dp"
                 android:text="Vấn đề"
                 android:textSize="@dimen/body2" />
-            <EditText
-                android:id="@+id/edtProblem"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilProblem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
                 android:layout_marginHorizontal="16dp"
-                android:hint="Vui lòng nhập"
-                android:textColorHint="@color/dark2"
-                android:textColor="@color/dark1"
-                android:gravity="center_vertical"
-                android:textSize="@dimen/body2"
-                android:background="@drawable/bg_edittext_rounded"
-                android:padding="12dp"
-                android:drawableEnd="@drawable/delete_all"
-                android:drawablePadding="8dp" />
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtProblem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Vui lòng nhập"
+                    android:paddingHorizontal="16dp"
+                    android:textColorHint="@color/dark2"
+                    android:textColor="@color/dark1"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/body2"
+                    android:background="@drawable/bg_edittext_rounded"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/delete_all"
+                    android:drawablePadding="8dp"
+                    android:backgroundTint="@null" />
+
+            </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -175,21 +215,31 @@
                 android:paddingHorizontal="16dp"
                 android:text="Nội dung"
                 android:textSize="@dimen/body2" />
-            <EditText
-                android:id="@+id/edtContent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
                 android:layout_marginHorizontal="16dp"
-                android:hint="Vui lòng nhập"
-                android:textColorHint="@color/dark2"
-                android:textColor="@color/dark1"
-                android:gravity="center_vertical"
-                android:textSize="@dimen/body2"
-                android:background="@drawable/bg_edittext_rounded"
-                android:padding="12dp"
-                android:drawableEnd="@drawable/delete_all"
-                android:drawablePadding="8dp" />
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Vui lòng nhập"
+                    android:paddingHorizontal="16dp"
+                    android:textColorHint="@color/dark2"
+                    android:textColor="@color/dark1"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/body2"
+                    android:background="@drawable/bg_edittext_rounded"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/delete_all"
+                    android:drawablePadding="8dp"
+                    android:backgroundTint="@null" />
+
+            </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
