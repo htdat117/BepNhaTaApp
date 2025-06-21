@@ -12,7 +12,7 @@ import java.io.ByteArrayOutputStream;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private static final String DB_NAME = "BepNhaTa.db";
 
     public static final String TBL_CUSTOMERS = "CUSTOMERS";
@@ -39,6 +39,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TBL_BLOG_COMMENTS = "BLOG_COMMENTS";
     public static final String TBL_RECIPE_COMMENTS = "RECIPE_COMMENTS";
     public static final String TBL_COUPONS = "COUPONS";
+    public static final String TBL_PRODUCTS = "PRODUCTS";
+    public static final String TBL_PRODUCT_DETAILS = "PRODUCT_DETAILS";
+    public static final String TBL_INGREDIENTS = "INGREDIENTS";
+    public static final String TBL_PRODUCT_INGREDIENTS = "PRODUCT_INGREDIENTS";
+    public static final String TBL_FAVOURITE_PRODUCTS = "FAVOURITE_PRODUCTS";
+    public static final String TBL_FOOD_CALO = "FOOD_CALO";
 
     private static final String SQL_CREATE_CUSTOMER =
             "CREATE TABLE IF NOT EXISTS " + TBL_CUSTOMERS + " (" +
@@ -317,6 +323,78 @@ public class DBHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(customerID) REFERENCES " + TBL_CUSTOMERS + "(customerID)" +
                     ")";
 
+    private static final String SQL_CREATE_PRODUCT =
+            "CREATE TABLE IF NOT EXISTS " + TBL_PRODUCTS + " (" +
+                    "productID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "productName TEXT," +
+                    "productDescription TEXT," +
+                    "productPrice INTEGER," +
+                    "salePercent INTEGER," +
+                    "productThumb BLOB," +
+                    "commentAmount INTEGER," +
+                    "category TEXT," +
+                    "inventory INTEGER," +
+                    "soldQuantity INTEGER," +
+                    "avgRating REAL," +
+                    "status TEXT," +
+                    "createdDate TEXT," +
+                    "updatedDate TEXT" +
+                    ")";
+
+    private static final String SQL_CREATE_PRODUCT_DETAIL =
+            "CREATE TABLE IF NOT EXISTS " + TBL_PRODUCT_DETAILS + " (" +
+                    "productID INTEGER PRIMARY KEY," +
+                    "recipeID INTEGER," +
+                    "calo REAL," +
+                    "protein REAL," +
+                    "carbs REAL," +
+                    "fat REAL," +
+                    "foodTag TEXT," +
+                    "cuisine TEXT," +
+                    "cookingTimeMinutes INTEGER," +
+                    "storageGuide TEXT," +
+                    "expiry TEXT," +
+                    "note TEXT," +
+                    "FOREIGN KEY(productID) REFERENCES " + TBL_PRODUCTS + "(productID)," +
+                    "FOREIGN KEY(recipeID) REFERENCES " + TBL_RECIPES + "(recipeID)" +
+                    ")";
+
+    private static final String SQL_CREATE_INGREDIENT =
+            "CREATE TABLE IF NOT EXISTS " + TBL_INGREDIENTS + " (" +
+                    "ingredientID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "ingredientName TEXT," +
+                    "unit TEXT," +
+                    "image BLOB" +
+                    ")";
+
+    private static final String SQL_CREATE_PRODUCT_INGREDIENT =
+            "CREATE TABLE IF NOT EXISTS " + TBL_PRODUCT_INGREDIENTS + " (" +
+                    "productID INTEGER," +
+                    "ingredientID INTEGER," +
+                    "quantity INTEGER," +
+                    "PRIMARY KEY(productID, ingredientID)," +
+                    "FOREIGN KEY(productID) REFERENCES " + TBL_PRODUCTS + "(productID)," +
+                    "FOREIGN KEY(ingredientID) REFERENCES " + TBL_INGREDIENTS + "(ingredientID)" +
+                    ")";
+
+    private static final String SQL_CREATE_FAVOURITE_PRODUCT =
+            "CREATE TABLE IF NOT EXISTS " + TBL_FAVOURITE_PRODUCTS + " (" +
+                    "productID INTEGER," +
+                    "customerID INTEGER," +
+                    "createdAt TEXT," +
+                    "PRIMARY KEY(productID, customerID)," +
+                    "FOREIGN KEY(productID) REFERENCES " + TBL_PRODUCTS + "(productID)," +
+                    "FOREIGN KEY(customerID) REFERENCES " + TBL_CUSTOMERS + "(customerID)" +
+                    ")";
+
+    private static final String SQL_CREATE_FOOD_CALO =
+            "CREATE TABLE IF NOT EXISTS " + TBL_FOOD_CALO + " (" +
+                    "foodCaloID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "foodName TEXT," +
+                    "foodThumb BLOB," +
+                    "caloPerOneHundredGrams INTEGER" +
+                    ")";
+
     private final Context ctx;
     private static final String TAG = "DBHelper";
 
@@ -356,6 +434,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_BLOG_COMMENT);
         db.execSQL(SQL_CREATE_RECIPE_COMMENT);
         db.execSQL(SQL_CREATE_COUPON);
+        db.execSQL(SQL_CREATE_PRODUCT);
+        db.execSQL(SQL_CREATE_PRODUCT_DETAIL);
+        db.execSQL(SQL_CREATE_INGREDIENT);
+        db.execSQL(SQL_CREATE_PRODUCT_INGREDIENT);
+        db.execSQL(SQL_CREATE_FAVOURITE_PRODUCT);
+        db.execSQL(SQL_CREATE_FOOD_CALO);
 
         // Seed initial data but do NOT allow any runtime-exception here to abort DB creation
         try {
@@ -382,6 +466,12 @@ public class DBHelper extends SQLiteOpenHelper {
             seedBlogComments(db);
             seedRecipeComments(db);
             seedCoupons(db);
+            seedProducts(db);
+            seedProductDetails(db);
+            seedIngredientsMaster(db);
+            seedProductIngredients(db);
+            seedFavouriteProducts(db);
+            seedFoodCalo(db);
         } catch (Exception e) {
             android.util.Log.e(TAG, "Error seeding initial customers. Database schema is still created.", e);
             // Optionally you could decide to delete all partially inserted rows here.
@@ -413,6 +503,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TBL_BLOG_COMMENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TBL_RECIPE_COMMENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TBL_COUPONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_PRODUCTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_PRODUCT_DETAILS);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_INGREDIENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_PRODUCT_INGREDIENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_FAVOURITE_PRODUCTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_FOOD_CALO);
         onCreate(db);
     }
 
@@ -1450,6 +1546,295 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.put("isGeneral", (Integer) r[8]);
                 if (r[9] != null) cv.put("exchangePoints", (Integer) r[9]); else cv.putNull("exchangePoints");
                 db.insert(TBL_COUPONS, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    /* =========================================================
+     *  TABLE: PRODUCTS
+     *  Seed sample products
+     *  --------------------------------------------------------- */
+    private void seedProducts(SQLiteDatabase db) {
+        Object[][] rows = {
+                {1, "Bột yến mạch nguyên chất", "Giàu chất xơ, tốt cho sức khỏe", 65000, 10, R.drawable.recipe1, 3, "Ngũ cốc", 120, 45, 4.5, "active", "2025-06-01", "2025-06-18"},
+                {2, "Sữa hạnh nhân không đường", "Ít calo, phù hợp ăn kiêng", 78000, 0, R.drawable.recipe2, 5, "Đồ uống", 80, 30, 4.8, "active", "2025-06-05", "2025-06-18"},
+                {3, "Dầu oliu Extra Virgin 500ml", "100% nguyên chất, nhập khẩu", 125000, 15, R.drawable.recipe3, 10, "Gia vị", 50, 20, 4.6, "active", "2025-06-10", "2025-06-18"},
+                {4, "Hạt chia Úc 1kg", "Bổ sung Omega-3", 220000, 5, R.drawable.recipe4, 8, "Ngũ cốc", 60, 18, 4.7, "active", "2025-06-12", "2025-06-18"},
+                {5, "Nước mắm nhĩ 40N 500ml", "Truyền thống, không chất bảo quản", 90000, 0, R.drawable.recipe5, 15, "Gia vị", 200, 90, 4.9, "active", "2025-06-15", "2025-06-18"}
+        };
+
+        db.beginTransaction();
+        try {
+            for (Object[] r : rows) {
+                android.content.ContentValues cv = new android.content.ContentValues();
+                cv.put("productID", (Integer) r[0]);
+                cv.put("productName", (String) r[1]);
+                cv.put("productDescription", (String) r[2]);
+                cv.put("productPrice", (Integer) r[3]);
+                cv.put("salePercent", (Integer) r[4]);
+                int resId = (Integer) r[5];
+                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(ctx.getResources(), resId);
+                if (bmp != null) {
+                    java.io.ByteArrayOutputStream osImg = new java.io.ByteArrayOutputStream();
+                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 90, osImg);
+                    cv.put("productThumb", osImg.toByteArray());
+                } else {
+                    cv.putNull("productThumb");
+                    android.util.Log.w(TAG, "Cannot decode product thumb resource id=" + resId);
+                }
+                cv.put("commentAmount", (Integer) r[6]);
+                cv.put("category", (String) r[7]);
+                cv.put("inventory", (Integer) r[8]);
+                cv.put("soldQuantity", (Integer) r[9]);
+                cv.put("avgRating", ((Number) r[10]).doubleValue());
+                cv.put("status", (String) r[11]);
+                cv.put("createdDate", (String) r[12]);
+                cv.put("updatedDate", (String) r[13]);
+                db.insert(TBL_PRODUCTS, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    /* =========================================================
+     *  TABLE: PRODUCT_DETAILS
+     *  Seed nutritional & meta data per product
+     *  --------------------------------------------------------- */
+    private void seedProductDetails(SQLiteDatabase db) {
+        Object[][] rows = {
+                {1, 1, 370.0, 12.0, 65.0, 7.0, "Giàu chất xơ", "Việt Nam", 5, "Bảo quản nơi khô ráo, thoáng mát", "2025-12-31", null},
+                {2, 18, 30.0, 1.0, 1.0, 2.5, "Ít calo", "Mỹ", 0, "Giữ lạnh sau khi mở nắp, dùng trong 7 ngày", "2025-11-30", null},
+                {3, 5, 120.0, 0.0, 0.0, 14.0, "Giàu chất béo không bão hòa", "Địa Trung Hải", 0, "Tránh ánh nắng trực tiếp", "2026-05-15", null},
+                {4, 6, 486.0, 16.0, 42.0, 30.0, "Giàu Omega-3", "Úc", 0, "Đậy kín túi, để nơi mát", "2026-01-20", null},
+                {5, 16, 10.0, 1.0, 0.0, 0.0, "Giàu đạm", "Việt Nam", 0, "Bảo quản nơi khô ráo, tránh nắng", "2025-09-15", "Không dùng cho người dị ứng cá"}
+        };
+
+        db.beginTransaction();
+        try {
+            for (Object[] r : rows) {
+                android.content.ContentValues cv = new android.content.ContentValues();
+                cv.put("productID", (Integer) r[0]);
+                if (r[1] != null) cv.put("recipeID", (Integer) r[1]); else cv.putNull("recipeID");
+                cv.put("calo", ((Number) r[2]).doubleValue());
+                cv.put("protein", ((Number) r[3]).doubleValue());
+                cv.put("carbs", ((Number) r[4]).doubleValue());
+                cv.put("fat", ((Number) r[5]).doubleValue());
+                cv.put("foodTag", (String) r[6]);
+                cv.put("cuisine", (String) r[7]);
+                cv.put("cookingTimeMinutes", (Integer) r[8]);
+                cv.put("storageGuide", (String) r[9]);
+                cv.put("expiry", (String) r[10]);
+                if (r[11] != null) cv.put("note", (String) r[11]); else cv.putNull("note");
+                db.insert(TBL_PRODUCT_DETAILS, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    /* =========================================================
+     *  TABLE: INGREDIENTS
+     *  Seed master list (50 rows)
+     *  --------------------------------------------------------- */
+    private void seedIngredientsMaster(SQLiteDatabase db) {
+        Object[][] rows = {
+            {"Gà ta", "gram", R.drawable.recipe1},
+            {"Tỏi", "củ", R.drawable.recipe2},
+            {"Hành tím", "củ", R.drawable.recipe3},
+            {"Gừng", "gram", R.drawable.recipe4},
+            {"Ớt", "quả", R.drawable.recipe5},
+            {"Cà chua", "quả", R.drawable.recipe6},
+            {"Dưa leo", "quả", R.drawable.recipe7},
+            {"Rau muống", "gram", R.drawable.recipe8},
+            {"Đậu hũ", "miếng", R.drawable.recipe9},
+            {"Nấm rơm", "gram", R.drawable.recipe10},
+            {"Cá hồi", "gram", R.drawable.recipe5},
+            {"Thịt bò", "gram", R.drawable.recipe3},
+            {"Thịt heo", "gram", R.drawable.recipe1},
+            {"Sườn non", "gram", R.drawable.recipe15},
+            {"Bí đỏ", "gram", R.drawable.recipe6},
+            {"Khoai tây", "gram", R.drawable.recipe4},
+            {"Cà rốt", "gram", R.drawable.recipe4},
+            {"Bắp cải", "gram", R.drawable.recipe8},
+            {"Rau xà lách", "gram", R.drawable.recipe2},
+            {"Hành tây", "củ", R.drawable.recipe3},
+            {"Sả", "cây", R.drawable.recipe7},
+            {"Tiêu", "gram", R.drawable.recipe5},
+            {"Muối", "gram", R.drawable.recipe5},
+            {"Nước mắm", "ml", R.drawable.recipe5},
+            {"Dầu oliu", "ml", R.drawable.recipe3},
+            {"Trứng gà", "quả", R.drawable.recipe11},
+            {"Sữa đặc", "ml", R.drawable.recipe12},
+            {"Sữa tươi", "ml", R.drawable.recipe12},
+            {"Đậu đen", "gram", R.drawable.recipe9},
+            {"Đậu đỏ", "gram", R.drawable.recipe9},
+            {"Đậu xanh", "gram", R.drawable.recipe9},
+            {"Bột mì", "gram", R.drawable.recipe14},
+            {"Đường trắng", "gram", R.drawable.recipe18},
+            {"Mật ong", "ml", R.drawable.recipe18},
+            {"Bơ", "gram", R.drawable.recipe14},
+            {"Phô mai", "gram", R.drawable.recipe8},
+            {"Sữa chua", "ml", R.drawable.recipe20},
+            {"Dầu mè", "ml", R.drawable.recipe3},
+            {"Dầu dừa", "ml", R.drawable.recipe3},
+            {"Giấm táo", "ml", R.drawable.recipe18},
+            {"Mắm tôm", "ml", R.drawable.recipe5},
+            {"Bún tươi", "gram", R.drawable.recipe7},
+            {"Mì Ý", "gram", R.drawable.recipe8},
+            {"Gạo tẻ", "gram", R.drawable.recipe10},
+            {"Gạo lứt", "gram", R.drawable.recipe10},
+            {"Bột yến mạch", "gram", R.drawable.recipe1},
+            {"Hạt chia", "gram", R.drawable.recipe4},
+            {"Hạt điều", "gram", R.drawable.recipe18},
+            {"Hạt óc chó", "gram", R.drawable.recipe18},
+            {"Rong biển", "gram", R.drawable.recipe9}
+        };
+
+        db.beginTransaction();
+        try {
+            int id = 1;
+            for (Object[] r : rows) {
+                android.content.ContentValues cv = new android.content.ContentValues();
+                cv.put("ingredientID", id++);
+                cv.put("ingredientName", (String) r[0]);
+                cv.put("unit", (String) r[1]);
+                int resId = (Integer) r[2];
+                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(ctx.getResources(), resId);
+                if (bmp != null) {
+                    java.io.ByteArrayOutputStream osImg = new java.io.ByteArrayOutputStream();
+                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 90, osImg);
+                    cv.put("image", osImg.toByteArray());
+                } else {
+                    cv.putNull("image");
+                    android.util.Log.w(TAG, "Cannot decode ingredient thumb resId=" + resId);
+                }
+                db.insert(TBL_INGREDIENTS, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    /* =========================================================
+     *  TABLE: PRODUCT_INGREDIENTS
+     *  Seed mapping product ↔ ingredient with quantity
+     *  --------------------------------------------------------- */
+    private void seedProductIngredients(SQLiteDatabase db) {
+        int[][] rows = {
+                {1, 46, 1000}, // Bột yến mạch thành phần chính của sản phẩm 1
+                {1, 23, 5},    // thêm muối
+                {2, 37, 200},  // sữa chua làm nền sữa hạnh nhân
+                {2, 34, 50},   // mật ong tạo vị ngọt
+                {3, 25, 500},  // dầu oliu nguyên chất
+                {3, 22, 10},   // tiêu nêm
+                {4, 47, 300},  // hạt chia
+                {4, 33, 20},   // đường trắng nhẹ
+                {5, 24, 500},  // nước mắm
+                {5, 23, 15}    // muối
+        };
+
+        db.beginTransaction();
+        try {
+            for (int[] r : rows) {
+                android.content.ContentValues cv = new android.content.ContentValues();
+                cv.put("productID", r[0]);
+                cv.put("ingredientID", r[1]);
+                cv.put("quantity", r[2]);
+                db.insert(TBL_PRODUCT_INGREDIENTS, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    private void seedFavouriteProducts(SQLiteDatabase db) {
+        Object[][] rows = {
+            {1, 1, "2025-06-20"},
+            {2, 2, "2025-06-21"},
+            {3, 1, "2025-06-22"},
+            {4, 3, "2025-06-23"},
+            {5, 2, "2025-06-24"}
+        };
+
+        db.beginTransaction();
+        try {
+            for (Object[] r : rows) {
+                android.content.ContentValues cv = new android.content.ContentValues();
+                cv.put("productID", (Integer) r[0]);
+                cv.put("customerID", (Integer) r[1]);
+                cv.put("createdAt", (String) r[2]);
+                db.insert(TBL_FAVOURITE_PRODUCTS, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    private void seedFoodCalo(SQLiteDatabase db) {
+        Object[][] rows = {
+                {"Gà ta (thịt ức)", R.drawable.recipe1, 165},
+                {"Thịt bò nạc", R.drawable.recipe3, 250},
+                {"Thịt heo nạc", R.drawable.recipe1, 242},
+                {"Cá hồi", R.drawable.recipe5, 208},
+                {"Đậu hũ", R.drawable.recipe9, 76},
+                {"Trứng gà", R.drawable.recipe11, 155},
+                {"Sữa tươi không đường", R.drawable.recipe20, 42},
+                {"Bí đỏ", R.drawable.recipe6, 26},
+                {"Khoai tây", R.drawable.recipe4, 77},
+                {"Gạo lứt", R.drawable.recipe10, 111},
+                {"Bột yến mạch", R.drawable.recipe1, 389},
+                {"Hạt chia", R.drawable.recipe4, 486},
+                {"Táo", R.drawable.recipe2, 52},
+                {"Chuối", R.drawable.recipe2, 89},
+                {"Cà rốt", R.drawable.recipe4, 41},
+                {"Bông cải xanh", R.drawable.recipe8, 34},
+                {"Dầu oliu", R.drawable.recipe3, 884},
+                {"Mật ong", R.drawable.recipe18, 304},
+                {"Đường trắng", R.drawable.recipe18, 387},
+                {"Nước mắm", R.drawable.recipe5, 11},
+                {"Bắp cải", R.drawable.recipe8, 25},
+                {"Xà lách", R.drawable.recipe2, 15},
+                {"Rau muống", R.drawable.recipe8, 19},
+                {"Thịt gà đùi", R.drawable.recipe1, 209},
+                {"Cá thu", R.drawable.recipe5, 250},
+                {"Cá ngừ", R.drawable.recipe5, 184},
+                {"Phô mai cheddar", R.drawable.recipe8, 402},
+                {"Sữa chua", R.drawable.recipe20, 59},
+                {"Yến mạch cán dẹt", R.drawable.recipe1, 379},
+                {"Óc chó", R.drawable.recipe18, 654},
+                {"Hạnh nhân", R.drawable.recipe18, 579},
+                {"Hạt điều", R.drawable.recipe18, 553},
+                {"Đậu đen", R.drawable.recipe9, 339},
+                {"Đậu đỏ", R.drawable.recipe9, 337},
+                {"Đậu xanh", R.drawable.recipe9, 347},
+                {"Dầu dừa", R.drawable.recipe3, 862},
+                {"Dầu mè", R.drawable.recipe3, 884},
+                {"Sốt cà chua", R.drawable.recipe8, 30},
+                {"Mì Ý chín", R.drawable.recipe8, 158},
+                {"Bún tươi", R.drawable.recipe7, 110},
+                {"Bánh mì trắng", R.drawable.recipe14, 265},
+                {"Bột mì đa dụng", R.drawable.recipe14, 364},
+                {"Bơ lạt", R.drawable.recipe14, 717},
+                {"Sữa đặc có đường", R.drawable.recipe12, 321},
+                {"Gelatin", R.drawable.recipe12, 335},
+                {"Rong biển khô", R.drawable.recipe9, 45},
+                {"Rau cải bó xôi", R.drawable.recipe8, 23},
+                {"Ớt đỏ", R.drawable.recipe5, 40},
+                {"Sả", R.drawable.recipe7, 99},
+                {"Gừng tươi", R.drawable.recipe4, 80}
+        };
+
+        db.beginTransaction();
+        try {
+            for (Object[] r : rows) {
+                android.content.ContentValues cv = new android.content.ContentValues();
+                cv.put("foodName", (String) r[0]);
+                int resId = (Integer) r[1];
+                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(ctx.getResources(), resId);
+                if (bmp != null) {
+                    java.io.ByteArrayOutputStream osImg = new java.io.ByteArrayOutputStream();
+                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 90, osImg);
+                    cv.put("foodThumb", osImg.toByteArray());
+                } else cv.putNull("foodThumb");
+                cv.put("caloPerOneHundredGrams", (Integer) r[2]);
+                db.insert(TBL_FOOD_CALO, null, cv);
             }
             db.setTransactionSuccessful();
         } finally { db.endTransaction(); }
