@@ -4,13 +4,13 @@ public class Recipe {
     private int imageResId;
     private String title;
     private String calories;
-    private String time;
+    private String duration;
 
-    public Recipe(int imageResId, String title, String calories, String time) {
+    public Recipe(int imageResId, String title, String calories, String duration) {
         this.imageResId = imageResId;
         this.title = title;
         this.calories = calories;
-        this.time = time;
+        this.duration = duration;
     }
 
     public int getImageResId() {
@@ -25,7 +25,7 @@ public class Recipe {
         return calories;
     }
 
-    public String getTime() {
-        return time;
+    public String getDuration() {
+        return duration;
     }
 } 

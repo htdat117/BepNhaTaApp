@@ -8,16 +8,21 @@ import com.example.bepnhataapp.common.databases.DBHelper;
 public class MyApplication extends Application {
 
     private static final String TAG = "MyApplication";
+    public static volatile boolean isDbReady = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // Initialize database early so schema is ready for activities/fragments
-        try {
-            new DBHelper(this).getReadableDatabase();
-            Log.d(TAG, "Database initialized successfully");
-        } catch (Exception e) {
-            Log.e(TAG, "Error initializing database", e);
-        }
+        
+        new Thread(() -> {
+            DBHelper dbHelper = new DBHelper(this);
+            try {
+                dbHelper.createDatabase();
+                Log.d(TAG, "Database created/checked successfully in background.");
+                isDbReady = true; // Giơ cờ hiệu: Cơ sở dữ liệu đã sẵn sàng!
+            } catch (Exception e) {
+                Log.e(TAG, "Error creating database in background", e);
+            }
+        }).start();
     }
 } 

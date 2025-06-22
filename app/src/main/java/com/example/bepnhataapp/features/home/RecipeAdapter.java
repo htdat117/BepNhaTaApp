@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.models.Recipe;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipe_grid, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipe_card, parent, false);
         return new RecipeViewHolder(view);
     }
 
@@ -32,31 +33,33 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipeList.get(position);
         holder.recipeImage.setImageResource(recipe.getImageResId());
-        holder.recipeTitle.setText(recipe.getTitle());
-        holder.recipeCalories.setText(recipe.getCalories());
-        holder.recipeTime.setText(recipe.getTime());
-        // You can set click listeners for the favorite icon here if needed
+        holder.recipeTitle.setText(recipe.getName());
+        holder.recipeCategory.setText(recipe.getCategory());
+
+        holder.favoriteIcon.setImageResource(recipe.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+        holder.favoriteIcon.setOnClickListener(v -> {
+            recipe.setFavorite(!recipe.isFavorite());
+            notifyItemChanged(position);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return recipeList.size();
+        return recipeList != null ? recipeList.size() : 0;
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
         ImageView recipeImage;
         TextView recipeTitle;
-        TextView recipeCalories;
-        TextView recipeTime;
+        TextView recipeCategory;
         ImageView favoriteIcon;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTitle = itemView.findViewById(R.id.recipe_title);
-            recipeCalories = itemView.findViewById(R.id.recipe_calories);
-            recipeTime = itemView.findViewById(R.id.recipe_time);
+            recipeCategory = itemView.findViewById(R.id.recipe_category);
             favoriteIcon = itemView.findViewById(R.id.favorite_icon);
         }
     }
-} 
+}

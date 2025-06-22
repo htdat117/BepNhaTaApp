@@ -54,6 +54,18 @@ public class BlogDao {
         return list;
     }
 
+    public List<BlogEntity> getRandomBlogs(int limit) {
+        List<BlogEntity> list = new ArrayList<>();
+        Cursor c = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_BLOGS + " ORDER BY RANDOM() LIMIT ?", new String[]{String.valueOf(limit)});
+        if (c.moveToFirst()) {
+            do {
+                list.add(fromCursor(c));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return list;
+    }
+
     private ContentValues toContentValues(BlogEntity b) {
         ContentValues v = new ContentValues();
         if (b.getBlogID() > 0) v.put("blogID", b.getBlogID());

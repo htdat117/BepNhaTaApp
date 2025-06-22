@@ -1,5 +1,7 @@
 package com.example.bepnhataapp.features.home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,50 +12,69 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.features.blog.BlogDetailActivity;
 
 import java.util.List;
 
-public class CookingTipAdapter extends RecyclerView.Adapter<CookingTipAdapter.CookingTipViewHolder> {
+public class CookingTipAdapter extends RecyclerView.Adapter<CookingTipAdapter.ViewHolder> {
 
-    private List<CookingTip> cookingTipList;
+    private final List<Blog> tips;
+    private final Context context;
 
-    public CookingTipAdapter(List<CookingTip> cookingTipList) {
-        this.cookingTipList = cookingTipList;
+    public CookingTipAdapter(Context context, List<Blog> tips) {
+        this.context = context;
+        this.tips = tips;
     }
 
     @NonNull
     @Override
-    public CookingTipViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_suggest_blog, parent, false);
-        return new CookingTipViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cooking_tip, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CookingTipViewHolder holder, int position) {
-        CookingTip cookingTip = cookingTipList.get(position);
-        holder.tipImage.setImageResource(cookingTip.getImageResId());
-        holder.tipTitle.setText(cookingTip.getTitle());
-        holder.tipSubtitle.setText(cookingTip.getSubtitle());
-        // You can set click listeners for the favorite icon here if needed
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Blog tip = tips.get(position);
+        holder.title.setText(tip.getTitle());
+        holder.category.setText(tip.getCategory());
+
+        // Set image using resource ID
+        holder.image.setImageResource(tip.getImageResId());
+
+        holder.favoriteIcon.setImageResource(tip.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+
+        holder.favoriteIcon.setOnClickListener(v -> {
+            tip.setFavorite(!tip.isFavorite());
+            notifyItemChanged(position);
+            // Here you would also update the database
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, BlogDetailActivity.class);
+            intent.putExtra(BlogDetailActivity.EXTRA_BLOG, tip);
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return cookingTipList.size();
+        return tips != null ? tips.size() : 0;
     }
 
-    static class CookingTipViewHolder extends RecyclerView.ViewHolder {
-        ImageView tipImage;
-        TextView tipTitle;
-        TextView tipSubtitle;
-        ImageView favoriteTipIcon;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView title;
+        TextView category;
+        ImageView favoriteIcon;
 
-        public CookingTipViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tipImage = itemView.findViewById(R.id.imgThumb);
-            tipTitle = itemView.findViewById(R.id.tvTitle);
-            tipSubtitle = itemView.findViewById(R.id.tvCategory);
-            favoriteTipIcon = itemView.findViewById(R.id.ivFavorite);
+            image = itemView.findViewById(R.id.tip_image);
+            title = itemView.findViewById(R.id.tip_title);
+            category = itemView.findViewById(R.id.tip_category);
+            favoriteIcon = itemView.findViewById(R.id.tip_favorite_icon);
         }
     }
 } 

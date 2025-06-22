@@ -11,6 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import android.widget.TextView;
 import android.view.View;
+import com.example.bepnhataapp.common.adapter.BlogAdapter;
+import com.example.bepnhataapp.common.dao.BlogDao;
+import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.common.model.BlogEntity;
+import com.example.bepnhataapp.MyApplication;
+import com.example.bepnhataapp.common.model.RecipeEntity;
+import com.example.bepnhataapp.common.dao.RecipeDao;
+import com.example.bepnhataapp.common.models.Recipe;
+import com.example.bepnhataapp.features.home.CookingTipAdapter;
+import com.example.bepnhataapp.features.home.RecipeAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,28 +78,13 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         recipesGridRecyclerView = findViewById(R.id.recipes_grid_recycler_view);
         recipesGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recipesGridRecyclerView.setNestedScrollingEnabled(false);
-
-        List<Recipe> recipeList = new ArrayList<>();
-        recipeList.add(new Recipe(R.drawable.placeholder_banner_background, "Bún gạo xào gà", "350 Kcal", "45 min"));
-        recipeList.add(new Recipe(R.drawable.placeholder_banner_background, "Măng xào thịt ba chỉ giòn bùi", "125 Kcal", "20 min"));
-        recipeList.add(new Recipe(R.drawable.placeholder_banner_background, "Nấm đùi gà chiên giòn lắc sa tế", "350 Kcal", "45 min"));
-        recipeList.add(new Recipe(R.drawable.placeholder_banner_background, "Nộm măng riềng tai heo giòn ngon", "125 Kcal", "20 min"));
-
-        RecipeAdapter recipeAdapter = new RecipeAdapter(recipeList);
-        recipesGridRecyclerView.setAdapter(recipeAdapter);
+        loadRecipesAsync();
 
         // Setup Cooking Tips RecyclerView
         cookingTipsRecyclerView = findViewById(R.id.cooking_tips_recycler_view);
-        cookingTipsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cookingTipsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         cookingTipsRecyclerView.setNestedScrollingEnabled(false);
-
-        // Dữ liệu mẹo vặt đồng bộ với blog mẫu
-        List<CookingTip> cookingTipList = new ArrayList<>();
-        cookingTipList.add(new CookingTip(R.drawable.blog, "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "Mẹo hay - Nấu chuẩn"));
-        cookingTipList.add(new CookingTip(R.drawable.blog, "Bí quyết làm thịt kho tàu chuẩn vị", "Mẹo hay - Nấu chuẩn"));
-        cookingTipList.add(new CookingTip(R.drawable.blog, "Cách làm bánh flan mềm mịn không tanh", "Mẹo hay - Nấu chuẩn"));
-        CookingTipAdapter cookingTipAdapter = new CookingTipAdapter(cookingTipList);
-        cookingTipsRecyclerView.setAdapter(cookingTipAdapter);
+        loadCookingTipsAsync();
 
         // Thêm sự kiện click cho nút 'Xem tất cả' phần mẹo vặt bí quyết nấu ăn
         TextView xemTatCaCookingTips = findViewById(R.id.tvSeeAllCookingTips);
@@ -145,5 +141,77 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
     @Override
     public void onNavigationItemReselected(int itemId) {
         handleNavigation(itemId);
+    }
+
+    private void loadRecipesAsync() {
+        new Thread(() -> {
+            // Wait until the DB is ready
+            while (!MyApplication.isDbReady) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+            RecipeDao recipeDao = new RecipeDao(this);
+            List<RecipeEntity> recipeEntities = recipeDao.getAllRecipes();
+            final List<Recipe> recipeList = new ArrayList<>();
+            if (recipeEntities != null) {
+                for (RecipeEntity entity : recipeEntities) {
+                    recipeList.add(new Recipe(
+                            entity.getRecipeName(),
+                            entity.getCategory(),
+                            R.drawable.placeholder_banner_background, // Using a valid placeholder
+                            false
+                    ));
+                }
+            }
+
+            runOnUiThread(() -> {
+                if (!isFinishing()) {
+                    RecipeAdapter recipeAdapter = new RecipeAdapter(recipeList);
+                    recipesGridRecyclerView.setAdapter(recipeAdapter);
+                }
+            });
+        }).start();
+    }
+
+    private void loadCookingTipsAsync() {
+        new Thread(() -> {
+            // Wait until the DB is ready
+            while (!MyApplication.isDbReady) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+            BlogDao blogDao = new BlogDao(this);
+            List<BlogEntity> blogEntities = blogDao.getRandomBlogs(3);
+            final List<Blog> blogList = new ArrayList<>();
+            if (blogEntities != null) {
+                for (BlogEntity entity : blogEntities) {
+                    blogList.add(new Blog(
+                            entity.getTitle(),
+                            entity.getContent(),
+                            entity.getTag(),
+                            R.drawable.placeholder_banner_background,
+                            false,
+                            entity.getCreatedAt(),
+                            0,
+                            0
+                    ));
+                }
+            }
+
+            runOnUiThread(() -> {
+                if (!isFinishing()) {
+                    CookingTipAdapter cookingTipAdapter = new CookingTipAdapter(this, blogList);
+                    cookingTipsRecyclerView.setAdapter(cookingTipAdapter);
+                }
+            });
+        }).start();
     }
 }

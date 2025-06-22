@@ -1,11 +1,11 @@
 package com.example.bepnhataapp.common.dao;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.bepnhataapp.common.databases.DBHelper;
-import com.example.bepnhataapp.common.model.Recipe;
+import com.example.bepnhataapp.common.model.RecipeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,60 +15,31 @@ public class RecipeDao {
     private final DBHelper helper;
 
     public RecipeDao(Context ctx) {
-        helper = new DBHelper(ctx.getApplicationContext());
+        this.helper = new DBHelper(ctx.getApplicationContext());
     }
 
-    // CRUD operations
-    public long insert(Recipe r) {
-        return helper.getWritableDatabase().insert(DBHelper.TBL_RECIPES, null, toContentValues(r));
-    }
-
-    public int update(Recipe r) {
-        return helper.getWritableDatabase().update(DBHelper.TBL_RECIPES, toContentValues(r), "recipeID=?", new String[]{String.valueOf(r.getRecipeID())});
-    }
-
-    public int delete(long id) {
-        return helper.getWritableDatabase().delete(DBHelper.TBL_RECIPES, "recipeID=?", new String[]{String.valueOf(id)});
-    }
-
-    public List<Recipe> getAll() {
-        List<Recipe> list = new ArrayList<>();
-        Cursor cur = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_RECIPES + " ORDER BY recipeID DESC", null);
-        if (cur.moveToFirst()) {
-            do {
-                list.add(fromCursor(cur));
-            } while (cur.moveToNext());
+    public List<RecipeEntity> getAllRecipes() {
+        List<RecipeEntity> list = new ArrayList<>();
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor c = null;
+        try {
+            c = db.rawQuery("SELECT * FROM RECIPES", null);
+            if (c.moveToFirst()) {
+                do {
+                    list.add(fromCursor(c));
+                } while (c.moveToNext());
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
         }
-        cur.close();
         return list;
     }
 
-    public Recipe get(long id) {
-        Cursor c = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_RECIPES + " WHERE recipeID=?", new String[]{String.valueOf(id)});
-        Recipe r = null;
-        if (c.moveToFirst()) r = fromCursor(c);
-        c.close();
-        return r;
-    }
-
-    // Helpers
-    private ContentValues toContentValues(Recipe r) {
-        ContentValues cv = new ContentValues();
-        cv.put("recipeName", r.getRecipeName());
-        cv.put("description", r.getDescription());
-        cv.put("tag", r.getTag());
-        cv.put("createdAt", r.getCreatedAt());
-        cv.put("imageThumb", r.getImageThumb());
-        cv.put("category", r.getCategory());
-        cv.put("commentAmount", r.getCommentAmount());
-        cv.put("likeAmount", r.getLikeAmount());
-        cv.put("sectionAmount", r.getSectionAmount());
-        return cv;
-    }
-
-    private Recipe fromCursor(Cursor cur) {
-        Recipe r = new Recipe();
-        r.setRecipeID(cur.getLong(cur.getColumnIndexOrThrow("recipeID")));
+    private RecipeEntity fromCursor(Cursor cur) {
+        RecipeEntity r = new RecipeEntity();
+        r.setRecipeID(cur.getInt(cur.getColumnIndexOrThrow("recipeID")));
         r.setRecipeName(cur.getString(cur.getColumnIndexOrThrow("recipeName")));
         r.setDescription(cur.getString(cur.getColumnIndexOrThrow("description")));
         r.setTag(cur.getString(cur.getColumnIndexOrThrow("tag")));

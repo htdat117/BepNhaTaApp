@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.bepnhataapp.common.adapter.BlogAdapter;
 import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.common.dao.BlogDao;
+import com.example.bepnhataapp.common.model.BlogEntity;
+import com.example.bepnhataapp.MyApplication;
 
 public class BlogFeedFragment extends Fragment {
 
@@ -33,29 +36,52 @@ public class BlogFeedFragment extends Fragment {
         recyclerViewBlog.setLayoutManager(new LinearLayoutManager(getContext()));
 
         blogList = new ArrayList<>();
-        addSampleBlogPosts(); // Add sample data
-
         blogAdapter = new BlogAdapter(blogList);
         recyclerViewBlog.setAdapter(blogAdapter);
+        
+        loadBlogsAsync();
 
         return view;
     }
 
-    private void addSampleBlogPosts() {
-        // Thêm dữ liệu mẫu giống hình minh họa
-        blogList.add(new Blog(
-                "Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh",
-                "Bữa tối ngày mùa đông trời se se lạnh mà có một đĩa chả cá chiên nóng hổi cùng một tô canh vị chua chua ngọt ngọt thì ngon phải biết luôn đó nha! Bếp Nhà Ta phải rủ Mẹ vào bếp trổ tài nhanh một thực đơn xuất sắc với toàn món ngon mùa đông ngay thôi!",
-                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
+    private void loadBlogsAsync() {
+        new Thread(() -> {
+            // Đợi đến khi cờ hiệu isDbReady được giơ lên
+            while (!MyApplication.isDbReady) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        blogList.add(new Blog(
-                "Bí quyết làm thịt kho tàu chuẩn vị",
-                "",
-                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
+            // Khi DB đã sẵn sàng, tiến hành truy vấn
+            BlogDao blogDao = new BlogDao(requireContext());
+            List<BlogEntity> blogEntities = blogDao.getAll();
+            List<Blog> newBlogs = new ArrayList<>();
+            if (blogEntities != null) {
+                for(BlogEntity entity : blogEntities) {
+                    newBlogs.add(new Blog(
+                            entity.getTitle(),
+                            entity.getContent(),
+                            entity.getTag(),
+                            R.drawable.placeholder_banner_background,
+                            false,
+                            entity.getCreatedAt(),
+                            0,
+                            0
+                    ));
+                }
+            }
 
-        blogList.add(new Blog(
-                "Cách làm bánh flan mềm mịn không tanh",
-                "",
-                "Mẹo hay - Nấu chuẩn", R.drawable.blog, false));
+            // Cập nhật giao diện trên luồng chính
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    blogList.clear();
+                    blogList.addAll(newBlogs);
+                    blogAdapter.notifyDataSetChanged();
+                });
+            }
+        }).start();
     }
 } 

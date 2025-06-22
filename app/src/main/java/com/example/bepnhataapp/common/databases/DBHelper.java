@@ -402,36 +402,46 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        ctx = context.getApplicationContext();
-
-        // Copy the bundled database (once) using the teacher-style method.
-        copyDataBaseO();
+        this.ctx = context;
     }
 
     /**
-     * Teacher-style wrapper that copies the DB from assets to the app's internal
-     * storage the first time the app runs.
+     * Creates a new database by copying the asset DB if it doesn't exist.
+     * If it does exist, it opens it.
      */
-    private void copyDataBaseO() {
-        try {
-            java.io.File dbFile = ctx.getDatabasePath(DATABASE_NAME);
-            if (!dbFile.exists()) {
-                if (CopyDBFromAsset()) {
-                    Toast.makeText(ctx, "Copy database successful!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(ctx, "Copy database fail!", Toast.LENGTH_LONG).show();
-                }
+    public void createDatabase() throws java.io.IOException {
+        boolean dbExist = checkDatabase();
+        if (!dbExist) {
+            // By calling this method an empty database will be created into the default system path
+            // of your application so we are gonna be able to overwrite that database with our database.
+            this.getReadableDatabase();
+            // Closing the empty DB so we can overwrite it
+            this.close();
+            try {
+                copyDatabase();
+                Log.d(TAG, "Database copied from assets.");
+            } catch (java.io.IOException e) {
+                throw new Error("Error copying database");
             }
-        } catch (Exception e) {
-            Log.e("Error", e.toString());
         }
     }
 
-    /**
-     * Actual copy implementation – closely follows the snippet from the slide.
-     * @return true if the copy succeeded.
-     */
-    private boolean CopyDBFromAsset() {
+    private boolean checkDatabase() {
+        SQLiteDatabase checkDB = null;
+        try {
+            String myPath = ctx.getDatabasePath(DB_NAME).getAbsolutePath();
+            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        } catch (Exception e) {
+            //database does't exist yet.
+            Log.d(TAG, "Database does not exist yet.");
+        }
+        if (checkDB != null) {
+            checkDB.close();
+        }
+        return checkDB != null;
+    }
+
+    private void copyDatabase() throws java.io.IOException {
         String dbPath = ctx.getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
         try (java.io.InputStream inputStream = ctx.getAssets().open(DATABASE_NAME)) {
             // Ensure parent folder exists
@@ -448,10 +458,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
                 outputStream.flush();
             }
-            return true;
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
