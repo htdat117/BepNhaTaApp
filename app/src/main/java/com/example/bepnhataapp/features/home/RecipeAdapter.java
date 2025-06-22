@@ -10,15 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.Recipe;
 
 import java.util.List;
 
+/**
+ * Adapter for displaying a list of recipes in a RecyclerView.
+ */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private List<Recipe> recipeList;
+    private List<com.example.bepnhataapp.common.models.Recipe> recipeList;
 
-    public RecipeAdapter(List<Recipe> recipeList) {
+    public RecipeAdapter(List<com.example.bepnhataapp.common.models.Recipe> recipeList) {
         this.recipeList = recipeList;
     }
 
@@ -31,7 +33,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
-        Recipe recipe = recipeList.get(position);
+        com.example.bepnhataapp.common.models.Recipe recipe = recipeList.get(position);
         holder.recipeImage.setImageResource(recipe.getImageResId());
         holder.recipeTitle.setText(recipe.getName());
         holder.recipeCategory.setText(recipe.getCategory());
