@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,17 +13,12 @@ import com.example.bepnhataapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.example.bepnhataapp.common.adapter.BlogAdapter;
-import com.example.bepnhataapp.common.models.Blog;
-import com.example.bepnhataapp.common.dao.BlogDao;
-import com.example.bepnhataapp.common.model.BlogEntity;
-import com.example.bepnhataapp.MyApplication;
 
 public class BlogFeedFragment extends Fragment {
 
     private RecyclerView recyclerViewBlog;
-    private BlogAdapter blogAdapter;
-    private List<Blog> blogList;
+    private com.example.bepnhataapp.common.adapter.BlogAdapter blogAdapter;
+    private List<com.example.bepnhataapp.common.models.Blog> blogList;
 
     @Nullable
     @Override
@@ -36,9 +29,9 @@ public class BlogFeedFragment extends Fragment {
         recyclerViewBlog.setLayoutManager(new LinearLayoutManager(getContext()));
 
         blogList = new ArrayList<>();
-        blogAdapter = new BlogAdapter(blogList);
+        blogAdapter = new com.example.bepnhataapp.common.adapter.BlogAdapter(blogList);
         recyclerViewBlog.setAdapter(blogAdapter);
-        
+
         loadBlogsAsync();
 
         return view;
@@ -46,35 +39,37 @@ public class BlogFeedFragment extends Fragment {
 
     private void loadBlogsAsync() {
         new Thread(() -> {
-            // Đợi đến khi cờ hiệu isDbReady được giơ lên
-            while (!MyApplication.isDbReady) {
+            // Wait for DB to be ready
+            while (!com.example.bepnhataapp.MyApplication.isDbReady) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
 
-            // Khi DB đã sẵn sàng, tiến hành truy vấn
-            BlogDao blogDao = new BlogDao(requireContext());
-            List<BlogEntity> blogEntities = blogDao.getAll();
-            List<Blog> newBlogs = new ArrayList<>();
+            if (getContext() == null) return;
+
+            // Query data from DAO
+            com.example.bepnhataapp.common.dao.BlogDao blogDao = new com.example.bepnhataapp.common.dao.BlogDao(getContext());
+            List<com.example.bepnhataapp.common.model.BlogEntity> blogEntities = blogDao.getAll();
+            final List<com.example.bepnhataapp.common.models.Blog> newBlogs = new ArrayList<>();
             if (blogEntities != null) {
-                for(BlogEntity entity : blogEntities) {
-                    newBlogs.add(new Blog(
+                for (com.example.bepnhataapp.common.model.BlogEntity entity : blogEntities) {
+                    newBlogs.add(new com.example.bepnhataapp.common.models.Blog(
                             entity.getTitle(),
                             entity.getContent(),
                             entity.getTag(),
-                            R.drawable.placeholder_banner_background,
+                            entity.getImageThumb(),
                             false,
                             entity.getCreatedAt(),
-                            0,
-                            0
+                            0, // Placeholder for likes
+                            0  // Placeholder for comments
                     ));
                 }
             }
 
-            // Cập nhật giao diện trên luồng chính
+            // Update UI on the main thread
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     blogList.clear();
@@ -84,4 +79,4 @@ public class BlogFeedFragment extends Fragment {
             }
         }).start();
     }
-} 
+}

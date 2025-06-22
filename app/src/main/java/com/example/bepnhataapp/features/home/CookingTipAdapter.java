@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.Blog;
 import com.example.bepnhataapp.features.blog.BlogDetailActivity;
@@ -40,8 +41,11 @@ public class CookingTipAdapter extends RecyclerView.Adapter<CookingTipAdapter.Vi
         holder.title.setText(tip.getTitle());
         holder.category.setText(tip.getCategory());
 
-        // Set image using resource ID
-        holder.image.setImageResource(tip.getImageResId());
+        Glide.with(context)
+                .load(tip.getImageUrl())
+                .placeholder(R.drawable.placeholder_banner_background)
+                .error(R.drawable.placeholder_banner_background)
+                .into(holder.image);
 
         holder.favoriteIcon.setImageResource(tip.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
 

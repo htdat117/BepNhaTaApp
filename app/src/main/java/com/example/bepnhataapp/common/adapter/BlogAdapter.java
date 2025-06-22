@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.Blog;
 import com.example.bepnhataapp.features.blog.BlogDetailActivity;
@@ -49,7 +50,12 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Blog blog = blogList.get(position);
         if (getItemViewType(position) == TYPE_HEADER) {
             HeaderViewHolder vh = (HeaderViewHolder) holder;
-            vh.imageViewPost.setImageResource(blog.getImageResId());
+
+            Glide.with(context)
+                    .load(blog.getImageUrl())
+                    .placeholder(R.drawable.placeholder_banner_background)
+                    .into(vh.imageViewPost);
+
             vh.textViewCategory.setText(blog.getCategory());
             vh.textViewTitle.setText(blog.getTitle());
             vh.textViewDescription.setText(blog.getDescription());
@@ -68,7 +74,10 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         } else {
             ItemViewHolder vh = (ItemViewHolder) holder;
-            vh.imgBlog.setImageResource(blog.getImageResId());
+            Glide.with(context)
+                    .load(blog.getImageUrl())
+                    .placeholder(R.drawable.placeholder_banner_background)
+                    .into(vh.imgBlog);
             vh.tvTitle.setText(blog.getTitle());
             vh.tvCategory.setText(blog.getCategory());
             vh.imgFavorite.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);

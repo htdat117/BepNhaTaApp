@@ -162,7 +162,7 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
                     recipeList.add(new Recipe(
                             entity.getRecipeName(),
                             entity.getCategory(),
-                            R.drawable.placeholder_banner_background, // Using a valid placeholder
+                            entity.getImageThumb(), // This is now correct
                             false
                     ));
                 }
@@ -197,7 +197,7 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
                             entity.getTitle(),
                             entity.getContent(),
                             entity.getTag(),
-                            R.drawable.placeholder_banner_background,
+                            entity.getImageThumb(), // Pass the image URL string
                             false,
                             entity.getCreatedAt(),
                             0,

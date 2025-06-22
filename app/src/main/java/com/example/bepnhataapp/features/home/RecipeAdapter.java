@@ -9,7 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.models.Recipe;
 
 import java.util.List;
 
@@ -18,9 +20,9 @@ import java.util.List;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private List<com.example.bepnhataapp.common.models.Recipe> recipeList;
+    private List<Recipe> recipeList;
 
-    public RecipeAdapter(List<com.example.bepnhataapp.common.models.Recipe> recipeList) {
+    public RecipeAdapter(List<Recipe> recipeList) {
         this.recipeList = recipeList;
     }
 
@@ -33,8 +35,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
-        com.example.bepnhataapp.common.models.Recipe recipe = recipeList.get(position);
-        holder.recipeImage.setImageResource(recipe.getImageResId());
+        Recipe recipe = recipeList.get(position);
+
+        Glide.with(holder.itemView.getContext())
+                .load(recipe.getImageUrl())
+                .placeholder(R.drawable.placeholder_banner_background)
+                .error(R.drawable.placeholder_banner_background)
+                .into(holder.recipeImage);
+
         holder.recipeTitle.setText(recipe.getName());
         holder.recipeCategory.setText(recipe.getCategory());
 

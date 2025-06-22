@@ -8,20 +8,20 @@ import androidx.annotation.NonNull;
 public class Recipe implements Parcelable {
     private String name;
     private String category;
-    private int imageResId;
+    private String imageUrl;
     private boolean isFavorite;
 
-    public Recipe(String name, String category, int imageResId, boolean isFavorite) {
+    public Recipe(String name, String category, String imageUrl, boolean isFavorite) {
         this.name = name;
         this.category = category;
-        this.imageResId = imageResId;
+        this.imageUrl = imageUrl;
         this.isFavorite = isFavorite;
     }
 
     protected Recipe(Parcel in) {
         name = in.readString();
         category = in.readString();
-        imageResId = in.readInt();
+        imageUrl = in.readString();
         isFavorite = in.readByte() != 0;
     }
 
@@ -45,8 +45,8 @@ public class Recipe implements Parcelable {
         return category;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public boolean isFavorite() {
@@ -66,7 +66,7 @@ public class Recipe implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(category);
-        dest.writeInt(imageResId);
+        dest.writeString(imageUrl);
         dest.writeByte((byte) (isFavorite ? 1 : 0));
     }
 } 
