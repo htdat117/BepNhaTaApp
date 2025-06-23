@@ -8,6 +8,7 @@ import android.widget.Toast;
 import android.text.TextWatcher;
 import android.text.Editable;
 import android.view.KeyEvent;
+import com.example.bepnhataapp.common.utils.SessionManager;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
@@ -55,10 +56,19 @@ public class AuthenticationActivity extends AppCompatActivity {
             android.content.Intent next;
             if ("reset".equals(flow)) {
                 next = new android.content.Intent(this, NewPasswordActivity.class);
+                next.putExtra("phone", phone);
             } else if ("register".equals(flow)) {
                 next = new android.content.Intent(this, AccountInfoActivity.class);
                 next.putExtra("phone", phone);
                 // close this activity so it is not on back stack
+                startActivity(next);
+                finish();
+                return;
+            } else if ("login".equals(flow)) {
+                // Successful OTP login
+                SessionManager.login(this, phone);
+                next = new android.content.Intent(this, com.example.bepnhataapp.features.manage_account.ManageAccountActivity.class);
+                next.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(next);
                 finish();
                 return;

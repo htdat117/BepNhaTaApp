@@ -18,6 +18,7 @@ import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.features.manage_account.ManageAccountActivity;
+import com.example.bepnhataapp.common.utils.SessionManager;
 
 public class PasswordFragment extends Fragment {
 
@@ -68,6 +69,7 @@ public class PasswordFragment extends Fragment {
                     Toast.makeText(getContext(), "Sai số điện thoại hoặc mật khẩu", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                SessionManager.login(requireContext(), phoneNumber);
                 Toast.makeText(getContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), ManageAccountActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

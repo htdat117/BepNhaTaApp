@@ -15,6 +15,7 @@ import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import com.example.bepnhataapp.features.point.PointActivity;
 import com.example.bepnhataapp.features.voucher.VoucherActivity;
+import com.example.bepnhataapp.common.utils.SessionManager;
 
 public class ManageAccountActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -46,6 +47,14 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
 
         // Thiết lập click cho các mục cần đăng nhập
         setupItemClicks();
+
+        // Nếu đã đăng nhập, gán sự kiện Đăng xuất
+        if (isLoggedIn()) {
+            android.view.View logoutView = findViewById(R.id.layout_logout);
+            if (logoutView != null) {
+                logoutView.setOnClickListener(v -> showLogoutConfirmDialog());
+            }
+        }
 
         // Sau khi setup item clicks dành cho login prompt
         android.view.View faqView = findViewById(R.id.layout_faq);
@@ -104,8 +113,7 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
     }
 
     private boolean isLoggedIn() {
-        // TODO: Thay thế bằng logic kiểm tra đăng nhập thực tế
-        return false; // Mặc định chưa đăng nhập
+        return com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this);
     }
 
     @Override
@@ -163,5 +171,19 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
         });
 
         dialog.show();
+    }
+
+    // Hiển thị hộp thoại xác nhận đăng xuất
+    private void showLogoutConfirmDialog() {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                    SessionManager.logout(this);
+                    // Reload activity để cập nhật UI
+                    recreate();
+                })
+                .setNegativeButton("Huỷ", null)
+                .show();
     }
 }
