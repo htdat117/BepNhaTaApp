@@ -1,6 +1,14 @@
 package com.example.bepnhataapp.common.base;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +24,9 @@ import com.example.bepnhataapp.features.mealplan.MealPlanActivity;
 import com.example.bepnhataapp.features.recipes.RecipesActivity;
 import com.example.bepnhataapp.features.tools.ToolsActivity;
 import com.example.bepnhataapp.features.manage_account.ManageAccountActivity;
+import com.example.bepnhataapp.common.utils.SessionManager;
+import com.example.bepnhataapp.common.dao.CustomerDao;
+import com.example.bepnhataapp.common.model.Customer;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
@@ -35,6 +46,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         // Thiết lập sự kiện click cho header (nếu header tồn tại trong layout)
         setupHeaderClicks();
+        // Cập nhật UI header tuỳ theo trạng thái đăng nhập
+        updateHeaderInfo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh header every time activity is resumed to reflect possible login state change
+        updateHeaderInfo();
     }
 
     private void setupHeaderClicks() {
@@ -56,6 +76,84 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
         if (ivLogo != null) ivLogo.setOnClickListener(goToManageAccount);
         if (tvLogin != null) tvLogin.setOnClickListener(goToManageAccount);
+    }
+
+    /**
+     * Thay đổi hiển thị header dựa trên trạng thái đăng nhập.
+     * Khi đã đăng nhập thành công: hiển thị avatar và tên người dùng thay cho logo và chữ "Đăng nhập".
+     */
+    private void updateHeaderInfo() {
+        View root = findViewById(android.R.id.content);
+        if (root == null) return;
+
+        ImageView ivLogo = root.findViewById(R.id.iv_logo);
+        TextView tvLogin = root.findViewById(R.id.tv_login);
+        if (ivLogo == null && tvLogin == null) return; // header not present
+
+        if (SessionManager.isLoggedIn(this)) {
+            // Lấy thông tin người dùng từ DB
+            String phone = SessionManager.getPhone(this);
+            CustomerDao dao = new CustomerDao(this);
+            Customer customer = phone != null ? dao.findByPhone(phone) : null;
+
+            // Cập nhật tên
+            if (tvLogin != null) {
+                if (customer != null && customer.getFullName() != null && !customer.getFullName().isEmpty()) {
+                    tvLogin.setText(customer.getFullName());
+                } else if (phone != null) {
+                    tvLogin.setText(phone);
+                }
+            }
+
+            // Cập nhật avatar (thay thế cho logo)
+            if (ivLogo != null) {
+                // Đặt background hình tròn để tạo khung avatar
+                ivLogo.setBackgroundResource(R.drawable.bg_avatar);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ivLogo.setClipToOutline(true); // cắt ảnh theo viền (oval)
+                }
+
+                boolean avatarSet = false;
+                if (customer != null && customer.getAvatar() != null && customer.getAvatar().length > 0) {
+                    try {
+                        Bitmap bmp = BitmapFactory.decodeByteArray(customer.getAvatar(), 0, customer.getAvatar().length);
+                        if (bmp != null) {
+                            // Bảo đảm bitmap được cắt tròn (cho API <21 hoặc phòng hờ)
+                            Bitmap circleBmp = getCircularBitmap(bmp);
+                            ivLogo.setImageBitmap(circleBmp);
+                            avatarSet = true;
+                        }
+                    } catch (Exception ignored) { }
+                }
+                if (!avatarSet) {
+                    ivLogo.setImageResource(R.drawable.ic_avatar);
+                }
+            }
+        } else {
+            // Chưa đăng nhập – giữ logo & text Đăng nhập
+            if (tvLogin != null) {
+                tvLogin.setText("Đăng nhập");
+            }
+            if (ivLogo != null) {
+                ivLogo.setImageResource(R.drawable.ic_logo);
+                ivLogo.setBackground(null); // bỏ khung tròn khi là logo
+            }
+        }
+    }
+
+    // Utility: crop bitmap to circle (fallback for older devices)
+    private Bitmap getCircularBitmap(Bitmap src) {
+        int size = Math.min(src.getWidth(), src.getHeight());
+        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        float r = size / 2f;
+        canvas.drawCircle(r, r, r, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        Rect rect = new Rect(0, 0, size, size);
+        canvas.drawBitmap(src, null, rect, paint);
+        return output;
     }
 
     // Method to be implemented by child activities to get the container ID for the bottom navigation fragment
