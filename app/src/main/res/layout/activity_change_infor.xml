@@ -45,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:fontFamily="@font/inter_regular">
 
             <!-- Họ và tên -->
             <TextView
@@ -123,6 +124,17 @@
                     android:layout_centerVertical="true"/>
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/tv_error_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Số điện thoại không hợp lệ"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:paddingStart="4dp"
+                android:layout_marginTop="-4dp"/>
+
             <!-- Email -->
             <TextView
                 android:layout_width="wrap_content"
@@ -160,6 +172,17 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"/>
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_error_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email không hợp lệ"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:paddingStart="4dp"
+                android:layout_marginTop="-4dp"/>
 
             <!-- Ngày sinh & Giới tính -->
             <LinearLayout

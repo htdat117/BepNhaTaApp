@@ -30,7 +30,7 @@ import java.io.IOException;
 public class account_infor extends AppCompatActivity {
 
     private ImageView imgAvatar;
-    private TextView tvName, tvBirthday, tvPhone, tvEmail, tvGender;
+    private TextView tvName, tvBirthday, tvPhone, tvEmail, tvGender, tvPassword;
     private Customer currentCustomer;
     private CustomerDao customerDao;
     private ActivityResultLauncher<String> pickImageLauncher;
@@ -55,7 +55,9 @@ public class account_infor extends AppCompatActivity {
         tvPhone = findViewById(R.id.tv_phone);
         tvEmail = findViewById(R.id.tv_email);
         tvGender = findViewById(R.id.tv_gender);
+        tvPassword = findViewById(R.id.tv_password);
         Button btnEdit = findViewById(R.id.btn_edit);
+        Button btnChangePassword = findViewById(R.id.btn_change_password);
 
         btnBack.setOnClickListener(v -> finish());
 
@@ -94,6 +96,11 @@ public class account_infor extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+
+        btnChangePassword.setOnClickListener(v -> {
+            Intent intent = new Intent(account_infor.this, change_password.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -114,6 +121,14 @@ public class account_infor extends AppCompatActivity {
         tvPhone.setText(currentCustomer.getPhone());
         tvEmail.setText(currentCustomer.getEmail());
         tvGender.setText(currentCustomer.getGender());
+
+        // Hiển thị mật khẩu dạng ***** theo độ dài
+        String pwd = currentCustomer.getPassword();
+        if (pwd != null) {
+            char[] mask = new char[pwd.length()];
+            java.util.Arrays.fill(mask, '*');
+            tvPassword.setText(new String(mask));
+        }
 
         byte[] avatar = currentCustomer.getAvatar();
         if (avatar != null && avatar.length > 0) {

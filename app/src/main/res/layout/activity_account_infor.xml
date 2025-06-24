@@ -100,15 +100,17 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Họ và tên"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        style="@style/Body.Bold.Ag1"
+                        android:textColor="@color/dark1"
+                        />
 
                     <TextView
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Hồ Tiến Đạt"
-                        android:textSize="16sp"/>
+                        style="@style/Body.Regular.Ag1"
+                        android:textColor="@color/dark1"/>
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
@@ -128,15 +130,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Ngày sinh"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        style="@style/Body.Bold.Ag1"
+                        android:textColor="@color/dark1"/>
 
                     <TextView
                         android:id="@+id/tv_birthday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="11/07/2004"
-                        android:textSize="16sp"/>
+                        style="@style/Body.Regular.Ag1"
+                        android:textColor="@color/dark1"/>
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
@@ -156,15 +159,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Số điện thoại"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        style="@style/Body.Bold.Ag1"
+                        android:textColor="@color/dark1"/>
 
                     <TextView
                         android:id="@+id/tv_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0349991234"
-                        android:textSize="16sp"/>
+                        style="@style/Body.Regular.Ag1"
+                        android:textColor="@color/dark1"/>
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
@@ -184,15 +188,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Email"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        style="@style/Body.Bold.Ag1"
+                        android:textColor="@color/dark1"/>
 
                     <TextView
                         android:id="@+id/tv_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="datht22411@st.uel.edu.vn"
-                        android:textSize="16sp"/>
+                        style="@style/Body.Regular.Ag1"
+                        android:textColor="@color/dark1"/>
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
@@ -212,15 +217,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Giới tính"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        style="@style/Body.Bold.Ag1"
+                        android:textColor="@color/dark1"/>
 
                     <TextView
                         android:id="@+id/tv_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nam"
-                        android:textSize="16sp"/>
+                        style="@style/Body.Regular.Ag1"
+                        android:textColor="@color/dark1"/>
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
@@ -240,15 +246,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Mật khẩu"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        style="@style/Body.Bold.Ag1"
+                        android:textColor="@color/dark1"/>
 
                     <TextView
                         android:id="@+id/tv_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="**********"
-                        android:textSize="16sp"/>
+                        style="@style/Body.Regular.Ag1"
+                        android:textColor="@color/dark1"/>
                 </LinearLayout>
             </LinearLayout>
 

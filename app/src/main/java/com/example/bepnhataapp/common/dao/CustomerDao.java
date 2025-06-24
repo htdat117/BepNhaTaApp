@@ -66,6 +66,17 @@ public class CustomerDao {
         return null;
     }
 
+    public Customer findById(long id) {
+        Cursor cursor = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_CUSTOMERS + " WHERE customerID=? LIMIT 1", new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            Customer c = fromCursor(cursor);
+            cursor.close();
+            return c;
+        }
+        cursor.close();
+        return null;
+    }
+
     private ContentValues toContentValues(Customer c) {
         ContentValues v = new ContentValues();
         v.put("fullName", c.getFullName());
