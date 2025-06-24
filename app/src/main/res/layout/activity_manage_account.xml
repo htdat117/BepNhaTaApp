@@ -70,6 +70,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/layout_wait_confirm"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -92,6 +93,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_wait_pickup"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -114,6 +116,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_out_for_delivery"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -136,6 +139,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_review_order"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

@@ -4,17 +4,46 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.dao.CustomerDao;
+import com.example.bepnhataapp.common.model.Customer;
+import com.example.bepnhataapp.common.utils.SessionManager;
 
 public class AccountLoggedInFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_account_logged_in, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateUserName();
+    }
+
+    private void updateUserName() {
+        TextView tvUserName = getView().findViewById(R.id.tvUserName);
+        if (tvUserName == null) return;
+        String phone = SessionManager.getPhone(requireContext());
+        if (phone != null) {
+            CustomerDao dao = new CustomerDao(requireContext());
+            Customer c = dao.findByPhone(phone);
+            if (c != null) {
+                tvUserName.setText(c.getFullName());
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUserName();
     }
 } 

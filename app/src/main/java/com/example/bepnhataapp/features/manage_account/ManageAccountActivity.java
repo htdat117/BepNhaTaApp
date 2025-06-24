@@ -108,6 +108,74 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
             });
         }
 
+        // Xử lý click cho Thông tin tài khoản và Địa chỉ giao hàng (chỉ khi đã đăng nhập)
+        if (isLoggedIn()) {
+            android.view.View accountInfoView = findViewById(R.id.layout_account_info);
+            if (accountInfoView != null) {
+                accountInfoView.setOnClickListener(v -> {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_pinfor.account_infor.class);
+                    startActivity(intent);
+                });
+            }
+
+            android.view.View shippingAddressView = findViewById(R.id.layout_shipping_address);
+            if (shippingAddressView != null) {
+                shippingAddressView.setOnClickListener(v -> {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_pinfor.shipping_address.class);
+                    startActivity(intent);
+                });
+            }
+        }
+
+        // Xử lý click cho các trạng thái đơn hàng
+        android.view.View waitConfirmView = findViewById(R.id.layout_wait_confirm);
+        if (waitConfirmView != null) {
+            waitConfirmView.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.wait_confirm.class);
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
+
+        android.view.View waitPickupView = findViewById(R.id.layout_wait_pickup);
+        if (waitPickupView != null) {
+            waitPickupView.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.wait_pickup.class);
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
+
+        android.view.View outForDeliveryView = findViewById(R.id.layout_out_for_delivery);
+        if (outForDeliveryView != null) {
+            outForDeliveryView.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.out_for_delivery.class);
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
+
+        android.view.View reviewOrderView = findViewById(R.id.layout_review_order);
+        if (reviewOrderView != null) {
+            reviewOrderView.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.review_order.class);
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
+
         // Thiết lập Bottom Navigation
         setupBottomNavigationFragment(R.id.nav_home); // chọn mặc định Trang chủ
     }

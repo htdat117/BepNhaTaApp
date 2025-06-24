@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                android:text="Chúc một ngày tốt lành,"
+                android:text="Xin chào,"
                 android:textColor="@android:color/white"
                 style="@style/Body.Regular.Ag1" />
 
