@@ -12,8 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.Product;
+import com.example.bepnhataapp.common.model.Product;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.bumptech.glide.Glide;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import java.util.List;
 
@@ -37,21 +40,31 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     @Override
     public void onBindViewHolder(@NonNull SuggestionViewHolder holder, int position) {
         Product p = list.get(position);
-        holder.imgProduct.setImageResource(p.imageResId);
-        holder.tvName.setText(p.name);
-        holder.tvKcal.setText(p.kcal);
-        holder.tvNutrition.setText(p.nutrition);
-        holder.tvTime.setText(p.time);
-        holder.tvPrice.setText(p.price);
+
+        String thumb=p.getProductThumb();
+        if(thumb!=null&&!thumb.isEmpty()){
+            Glide.with(context).load(thumb).placeholder(R.drawable.sample_img).into(holder.imgProduct);
+        }else {
+            holder.imgProduct.setImageResource(R.drawable.sample_img);
+        }
+
+        holder.tvName.setText(p.getProductName());
+        holder.tvKcal.setText("");
+        holder.tvNutrition.setText("");
+        holder.tvTime.setText("");
+        holder.tvPrice.setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
+
         holder.btnAddCart.setOnClickListener(v -> {
             BottomSheetDialog dialog = new BottomSheetDialog(context);
             View sheet = LayoutInflater.from(context).inflate(R.layout.dialog_quick_add, null);
-            ((ImageView)sheet.findViewById(R.id.imgProduct)).setImageResource(p.imageResId);
-            ((TextView)sheet.findViewById(R.id.tvName)).setText(p.name);
-            ((TextView)sheet.findViewById(R.id.tvPrice)).setText(p.price);
-            ((TextView)sheet.findViewById(R.id.tvOldPrice)).setText(p.oldPrice);
+            if(thumb!=null&&!thumb.isEmpty()){
+                Glide.with(context).load(thumb).into((ImageView)sheet.findViewById(R.id.imgProduct));
+            }
+            ((TextView)sheet.findViewById(R.id.tvName)).setText(p.getProductName());
+            ((TextView)sheet.findViewById(R.id.tvPrice)).setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
+            ((TextView)sheet.findViewById(R.id.tvOldPrice)).setText(p.getSalePercent()>0?formatPrice(p.getProductPrice()):"");
             ((TextView)sheet.findViewById(R.id.tvDesc)).setText("Mô tả món ăn ...");
-            ((TextView)sheet.findViewById(R.id.tvTotalPrice)).setText(p.price);
+            ((TextView)sheet.findViewById(R.id.tvTotalPrice)).setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
             dialog.setContentView(sheet);
             dialog.show();
         });
@@ -78,5 +91,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             btnBuy = itemView.findViewById(R.id.btnBuy);
             btnAddCart = itemView.findViewById(R.id.btnAddCart);
         }
+    }
+
+    private String formatPrice(int price){
+        NumberFormat nf=NumberFormat.getInstance(new Locale("vi","VN"));
+        return nf.format(price)+"đ";
     }
 } 

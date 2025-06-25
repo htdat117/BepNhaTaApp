@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.ProductAdapter;
 import com.example.bepnhataapp.databinding.ActivityProductBinding;
-import com.example.bepnhataapp.common.models.Product;
+import com.example.bepnhataapp.common.model.Product;
 import com.example.bepnhataapp.common.adapter.CategoryAdapter;
 import com.example.bepnhataapp.common.models.Category;
 import com.example.bepnhataapp.common.base.BaseActivity;
+import com.example.bepnhataapp.common.dao.ProductDao;
+import com.example.bepnhataapp.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,32 +45,36 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
         RecyclerView rvCategories = findViewById(R.id.rvCategories);
         rvCategories.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         List<Category> categoryList = new ArrayList<>();
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Tất cả"));
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Khuyến mãi"));
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Món nướng"));
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Món kho"));
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Món mặn"));
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Món chay"));
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Món canh"));
-        categoryList.add(new Category(R.drawable.ic_launcher_background, "Món xào"));
+        addCategory(categoryList, "Tất cả", "cate_product_all");
+        addCategory(categoryList, "Khuyến mãi", "cate_product_sale");
+        addCategory(categoryList, "Món nướng", "cate_product_grill");
+        addCategory(categoryList, "Món kho", "cate_product_kho");
+        addCategory(categoryList, "Món mặn", "cate_product_all"); // fallback
+        addCategory(categoryList, "Món chay", "cate_product_vegetarian");
+        addCategory(categoryList, "Món nước", "cate_product_noodle");
+        addCategory(categoryList, "Món xào", "cate_product_stir");
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoryList);
         rvCategories.setAdapter(categoryAdapter);
 
-        // Sản phẩm
+        // Sản phẩm - load từ DB
         RecyclerView rvProducts = findViewById(R.id.rvProducts);
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
         List<Product> productList = new ArrayList<>();
-        productList.add(new Product(R.drawable.ic_launcher_background, "Bò xào rau củ", "500 Kcal", "Giàu chất xơ", "20 phút", "2 người", "4 người", "150.000đ", "140.000đ", 4.4f, 1604, false));
-        productList.add(new Product(R.drawable.ic_launcher_background, "Bánh canh cua", "1560 Kcal", "Nhiều canxi", "60 phút", "2 người", "4 người", "", "90.000đ", 4.4f, 2804, true));
-        productList.add(new Product(R.drawable.ic_launcher_background, "Thịt rang cháy cạnh", "700 Kcal", "Giàu đạm", "30 phút", "2 người", "4 người", "65.000đ", "50.000đ", 4.4f, 1604, false));
-        productList.add(new Product(R.drawable.ic_launcher_background, "Thịt rang cháy cạnh", "700 Kcal", "Giàu đạm", "30 phút", "2 người", "4 người", "65.000đ", "50.000đ", 4.4f, 1604, false));
-        productList.add(new Product(R.drawable.ic_launcher_background, "Thịt rang cháy cạnh", "700 Kcal", "Giàu đạm", "30 phút", "2 người", "4 người", "65.000đ", "50.000đ", 4.4f, 1604, false));
-        productList.add(new Product(R.drawable.ic_launcher_background, "Thịt rang cháy cạnh", "700 Kcal", "Giàu đạm", "30 phút", "2 người", "4 người", "65.000đ", "50.000đ", 4.4f, 1604, false));
-        productList.add(new Product(R.drawable.ic_launcher_background, "Thịt rang cháy cạnh", "700 Kcal", "Giàu đạm", "30 phút", "2 người", "4 người", "65.000đ", "50.000đ", 4.4f, 1604, false));
-        productList.add(new Product(R.drawable.ic_launcher_background, "Thịt rang cháy cạnh", "700 Kcal", "Giàu đạm", "30 phút", "2 người", "4 người", "65.000đ", "50.000đ", 4.4f, 1604, false));
-        // Thêm sản phẩm mẫu khác nếu muốn
         ProductAdapter adapter = new ProductAdapter(this, productList);
         rvProducts.setAdapter(adapter);
+
+        // Load asynchronously để tránh block UI
+        new Thread(() -> {
+            // Đợi DB sẵn sàng (như cách load recipe)
+            while (!MyApplication.isDbReady) {
+                try { Thread.sleep(100); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            }
+
+            ProductDao dao = new ProductDao(this);
+            productList.addAll(dao.getAll());
+
+            runOnUiThread(adapter::notifyDataSetChanged);
+        }).start();
 
         // Sắp xếp
         TextView tvSortOption = findViewById(R.id.tvSortOption);
@@ -83,46 +89,30 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
                         int id = item.getItemId();
                         if (id == R.id.sort_price_high_low) {
                             tvSortOption.setText("Cao nhất - Thấp nhất");
-                            Collections.sort(productList, new Comparator<Product>() {
-                                @Override
-                                public int compare(Product o1, Product o2) {
-                                    int price1 = getPriceValue(o1.price);
-                                    int price2 = getPriceValue(o2.price);
-                                    return price2 - price1;
-                                }
+                            Collections.sort(productList, (o1, o2) -> {
+                                int price1 = o1.getProductPrice() * (100 - o1.getSalePercent()) / 100;
+                                int price2 = o2.getProductPrice() * (100 - o2.getSalePercent()) / 100;
+                                return price2 - price1;
                             });
                             adapter.notifyDataSetChanged();
                             return true;
                         } else if (id == R.id.sort_price_low_high) {
                             tvSortOption.setText("Thấp nhất - Cao nhất");
-                            Collections.sort(productList, new Comparator<Product>() {
-                                @Override
-                                public int compare(Product o1, Product o2) {
-                                    int price1 = getPriceValue(o1.price);
-                                    int price2 = getPriceValue(o2.price);
-                                    return price1 - price2;
-                                }
+                            Collections.sort(productList, (o1, o2) -> {
+                                int price1 = o1.getProductPrice() * (100 - o1.getSalePercent()) / 100;
+                                int price2 = o2.getProductPrice() * (100 - o2.getSalePercent()) / 100;
+                                return price1 - price2;
                             });
                             adapter.notifyDataSetChanged();
                             return true;
                         } else if (id == R.id.sort_name_az) {
                             tvSortOption.setText("Tên: A-Z");
-                            Collections.sort(productList, new Comparator<Product>() {
-                                @Override
-                                public int compare(Product o1, Product o2) {
-                                    return o1.name.compareToIgnoreCase(o2.name);
-                                }
-                            });
+                            Collections.sort(productList, (o1, o2) -> o1.getProductName().compareToIgnoreCase(o2.getProductName()));
                             adapter.notifyDataSetChanged();
                             return true;
                         } else if (id == R.id.sort_name_za) {
                             tvSortOption.setText("Tên: Z-A");
-                            Collections.sort(productList, new Comparator<Product>() {
-                                @Override
-                                public int compare(Product o1, Product o2) {
-                                    return o2.name.compareToIgnoreCase(o1.name);
-                                }
-                            });
+                            Collections.sort(productList, (o1, o2) -> o2.getProductName().compareToIgnoreCase(o1.getProductName()));
                             adapter.notifyDataSetChanged();
                             return true;
                         }
@@ -152,6 +142,13 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
         return Integer.parseInt(number);
     }
 
+    // Convert integer price (e.g., 150000) to string "150.000đ"
+    private String formatPrice(int price) {
+        java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi", "VN"));
+        nf.setGroupingUsed(true);
+        return nf.format(price) + "đ";
+    }
+
     @Override
     protected int getBottomNavigationContainerId() {
         return R.id.bottom_navigation_container;
@@ -160,5 +157,11 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
     @Override
     public void onNavigationItemReselected(int itemId) {
         handleNavigation(itemId);
+    }
+
+    private void addCategory(List<Category> list, String name, String drawableName) {
+        int resId = getResources().getIdentifier(drawableName, "drawable", getPackageName());
+        if (resId == 0) resId = R.drawable.ic_launcher_background; // default
+        list.add(new Category(resId, name));
     }
 }

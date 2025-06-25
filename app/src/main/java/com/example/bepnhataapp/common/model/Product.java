@@ -8,7 +8,7 @@ public class Product implements Serializable {
     private String productDescription;
     private int productPrice;
     private int salePercent;
-    private byte[] productThumb; // may be null
+    private String productThumb; // store path/URL
     private int commentAmount;
     private String category;
     private int inventory;
@@ -31,8 +31,8 @@ public class Product implements Serializable {
     public void setProductPrice(int productPrice) { this.productPrice = productPrice; }
     public int getSalePercent() { return salePercent; }
     public void setSalePercent(int salePercent) { this.salePercent = salePercent; }
-    public byte[] getProductThumb() { return productThumb; }
-    public void setProductThumb(byte[] productThumb) { this.productThumb = productThumb; }
+    public String getProductThumb() { return productThumb; }
+    public void setProductThumb(String productThumb) { this.productThumb = productThumb; }
     public int getCommentAmount() { return commentAmount; }
     public void setCommentAmount(int commentAmount) { this.commentAmount = commentAmount; }
     public String getCategory() { return category; }

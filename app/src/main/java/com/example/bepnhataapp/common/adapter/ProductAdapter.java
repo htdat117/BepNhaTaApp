@@ -13,9 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.Product;
+import com.example.bepnhataapp.common.model.Product;
 import com.example.bepnhataapp.features.products.ProductDetailActivity;
+import com.bumptech.glide.Glide;
 
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
@@ -37,21 +40,43 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.imgProduct.setImageResource(product.imageResId);
-        holder.tvProductName.setText(product.name);
-        holder.tvKcal.setText(product.kcal);
-        holder.tvNutrition.setText(product.nutrition);
-        holder.tvTime.setText(product.time);
-        holder.tvFor2.setText(product.for2);
-        holder.tvFor4.setText(product.for4);
-        holder.tvOldPrice.setText(product.oldPrice);
-        holder.tvPrice.setText(product.price);
-        holder.tvRating.setText(String.valueOf(product.rating));
-        holder.tvReviewCount.setText("(" + product.reviewCount + ")");
-        holder.imgFavorite.setImageResource(product.isFavorite ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+
+        // Load image thumb via Glide
+        String thumb = product.getProductThumb();
+        if (thumb != null && !thumb.isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(thumb)
+                    .placeholder(R.drawable.sample_img)
+                    .error(R.drawable.sample_img)
+                    .into(holder.imgProduct);
+        } else {
+            holder.imgProduct.setImageResource(R.drawable.sample_img);
+        }
+
+        holder.tvProductName.setText(product.getProductName());
+        holder.tvKcal.setText("");
+        holder.tvNutrition.setText("");
+        holder.tvTime.setText("");
+        holder.tvFor2.setText("2 người");
+        holder.tvFor4.setText("4 người");
+
+        int price = product.getProductPrice() * (100 - product.getSalePercent()) / 100;
+        String priceStr = formatPrice(price);
+        holder.tvPrice.setText(priceStr);
+        if (product.getSalePercent() > 0) {
+            holder.tvOldPrice.setText(formatPrice(product.getProductPrice()));
+            holder.tvOldPrice.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvOldPrice.setVisibility(View.GONE);
+        }
+
+        holder.tvRating.setText(String.valueOf((float) product.getAvgRating()));
+        holder.tvReviewCount.setText("(" + product.getCommentAmount() + ")");
+        holder.imgFavorite.setImageResource(R.drawable.ic_favorite_unchecked);
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, com.example.bepnhataapp.features.products.ProductDetailActivity.class);
-            intent.putExtra("product", product);
+            intent.putExtra("productId", product.getProductID());
             context.startActivity(intent);
         });
     }
@@ -59,6 +84,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public int getItemCount() {
         return productList.size();
+    }
+
+    private String formatPrice(int price){
+        NumberFormat nf = NumberFormat.getInstance(new Locale("vi","VN"));
+        return nf.format(price)+"đ";
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

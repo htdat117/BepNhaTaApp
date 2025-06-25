@@ -11,11 +11,15 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.ProductDetailPagerAdapter;
 import com.example.bepnhataapp.databinding.ActivityProductDetailBinding;
-import com.example.bepnhataapp.common.models.Product;
+import com.example.bepnhataapp.common.model.Product;
 import com.example.bepnhataapp.common.models.Review;
 import com.example.bepnhataapp.common.adapter.ReviewAdapter;
-import com.example.bepnhataapp.common.adapter.SuggestionAdapter;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.bumptech.glide.Glide;
+import android.graphics.BitmapFactory;
+import com.example.bepnhataapp.common.dao.ProductDao;
+import com.example.bepnhataapp.common.dao.ProductDetailDao;
+import com.example.bepnhataapp.common.model.ProductDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +34,35 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding = ActivityProductDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Product product = (Product) getIntent().getSerializableExtra("product");
+        Product product = null;
+        if(getIntent().hasExtra("productId")){
+            long id = getIntent().getLongExtra("productId",-1);
+            if(id!=-1){
+                product = new ProductDao(this).getById(id);
+            }
+        }
         if (product != null) {
-            binding.ivProduct.setImageResource(product.imageResId);
-            binding.tvProductName.setText(product.name);
-            binding.tvTime.setText(product.time);
-            binding.tvPrice.setText(product.price.replace("đ", "")); // show numeric price
+            String thumb = product.getProductThumb();
+            if (thumb != null && !thumb.isEmpty()) {
+                Glide.with(this).load(thumb).placeholder(R.drawable.sample_img).error(R.drawable.sample_img).into(binding.ivProduct);
+            } else {
+                binding.ivProduct.setImageResource(R.drawable.sample_img);
+            }
+            binding.tvProductName.setText(product.getProductName());
+            binding.tvTime.setText("");
+            int price = product.getProductPrice() * (100 - product.getSalePercent()) / 100;
+            binding.tvPrice.setText(String.valueOf(price));
             // Additional binding like kcal, nutrition, etc. can be done here.
+
+            // Load detail
+            ProductDetail detail = new ProductDetailDao(this).getByProductId(product.getProductID());
+            if(detail!=null){
+                ((android.widget.TextView)findViewById(R.id.tvCarbs)).setText(formatMacro(detail.getCarbs(),"carbs"));
+                ((android.widget.TextView)findViewById(R.id.tvProtein)).setText(formatMacro(detail.getProtein(),"proteins"));
+                ((android.widget.TextView)findViewById(R.id.tvCalo)).setText(formatMacro(detail.getCalo(),"calo"));
+                ((android.widget.TextView)findViewById(R.id.tvFat)).setText(formatMacro(detail.getFat(),"fat"));
+                binding.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
+            }
         }
 
         // Setup ViewPager with two fragments
@@ -59,14 +85,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.rvReviews.setLayoutManager(new LinearLayoutManager(this));
         binding.rvReviews.setAdapter(reviewAdapter);
 
-        List<Product> suggestList = new ArrayList<>();
-        suggestList.add(new Product(R.drawable.food, "Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút", "2 người", "4 người", "", "70.000đ", 4.5f, 100, false));
-        suggestList.add(new Product(R.drawable.food, "Sườn nướng mật ong", "800 cal", "Giàu đạm", "60 phút", "2 người", "4 người", "", "80.000đ", 4.5f, 120, false));
-        suggestList.add(new Product(R.drawable.food, "Bò lúc lắc", "650 cal", "Giàu đạm", "30 phút", "2 người", "4 người", "", "80.000đ", 4.5f, 140, false));
-
-        SuggestionAdapter suggestionAdapter = new SuggestionAdapter(this, suggestList);
-        binding.rvSuggestions.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvSuggestions.setAdapter(suggestionAdapter);
+        // TODO load suggestion products from DB if needed
 
         MaterialButtonToggleGroup toggleGroup = binding.toggleGroupTab;
         toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -91,5 +110,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             Intent intent = new Intent(ProductDetailActivity.this, AllReviewsActivity.class);
             startActivity(intent);
         });
+    }
+
+    private String formatMacro(double value,String label){
+        return (int)value+"g "+label;
     }
 } 

@@ -25,7 +25,7 @@ public class ProductDao {
         p.setProductDescription(c.getString(c.getColumnIndexOrThrow("productDescription")));
         p.setProductPrice(c.getInt(c.getColumnIndexOrThrow("productPrice")));
         p.setSalePercent(c.getInt(c.getColumnIndexOrThrow("salePercent")));
-        p.setProductThumb(c.getBlob(c.getColumnIndexOrThrow("productThumb")));
+        p.setProductThumb(c.getString(c.getColumnIndexOrThrow("productThumb")));
         p.setCommentAmount(c.getInt(c.getColumnIndexOrThrow("commentAmount")));
         p.setCategory(c.getString(c.getColumnIndexOrThrow("category")));
         p.setInventory(c.getInt(c.getColumnIndexOrThrow("inventory")));
