@@ -87,6 +87,20 @@ public class ProductDao {
         return list;
     }
 
+    /**
+     * Trả về danh sách sản phẩm bán chạy nhất (hoặc hot) giới hạn limit.
+     */
+    public List<Product> getHotProducts(int limit) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c = db.query(DBHelper.TBL_PRODUCTS, null, null, null, null, null, "soldQuantity DESC", String.valueOf(limit));
+        List<Product> list = new ArrayList<>();
+        if (c.moveToFirst()) {
+            do { list.add(cursorToProduct(c)); } while (c.moveToNext());
+        }
+        c.close();
+        return list;
+    }
+
     private ContentValues toContentValues(Product p, boolean includeId) {
         ContentValues cv = new ContentValues();
         if (includeId) cv.put("productID", p.getProductID());

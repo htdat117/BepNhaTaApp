@@ -23,7 +23,10 @@ public class RecipeDao {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor c = null;
         try {
-            c = db.rawQuery("SELECT * FROM RECIPES", null);
+            // Chỉ lấy các cột cần hiển thị, tránh nạp toàn bộ blob/column lớn gây CursorWindow quá lớn
+            String sql = "SELECT recipeID, recipeName, description, tag, createdAt, imageThumb, " +
+                    "category, commentAmount, likeAmount, sectionAmount FROM RECIPES";
+            c = db.rawQuery(sql, null);
             if (c.moveToFirst()) {
                 do {
                     list.add(fromCursor(c));
@@ -33,6 +36,44 @@ public class RecipeDao {
             if (c != null) {
                 c.close();
             }
+        }
+        return list;
+    }
+
+    /**
+     * Lấy tối đa <code>limit</code> công thức thuộc category chỉ định (không phân biệt hoa thường).
+     */
+    public List<RecipeEntity> getRecipesByCategory(String category, int limit) {
+        List<RecipeEntity> list = new ArrayList<>();
+        Cursor c = null;
+        try {
+            String sql = "SELECT recipeID, recipeName, description, tag, createdAt, imageThumb, " +
+                    "category, commentAmount, likeAmount, sectionAmount " +
+                    "FROM RECIPES WHERE lower(category)=lower(?) ORDER BY recipeID DESC LIMIT ?";
+            c = helper.getReadableDatabase().rawQuery(sql, new String[]{category, String.valueOf(limit)});
+            if (c.moveToFirst()) {
+                do { list.add(fromCursor(c)); } while (c.moveToNext());
+            }
+        } finally {
+            if (c != null) c.close();
+        }
+        return list;
+    }
+
+    /**
+     * Trả về danh sách category duy nhất (không null). Dùng để render list button.
+     */
+    public List<String> getAllCategories() {
+        List<String> list = new ArrayList<>();
+        Cursor c = null;
+        try {
+            String sql = "SELECT DISTINCT category FROM RECIPES WHERE category IS NOT NULL ORDER BY category";
+            c = helper.getReadableDatabase().rawQuery(sql, null);
+            if (c.moveToFirst()) {
+                do { list.add(c.getString(0)); } while (c.moveToNext());
+            }
+        } finally {
+            if (c != null) c.close();
         }
         return list;
     }

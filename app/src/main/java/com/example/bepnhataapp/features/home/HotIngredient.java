@@ -1,18 +1,18 @@
 package com.example.bepnhataapp.features.home;
 
 public class HotIngredient {
-    private int imageResId;
+    private String imageUrl;
     private String title;
     private String price;
 
-    public HotIngredient(int imageResId, String title, String price) {
-        this.imageResId = imageResId;
+    public HotIngredient(String imageUrl, String title, String price) {
+        this.imageUrl = imageUrl;
         this.title = title;
         this.price = price;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getTitle() {

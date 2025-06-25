@@ -20,7 +20,7 @@ public class FoodCaloDao {
         FoodCalo f = new FoodCalo();
         f.setFoodCaloID(c.getLong(c.getColumnIndexOrThrow("foodCaloID")));
         f.setFoodName(c.getString(c.getColumnIndexOrThrow("foodName")));
-        f.setFoodThumb(c.getBlob(c.getColumnIndexOrThrow("foodThumb")));  // blob
+        f.setFoodThumb(c.getString(c.getColumnIndexOrThrow("foodThumb")));
         f.setCaloPerOneHundredGrams(c.getInt(c.getColumnIndexOrThrow("caloPerOneHundredGrams")));
         return f;
     }

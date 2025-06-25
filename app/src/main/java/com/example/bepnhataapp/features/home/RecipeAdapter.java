@@ -37,8 +37,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipeList.get(position);
 
+        String img = recipe.getImageUrl();
+        Object source;
+        if (img == null || img.isEmpty()) {
+            source = R.drawable.placeholder_banner_background;
+        } else if (img.startsWith("http")) {
+            source = img;
+        } else {
+            int resId = holder.itemView.getContext().getResources()
+                    .getIdentifier(img, "drawable", holder.itemView.getContext().getPackageName());
+            source = resId != 0 ? resId : R.drawable.placeholder_banner_background;
+        }
+
         Glide.with(holder.itemView.getContext())
-                .load(recipe.getImageUrl())
+                .load(source)
                 .placeholder(R.drawable.placeholder_banner_background)
                 .error(R.drawable.placeholder_banner_background)
                 .into(holder.recipeImage);

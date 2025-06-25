@@ -70,7 +70,7 @@ public class MealPlanDao {
         m.setMealCategory(cur.getString(cur.getColumnIndexOrThrow("mealCategory")));
         m.setTitle(cur.getString(cur.getColumnIndexOrThrow("title")));
         m.setCreatedAt(cur.getString(cur.getColumnIndexOrThrow("createdAt")));
-        m.setImageThumb(cur.getBlob(cur.getColumnIndexOrThrow("imageThumb")));
+        m.setImageThumb(cur.getString(cur.getColumnIndexOrThrow("imageThumb")));
         m.setTotalDays(cur.getInt(cur.getColumnIndexOrThrow("totalDays")));
         m.setAvgCalories(cur.getDouble(cur.getColumnIndexOrThrow("avgCalories")));
         m.setAvgCarbs(cur.getDouble(cur.getColumnIndexOrThrow("avgCarbs")));

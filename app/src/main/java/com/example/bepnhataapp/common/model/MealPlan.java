@@ -6,7 +6,7 @@ public class MealPlan {
     private String mealCategory;
     private String title;
     private String createdAt;
-    private byte[] imageThumb;
+    private String imageThumb;
     private int totalDays;
     private double avgCalories;
     private double avgCarbs;
@@ -35,8 +35,8 @@ public class MealPlan {
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
-    public byte[] getImageThumb() { return imageThumb; }
-    public void setImageThumb(byte[] imageThumb) { this.imageThumb = imageThumb; }
+    public String getImageThumb() { return imageThumb; }
+    public void setImageThumb(String imageThumb) { this.imageThumb = imageThumb; }
 
     public int getTotalDays() { return totalDays; }
     public void setTotalDays(int totalDays) { this.totalDays = totalDays; }

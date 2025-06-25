@@ -8,7 +8,7 @@ public class Product implements Serializable {
     private String productDescription;
     private int productPrice;
     private int salePercent;
-    private String productThumb; // store path/URL
+    private String productThumb; // may be URL/path
     private int commentAmount;
     private String category;
     private int inventory;

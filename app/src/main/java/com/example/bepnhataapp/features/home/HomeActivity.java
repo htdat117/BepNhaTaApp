@@ -22,6 +22,9 @@ import com.example.bepnhataapp.common.models.Recipe;
 import com.example.bepnhataapp.features.home.CookingTipAdapter;
 import com.example.bepnhataapp.features.home.RecipeAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
+import com.example.bepnhataapp.common.dao.ProductDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
     private RecyclerView recipesGridRecyclerView;
     private RecyclerView cookingTipsRecyclerView;
     private TextView currentSelectedCategory;
+    private String selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,23 +66,16 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         hotIngredientsRecyclerView = findViewById(R.id.hot_ingredients_recycler_view);
         hotIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        List<HotIngredient> hotIngredientList = new ArrayList<>();
-        hotIngredientList.add(new HotIngredient(R.drawable.placeholder_banner_background, "Bò xào rau củ", "50.000đ"));
-        hotIngredientList.add(new HotIngredient(R.drawable.placeholder_banner_background, "Gà chiên giòn", "75.000đ"));
-        hotIngredientList.add(new HotIngredient(R.drawable.placeholder_banner_background, "Canh chua cá", "60.000đ"));
-        hotIngredientList.add(new HotIngredient(R.drawable.placeholder_banner_background, "Mì Ý sốt bò", "80.000đ"));
+        loadHotIngredientsAsync();
 
-        HotIngredientAdapter hotIngredientAdapter = new HotIngredientAdapter(hotIngredientList);
-        hotIngredientsRecyclerView.setAdapter(hotIngredientAdapter);
-
-        // Setup Recipe Categories
-        setupRecipeCategories();
+        // Setup Recipe Categories (dynamic)
+        loadCategoriesAsync();
 
         // Setup Recipes Grid RecyclerView
         recipesGridRecyclerView = findViewById(R.id.recipes_grid_recycler_view);
         recipesGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recipesGridRecyclerView.setNestedScrollingEnabled(false);
-        loadRecipesAsync();
+        // Recipes sẽ được load sau khi categories sẵn sàng.
 
         // Setup Cooking Tips RecyclerView
         cookingTipsRecyclerView = findViewById(R.id.cooking_tips_recycler_view);
@@ -102,34 +99,54 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         setupBottomNavigationFragment(R.id.nav_home);
     }
 
-    private void setupRecipeCategories() {
-        TextView categoryMonNuong = findViewById(R.id.category_mon_nuong);
-        TextView categoryMonKho = findViewById(R.id.category_mon_kho);
-        TextView categoryMonXao = findViewById(R.id.category_mon_xao);
-        TextView categoryMonNuoc = findViewById(R.id.category_mon_nuoc);
-        TextView categoryMonChay = findViewById(R.id.category_mon_chay);
+    /**
+     * Tải danh sách category từ DB và hiển thị thành button động.
+     */
+    private void loadCategoriesAsync() {
+        new Thread(() -> {
+            while (!MyApplication.isDbReady) {
+                try { Thread.sleep(100); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            }
 
-        List<TextView> categoryButtons = new ArrayList<>();
-        categoryButtons.add(categoryMonNuong);
-        categoryButtons.add(categoryMonKho);
-        categoryButtons.add(categoryMonXao);
-        categoryButtons.add(categoryMonNuoc);
-        categoryButtons.add(categoryMonChay);
+            RecipeDao dao = new RecipeDao(this);
+            List<String> categories = dao.getAllCategories();
 
-        // Set initial selected state
-        categoryMonNuong.setSelected(true);
-        currentSelectedCategory = categoryMonNuong;
+            runOnUiThread(() -> buildCategoryButtons(categories));
+        }).start();
+    }
 
-        for (TextView button : categoryButtons) {
-            button.setOnClickListener(v -> {
+    private void buildCategoryButtons(List<String> categories) {
+        LinearLayout container = findViewById(R.id.recipe_categories_container);
+        if (container == null) return;
+
+        container.removeAllViews();
+
+        if (categories == null || categories.isEmpty()) return;
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        for (String cat : categories) {
+            TextView tv = (TextView) inflater.inflate(R.layout.item_category_button, container, false);
+            tv.setText(cat);
+
+            tv.setOnClickListener(v -> {
                 if (currentSelectedCategory != null) {
                     currentSelectedCategory.setSelected(false);
                 }
                 v.setSelected(true);
                 currentSelectedCategory = (TextView) v;
-                // Here you would typically filter your recipes based on the selected category
-                // For now, we just handle the UI change
+                selectedCategory = tv.getText().toString();
+                loadRecipesForCategory(selectedCategory);
             });
+
+            container.addView(tv);
+
+            if (currentSelectedCategory == null) {
+                tv.setSelected(true);
+                currentSelectedCategory = tv;
+                selectedCategory = tv.getText().toString();
+                loadRecipesForCategory(selectedCategory); // initial load
+            }
         }
     }
 
@@ -143,26 +160,26 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         handleNavigation(itemId);
     }
 
-    private void loadRecipesAsync() {
+    private void loadRecipesForCategory(String category) {
         new Thread(() -> {
-            // Wait until the DB is ready
             while (!MyApplication.isDbReady) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                try { Thread.sleep(100);} catch (InterruptedException e){Thread.currentThread().interrupt();}
             }
 
             RecipeDao recipeDao = new RecipeDao(this);
-            List<RecipeEntity> recipeEntities = recipeDao.getAllRecipes();
+            List<RecipeEntity> recipeEntities;
+            if (category == null) {
+                recipeEntities = recipeDao.getAllRecipes();
+            } else {
+                recipeEntities = recipeDao.getRecipesByCategory(category, 4);
+            }
             final List<Recipe> recipeList = new ArrayList<>();
             if (recipeEntities != null) {
                 for (RecipeEntity entity : recipeEntities) {
                     recipeList.add(new Recipe(
                             entity.getRecipeName(),
                             entity.getCategory(),
-                            entity.getImageThumb(), // This is now correct
+                            entity.getImageThumb() != null ? entity.getImageThumb().trim() : "",
                             false
                     ));
                 }
@@ -197,7 +214,7 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
                             entity.getTitle(),
                             entity.getContent(),
                             entity.getTag(),
-                            entity.getImageThumb(), // Pass the image URL string
+                            entity.getImageThumb() != null ? entity.getImageThumb().trim() : "",
                             false,
                             entity.getCreatedAt(),
                             0,
@@ -210,6 +227,29 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
                 if (!isFinishing()) {
                     CookingTipAdapter cookingTipAdapter = new CookingTipAdapter(this, blogList);
                     cookingTipsRecyclerView.setAdapter(cookingTipAdapter);
+                }
+            });
+        }).start();
+    }
+
+    private void loadHotIngredientsAsync() {
+        new Thread(() -> {
+            while (!MyApplication.isDbReady) {
+                try { Thread.sleep(100);} catch (InterruptedException e){Thread.currentThread().interrupt();}
+            }
+
+            ProductDao productDao = new ProductDao(this);
+            List<com.example.bepnhataapp.common.model.Product> products = productDao.getHotProducts(4);
+            final List<HotIngredient> list = new ArrayList<>();
+            for (com.example.bepnhataapp.common.model.Product p : products) {
+                String priceStr = String.format("%,dđ", p.getProductPrice()).replace(',', '.');
+                list.add(new HotIngredient(p.getProductThumb() != null ? p.getProductThumb().trim() : "", p.getProductName(), priceStr));
+            }
+
+            runOnUiThread(() -> {
+                if (!isFinishing()) {
+                    HotIngredientAdapter hotIngredientAdapter = new HotIngredientAdapter(list);
+                    hotIngredientsRecyclerView.setAdapter(hotIngredientAdapter);
                 }
             });
         }).start();

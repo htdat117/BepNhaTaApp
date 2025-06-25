@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -32,7 +33,23 @@ public class HotIngredientAdapter extends RecyclerView.Adapter<HotIngredientAdap
     @Override
     public void onBindViewHolder(@NonNull HotIngredientViewHolder holder, int position) {
         HotIngredient hotIngredient = hotIngredientList.get(position);
-        holder.itemImage.setImageResource(hotIngredient.getImageResId());
+        String img = hotIngredient.getImageUrl();
+        Object source;
+        if (img == null || img.isEmpty()) {
+            source = R.drawable.placeholder_banner_background;
+        } else if (img.startsWith("http")) {
+            source = img;
+        } else {
+            int resId = holder.itemView.getContext().getResources()
+                    .getIdentifier(img, "drawable", holder.itemView.getContext().getPackageName());
+            source = resId != 0 ? resId : R.drawable.placeholder_banner_background;
+        }
+
+        Glide.with(holder.itemView.getContext())
+                .load(source)
+                .placeholder(R.drawable.placeholder_banner_background)
+                .error(R.drawable.placeholder_banner_background)
+                .into(holder.itemImage);
         holder.itemTitle.setText(hotIngredient.getTitle());
         holder.itemPrice.setText(hotIngredient.getPrice());
         // You can set click listeners for the button here if needed
