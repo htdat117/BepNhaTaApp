@@ -23,7 +23,20 @@ public class IngredientDao {
         i.setIngredientID(c.getLong(c.getColumnIndexOrThrow("ingredientID")));
         i.setIngredientName(c.getString(c.getColumnIndexOrThrow("ingredientName")));
         i.setUnit(c.getString(c.getColumnIndexOrThrow("unit")));
-        i.setImage(c.getBlob(c.getColumnIndexOrThrow("image")));
+        int colImage = c.getColumnIndex("image");
+        if(colImage != -1){
+            // Try to get as String first (URL), else blob
+            try {
+                String link = c.getString(colImage);
+                if(link!=null){
+                    i.setImageLink(link);
+                }
+            } catch (Exception e){
+                try{
+                    i.setImage(c.getBlob(colImage));
+                }catch (Exception ignored){}
+            }
+        }
         return i;
     }
 

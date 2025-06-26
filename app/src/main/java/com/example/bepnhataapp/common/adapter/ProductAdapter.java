@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.model.Product;
-import com.example.bepnhataapp.features.products.ProductDetailActivity;
+import com.example.bepnhataapp.common.dao.ProductDetailDao;
+import com.example.bepnhataapp.common.model.ProductDetail;
 import com.bumptech.glide.Glide;
 
 import java.text.NumberFormat;
@@ -54,9 +55,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         }
 
         holder.tvProductName.setText(product.getProductName());
-        holder.tvKcal.setText("");
+        ProductDetail detail = new ProductDetailDao(context).getByProductId(product.getProductID());
+        if(detail!=null){
+            holder.tvKcal.setText((int)detail.getCalo()+" cal");
+            holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
+        }else{
+            holder.tvKcal.setText("");
+            holder.tvTime.setText("");
+        }
         holder.tvNutrition.setText("");
-        holder.tvTime.setText("");
         holder.tvFor2.setText("2 người");
         holder.tvFor4.setText("4 người");
 

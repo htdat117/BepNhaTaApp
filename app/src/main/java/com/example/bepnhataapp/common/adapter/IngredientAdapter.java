@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.Ingredient;
 
@@ -35,7 +36,17 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
         Ingredient ing = list.get(position);
-        holder.ivIcon.setImageResource(ing.imageResId);
+        if (ing.imageUrl != null && !ing.imageUrl.isEmpty()) {
+            // Remove any starting '@' if exists
+            String url = ing.imageUrl.startsWith("@") ? ing.imageUrl.substring(1) : ing.imageUrl;
+            Glide.with(context).load(url).placeholder(R.drawable.food_placeholder).into(holder.ivIcon);
+        } else if (ing.imageData != null && ing.imageData.length > 0) {
+            Glide.with(context).load(ing.imageData).placeholder(R.drawable.food_placeholder).into(holder.ivIcon);
+        } else if (ing.imageResId != 0) {
+            holder.ivIcon.setImageResource(ing.imageResId);
+        } else {
+            holder.ivIcon.setImageResource(R.drawable.food_placeholder); // fallback icon
+        }
         holder.tvName.setText(ing.name);
         holder.tvQuantity.setText(ing.quantity);
     }

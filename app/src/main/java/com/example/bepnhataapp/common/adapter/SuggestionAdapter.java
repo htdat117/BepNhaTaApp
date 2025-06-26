@@ -13,12 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.model.Product;
+import com.example.bepnhataapp.common.dao.ProductDetailDao;
+import com.example.bepnhataapp.common.model.ProductDetail;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.bumptech.glide.Glide;
 import java.text.NumberFormat;
 import java.util.Locale;
 
 import java.util.List;
+import android.content.Intent;
+import com.example.bepnhataapp.features.products.ProductDetailActivity;
 
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.SuggestionViewHolder> {
 
@@ -49,9 +53,17 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         }
 
         holder.tvName.setText(p.getProductName());
-        holder.tvKcal.setText("");
+
+        // Bind detail data
+        ProductDetail detail = new ProductDetailDao(context).getByProductId(p.getProductID());
+        if(detail!=null){
+            holder.tvKcal.setText((int)detail.getCalo()+" cal");
+            holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
+        }else{
+            holder.tvKcal.setText("");
+            holder.tvTime.setText("");
+        }
         holder.tvNutrition.setText("");
-        holder.tvTime.setText("");
         holder.tvPrice.setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
 
         holder.btnAddCart.setOnClickListener(v -> {
@@ -67,6 +79,13 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             ((TextView)sheet.findViewById(R.id.tvTotalPrice)).setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
             dialog.setContentView(sheet);
             dialog.show();
+        });
+
+        // Navigate to product detail when click item
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("productId", p.getProductID());
+            context.startActivity(intent);
         });
     }
 

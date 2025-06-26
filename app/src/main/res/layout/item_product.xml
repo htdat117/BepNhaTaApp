@@ -78,8 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tên món ăn"
-            android:textStyle="bold"
-            android:textSize="@dimen/body1"
+            style="@style/Header.Ag4"
+            android:textColor="@color/dark1"
             android:layout_marginTop="4dp"/>
 
         <!-- Info -->
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="bottom"
+                android:gravity="center_vertical"
                 android:layout_weight="1">
                 <!-- Calo-->
                 <LinearLayout
@@ -107,18 +107,19 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/rounded_bg_primary4">
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="13dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:src="@drawable/ic_fire_calo"
                         android:layout_gravity="center_vertical"/>
                     <TextView
                         android:id="@+id/tvKcal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="500 Kcal"
-                        android:textSize="@dimen/body4"
                         android:textColor="@color/primary1"
-                        android:paddingLeft="4dp"/>
+                        android:text="700 cal"
+                        style="@style/Body.Regular.Ag3"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp" />
                 </LinearLayout>
                 <!-- Nutrition-->
                 <LinearLayout
@@ -132,18 +133,19 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/rounded_bg_primary4">
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="13dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:src="@drawable/ic_nutrition"
                         android:layout_gravity="center_vertical"/>
                     <TextView
                         android:id="@+id/tvNutrition"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Giàu chất sơ"
-                        android:textSize="@dimen/body4"
+                        android:text="Giàu đạm"
                         android:textColor="@color/primary1"
-                        android:paddingLeft="4dp"/>
+                        style="@style/Body.Regular.Ag3"
+                        android:paddingHorizontal="2dp"
+                        android:paddingVertical="2dp"/>
                 </LinearLayout>
                 <!-- Time-->
                 <LinearLayout
@@ -157,18 +159,19 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/rounded_bg_primary4">
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="13dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:src="@drawable/ic_time"
                         android:layout_gravity="center_vertical"/>
                     <TextView
                         android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20 phút"
-                        android:textSize="@dimen/body4"
+                        style="@style/Body.Regular.Ag3"
+                        android:text="50 phút"
                         android:textColor="@color/primary1"
-                        android:paddingLeft="4dp"/>
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp" />
                 </LinearLayout>
             </LinearLayout>
             <!-- Info: Price -->
@@ -182,14 +185,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="150.000đ"
-                    android:textSize="@dimen/body4"
+                    style="@style/Body.Regular.Ag3"
                     android:textColor="@color/dark2"/>
                 <TextView
                     android:id="@+id/tvPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="140.000đ"
-                    android:textSize="@dimen/body1"
+                    style="@style/Body.Medium.Ag1"
                     android:textColor="@color/primary1"
                     android:textStyle="bold"/>
             </LinearLayout>
@@ -220,7 +223,7 @@
                         android:id="@+id/btnFor2"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:text="2 người"
                         android:textSize="@dimen/body3"
                         app:cornerRadius="16dp"
@@ -233,7 +236,7 @@
                         android:id="@+id/btnFor4"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:text="4 người"
                         android:textSize="@dimen/body3"
                         app:cornerRadius="16dp"
@@ -252,10 +255,11 @@
                 android:background="@drawable/rounded_bg_primary4">                >
                 <ImageView
                     android:id="@+id/btnAddCart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:src="@drawable/ic_cart"
-                    android:padding="8dp"/>
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="6dp"/>
                 <TextView
                     android:id="@+id/btnBuy"
                     android:layout_width="wrap_content"
@@ -263,9 +267,10 @@
                     android:text="Mua ngay"
                     android:background="@drawable/rounded_bg_primary1_2"
                     android:textColor="#FFFFFF"
-                    android:textSize="@dimen/body3"
+                    style="@style/Body.Medium.Ag2"
                     android:gravity="center"
-                    android:padding="8dp"/>
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

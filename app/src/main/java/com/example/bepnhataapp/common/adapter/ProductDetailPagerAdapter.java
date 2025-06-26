@@ -7,20 +7,30 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.bepnhataapp.features.ingredients.IngredientPackageFragment;
 import com.example.bepnhataapp.features.ingredients.UsageGuideFragment;
+import com.example.bepnhataapp.common.model.ProductDetail;
 
 public class ProductDetailPagerAdapter extends FragmentStateAdapter {
 
-    public ProductDetailPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    private final ProductDetail detail;
+    private final long productId;
+
+    public ProductDetailPagerAdapter(@NonNull FragmentActivity fragmentActivity, ProductDetail detail, long productId) {
         super(fragmentActivity);
+        this.detail = detail;
+        this.productId = productId;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         if (position == 0) {
-            return new IngredientPackageFragment();
+            return IngredientPackageFragment.newInstance(productId);
         } else {
-            return new UsageGuideFragment();
+            return UsageGuideFragment.newInstance(
+                    detail != null ? detail.getStorageGuide() : "",
+                    detail != null ? detail.getExpiry() : "",
+                    detail != null ? detail.getNote() : ""
+            );
         }
     }
 

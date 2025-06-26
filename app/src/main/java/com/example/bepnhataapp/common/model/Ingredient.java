@@ -7,6 +7,7 @@ public class Ingredient implements Serializable {
     private String ingredientName;
     private String unit;
     private byte[] image; // BLOB
+    private String imageLink; // URL text stored in DB
 
     public Ingredient() {}
 
@@ -21,4 +22,12 @@ public class Ingredient implements Serializable {
 
     public byte[] getImage() { return image; }
     public void setImage(byte[] image) { this.image = image; }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
 } 

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.bepnhataapp.common.base.BaseActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -20,13 +20,21 @@ import android.graphics.BitmapFactory;
 import com.example.bepnhataapp.common.dao.ProductDao;
 import com.example.bepnhataapp.common.dao.ProductDetailDao;
 import com.example.bepnhataapp.common.model.ProductDetail;
+import com.example.bepnhataapp.common.adapter.SuggestionAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
-public class ProductDetailActivity extends AppCompatActivity {
+import androidx.annotation.IdRes;
+
+public class ProductDetailActivity extends BaseActivity {
 
     private ActivityProductDetailBinding binding;
+
+    private int quantity = 1;
+    private int basePrice = 0; // giá 1 gói 2 người sau khi trừ sale
+    private int currentServingFactor = 1; // 1 cho 2 người, 2 cho 4 người (giá gấp đôi)
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,9 +57,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                 binding.ivProduct.setImageResource(R.drawable.sample_img);
             }
             binding.tvProductName.setText(product.getProductName());
+            binding.tvDescription.setText(product.getProductDescription());
             binding.tvTime.setText("");
-            int price = product.getProductPrice() * (100 - product.getSalePercent()) / 100;
-            binding.tvPrice.setText(String.valueOf(price));
+            basePrice = product.getProductPrice() * (100 - product.getSalePercent()) / 100;
+            updatePriceText();
             // Additional binding like kcal, nutrition, etc. can be done here.
 
             // Load detail
@@ -63,11 +72,42 @@ public class ProductDetailActivity extends AppCompatActivity {
                 ((android.widget.TextView)findViewById(R.id.tvFat)).setText(formatMacro(detail.getFat(),"fat"));
                 binding.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
             }
+
+            // Setup ViewPager with two fragments
+            ProductDetailPagerAdapter adapter = new ProductDetailPagerAdapter(this, detail, product.getProductID());
+            binding.viewPager.setAdapter(adapter);
+        } else {
+            // still create adapter with null detail to avoid crash
+            ProductDetailPagerAdapter adapter = new ProductDetailPagerAdapter(this, null, -1);
+            binding.viewPager.setAdapter(adapter);
         }
 
-        // Setup ViewPager with two fragments
-        ProductDetailPagerAdapter adapter = new ProductDetailPagerAdapter(this);
-        binding.viewPager.setAdapter(adapter);
+        // Quantity +/- logic
+        binding.btnPlus.setOnClickListener(v -> {
+            quantity++;
+            updateQuantityText();
+            updatePriceText();
+        });
+
+        binding.btnMinus.setOnClickListener(v -> {
+            if(quantity > 1) {
+                quantity--;
+                updateQuantityText();
+                updatePriceText();
+            }
+        });
+
+        // Serving change logic
+        binding.toggleGroupServing.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if(isChecked) {
+                if(checkedId == R.id.btnServing2) {
+                    currentServingFactor = 1;
+                } else if(checkedId == R.id.btnServing4) {
+                    currentServingFactor = 2;
+                }
+                updatePriceText();
+            }
+        });
 
         binding.ivBack.setOnClickListener(v -> onBackPressed());
 
@@ -85,7 +125,18 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.rvReviews.setLayoutManager(new LinearLayoutManager(this));
         binding.rvReviews.setAdapter(reviewAdapter);
 
-        // TODO load suggestion products from DB if needed
+        // Load suggestion products (3 random others)
+        List<Product> allProducts = new ProductDao(this).getAll();
+        if(product!=null){
+            final long curId = product.getProductID();
+            allProducts.removeIf(p -> p.getProductID()==curId);
+        }
+        Collections.shuffle(allProducts);
+        List<Product> suggestList = allProducts.size()>3 ? allProducts.subList(0,3) : allProducts;
+
+        SuggestionAdapter suggestAdapter = new SuggestionAdapter(this, suggestList);
+        binding.rvSuggestions.setLayoutManager(new LinearLayoutManager(this));
+        binding.rvSuggestions.setAdapter(suggestAdapter);
 
         MaterialButtonToggleGroup toggleGroup = binding.toggleGroupTab;
         toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -112,7 +163,24 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected int getBottomNavigationContainerId() {
+        return 0; // no bottom navigation in this screen
+    }
+
     private String formatMacro(double value,String label){
+        if("calo".equals(label)){
+            return (int)value+" Kcal";
+        }
         return (int)value+"g "+label;
+    }
+
+    private void updateQuantityText() {
+        binding.tvQuantity.setText(String.valueOf(quantity));
+    }
+
+    private void updatePriceText() {
+        int total = basePrice * currentServingFactor * quantity;
+        binding.tvPrice.setText(String.valueOf(total));
     }
 } 

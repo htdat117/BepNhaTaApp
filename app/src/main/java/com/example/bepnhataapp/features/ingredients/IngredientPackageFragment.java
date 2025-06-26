@@ -12,13 +12,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.databinding.FragmentIngredientPackageBinding;
-import com.example.bepnhataapp.common.models.Ingredient;
 import com.example.bepnhataapp.common.adapter.IngredientAdapter;
+import com.example.bepnhataapp.common.models.Ingredient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientPackageFragment extends Fragment {
+
+    private static final String ARG_PRODUCT_ID = "product_id";
+
+    public static IngredientPackageFragment newInstance(long productId) {
+        IngredientPackageFragment fragment = new IngredientPackageFragment();
+        Bundle args = new Bundle();
+        args.putLong(ARG_PRODUCT_ID, productId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     private FragmentIngredientPackageBinding binding;
 
@@ -27,17 +36,36 @@ public class IngredientPackageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentIngredientPackageBinding.inflate(inflater, container, false);
 
-        // Sample ingredient data
-        List<Ingredient> ingredientList = new ArrayList<>();
-        ingredientList.add(new Ingredient(R.drawable.food, "Cua biển tươi", "200 gram"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Xương heo", "200 gram"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Tôm tươi", "100 gram"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Chả cua", "100 gram"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Bánh canh", "500 gram"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Trứng cút", "4 quả"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Gói gia vị tạo hương", "1 gói"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Gói gia vị Bếp Nhà Ta", "1 gói"));
-        ingredientList.add(new Ingredient(R.drawable.food, "Rau sống ăn kèm", "200 gram"));
+        long productId = getArguments() != null ? getArguments().getLong(ARG_PRODUCT_ID, -1) : -1;
+        List<Ingredient> ingredientList = new java.util.ArrayList<>();
+
+        if (productId != -1) {
+            com.example.bepnhataapp.common.dao.ProductIngredientDao piDao = new com.example.bepnhataapp.common.dao.ProductIngredientDao(requireContext());
+            java.util.List<com.example.bepnhataapp.common.model.ProductIngredient> piList = piDao.getIngredientsOfProduct(productId);
+            com.example.bepnhataapp.common.dao.IngredientDao ingDao = new com.example.bepnhataapp.common.dao.IngredientDao(requireContext());
+            for (com.example.bepnhataapp.common.model.ProductIngredient pi : piList) {
+                com.example.bepnhataapp.common.model.Ingredient ingEntity = ingDao.getById(pi.getIngredientID());
+                if (ingEntity != null) {
+                    String qtyText = pi.getQuantity() + " " + (ingEntity.getUnit() != null ? ingEntity.getUnit() : "");
+                    String link = ingEntity.getImageLink();
+                    if(link!=null && !link.isEmpty()){
+                        ingredientList.add(new Ingredient(link, ingEntity.getIngredientName(), qtyText));
+                    } else {
+                        byte[] imgData = ingEntity.getImage();
+                        if (imgData != null && imgData.length > 0) {
+                            ingredientList.add(new Ingredient(imgData, ingEntity.getIngredientName(), qtyText));
+                        } else {
+                            ingredientList.add(new Ingredient(R.drawable.food_placeholder, ingEntity.getIngredientName(), qtyText));
+                        }
+                    }
+                }
+            }
+        }
+
+        // If list is empty (productId invalid or no data), show placeholder sample data (optional)
+        if (ingredientList.isEmpty()) {
+            ingredientList.add(new Ingredient(R.drawable.food_placeholder, "Không có dữ liệu", ""));
+        }
 
         IngredientAdapter ingredientAdapter = new IngredientAdapter(getContext(), ingredientList);
         binding.rvIngredients.setLayoutManager(new LinearLayoutManager(getContext()));

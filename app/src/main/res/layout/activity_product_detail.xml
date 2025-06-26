@@ -259,6 +259,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:singleSelection="true"
+                app:selectionRequired="true"
                 app:checkedButton="@id/btnTabIngredient">
 
                 <com.google.android.material.button.MaterialButton
@@ -273,7 +274,8 @@
                     app:iconGravity="textStart"
                     app:checkedIcon="@null"
                     android:backgroundTint="@color/segmented_bg"
-                    android:textColor="@color/segmented_text"/>
+                    android:textColor="@color/segmented_text"
+                    android:textAllCaps="false"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTabGuide"
@@ -287,7 +289,8 @@
                     app:iconGravity="textStart"
                     app:checkedIcon="@null"
                     android:backgroundTint="@color/segmented_bg"
-                    android:textColor="@color/segmented_text"/>
+                    android:textColor="@color/segmented_text"
+                    android:textAllCaps="false"/>
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -379,6 +382,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:singleSelection="true"
+                app:selectionRequired="true"
                 app:checkedButton="@id/btnServing2">
 
                 <com.google.android.material.button.MaterialButton

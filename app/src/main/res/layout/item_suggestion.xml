@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/imgProduct"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
         android:scaleType="centerCrop"
         android:src="@drawable/sample_img"
         android:background="@drawable/rounded_img_16"
@@ -31,46 +31,103 @@
             android:layout_height="wrap_content"
             android:text="Tên món ăn"
             android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textColor="@color/dark1"
+            style="@style/Body.Bold.Ag1"/>
 
         <!-- badges row -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="4dp">
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/tvKcal"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bg_primary4"
-                android:text="700 cal"
-                android:textSize="10sp"
-                android:paddingHorizontal="4dp"
-                android:paddingVertical="2dp" />
+                android:orientation="horizontal"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/rounded_bg_primary4">
 
-            <TextView
-                android:id="@+id/tvNutrition"
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_fire_calo"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/tvKcal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_bg_primary4"
+                    android:textColor="@color/primary1"
+                    android:text="700 cal"
+                    style="@style/Body.Regular.Ag3"
+                    android:paddingHorizontal="4dp"
+                    android:paddingVertical="2dp" />
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bg_primary4"
-                android:text="Giàu đạm"
-                android:textSize="10sp"
-                android:paddingHorizontal="4dp"
-                android:paddingVertical="2dp"
-                android:layout_marginStart="4dp" />
+                android:orientation="horizontal"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/rounded_bg_primary4">
 
-            <TextView
-                android:id="@+id/tvTime"
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_nutrition"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/tvNutrition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_bg_primary4"
+                    android:text="Giàu đạm"
+                    android:textColor="@color/primary1"
+                    style="@style/Body.Regular.Ag3"
+                    android:paddingHorizontal="4dp"
+                    android:paddingVertical="2dp"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bg_primary4"
-                android:text="50 phút"
-                android:textSize="10sp"
-                android:paddingHorizontal="4dp"
-                android:paddingVertical="2dp"
-                android:layout_marginStart="4dp" />
+                android:orientation="horizontal"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/rounded_bg_primary4">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_time"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Body.Regular.Ag3"
+                    android:background="@drawable/rounded_bg_primary4"
+                    android:text="50 phút"
+                    android:textColor="@color/primary1"
+                    android:paddingHorizontal="4dp"
+                    android:paddingVertical="2dp" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <!-- Price & buttons row -->
@@ -78,7 +135,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="4dp"
             android:gravity="center_vertical">
 
             <TextView
@@ -87,8 +143,7 @@
                 android:layout_height="wrap_content"
                 android:text="70.000đ"
                 android:textColor="@color/primary1"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                style="@style/Body.Medium.Ag1" />
 
             <View
                 android:layout_width="0dp"
@@ -104,20 +159,22 @@
                 android:background="@drawable/rounded_bg_primary4">                >
                 <ImageView
                     android:id="@+id/btnAddCart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="36dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/ic_cart"
-                    android:padding="8dp"/>
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="6dp"/>
                 <TextView
                     android:id="@+id/btnBuy"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:text="Mua ngay"
                     android:background="@drawable/rounded_bg_primary1_2"
                     android:textColor="#FFFFFF"
-                    android:textSize="@dimen/body3"
+                    android:textSize="@dimen/body2"
                     android:gravity="center"
-                    android:padding="8dp"/>
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
