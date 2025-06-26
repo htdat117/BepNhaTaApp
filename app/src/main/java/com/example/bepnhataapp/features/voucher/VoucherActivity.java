@@ -3,6 +3,7 @@ package com.example.bepnhataapp.features.voucher;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.dao.CouponDao;
+import com.example.bepnhataapp.common.dao.CustomerDao;
+import com.example.bepnhataapp.common.model.Coupon;
+import com.example.bepnhataapp.common.model.Customer;
+import com.example.bepnhataapp.common.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,18 +47,35 @@ public class VoucherActivity extends AppCompatActivity {
         }
 
         RecyclerView rvVouchers = findViewById(R.id.rvVouchers);
+        LinearLayout emptyView = findViewById(R.id.layoutEmptyVoucher);
         if (rvVouchers != null) {
             rvVouchers.setLayoutManager(new LinearLayoutManager(this));
             List<VoucherItem> voucherList = new ArrayList<>();
-            // Thêm dữ liệu voucher mẫu
-            voucherList.add(new VoucherItem("GIAM20%", "Giảm 20% đơn hàng chào mừng tháng 4, giảm tối đa 60K", "30/04/2024"));
-            voucherList.add(new VoucherItem("FREESHIP", "Miễn phí vận chuyển cho đơn hàng từ 100K", "15/05/2024"));
-            voucherList.add(new VoucherItem("SUMMER50K", "Giảm 50K cho đơn hàng từ 200K", "31/07/2024"));
-            voucherList.add(new VoucherItem("BUY1GET1", "Mua 1 tặng 1 món bất kỳ", "10/06/2024"));
-            voucherList.add(new VoucherItem("NEWUSER", "Giảm 30% cho khách hàng mới", "31/12/2024"));
-
+            // Lấy voucher từ database
+            String phone = SessionManager.getPhone(this);
+            long customerId = -1;
+            if (phone != null) {
+                CustomerDao customerDao = new CustomerDao(this);
+                Customer customer = customerDao.findByPhone(phone);
+                if (customer != null) {
+                    customerId = customer.getCustomerID();
+                }
+            }
+            CouponDao couponDao = new CouponDao(this);
+            List<Coupon> coupons = couponDao.getAvailableForCustomer(customerId, 0); // orderPrice=0 để lấy tất cả
+            for (Coupon c : coupons) {
+                voucherList.add(new VoucherItem(
+                    c.getCouponTitle(),
+                    "Giảm " + c.getCouponValue() + "% tối đa " + (c.getMaxDiscount() != null ? c.getMaxDiscount() + "K" : "") + ", đơn tối thiểu " + c.getMinPrice() + "K",
+                    c.getExpireDate()
+                ));
+            }
             VoucherDisplayAdapter adapter = new VoucherDisplayAdapter(voucherList, this);
             rvVouchers.setAdapter(adapter);
+            if (emptyView != null) {
+                emptyView.setVisibility(voucherList.isEmpty() ? View.VISIBLE : View.GONE);
+            }
+            rvVouchers.setVisibility(voucherList.isEmpty() ? View.GONE : View.VISIBLE);
         }
     }
 }

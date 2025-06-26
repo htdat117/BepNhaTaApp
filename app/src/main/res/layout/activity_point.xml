@@ -92,7 +92,7 @@
                         android:id="@+id/tvRankPoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="400/499"
+                        android:text=""
                         android:textSize="15sp"
                         android:textColor="#222222"
                         android:layout_marginTop="2dp"/>
@@ -120,9 +120,10 @@
 
             <!-- Tổng điểm -->
             <TextView
+                android:id="@+id/tvTotalPoint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tổng điểm có thể dùng: 400"
+                android:text=""
                 android:textColor="#F36B22"
                 android:textStyle="bold"
                 android:textSize="20sp"

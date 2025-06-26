@@ -45,6 +45,30 @@
         android:clipToPadding="false"
         android:overScrollMode="never"/>
 
+    <!-- Layout trống khi không có voucher -->
+    <LinearLayout
+        android:id="@+id/layoutEmptyVoucher"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/imgEmptyVoucher"
+            android:layout_width="360dp"
+            android:layout_height="360dp"
+            android:src="@drawable/voucher"
+            android:contentDescription="Trống"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hiện tại không có mã giảm giá nào!"
+            android:textColor="#222222"
+            android:textSize="32sp"
+          />
+    </LinearLayout>
+
     <!-- Bottom Navigation Bar -->
     <include
         layout="@layout/layout_bottom_navigation"
