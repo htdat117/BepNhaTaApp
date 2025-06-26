@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".features.recipes.RecipeDetail">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary1"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imvAvatar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/img_dat"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_avatar"
+                android:cropToPadding="true"
+                android:clipToOutline="true" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hồ Tiến Đạt"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/header3" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imvCart"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_cart_header"
+                android:layout_marginEnd="16dp" />
+
+            <ImageView
+                android:id="@+id/imvMessage"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_message"
+                android:layout_marginEnd="16dp" />
+
+            <ImageView
+                android:id="@+id/imvNotification"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_notification" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/primary1"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Quản lý đơn hàng"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/header3"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_back_left"
+                    android:contentDescription="Back"
+                    android:layout_gravity="start|center_vertical" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Công thức > Tất cả > Bánh canh cua"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="@dimen/body3" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:layout_marginTop="12dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvRecipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@android:color/transparent">
+
+                    <ImageView
+                        android:id="@+id/imvRecipe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_banhcanhcua" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <ImageView
+                    android:id="@+id/iconOverlay"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_love_orange"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="8dp" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/txtName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bò xào rau củ"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/header3"
+                    android:textColor="@android:color/black"
+                    android:layout_marginBottom="6dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/imvCalendarAdd"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_calendar_add"
+                    android:layout_gravity="center_vertical"/>
+
+                <ImageView
+                    android:id="@+id/imvDowload"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_download"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:weightSum="4">
+
+                    <!-- Item 1 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_pagination_unselected"
+                        android:paddingVertical="8dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_time"/>
+
+                        <TextView
+                            android:id="@+id/txtTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="60 phút"
+                            android:textColor="@color/primary1"
+                            android:textSize="@dimen/body1"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                    <!-- Item 2 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_pagination_unselected"
+                        android:paddingVertical="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_medium_time"/>
+
+                        <TextView
+                            android:id="@+id/txtLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dễ"
+                            android:textColor="@color/primary1"
+                            android:textSize="@dimen/body1"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                    <!-- Item 3 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_pagination_unselected"
+                        android:paddingVertical="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imvTaste"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_taste" />
+
+                        <TextView
+                            android:id="@+id/txtTaste"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đậm đà"
+                            android:textColor="@color/primary1"
+                            android:textSize="@dimen/body1"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                    <!-- Item 4 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_pagination_unselected"
+                        android:paddingVertical="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imvUses"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_bone"/>
+
+                        <TextView
+                            android:id="@+id/txtUses"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tốt xương"
+                            android:textColor="@color/primary1"
+                            android:textSize="@dimen/body1"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mô tả món ăn"
+                android:textSize="@dimen/header4"
+                android:textStyle="bold"
+                android:paddingVertical="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="text"
+                android:justificationMode="inter_word"
+                android:textSize="@dimen/body1"
+                android:textColor="@color/dark1"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trải nghiệm món ăn"
+                    android:textSize="@dimen/header4"
+                    android:textStyle="bold"
+                    android:paddingVertical="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xem công thức"
+                        android:textSize="@dimen/body2"
+                        android:textColor="@color/primary1"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:layout_gravity="center_vertical"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thành phần dinh dưỡng"
+                android:textSize="@dimen/header4"
+                android:textStyle="bold"
+                android:paddingVertical="8dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="60dp">
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_carb"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
+                            android:padding="8dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="142g carbs"
+                            android:id="@+id/tvCarbs"
+                            android:textColor="@color/dark1"
+                            android:textSize="@dimen/body2"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/ic_protein"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
+                            android:padding="8dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="70g proteins"
+                            android:id="@+id/tvProtein"
+                            android:textColor="@color/dark1"
+                            android:textSize="@dimen/body2"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="60dp">
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_calo"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
+                            android:padding="8dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/tvCalo"
+                            android:textColor="@color/dark1"
+                            android:text="142g carbs"
+                            android:textSize="@dimen/body2"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_fat"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
+                            android:padding="8dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/tvFat"
+                            android:text="68g fat"
+                            android:textColor="@color/dark1"
+                            android:textSize="@dimen/body2"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleGroupTab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:singleSelection="true"
+                app:checkedButton="@id/btnTabIngredient">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabIngredient"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Nguyên liệu"
+                    android:textSize="14sp"
+                    app:cornerRadius="24dp"
+                    app:iconGravity="textStart"
+                    app:checkedIcon="@null"
+                    android:backgroundTint="@color/segmented_bg"
+                    android:textColor="@color/segmented_text"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabGuide"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Hướng dẫn sử dụng"
+                    android:textSize="14sp"
+                    app:cornerRadius="24dp"
+                    app:iconGravity="textStart"
+                    app:checkedIcon="@null"
+                    android:backgroundTint="@color/segmented_bg"
+                    android:textColor="@color/segmented_text"/>
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/txtNumofPeople"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Khẩu phần cho"
+                    android:textSize="@dimen/header4"
+                    android:textStyle="bold"
+                    android:paddingVertical="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNumofPeople"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="2 người"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/primary1"
+                    android:textSize="@dimen/body2"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/primary1"
+                    android:layout_marginStart="16dp"
+                    app:icon="@drawable/ic_arrow_down"
+                    app:iconGravity="textEnd"
+                    app:iconTint="@color/white"
+                    app:iconSize="10dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nguyên liệu cần chuẩn bị"
+                android:textSize="@dimen/header4"
+                android:textStyle="bold"
+                android:paddingVertical="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingVertical="8dp">
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bình luận"
+                    android:textSize="@dimen/header4"
+                    android:textStyle="bold"
+                    android:paddingVertical="8dp"/>
+
+                <TextView
+                    android:id="@+id/txtCommentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(110)"
+                    android:textSize="@dimen/header4"
+                    android:textStyle="bold"
+                    android:paddingVertical="8dp"
+                    android:layout_marginStart="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tất cả"
+                        android:textSize="@dimen/body2"
+                        android:textColor="@color/dark2"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_right_arrow_gray"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingVertical="4dp">
+
+                <ImageView
+                    android:id="@+id/imvAvatarCmt"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:src="@drawable/img_dat"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/bg_avatar"
+                    android:cropToPadding="true"
+                    android:clipToOutline="true" />
+
+                <EditText
+                    android:id="@+id/edtComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Chia sẻ cảm nhận của bạn"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_dark4"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcComment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingVertical="8dp">
+            </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Có thể bạn sẽ thích"
+                android:textSize="@dimen/header4"
+                android:textStyle="bold"
+                android:paddingVertical="8dp"
+                android:layout_marginTop="4dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecommend"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingVertical="8dp">
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/layout_bottom_navigation"
+        android:id="@+id/bottom_navigation_container"/>
+
+</LinearLayout>

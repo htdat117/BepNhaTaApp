@@ -57,7 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.tvProductName.setText(product.getProductName());
         ProductDetail detail = new ProductDetailDao(context).getByProductId(product.getProductID());
         if(detail!=null){
-            holder.tvKcal.setText((int)detail.getCalo()+" cal");
+            holder.tvKcal.setText((int)detail.getCalo()+" Kcal");
             holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
         }else{
             holder.tvKcal.setText("");
@@ -72,6 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.tvPrice.setText(priceStr);
         if (product.getSalePercent() > 0) {
             holder.tvOldPrice.setText(formatPrice(product.getProductPrice()));
+            holder.tvOldPrice.setPaintFlags(holder.tvOldPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvOldPrice.setVisibility(View.VISIBLE);
         } else {
             holder.tvOldPrice.setVisibility(View.GONE);

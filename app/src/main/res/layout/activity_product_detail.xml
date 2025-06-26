@@ -72,9 +72,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Tên sản phẩm"
-                    android:textStyle="bold"
                     android:textColor="@color/dark1"
-                    android:textSize="@dimen/header2"/>
+                    android:textSize="@dimen/header2"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="18dp"
@@ -161,10 +161,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="horizontal"
-                        android:layout_marginEnd="60dp">
+                        android:gravity="center_vertical">
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
@@ -182,12 +183,13 @@
                             android:layout_marginStart="8dp"/>
                     </LinearLayout>
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
                         <ImageView
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:src="@drawable/ic_protein"
                             android:background="@drawable/rounded_bg_primary4_for_product_recipes"
                             android:padding="8dp"/>
@@ -208,10 +210,11 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="12dp">
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="horizontal"
-                        android:layout_marginEnd="60dp">
+                        android:gravity="center_vertical">
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
@@ -229,8 +232,9 @@
                             android:layout_marginStart="8dp"/>
                     </LinearLayout>
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
                         <ImageView
                             android:layout_width="48dp"

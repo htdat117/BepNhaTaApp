@@ -19,6 +19,15 @@
         android:theme="@style/Theme.BepNhaTaApp"
         tools:targetApi="31">
         <activity
+            android:name=".features.recipes.RecipeComment"
+            android:exported="false" />
+        <activity
+            android:name=".features.recipes.RecipeDetail"
+            android:exported="false" />
+        <activity
+            android:name=".features.recipes.RecipeList"
+            android:exported="false" />
+        <activity
             android:name=".features.manage_order.review_order"
             android:exported="false" />
         <activity
@@ -71,6 +80,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Các activity công cụ -->
@@ -88,8 +98,8 @@
             android:exported="false" />
         <activity
             android:name=".features.customeridea.CustomerIdeaActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".features.mealplan.MealPlanActivity"
             android:exported="false" />
