@@ -224,4 +224,14 @@
         <item name="android:fontFamily">@font/inter_medium</item>
         <item name="android:textSize">@dimen/body2</item>
     </style>
+
+    <!-- Bottom sheet white background theme -->
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheet.White</item>
+    </style>
+
+    <style name="BottomSheet.White" parent="Widget.Design.BottomSheet.Modal">
+        <!-- Make container transparent so card's own white background shows -->
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources> 

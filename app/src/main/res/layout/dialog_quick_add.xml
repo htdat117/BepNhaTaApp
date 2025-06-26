@@ -5,24 +5,24 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     app:cardCornerRadius="24dp"
-    android:background="@android:color/white">
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp">
 
         <!-- drag indicator -->
         <View
             android:layout_width="60dp"
             android:layout_height="4dp"
-            android:background="@color/dark3"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/dark4"/>
+            android:background="@color/dark1"
+            android:backgroundTint="@color/dark1" />
 
-        <!-- product row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,9 +47,9 @@
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dark1"
                     android:text="Sườn nướng mật ong"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    style="@style/Header.Ag3"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -91,7 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     app:singleSelection="true"
-                    app:checkedButton="@id/btnServing2">
+                    app:checkedButton="@id/btnServing2"
+                    app:selectionRequired="true">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnServing2"
@@ -127,67 +128,81 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/dark1"
             android:text="Mô tả món ăn"
+            style="@style/Body.Bold.Ag1"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
         <TextView
             android:id="@+id/tvDesc"
             android:layout_width="match_parent"
+            android:textColor="@color/dark1"
             android:layout_height="wrap_content"
+            style="@style/Body.Regular.Ag2"
             android:text="Sườn nướng mật ong là món ăn thơm ngon với sườn heo..."
             android:layout_marginTop="4dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Thành phần dinh dưỡng"
+            style="@style/Body.Bold.Ag1"
+            android:textColor="@color/dark1"
+            android:layout_marginVertical="8dp"/>
 
-        <!-- nutrition grid -->
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:layout_marginTop="16dp">
+            android:columnCount="2">
 
-            <!-- item template repeated 4 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="12dp"
                 android:gravity="center_vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="horizontal"
-                        android:layout_marginEnd="60dp">
+                        android:gravity="center_vertical">
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_carb"
-                            android:background="@drawable/rounded_bg_primary4"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
                             android:padding="8dp"/>
                         <TextView
+                            android:id="@+id/tvCarbs"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="142g carbs"
+                            android:textColor="@color/dark1"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
                             android:layout_marginStart="8dp"/>
                     </LinearLayout>
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_protein"
-                            android:background="@drawable/rounded_bg_primary4"
-                            android:padding="4dp"/>
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
+                            android:padding="8dp"/>
                         <TextView
+                            android:id="@+id/tvProtein"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:textColor="@color/dark1"
                             android:text="70g proteins"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
@@ -200,37 +215,44 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="12dp">
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="horizontal"
-                        android:layout_marginEnd="60dp">
+                        android:gravity="center_vertical">
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_calo"
-                            android:background="@drawable/rounded_bg_primary4"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
                             android:padding="8dp"/>
                         <TextView
+                            android:id="@+id/tvCalo"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="142g carbs"
+                            android:textColor="@color/dark1"
+                            android:text="142 Kcal"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
                             android:layout_marginStart="8dp"/>
                     </LinearLayout>
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_fat"
-                            android:background="@drawable/rounded_bg_primary4"
+                            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
                             android:padding="8dp"/>
                         <TextView
+                            android:id="@+id/tvFat"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:textColor="@color/dark1"
                             android:text="68g fat"
                             android:textSize="@dimen/body2"
                             android:gravity="center_vertical"
@@ -238,7 +260,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            <!-- replicate other 3 items omitted for brevity -->
         </GridLayout>
 
         <!-- quantity -->
@@ -246,13 +267,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="Số lượng"
-                android:textStyle="bold"
+                android:textColor="@color/dark1"
+                style="@style/Body.Medium.Ag1"
                 android:layout_weight="1"/>
 
             <!-- Quantity control -->
@@ -268,22 +291,23 @@
 
                 <ImageView
                     android:id="@+id/btnMinus"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_remove"/>
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_minus_product"/>
 
                 <TextView
                     android:id="@+id/tvQuantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dark1"
                     android:text="1"
                     android:layout_marginHorizontal="8dp"/>
 
                 <ImageView
                     android:id="@+id/btnPlus"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_add"/>
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_add_product"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -292,13 +316,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="8dp">
         <!-- total -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tổng cộng"
-            android:textStyle="bold"
+            style="@style/Body.Medium.Ag1"
+            android:textColor="@color/dark1"
             android:layout_weight="1"/>
 
         <TextView

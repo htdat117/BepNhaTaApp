@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_bg_primary4"
                     android:textColor="@color/primary1"
-                    android:text="700 cal"
+                    android:text="700 Kcal"
                     style="@style/Body.Regular.Ag3"
                     android:paddingHorizontal="4dp"
                     android:paddingVertical="2dp" />
