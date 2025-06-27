@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Chia sẻ cảm nhận của bạn"
             android:textSize="16sp"
+            android:textColor="@color/dark1"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
 

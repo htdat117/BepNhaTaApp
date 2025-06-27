@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Tiêu đề blog lớn"
         android:textStyle="bold"
+        android:textColor="@color/dark1"
         android:textSize="18sp"
         android:layout_marginTop="8dp"/>
 
@@ -26,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Mô tả ngắn blog lớn"
-        android:textSize="14sp"
+        style="@style/Body.Medium.Ag2"
         android:layout_marginTop="4dp"/>
 
     <TextView

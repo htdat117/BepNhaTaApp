@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/imgBlog"
-        android:layout_width="64dp"
+        android:layout_width="88dp"
         android:layout_height="64dp"
         android:scaleType="centerCrop"
         android:src="@drawable/blog" />
@@ -24,16 +24,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tiêu đề blog nhỏ"
-            android:textStyle="bold"
-            android:textSize="15sp"/>
+            style="@style/Body.Medium.Ag2"
+            android:textColor="@color/dark1"/>
 
         <TextView
             android:id="@+id/tvCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Mẹo hay - Nấu chuẩn"
-            android:textSize="13sp"
-            android:textColor="#888888"/>
+            style="@style/Body.Medium.Ag3"
+            android:textColor="@color/dark2"/>
     </LinearLayout>
 
     <ImageView
