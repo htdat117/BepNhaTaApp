@@ -1,5 +1,7 @@
 package com.example.bepnhataapp.features.offline;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,15 @@ public class OfflineActivity extends AppCompatActivity {
             // Chuyển sang màn hình nội dung offline
             startActivity(new android.content.Intent(OfflineActivity.this, DownloadedContentActivity.class));
         });
-        btnRetry.setOnClickListener(v -> recreate());
+        btnRetry.setOnClickListener(v -> {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null && activeNetwork.isConnected();
+            if (isConnected) {
+                finish(); // Đã có mạng, quay về trang chính hoặc reload app
+            } else {
+                recreate(); // Vẫn chưa có mạng, chỉ reload lại trang offline
+            }
+        });
     }
 } 

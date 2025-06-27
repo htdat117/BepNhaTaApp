@@ -6,13 +6,17 @@ public class DownloadedRecipe {
     private String type;
     private String time;
     private int imageResId;
+    private String imageThumb;
+    private int recipeId;
 
-    public DownloadedRecipe(String title, String cal, String type, String time, int imageResId) {
+    public DownloadedRecipe(int recipeId, String title, String cal, String type, String time, int imageResId, String imageThumb) {
+        this.recipeId = recipeId;
         this.title = title;
         this.cal = cal;
         this.type = type;
         this.time = time;
         this.imageResId = imageResId;
+        this.imageThumb = imageThumb;
     }
 
     public String getTitle() { return title; }
@@ -20,4 +24,6 @@ public class DownloadedRecipe {
     public String getType() { return type; }
     public String getTime() { return time; }
     public int getImageResId() { return imageResId; }
+    public String getImageThumb() { return imageThumb; }
+    public int getRecipeId() { return recipeId; }
 } 

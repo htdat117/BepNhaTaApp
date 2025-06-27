@@ -1,18 +1,34 @@
 package com.example.bepnhataapp.features.recipes;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
+import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.dao.RecipeDao;
 import com.example.bepnhataapp.common.dao.RecipeDetailDao;
+import com.example.bepnhataapp.common.dao.RecipeDownloadDao;
+import com.example.bepnhataapp.common.dao.RecipeIngredientDao;
+import com.example.bepnhataapp.common.dao.IngredientDao;
+import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.RecipeDetail;
 import com.example.bepnhataapp.common.model.RecipeEntity;
+import com.example.bepnhataapp.common.model.RecipeDownload;
+import com.example.bepnhataapp.common.model.RecipeIngredient;
+import com.example.bepnhataapp.common.model.Ingredient;
+import com.example.bepnhataapp.common.utils.SessionManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class RecipeDetailActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -31,6 +47,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         TextView tvName = findViewById(R.id.txtName);
         TextView tvCategory = findViewById(R.id.tvRecipeCategory);
         TextView tvCaloTime = findViewById(R.id.tvRecipeCaloTime);
+        ImageView imvDownload = findViewById(R.id.imvDowload);
 
         // Load recipe entity
         RecipeEntity entity = new RecipeDao(this).getAllRecipes().stream()
@@ -59,6 +76,53 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
             tvCaloTime.setText(str);
         }
 
+        imvDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lấy customerID động
+                String phone = SessionManager.getPhone(RecipeDetailActivity.this);
+                if (phone == null) {
+                    Toast.makeText(RecipeDetailActivity.this, "Bạn cần đăng nhập để tải công thức!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                CustomerDao customerDao = new CustomerDao(RecipeDetailActivity.this);
+                Customer customer = customerDao.findByPhone(phone);
+                if (customer == null) {
+                    Toast.makeText(RecipeDetailActivity.this, "Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                long customerId = customer.getCustomerID();
+                RecipeDownloadDao dao = new RecipeDownloadDao(RecipeDetailActivity.this);
+                // Kiểm tra đã tải chưa
+                if (dao.get(customerId, recipeId) != null) {
+                    Toast.makeText(RecipeDetailActivity.this, "Công thức đã được tải về trước đó!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                RecipeDownload rd = new RecipeDownload();
+                rd.setCustomerID(customerId);
+                rd.setRecipeID(recipeId);
+                String now = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date());
+                rd.setDownloadedAt(now);
+                long result = dao.insert(rd);
+                if (result != -1) {
+                    Toast.makeText(RecipeDetailActivity.this, "Đã lưu công thức để xem offline!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(RecipeDetailActivity.this, "Lỗi khi lưu công thức!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Hiển thị nguyên liệu
+        LinearLayout layoutIngredients = findViewById(R.id.layoutIngredients);
+        RecipeIngredientDao ingredientDao = new RecipeIngredientDao(this);
+        java.util.List<RecipeIngredient> ingredients = ingredientDao.getByRecipeID(recipeId);
+        IngredientDao ingDao = new IngredientDao(this);
+        layoutIngredients.removeAllViews();
+        for (RecipeIngredient ing : ingredients) {
+            Ingredient ingEntity = ingDao.getById(ing.getIngredientID());
+            addIngredient(layoutIngredients, ingEntity, ing.getQuantity());
+        }
+
         // bottom nav
         setupBottomNavigationFragment(R.id.nav_recipes);
     }
@@ -71,5 +135,27 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
     @Override
     public void onNavigationItemReselected(int itemId) {
         handleNavigation(itemId);
+    }
+
+    private void addIngredient(LinearLayout parent, Ingredient ingEntity, double quantity) {
+        View v = getLayoutInflater().inflate(R.layout.item_ingredient_grid, parent, false);
+        ImageView iv = v.findViewById(R.id.ivIngredient);
+        TextView tvName = v.findViewById(R.id.tvIngredientName);
+        TextView tvQty = v.findViewById(R.id.tvIngredientQuantity);
+        if (ingEntity != null) {
+            if (ingEntity.getImageLink() != null && !ingEntity.getImageLink().isEmpty()) {
+                Glide.with(this).load(ingEntity.getImageLink()).placeholder(R.drawable.food_placeholder).into(iv);
+            } else if (ingEntity.getImage() != null && ingEntity.getImage().length > 0) {
+                Glide.with(this).load(ingEntity.getImage()).placeholder(R.drawable.food_placeholder).into(iv);
+            } else {
+                iv.setImageResource(R.drawable.food_placeholder);
+            }
+            tvName.setText(ingEntity.getIngredientName());
+        } else {
+            iv.setImageResource(R.drawable.food_placeholder);
+            tvName.setText("Không rõ");
+        }
+        tvQty.setText(String.valueOf(quantity));
+        parent.addView(v);
     }
 } 

@@ -183,6 +183,9 @@
             android:exported="false" />
         <activity
             android:name=".features.offline.DownloadedContentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.offline.RecipeDetailOfflineActivity"
             android:exported="false" /> <!-- Messaging -->
         <activity
             android:name=".features.message.notification_list"

@@ -1,5 +1,6 @@
 package com.example.bepnhataapp.common.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.DownloadedRecipe;
+import com.example.bepnhataapp.features.offline.RecipeDetailOfflineActivity;
 import java.util.List;
 
 public class DownloadedRecipeAdapter extends RecyclerView.Adapter<DownloadedRecipeAdapter.ViewHolder> {
@@ -36,13 +39,36 @@ public class DownloadedRecipeAdapter extends RecyclerView.Adapter<DownloadedReci
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DownloadedRecipe recipe = list.get(position);
-        holder.imgRecipe.setImageResource(recipe.getImageResId());
+        if (recipe.getImageThumb() != null && !recipe.getImageThumb().trim().isEmpty()) {
+            String imgStr = recipe.getImageThumb().trim();
+            if (imgStr.startsWith("http")) {
+                Glide.with(holder.imgRecipe.getContext())
+                        .load(imgStr)
+                        .placeholder(R.drawable.food_placeholder)
+                        .into(holder.imgRecipe);
+            } else {
+                int resId = holder.imgRecipe.getContext().getResources().getIdentifier(imgStr, "drawable", holder.imgRecipe.getContext().getPackageName());
+                if (resId != 0) {
+                    holder.imgRecipe.setImageResource(resId);
+                } else {
+                    holder.imgRecipe.setImageResource(R.drawable.food_placeholder);
+                }
+            }
+        } else {
+            holder.imgRecipe.setImageResource(recipe.getImageResId());
+        }
         holder.tvTitle.setText(recipe.getTitle());
         holder.tvCal.setText(recipe.getCal());
         holder.tvType.setText(recipe.getType());
         holder.tvTime.setText(recipe.getTime());
-
-        holder.btnView.setOnClickListener(v -> listener.onView(recipe));
+        holder.btnView.setOnClickListener(v -> {
+            if (v.getContext() != null) {
+                Intent intent = new Intent(v.getContext(), RecipeDetailOfflineActivity.class);
+                intent.putExtra("recipeId", recipe.getRecipeId());
+                v.getContext().startActivity(intent);
+            }
+            if (listener != null) listener.onView(recipe);
+        });
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(recipe));
     }
 
