@@ -12,12 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,9 +23,6 @@ import com.example.bepnhataapp.common.adapter.FoodItemAdapter;
 public class CaloCalculatorFragment extends Fragment {
 
     private static final String TAG = "CaloCalculatorFragment";
-    private static final int REQUEST_CODE_QR = 1001;
-    private static final int REQUEST_CODE_MIC = 1002;
-    private static final int REQUEST_CODE_CAMERA = 1003;
 
     private EditText editTextFoodName, editTextWeight;
     private Button btnSave, btnDelete;
@@ -70,9 +61,6 @@ public class CaloCalculatorFragment extends Fragment {
         Log.d(TAG, "listViewFoods: " + (listViewFoods != null ? "Found" : "Null"));
         textViewTotalCalories = view.findViewById(R.id.textViewTotalCalories);
         Log.d(TAG, "textViewTotalCalories: " + (textViewTotalCalories != null ? "Found" : "Null"));
-        ImageView ivBarcode = view.findViewById(R.id.ivBarcode);
-        ImageView ivMic = view.findViewById(R.id.ivMic);
-        ImageView ivCamera = view.findViewById(R.id.ivCamera);
 
         foodList = new ArrayList<>();
         foodCaloriesMap = new HashMap<>();
@@ -102,48 +90,7 @@ public class CaloCalculatorFragment extends Fragment {
             showFoodDetails(selectedFood);
         });
 
-        ivBarcode.setOnClickListener(v -> {
-            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-            try {
-                startActivityForResult(intent, REQUEST_CODE_QR);
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "Chưa cài ứng dụng quét QR!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        ivMic.setOnClickListener(v -> {
-            Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-            startActivityForResult(intent, REQUEST_CODE_MIC);
-        });
-        ivCamera.setOnClickListener(v -> {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, REQUEST_CODE_CAMERA);
-        });
-
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK || data == null) return;
-        if (requestCode == REQUEST_CODE_QR) {
-            String qrResult = data.getStringExtra("SCAN_RESULT");
-            if (qrResult != null) {
-                editTextFoodName.setText(qrResult);
-                Toast.makeText(getContext(), "Đã nhận QR: " + qrResult, Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == REQUEST_CODE_MIC) {
-            Uri audioUri = data.getData();
-            if (audioUri != null) {
-                Toast.makeText(getContext(), "Đã ghi âm xong!", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == REQUEST_CODE_CAMERA) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            if (photo != null) {
-                Toast.makeText(getContext(), "Đã chụp ảnh xong!", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     private void initializeFoodCalories() {

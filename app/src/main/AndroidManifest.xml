@@ -17,11 +17,7 @@
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.BepNhaTaApp"
-        tools:targetApi="31"
-        android:enableOnBackInvokedCallback="true">
-        <activity
-            android:name=".features.recipes.FilterRecipe"
-            android:exported="false" />
+        tools:targetApi="31">
         <activity
             android:name=".features.recipes.RecipeComment"
             android:exported="false" />
