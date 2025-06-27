@@ -16,8 +16,16 @@ import com.example.bepnhataapp.R;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private Context context;
-    private List<Category> categoryList;
+    private final Context context;
+    private final List<Category> categoryList;
+    private int selectedPos = 0;
+    private OnCategoryClickListener listener;
+
+    public interface OnCategoryClickListener {
+        void onCategoryClick(String categoryName);
+    }
+
+    public void setOnCategoryClickListener(OnCategoryClickListener l) { this.listener = l; }
 
     public CategoryAdapter(Context context, List<Category> categoryList) {
         this.context = context;
@@ -36,6 +44,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Category category = categoryList.get(position);
         holder.imgCategory.setImageResource(category.iconResId);
         holder.tvCategoryName.setText(category.name);
+
+        boolean selected = (position == selectedPos);
+        holder.imgCategory.setBackgroundResource(selected ? R.drawable.bg_category_selected : R.drawable.rounded_img_8);
+        holder.tvCategoryName.setTextColor(context.getResources().getColor(selected ? R.color.primary1 : R.color.dark1));
+
+        holder.itemView.setOnClickListener(v -> {
+            int prev = selectedPos;
+            selectedPos = position;
+            notifyItemChanged(prev);
+            notifyItemChanged(selectedPos);
+            if (listener != null) listener.onCategoryClick(category.name);
+        });
     }
 
     @Override

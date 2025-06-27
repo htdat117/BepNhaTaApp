@@ -2,9 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/primary4">
+    android:background="@drawable/bg_bottom_sheet_rounded">
+
+    <!-- Handle a small top radius if desired -->
+
+    <!-- (Header removed for bottom sheet) -->
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -17,12 +21,12 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Nguyên liệu -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Nguyên liệu -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -31,16 +35,15 @@
                     android:textSize="18sp"
                     android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
-                    android:layout_weight="1"/>
-                <!-- Close icon -->
+                    android:layout_weight="1" />
+
                 <ImageView
                     android:id="@+id/btnClose"
                     android:layout_width="12dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_close_popup"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end" />
             </LinearLayout>
-
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/flexIngredients"
@@ -48,7 +51,7 @@
                 android:layout_height="wrap_content"
                 app:flexWrap="wrap"
                 app:justifyContent="flex_start"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
 
             <!-- Địa phương -->
             <TextView
@@ -57,7 +60,7 @@
                 android:text="Địa phương"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/flexRegions"
@@ -65,7 +68,24 @@
                 android:layout_height="wrap_content"
                 app:flexWrap="wrap"
                 app:justifyContent="flex_start"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
+
+            <!-- Nhóm dinh dưỡng -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhóm dinh dưỡng"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexNutritions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                android:layout_marginTop="8dp" />
 
             <!-- Lượng calo -->
             <TextView
@@ -74,7 +94,7 @@
                 android:text="Lượng calo"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:id="@+id/tvKcalValue"
@@ -84,7 +104,7 @@
                 android:background="@drawable/rounded_bg_primary4"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/sliderKcal"
@@ -93,7 +113,7 @@
                 android:valueFrom="0"
                 android:valueTo="1000"
                 android:stepSize="10"
-                app:labelBehavior="floating"/>
+                app:labelBehavior="floating" />
 
             <!-- Thời gian nấu -->
             <TextView
@@ -102,7 +122,7 @@
                 android:text="Thời gian nấu"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:id="@+id/tvTimeValue"
@@ -112,7 +132,7 @@
                 android:background="@drawable/rounded_bg_primary4"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/sliderTime"
@@ -121,17 +141,21 @@
                 android:valueFrom="0"
                 android:valueTo="120"
                 android:stepSize="5"
-                app:labelBehavior="floating"/>
+                app:labelBehavior="floating" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnApply"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_margin="16dp"
         android:text="Hoàn tất"
         android:textColor="@android:color/white"
         android:background="@drawable/button_orange_rounded"
-        android:layout_margin="16dp"/>
+        app:backgroundTint="@null"
+        android:enabled="true"
+        android:insetTop="0dp"
+        android:insetBottom="0dp" />
 
-</LinearLayout>
+</LinearLayout> 

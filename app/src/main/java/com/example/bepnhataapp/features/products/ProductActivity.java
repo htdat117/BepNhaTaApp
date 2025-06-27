@@ -1,7 +1,5 @@
 package com.example.bepnhataapp.features.products;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +14,9 @@ import com.example.bepnhataapp.common.models.Category;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import com.example.bepnhataapp.common.dao.ProductDao;
 import com.example.bepnhataapp.MyApplication;
+import com.example.bepnhataapp.features.products.FilterProductBottomSheet;
+import com.example.bepnhataapp.common.dao.ProductDetailDao;
+import com.example.bepnhataapp.common.model.ProductDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,10 @@ import java.util.Comparator;
 public class ProductActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
     ActivityProductBinding binding;
+
+    private final List<Product> allProducts = new ArrayList<>();
+    private final List<Product> productList = new ArrayList<>();
+    private ProductAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +54,12 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
         addCategory(categoryList, "Khuyến mãi", "cate_product_sale");
         addCategory(categoryList, "Món nướng", "cate_product_grill");
         addCategory(categoryList, "Món kho", "cate_product_kho");
-        addCategory(categoryList, "Món mặn", "cate_product_all"); // fallback
         addCategory(categoryList, "Món chay", "cate_product_vegetarian");
         addCategory(categoryList, "Món nước", "cate_product_noodle");
         addCategory(categoryList, "Món xào", "cate_product_stir");
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoryList);
-        rvCategories.setAdapter(categoryAdapter);
-
-        // Sản phẩm - load từ DB
         RecyclerView rvProducts = findViewById(R.id.rvProducts);
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
-        List<Product> productList = new ArrayList<>();
-        ProductAdapter adapter = new ProductAdapter(this, productList);
+        adapter = new ProductAdapter(this, productList);
         rvProducts.setAdapter(adapter);
 
         // Load asynchronously để tránh block UI
@@ -71,7 +70,8 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
             }
 
             ProductDao dao = new ProductDao(this);
-            productList.addAll(dao.getAll());
+            allProducts.addAll(dao.getAll());
+            productList.addAll(allProducts);
 
             runOnUiThread(adapter::notifyDataSetChanged);
         }).start();
@@ -122,15 +122,17 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
                 popupMenu.show();
             }
         });
+
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoryList);
+        categoryAdapter.setOnCategoryClickListener(this::applyCategoryFilter);
+        rvCategories.setAdapter(categoryAdapter);
     }
 
     private void toFilter() {
-        binding.btnFilterProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProductActivity.this, FilterProductActivity.class);
-                startActivity(intent);
-            }
+        binding.btnFilterProduct.setOnClickListener(v -> {
+            FilterProductBottomSheet bottomSheet = new FilterProductBottomSheet();
+            bottomSheet.setOnFilterAppliedListener(this::applyAdvancedFilter);
+            bottomSheet.show(getSupportFragmentManager(), "FilterProductBottomSheet");
         });
     }
 
@@ -163,5 +165,42 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
         int resId = getResources().getIdentifier(drawableName, "drawable", getPackageName());
         if (resId == 0) resId = R.drawable.ic_launcher_background; // default
         list.add(new Category(resId, name));
+    }
+
+    private void applyCategoryFilter(String categoryName){
+        // assumes fields allProducts and productList defined final effectively
+        // clear then add matches
+        productList.clear();
+        if("Tất cả".equalsIgnoreCase(categoryName)){
+            productList.addAll(allProducts);
+        }else if("Khuyến mãi".equalsIgnoreCase(categoryName)){
+            for(Product p: allProducts){
+                if(p.getSalePercent()>0) productList.add(p);
+            }
+        }else{
+            for(Product p: allProducts){
+                if(p.getCategory()!=null && p.getCategory().equalsIgnoreCase(categoryName)) productList.add(p);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void applyAdvancedFilter(FilterProductBottomSheet.FilterCriteria c){
+        // Basic implementation using kcal & time & cuisine only for demo
+        productList.clear();
+        ProductDetailDao detailDao = new ProductDetailDao(this);
+        for(Product p: allProducts){
+            boolean ok=true;
+            if(c.regions!=null && !c.regions.isEmpty()){
+                ProductDetail d=detailDao.getByProductId(p.getProductID());
+                if(d==null || !c.regions.contains(d.getCuisine())) ok=false;
+                if(d!=null){
+                    if(d.getCalo()>c.maxKcal) ok=false;
+                    if(d.getCookingTimeMinutes()>c.maxTime) ok=false;
+                }
+            }
+            if(ok) productList.add(p);
+        }
+        adapter.notifyDataSetChanged();
     }
 }
