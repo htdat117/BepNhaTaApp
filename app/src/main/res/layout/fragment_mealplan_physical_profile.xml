@@ -171,7 +171,8 @@
                     app:chipStrokeColor="@color/orange"
                     app:chipStrokeWidth="2dp"
                     app:checkedIconVisible="false"
-                    app:checkedIcon="@null"/>
+                    app:checkedIcon="@null"
+                    android:checkable="true"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipFemale"
                     style="@style/Widget.BepNhaTa.ChoiceChip"
@@ -183,7 +184,8 @@
                     app:chipStrokeColor="@color/orange"
                     app:chipStrokeWidth="2dp"
                     app:checkedIconVisible="false"
-                    app:checkedIcon="@null"/>
+                    app:checkedIcon="@null"
+                    android:checkable="true"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipOther"
                     style="@style/Widget.BepNhaTa.ChoiceChip"
@@ -195,7 +197,8 @@
                     app:chipStrokeColor="@color/orange"
                     app:chipStrokeWidth="2dp"
                     app:checkedIconVisible="false"
-                    app:checkedIcon="@null"/>
+                    app:checkedIcon="@null"
+                    android:checkable="true"/>
             </com.google.android.material.chip.ChipGroup>
 
             <!-- Age -->
@@ -261,7 +264,8 @@
                     app:chipStrokeColor="@color/orange"
                     app:chipStrokeWidth="2dp"
                     app:checkedIconVisible="false"
-                    app:checkedIcon="@null"/>
+                    app:checkedIcon="@null"
+                    android:checkable="true"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipThin"
                     style="@style/Widget.BepNhaTa.ChoiceChip"
@@ -273,7 +277,8 @@
                     app:chipStrokeColor="@color/orange"
                     app:chipStrokeWidth="2dp"
                     app:checkedIconVisible="false"
-                    app:checkedIcon="@null"/>
+                    app:checkedIcon="@null"
+                    android:checkable="true"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipNormal"
                     style="@style/Widget.BepNhaTa.ChoiceChip"
@@ -285,7 +290,8 @@
                     app:chipStrokeColor="@color/orange"
                     app:chipStrokeWidth="2dp"
                     app:checkedIconVisible="false"
-                    app:checkedIcon="@null"/>
+                    app:checkedIcon="@null"
+                    android:checkable="true"/>
             </com.google.android.material.chip.ChipGroup>
 
         </LinearLayout>

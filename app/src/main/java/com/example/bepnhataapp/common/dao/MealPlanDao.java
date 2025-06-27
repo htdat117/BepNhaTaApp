@@ -42,6 +42,25 @@ public class MealPlanDao {
         return list;
     }
 
+    public boolean hasMealPlanForCustomer(long customerId) {
+        Cursor cur = helper.getReadableDatabase().rawQuery("SELECT 1 FROM " + DBHelper.TBL_MEAL_PLANS + " WHERE customerID=? LIMIT 1", new String[]{String.valueOf(customerId)});
+        boolean exists = cur.moveToFirst();
+        cur.close();
+        return exists;
+    }
+
+    public List<MealPlan> getTemplates() {
+        List<MealPlan> list = new ArrayList<>();
+        Cursor cur = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_MEAL_PLANS + " WHERE customerID IS NULL", null);
+        if (cur.moveToFirst()) {
+            do {
+                list.add(fromCursor(cur));
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return list;
+    }
+
     private ContentValues toContentValues(MealPlan m) {
         ContentValues v = new ContentValues();
         if (m.getCustomerID() != null) v.put("customerID", m.getCustomerID()); else v.putNull("customerID");

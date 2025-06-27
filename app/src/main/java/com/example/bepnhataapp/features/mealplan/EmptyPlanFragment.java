@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.features.mealplan.data.FakeMealPlanRepository;
 
 public class EmptyPlanFragment extends Fragment {
 

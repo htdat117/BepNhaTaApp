@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.bepnhataapp.features.mealplan.data.MealPlanRepository;
-import com.example.bepnhataapp.features.mealplan.data.WeekPlan;
+import com.example.bepnhataapp.common.repository.MealPlanRepository;
+import com.example.bepnhataapp.common.model.WeekPlan;
 
 import java.time.LocalDate;
 

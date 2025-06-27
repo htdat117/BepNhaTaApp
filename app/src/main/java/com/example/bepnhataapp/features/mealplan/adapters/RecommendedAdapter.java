@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.features.mealplan.adapters;
+package com.example.bepnhataapp.common.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 
 import java.util.List;
@@ -17,11 +18,14 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // ******************** Data model ********************
     public static class RecoItem {
-        public final int imageRes;
+        public final int imageRes; // 0 if using URL
+        public final String imageUrl; // may be null
         public final String title;
         public final int count;
-        public RecoItem(int img, String t) {this(img,t,0);} // default
-        public RecoItem(int img,String t,int c){imageRes=img;title=t;count=c;}
+        public RecoItem(int img, String t){this(img,t,0,null);} // default
+        public RecoItem(int img, String t, int c){this(img,t,c,null);} // img resource
+        public RecoItem(String url,String t,int c){this(0,t,c,url);} // url variant
+        public RecoItem(int img,String t,int c,String url){imageRes=img;title=t;count=c;imageUrl=url;}
     }
 
     private static final int TYPE_HEADER = 0;
@@ -59,7 +63,14 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else if (holder instanceof ItemVH) {
             RecoItem item = (RecoItem) obj;
             ItemVH vh = (ItemVH) holder;
-            vh.img.setImageResource(item.imageRes);
+            if(item.imageUrl!=null && !item.imageUrl.isEmpty()){
+                Glide.with(vh.img.getContext())
+                        .load(item.imageUrl)
+                        .placeholder(item.imageRes!=0?item.imageRes:R.drawable.placeholder_banner_background)
+                        .into(vh.img);
+            }else{
+                vh.img.setImageResource(item.imageRes);
+            }
             vh.tv.setText(item.title);
             if(vh.badge!=null){
                 if(item.count>0){

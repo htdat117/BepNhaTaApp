@@ -9,7 +9,7 @@ import com.example.bepnhataapp.R;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import com.example.bepnhataapp.features.mealplan.data.FakeSavedPlanRepository;
+import com.example.bepnhataapp.common.repository.SavedPlanRepository;
 
 public class LoadMealPlanReviewActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -29,8 +29,8 @@ public class LoadMealPlanReviewActivity extends BaseActivity implements BaseActi
             date = LocalDate.parse(dateStr);
         } catch (DateTimeParseException ignored) {}
 
-        FakeSavedPlanRepository repo = new FakeSavedPlanRepository();
-        FakeSavedPlanRepository.PlanInfo info = repo.getPlan(planName);
+        SavedPlanRepository repo = new SavedPlanRepository();
+        SavedPlanRepository.PlanInfo info = repo.getPlan(planName);
 
         if (info != null) {
             ((TextView) findViewById(R.id.tvDetailTitle)).setText(info.title);

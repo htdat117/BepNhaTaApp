@@ -15,7 +15,7 @@ import com.example.bepnhataapp.R;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bepnhataapp.features.mealplan.adapters.MealTimeAdapter;
+import com.example.bepnhataapp.common.adapter.MealTimeAdapter;
 import java.util.Arrays;
 import java.util.List;
 

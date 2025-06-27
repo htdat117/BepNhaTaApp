@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.features.mealplan.adapters.MealAdapter;
-import com.example.bepnhataapp.features.mealplan.adapters.MealTimeListAdapter;
-import com.example.bepnhataapp.features.mealplan.adapters.WeekAdapter;
+import com.example.bepnhataapp.common.adapter.MealAdapter;
+import com.example.bepnhataapp.common.adapter.MealTimeListAdapter;
+import com.example.bepnhataapp.common.adapter.WeekAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;

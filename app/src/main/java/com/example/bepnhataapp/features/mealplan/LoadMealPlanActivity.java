@@ -11,10 +11,10 @@ import androidx.annotation.NonNull;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
+import com.example.bepnhataapp.common.repository.SavedPlanRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import com.example.bepnhataapp.features.mealplan.data.FakeSavedPlanRepository;
 import java.util.List;
 
 public class LoadMealPlanActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
@@ -69,7 +69,7 @@ public class LoadMealPlanActivity extends BaseActivity implements BaseActivity.O
     }
 
     private void setupSavedPlanSpinner() {
-        FakeSavedPlanRepository repo = new FakeSavedPlanRepository();
+        SavedPlanRepository repo = new SavedPlanRepository();
         List<String> plans = repo.getPlanNames();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, plans);

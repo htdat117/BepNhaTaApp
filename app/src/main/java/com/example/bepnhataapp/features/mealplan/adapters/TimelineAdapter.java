@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.features.mealplan.adapters;
+package com.example.bepnhataapp.common.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

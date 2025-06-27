@@ -16,14 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.features.mealplan.data.FakeMealPlanRepository;
-import com.example.bepnhataapp.features.mealplan.adapters.RecommendedAdapter;
-import com.example.bepnhataapp.features.mealplan.adapters.GridSpacingItemDecoration;
+import com.example.bepnhataapp.common.repository.LocalMealPlanRepository;
+import com.example.bepnhataapp.common.adapter.RecommendedAdapter;
+import com.example.bepnhataapp.common.adapter.GridSpacingItemDecoration;
 import com.example.bepnhataapp.features.mealplan.WeekTimelineFragment;
 import java.time.LocalDate;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import androidx.annotation.NonNull;
 import com.google.android.material.button.MaterialButton;
+import com.example.bepnhataapp.common.dao.MealPlanDao;
+import com.example.bepnhataapp.common.model.MealPlan;
 
 public class MealPlanContentActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -115,38 +117,45 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
         RecyclerView rvReco = findViewById(R.id.rvRecommended);
         java.util.List<Object> recoData = new java.util.ArrayList<>();
         
-        // First category
-        recoData.add("Nhu cầu dinh dưỡng");
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Thực đơn cân bằng dinh dưỡng",7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Bổ máu",7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Giúp làm việc trí não hiệu quả",7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Xây dựng cơ xương",7));
+        java.util.List<MealPlan> templates = new MealPlanDao(this).getTemplates();
 
-        // Second category
-        recoData.add("Bữa tối nhanh chóng cho người bận rộn");
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Bữa ăn 20 phút (thao keo ngon)", 7 ));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Bữa ăn 30 phút (không khóe hoang)", 7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Bữa ăn 40 phút (chế biến đơn giản)", 7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Bữa ăn 15 phút (siêu nhanh)", 7));
+        java.util.Map<String, java.util.List<MealPlan>> byCat = new java.util.LinkedHashMap<>();
+        for (MealPlan mp : templates) {
+            String cat = mp.getMealCategory() != null ? mp.getMealCategory() : "Khác";
+            byCat.computeIfAbsent(cat, k -> new java.util.ArrayList<>()).add(mp);
+        }
 
-        // Third category
-        recoData.add("Thực đơn ăn chay cho ngày rằm");
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Hương Chay 3 Món - 7 Ngày Thanh Lọc", 7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Hương Chay 5 Món - 7 Ngày Thanh Lọc"));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Chay Thanh Đạm - 5 Món Đơn Giản"));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Chay Tinh Khiết - 10 Món Đặc Biệt"));
-
-        // Fourth category
-        recoData.add("Thực đơn cho người tập thể thao");
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Tăng cơ giảm mỡ - 7 ngày", 7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Dinh dưỡng cho runner", 7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Bổ sung protein - 10 món", 7));
-        recoData.add(new RecommendedAdapter.RecoItem(R.drawable.placeholder_banner_background, "Thực đơn tập gym", 7));
-
+        for (java.util.Map.Entry<String, java.util.List<MealPlan>> e : byCat.entrySet()) {
+            recoData.add(e.getKey()); // header
+            for (MealPlan mp : e.getValue()) {
+                int imgRes = R.drawable.placeholder_banner_background;
+                String imgStr = mp.getImageThumb() != null ? mp.getImageThumb().trim() : "";
+                String url = null;
+                if (!imgStr.isEmpty()) {
+                    if (imgStr.startsWith("http")) {
+                        url = imgStr;
+                    } else {
+                        int resId = getResources().getIdentifier(imgStr, "drawable", getPackageName());
+                        if (resId != 0) imgRes = resId;
+                    }
+                }
+                if(url!=null)
+                    recoData.add(new RecommendedAdapter.RecoItem(url, mp.getTitle(), mp.getTotalDays()));
+                else
+                    recoData.add(new RecommendedAdapter.RecoItem(imgRes, mp.getTitle(), mp.getTotalDays()));
+            }
+        }
+        
         RecommendedAdapter recoAdapter = new RecommendedAdapter(recoData);
         
         // Configure GridLayoutManager with proper spacing
-        GridLayoutManager glm = new GridLayoutManager(this, 2);
+        final int spanCount = 2;
+        GridLayoutManager glm = new GridLayoutManager(this, spanCount) {
+            @Override
+            public boolean canScrollVertically() {
+                return false; // allow RecyclerView to expand fully inside ScrollView
+            }
+        };
         glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -161,7 +170,7 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
         
         // Add spacing decoration
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
-        rvReco.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true));
+        rvReco.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacingInPixels, true));
         
         rvReco.setLayoutManager(glm);
         rvReco.setAdapter(recoAdapter);
@@ -253,7 +262,7 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
             @Override
             public <T extends androidx.lifecycle.ViewModel> T create(@NonNull Class<T> modelClass) {
                 //noinspection unchecked
-                return (T) new MealPlanViewModel(new com.example.bepnhataapp.features.mealplan.data.FakeMealPlanRepository());
+                return (T) new MealPlanViewModel(new com.example.bepnhataapp.common.repository.LocalMealPlanRepository(MealPlanContentActivity.this));
             }
         }).get(MealPlanViewModel.class);
         viewModel.getState().observe(this, state -> {
@@ -262,7 +271,7 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
                     .replace(R.id.dayPlanContainer, fragment)
                     .commit();
             
-            // Setup recommended section after fragment is loaded
+            // Setup recommended section after layout pass
             setupRecommendedSectionAfterFragmentLoad();
         });
     }
@@ -271,5 +280,8 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.dayPlanContainer, WeekTimelineFragment.newInstance())
                 .commit();
+
+        // Setup recommended section after layout pass
+        setupRecommendedSectionAfterFragmentLoad();
     }
 } 

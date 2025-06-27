@@ -171,7 +171,37 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else if (itemId == R.id.nav_recipes) {
             targetActivity = com.example.bepnhataapp.features.recipes.RecipesActivity.class;
         } else if (itemId == R.id.nav_meal_plan) {
-            targetActivity = MealPlanActivity.class;
+            // Determine whether user already has a saved meal plan
+            Class<?> defaultMealPlanActivity = MealPlanActivity.class;
+            Class<?> mealPlanContentActivity = com.example.bepnhataapp.features.mealplan.MealPlanContentActivity.class;
+
+            if (SessionManager.isLoggedIn(this)) {
+                String phone = SessionManager.getPhone(this);
+                if (phone != null) {
+                    try {
+                        com.example.bepnhataapp.common.dao.CustomerDao cDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                        com.example.bepnhataapp.common.model.Customer customer = cDao.findByPhone(phone);
+                        if (customer != null) {
+                            com.example.bepnhataapp.common.dao.MealPlanDao mpDao = new com.example.bepnhataapp.common.dao.MealPlanDao(this);
+                            if (mpDao.hasMealPlanForCustomer(customer.getCustomerID())) {
+                                targetActivity = mealPlanContentActivity;
+                            } else {
+                                targetActivity = defaultMealPlanActivity;
+                            }
+                        } else {
+                            targetActivity = defaultMealPlanActivity;
+                        }
+                    } catch (Exception e) {
+                        android.util.Log.e(TAG, "Error checking existing meal plan: " + e.getMessage());
+                        targetActivity = defaultMealPlanActivity;
+                    }
+                } else {
+                    targetActivity = defaultMealPlanActivity;
+                }
+            } else {
+                // Not logged in – still allow user to see the intro/setup screen
+                targetActivity = defaultMealPlanActivity;
+            }
         } else if (itemId == R.id.nav_tools) {
             targetActivity = ToolsActivity.class;
         }
