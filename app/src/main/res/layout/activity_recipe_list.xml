@@ -379,8 +379,4 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-
-    <include layout="@layout/layout_bottom_navigation"
-        android:id="@+id/bottom_navigation_container"/>
-
 </LinearLayout>

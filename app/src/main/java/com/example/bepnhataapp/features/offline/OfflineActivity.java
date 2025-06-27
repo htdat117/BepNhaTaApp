@@ -15,21 +15,10 @@ public class OfflineActivity extends AppCompatActivity {
         Button btnOffline = findViewById(R.id.btnOffline);
         Button btnRetry = findViewById(R.id.btnRetry);
 
-//        btnOffline.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Chuyển sang màn hình nội dung offline
-//                Intent intent = new Intent(OfflineActivity.this, OfflineContentActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        btnRetry.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Reload lại activity
-//                recreate();
-//            }
-//        });
-  }
+        btnOffline.setOnClickListener(v -> {
+            // Chuyển sang màn hình nội dung offline
+            startActivity(new android.content.Intent(OfflineActivity.this, DownloadedContentActivity.class));
+        });
+        btnRetry.setOnClickListener(v -> recreate());
+    }
 } 

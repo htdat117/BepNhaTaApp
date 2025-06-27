@@ -165,12 +165,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         Class<?> targetActivity = null;
 
         if (itemId == R.id.nav_home) {
-            // Quay về Home: tránh tạo task mới để không bị màn hình trắng
             targetActivity = HomeActivity.class;
         } else if (itemId == R.id.nav_ingredients) {
             targetActivity = ProductActivity.class;
         } else if (itemId == R.id.nav_recipes) {
-            targetActivity = RecipesActivity.class;
+            targetActivity = com.example.bepnhataapp.features.recipes.RecipesActivity.class;
         } else if (itemId == R.id.nav_meal_plan) {
             targetActivity = MealPlanActivity.class;
         } else if (itemId == R.id.nav_tools) {
@@ -185,13 +184,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                 try {
                     intent = new Intent(this, targetActivity);
                     if (targetActivity.equals(HomeActivity.class)) {
-                        // Nếu quay về Home, chỉ đưa activity cũ ra trước (nếu có) hoặc tạo mới
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     } else {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     }
                     startActivity(intent);
-                    // Remove default animation to prevent slide-up glitch when switching pages
                     overridePendingTransition(0, 0);
                     Log.d(TAG, "Successfully started activity: " + targetActivity.getSimpleName());
                 } catch (Exception e) {

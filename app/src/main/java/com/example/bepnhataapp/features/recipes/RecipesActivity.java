@@ -1,9 +1,6 @@
 package com.example.bepnhataapp.features.recipes;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.FrameLayout;
-
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import androidx.fragment.app.FragmentManager;
@@ -15,14 +12,17 @@ public class RecipesActivity extends BaseActivity implements BaseActivity.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
-
-        // Tải OfflineRecipesFragment vào content_container
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content_container, new OfflineRecipesFragment());
-        fragmentTransaction.commit();
-
-        // Setup the bottom navigation fragment
+        if (com.example.bepnhataapp.common.utils.NetworkUtils.isNetworkAvailable(this)) {
+            // Replace fragment online
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.content_container, new RecipeListFragment());
+            fragmentTransaction.commit();
+        } else {
+            // Khi mất mạng, chuyển sang OfflineActivity
+            startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.offline.OfflineActivity.class));
+            finish();
+        }
         setupBottomNavigationFragment(R.id.nav_recipes);
     }
 
@@ -33,6 +33,6 @@ public class RecipesActivity extends BaseActivity implements BaseActivity.OnNavi
 
     @Override
     public void onNavigationItemReselected(int itemId) {
-        handleNavigation(itemId);
+        // Không cần xử lý gì ở đây
     }
 }
