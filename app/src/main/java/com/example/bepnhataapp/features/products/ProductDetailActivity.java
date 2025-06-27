@@ -43,7 +43,17 @@ public class ProductDetailActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         Product product = null;
-        if(getIntent().hasExtra("productId")){
+            
+        // Ưu tiên lấy dữ liệu từ Intent
+        if(getIntent().hasExtra("productName")){
+            product = new Product();
+            product.setProductID(getIntent().getLongExtra("productId", -1));
+            product.setProductName(getIntent().getStringExtra("productName"));
+            product.setProductPrice(getIntent().getIntExtra("productPrice", 0));
+            product.setProductThumb(getIntent().getStringExtra("productThumb"));
+            product.setProductDescription(getIntent().getStringExtra("productDescription"));
+            product.setSalePercent(getIntent().getIntExtra("salePercent", 0));
+        } else if(getIntent().hasExtra("productId")){
             long id = getIntent().getLongExtra("productId",-1);
             if(id!=-1){
                 product = new ProductDao(this).getById(id);
