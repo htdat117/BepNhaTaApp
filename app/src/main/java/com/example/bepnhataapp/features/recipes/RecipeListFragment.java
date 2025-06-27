@@ -1,6 +1,7 @@
 package com.example.bepnhataapp.features.recipes;
 
 import android.os.Bundle;
+import android.content.Intent;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import com.example.bepnhataapp.R;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import com.example.bepnhataapp.common.dao.RecipeDao;
+import com.example.bepnhataapp.common.model.RecipeEntity;
 
 public class RecipeListFragment extends Fragment {
 
@@ -30,7 +33,50 @@ public class RecipeListFragment extends Fragment {
         // Khởi tạo RecyclerView và setAdapter
         RecyclerView rvRecipe = view.findViewById(R.id.rvRecipe);
         rvRecipe.setLayoutManager(new LinearLayoutManager(getContext()));
-        RecipeAdapter adapter = new RecipeAdapter(new ArrayList<>(), null); // Truyền list rỗng và listener null
+
+        // Lấy danh sách công thức từ database
+        java.util.List<RecipeEntity> recipeEntities = new RecipeDao(getContext()).getAllRecipes();
+        java.util.List<RecipeItem> recipeItems = new ArrayList<>();
+        for (RecipeEntity entity : recipeEntities) {
+            int imageResId;
+            String imgStr = entity.getImageThumb() != null ? entity.getImageThumb().trim() : "";
+            if (imgStr.isEmpty()) {
+                imageResId = R.drawable.placeholder_banner_background;
+            } else {
+                int resId = getResources().getIdentifier(imgStr, "drawable", getContext().getPackageName());
+                imageResId = resId != 0 ? resId : R.drawable.placeholder_banner_background;
+            }
+            recipeItems.add(new RecipeItem(
+                imageResId,
+                entity.getRecipeName(),
+                "", // calories, nếu có trường calo thì lấy, còn không để rỗng
+                entity.getCategory() != null ? entity.getCategory() : "",
+                "" // time, nếu có trường thời gian thì lấy, còn không để rỗng
+            ));
+        }
+
+        RecipeAdapter adapter = new RecipeAdapter(recipeItems, new RecipeAdapter.OnRecipeActionListener() {
+            @Override
+            public void onView(RecipeItem recipe) {
+                // Tìm recipeId theo tên (nên tốt nhất là truyền id vào RecipeItem)
+                RecipeEntity found = null;
+                for (RecipeEntity entity : recipeEntities) {
+                    if (entity.getRecipeName().equals(recipe.getName())) {
+                        found = entity;
+                        break;
+                    }
+                }
+                if (found != null) {
+                    Intent intent = new Intent(getContext(), RecipeDetailActivity.class);
+                    intent.putExtra("recipeId", found.getRecipeID());
+                    startActivity(intent);
+                }
+            }
+            @Override
+            public void onDelete(RecipeItem recipe) {
+                // Không hỗ trợ xóa ở đây
+            }
+        });
         rvRecipe.setAdapter(adapter);
         return view;
     }
