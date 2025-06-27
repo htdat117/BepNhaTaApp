@@ -22,9 +22,13 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.FoodItemAdapter;
+import com.example.bepnhataapp.common.dao.FoodCaloDao;
+import com.example.bepnhataapp.common.model.FoodCalo;
 
 public class CaloCalculatorFragment extends Fragment {
 
@@ -120,6 +124,23 @@ public class CaloCalculatorFragment extends Fragment {
             startActivityForResult(intent, REQUEST_CODE_CAMERA);
         });
 
+        editTextFoodName.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                String foodName = editTextFoodName.getText().toString().trim();
+                if (!foodName.isEmpty()) {
+                    FoodCaloDao dao = new FoodCaloDao(getContext());
+                    java.util.List<FoodCalo> list = dao.getAll();
+                    String normalizedInput = normalizeText(foodName);
+                    for (FoodCalo f : list) {
+                        if (normalizeText(f.getFoodName()).equals(normalizedInput)) {
+                            Toast.makeText(getContext(), f.getFoodName() + ": " + f.getCaloPerOneHundredGrams() + " calo/100g", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
         return view;
     }
 
@@ -189,13 +210,30 @@ public class CaloCalculatorFragment extends Fragment {
                 return;
             }
 
-            FoodData foodData = foodCaloriesMap.get(foodName);
+            // Tìm trong DB FoodCalo
+            FoodCaloDao dao = new FoodCaloDao(getContext());
+            java.util.List<FoodCalo> list = dao.getAll();
+            String normalizedInput = normalizeText(foodName);
+            FoodCalo found = null;
+            for (FoodCalo f : list) {
+                if (normalizeText(f.getFoodName()).equals(normalizedInput)) {
+                    found = f;
+                    break;
+                }
+            }
 
-            if (foodData == null) {
+            if (found == null) {
                 Toast.makeText(getContext(), "Món ăn chưa có trong danh sách!", Toast.LENGTH_SHORT).show();
             } else {
-                double calories = weight * foodData.caloriesPer100g / 100.0;
-                foodList.add(new FoodItem(foodName, weight, calories, foodData.imageResId));
+                double calories = weight * found.getCaloPerOneHundredGrams() / 100.0;
+                int imgRes = R.drawable.food_placeholder;
+                // Nếu foodThumb là tên file ảnh trong drawable, có thể lấy resource id động
+                if (found.getFoodThumb() != null && !found.getFoodThumb().isEmpty()) {
+                    String imgName = found.getFoodThumb().replace(".png", "").replace(".jpg", "").replace(".jpeg", "");
+                    int resId = getResources().getIdentifier(imgName, "drawable", getContext().getPackageName());
+                    if (resId != 0) imgRes = resId;
+                }
+                foodList.add(new FoodItem(found.getFoodName(), weight, calories, imgRes));
                 adapter.notifyDataSetChanged();
                 calculateTotalCalories();
                 clearInputs();
@@ -244,5 +282,11 @@ public class CaloCalculatorFragment extends Fragment {
         editTextFoodName.setText("");
         editTextWeight.setText("");
         editTextFoodName.requestFocus();
+    }
+
+    private String normalizeText(String input) {
+        String temp = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("").toLowerCase();
     }
 } 
