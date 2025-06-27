@@ -171,24 +171,6 @@
                     android:textColor="@android:color/black"
                     android:layout_marginBottom="6dp"/>
 
-                <TextView
-                    android:id="@+id/tvRecipeCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Category"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/tvRecipeCaloTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calo và Time"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="8dp" />
-
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"

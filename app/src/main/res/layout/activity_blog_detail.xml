@@ -19,7 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="12dp"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_back_arrow"
             android:contentDescription="Quay lại" />
 
         <TextView
@@ -63,8 +63,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh"
-                android:textStyle="bold"
-                android:textSize="20sp"
+                android:textColor="@color/dark1"
+                style="@style/Header.Ag3"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="8dp"
                 android:paddingStart="16dp"
@@ -124,6 +124,7 @@
             <TextView
                 android:text="Bình luận (20)"
                 android:textStyle="bold"
+                android:textColor="@color/dark1"
                 android:textSize="16sp"
                 android:layout_marginTop="24dp"
                 android:layout_width="wrap_content"
@@ -176,6 +177,7 @@
                     android:text="Có thể bạn sẽ thích"
                     android:textStyle="bold"
                     android:textSize="16sp"
+                    android:textColor="@color/dark1"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:layout_marginBottom="8dp"/>

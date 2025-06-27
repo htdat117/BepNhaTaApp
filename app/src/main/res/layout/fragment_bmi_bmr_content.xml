@@ -18,6 +18,7 @@
             android:text="Giới tính"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:textColor="@color/dark1"
             android:layout_marginBottom="8dp"/>
 
         <RadioGroup
@@ -31,6 +32,7 @@
                 android:id="@+id/radioMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/dark1"
                 android:text="Nam"
                 android:checked="true"
                 android:layout_marginEnd="16dp"/>
@@ -38,6 +40,7 @@
             <RadioButton
                 android:id="@+id/radioFemale"
                 android:layout_width="wrap_content"
+                android:textColor="@color/dark1"
                 android:layout_height="wrap_content"
                 android:text="Nữ"/>
         </RadioGroup>
@@ -49,6 +52,7 @@
             android:text="Tuổi"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:textColor="@color/dark1"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -65,6 +69,7 @@
             android:text="Chiều cao"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:textColor="@color/dark1"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -81,6 +86,7 @@
             android:text="Cân nặng"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:textColor="@color/dark1"
             android:layout_marginBottom="8dp"/>
 
         <EditText

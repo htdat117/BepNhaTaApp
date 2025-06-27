@@ -13,7 +13,7 @@
 
         <ImageView
             android:id="@+id/imgThumb"
-            android:layout_width="60dp"
+            android:layout_width="88dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
             android:src="@drawable/blog"/>
@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh"
                 style="@style/Body.Medium.Ag2"
+                android:textColor="@color/dark1"
                 android:maxLines="2"
                 android:ellipsize="end"/>
             <LinearLayout
@@ -44,15 +45,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Mẹo hay - Nấu chuẩn"
-                    android:textColor="#6F6F6F"
-                    android:textSize="13sp"
-                    android:layout_marginTop="2dp"/>
+                    style="@style/Body.Medium.Ag3"
+                    android:textColor="@color/dark2"/>
 
                 <ImageView
-                    android:id="@+id/ivFavorite"
+                    android:id="@+id/imgFavorite"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_love"
+                    android:src="@drawable/ic_like"
                     android:layout_gravity="center_vertical"/>
             </LinearLayout>
         </LinearLayout>

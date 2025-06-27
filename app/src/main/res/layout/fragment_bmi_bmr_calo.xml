@@ -6,6 +6,10 @@
     android:orientation="vertical"
     android:background="#FFFFFF">
 
+    <include layout="@layout/layout_custom_header"
+        android:id="@+id/custom_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <!-- Thanh chuyển đổi BMI/BMR vs Calo -->
     <FrameLayout
         android:id="@+id/tabContainer"
@@ -50,5 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
 
 </LinearLayout> 
