@@ -1,5 +1,7 @@
 package com.example.bepnhataapp.features.home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
 import com.bumptech.glide.Glide;
+import com.example.bepnhataapp.common.model.Product;
 
 import java.util.List;
 
 public class HotIngredientAdapter extends RecyclerView.Adapter<HotIngredientAdapter.HotIngredientViewHolder> {
 
-    private List<HotIngredient> hotIngredientList;
+    private List<Product> productList;
 
-    public HotIngredientAdapter(List<HotIngredient> hotIngredientList) {
-        this.hotIngredientList = hotIngredientList;
+    public HotIngredientAdapter(List<Product> productList) {
+        this.productList = productList;
     }
 
     @NonNull
@@ -32,8 +35,8 @@ public class HotIngredientAdapter extends RecyclerView.Adapter<HotIngredientAdap
 
     @Override
     public void onBindViewHolder(@NonNull HotIngredientViewHolder holder, int position) {
-        HotIngredient hotIngredient = hotIngredientList.get(position);
-        String img = hotIngredient.getImageUrl();
+        Product product = productList.get(position);
+        String img = product.getProductThumb();
         Object source;
         if (img == null || img.isEmpty()) {
             source = R.drawable.placeholder_banner_background;
@@ -50,14 +53,21 @@ public class HotIngredientAdapter extends RecyclerView.Adapter<HotIngredientAdap
                 .placeholder(R.drawable.placeholder_banner_background)
                 .error(R.drawable.placeholder_banner_background)
                 .into(holder.itemImage);
-        holder.itemTitle.setText(hotIngredient.getTitle());
-        holder.itemPrice.setText(hotIngredient.getPrice());
-        // You can set click listeners for the button here if needed
+        holder.itemTitle.setText(product.getProductName());
+        holder.itemPrice.setText(String.format("%,dđ", product.getProductPrice()).replace(',', '.'));
+
+        holder.itemView.setOnClickListener(v -> {
+            Context context = holder.itemView.getContext();
+            Intent intent = new Intent(context, com.example.bepnhataapp.features.products.ProductDetailActivity.class);
+            intent.putExtra("productId", product.getProductID());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return hotIngredientList.size();
+        return productList.size();
     }
 
     static class HotIngredientViewHolder extends RecyclerView.ViewHolder {

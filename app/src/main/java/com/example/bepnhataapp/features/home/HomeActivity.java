@@ -25,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import com.example.bepnhataapp.common.dao.ProductDao;
+import com.example.bepnhataapp.common.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -240,10 +241,9 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
 
             ProductDao productDao = new ProductDao(this);
             List<com.example.bepnhataapp.common.model.Product> products = productDao.getHotProducts(4);
-            final List<HotIngredient> list = new ArrayList<>();
+            final List<Product> list = new ArrayList<>();
             for (com.example.bepnhataapp.common.model.Product p : products) {
-                String priceStr = String.format("%,dđ", p.getProductPrice()).replace(',', '.');
-                list.add(new HotIngredient(p.getProductThumb() != null ? p.getProductThumb().trim() : "", p.getProductName(), priceStr));
+                list.add(p);
             }
 
             runOnUiThread(() -> {

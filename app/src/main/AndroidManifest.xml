@@ -220,6 +220,9 @@
         <activity
             android:name=".features.login.AccountInfoActivity"
             android:exported="false" />
+        <activity
+            android:name=".features.recipes.RecipeDetailActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

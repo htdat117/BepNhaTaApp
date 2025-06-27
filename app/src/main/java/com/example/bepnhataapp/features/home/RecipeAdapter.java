@@ -1,5 +1,6 @@
 package com.example.bepnhataapp.features.home;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.favoriteIcon.setOnClickListener(v -> {
             recipe.setFavorite(!recipe.isFavorite());
             notifyItemChanged(position);
+        });
+        holder.itemView.setOnClickListener(v -> {
+            android.content.Context context = holder.itemView.getContext();
+            Intent intent = new Intent(context, com.example.bepnhataapp.features.recipes.RecipeDetailActivity.class);
+            intent.putExtra("recipeName", recipe.getName());
+            context.startActivity(intent);
         });
     }
 

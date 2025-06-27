@@ -23,18 +23,30 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
 
         int recipeId = getIntent().getIntExtra("recipeId", -1);
         if (recipeId == -1) {
+            String recipeName = getIntent().getStringExtra("recipeName");
+            if (recipeName != null) {
+                RecipeEntity entityByName = new RecipeDao(this).getAllRecipes().stream()
+                    .filter(r -> recipeName.equals(r.getRecipeName()))
+                    .findFirst()
+                    .orElse(null);
+                if (entityByName != null) {
+                    recipeId = entityByName.getRecipeID();
+                }
+            }
+        }
+        if (recipeId == -1) {
             finish();
             return;
         }
 
-        ImageView img = findViewById(R.id.imgRecipe);
-        TextView tvName = findViewById(R.id.tvRecipeName);
+        ImageView img = findViewById(R.id.imvRecipe);
+        TextView tvName = findViewById(R.id.txtName);
         TextView tvCategory = findViewById(R.id.tvRecipeCategory);
         TextView tvCaloTime = findViewById(R.id.tvRecipeCaloTime);
 
-        // Load recipe entity
+        final int finalRecipeId = recipeId;
         RecipeEntity entity = new RecipeDao(this).getAllRecipes().stream()
-                .filter(r -> r.getRecipeID() == recipeId)
+                .filter(r -> r.getRecipeID() == finalRecipeId)
                 .findFirst()
                 .orElse(null);
         if (entity != null) {
