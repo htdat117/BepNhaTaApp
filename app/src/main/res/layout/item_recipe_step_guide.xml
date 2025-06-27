@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp">
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bước 1: Chuẩn bị nước dùng"
+            android:textSize="@dimen/body1"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Cho xương heo vào nồi, đổ khoảng 1.5-2 lít nước, thêm một ít muối, và đường phèn để nước dùng đậm đà hơn, để đun sôi rồi hạ lửa nhỏ, ninh trong khoảng 45-60 phút để lấy nước dùng. Khi ninh, nhớ vớt bọt để nước dùng trong và ngọt hơn.\n• Luộc cua trong nước sôi khoảng 10-15 phút, sau đó lấy thịt cua ra khỏi vỏ, giữ lại nước luộc cua và cho vào nồi nước dùng. Cua sẽ làm nước dùng thêm ngọt và thơm."
+            android:textSize="@dimen/body2"
+            android:justificationMode="inter_word"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"/>
+
+        <ImageView
+            android:id="@+id/imvStep"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:src="@drawable/img_cua"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
