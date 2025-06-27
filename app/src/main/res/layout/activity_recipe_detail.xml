@@ -576,10 +576,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcIngredient"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingVertical="8dp">
-            </androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -658,10 +656,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcComment"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingVertical="8dp">
-            </androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -674,10 +670,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecommend"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingVertical="8dp">
-            </androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"/>
 
             <View
                 android:layout_width="match_parent"

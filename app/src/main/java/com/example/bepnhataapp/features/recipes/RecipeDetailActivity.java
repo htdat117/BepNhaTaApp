@@ -27,8 +27,8 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
             return;
         }
 
-        ImageView img = findViewById(R.id.imgRecipe);
-        TextView tvName = findViewById(R.id.tvRecipeName);
+        ImageView img = findViewById(R.id.imvRecipe);
+        TextView tvName = findViewById(R.id.txtName);
         TextView tvCategory = findViewById(R.id.tvRecipeCategory);
         TextView tvCaloTime = findViewById(R.id.tvRecipeCaloTime);
 
