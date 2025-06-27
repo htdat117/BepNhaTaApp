@@ -573,6 +573,14 @@
                 android:textStyle="bold"
                 android:paddingVertical="8dp"/>
 
+            <LinearLayout
+                android:id="@+id/layoutIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="8dp"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcIngredient"
                 android:layout_width="match_parent"
@@ -673,29 +681,7 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="8dp"/>
 
-            <!-- Added for displaying recipe category -->
-            <TextView
-                android:id="@+id/tvRecipeCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:textColor="@color/dark2"
-                android:textSize="@dimen/body2"
-                android:layout_marginBottom="4dp"/>
 
-            <!-- Added for displaying calorie and time information -->
-            <TextView
-                android:id="@+id/tvRecipeCaloTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 Kcal • 0 Min"
-                android:textColor="@color/dark2"
-                android:textSize="@dimen/body2"
-                android:layout_marginBottom="8dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="50dp"/>
         </LinearLayout>
     </ScrollView>
 
