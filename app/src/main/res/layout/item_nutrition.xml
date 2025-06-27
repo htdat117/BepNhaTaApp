@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/bg_card_round_ingredient"
+    android:padding="10dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="8dp">
+
+    <ImageView
+        android:id="@+id/ivNutritionIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_nutrition"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/tvNutritionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Carbs"
+        android:textColor="@color/dark1"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="6dp"/>
+
+    <TextView
+        android:id="@+id/tvNutritionValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15g carbs"
+        android:textColor="@color/dark1"
+        android:textSize="13sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="2dp"/>
+
+</LinearLayout> 
