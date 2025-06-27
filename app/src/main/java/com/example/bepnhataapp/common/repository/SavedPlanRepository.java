@@ -1,11 +1,8 @@
-package com.example.bepnhataapp.features.mealplan.data;
+package com.example.bepnhataapp.common.repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class FakeSavedPlanRepository {
+public class SavedPlanRepository {
 
     public static class PlanInfo {
         public final String title;
@@ -13,7 +10,7 @@ public class FakeSavedPlanRepository {
         public final int dayCount;
         public final int avgCal;
         public final int avgCarbs;
-        public final int avgFat; // use int grams for simplicity
+        public final int avgFat; // grams
         public final int avgProtein;
 
         public PlanInfo(String title, String description, int dayCount, int avgCal, int avgCarbs, int avgFat, int avgProtein) {

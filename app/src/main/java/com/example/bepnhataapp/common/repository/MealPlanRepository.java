@@ -1,5 +1,6 @@
-package com.example.bepnhataapp.features.mealplan.data;
+package com.example.bepnhataapp.common.repository;
 
+import com.example.bepnhataapp.common.model.WeekPlan;
 import java.time.LocalDate;
 
 public interface MealPlanRepository {
