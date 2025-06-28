@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 
 import java.util.List;
@@ -37,8 +38,26 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         RecipeItem currentItem = recipeList.get(position);
-        // Ảnh món ăn
-        holder.imvRecipe.setImageResource(currentItem.getImageResId());
+        // Load ảnh món ăn
+        if (currentItem.getImageData() != null && currentItem.getImageData().length > 0) {
+            Glide.with(holder.imvRecipe.getContext())
+                .load(currentItem.getImageData())
+                .placeholder(R.drawable.placeholder_banner_background)
+                .into(holder.imvRecipe);
+        } else if (currentItem.getImageUrl() != null && !currentItem.getImageUrl().isEmpty()) {
+            String url = currentItem.getImageUrl();
+            if (url.startsWith("http")) {
+                Glide.with(holder.imvRecipe.getContext())
+                    .load(url)
+                    .placeholder(R.drawable.placeholder_banner_background)
+                    .into(holder.imvRecipe);
+            } else {
+                int resId = holder.imvRecipe.getContext().getResources().getIdentifier(url, "drawable", holder.imvRecipe.getContext().getPackageName());
+                holder.imvRecipe.setImageResource(resId != 0 ? resId : R.drawable.placeholder_banner_background);
+            }
+        } else {
+            holder.imvRecipe.setImageResource(currentItem.getImageResId());
+        }
         // Tên món
         holder.txtName.setText(currentItem.getName());
         // Thời gian nấu

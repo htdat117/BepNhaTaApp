@@ -38,20 +38,25 @@ public class RecipeListFragment extends Fragment {
         java.util.List<RecipeEntity> recipeEntities = new RecipeDao(getContext()).getAllRecipes();
         java.util.List<RecipeItem> recipeItems = new ArrayList<>();
         for (RecipeEntity entity : recipeEntities) {
-            int imageResId;
             String imgStr = entity.getImageThumb() != null ? entity.getImageThumb().trim() : "";
-            if (imgStr.isEmpty()) {
-                imageResId = R.drawable.placeholder_banner_background;
-            } else {
+            byte[] imgData = null;
+            try {
+                java.lang.reflect.Method m = entity.getClass().getMethod("getImage");
+                imgData = (byte[]) m.invoke(entity);
+            } catch (Exception e) { /* ignore nếu không có */ }
+            int imageResId = R.drawable.placeholder_banner_background;
+            if (!imgStr.isEmpty()) {
                 int resId = getResources().getIdentifier(imgStr, "drawable", getContext().getPackageName());
-                imageResId = resId != 0 ? resId : R.drawable.placeholder_banner_background;
+                if (resId != 0) imageResId = resId;
             }
             recipeItems.add(new RecipeItem(
                 imageResId,
+                imgStr,
+                imgData,
                 entity.getRecipeName(),
-                "", // calories, nếu có trường calo thì lấy, còn không để rỗng
+                "", // calories
                 entity.getCategory() != null ? entity.getCategory() : "",
-                "" // time, nếu có trường thời gian thì lấy, còn không để rỗng
+                "" // time
             ));
         }
 
