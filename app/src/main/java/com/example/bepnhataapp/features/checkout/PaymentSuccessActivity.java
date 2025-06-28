@@ -2,26 +2,54 @@ package com.example.bepnhataapp.features.checkout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.base.BaseActivity;
 import com.example.bepnhataapp.features.home.HomeActivity;
 
-public class PaymentSuccessActivity extends AppCompatActivity {
-    @Override protected void onCreate(@Nullable Bundle savedInstanceState){
+/**
+ * Hiển thị màn hình thông báo đặt hàng thành công.
+ * Header và footer được xử lý bởi {@link BaseActivity} để bảo đảm đồng bộ khắp ứng dụng.
+ */
+public class PaymentSuccessActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_success);
-        // header title
-        ((android.widget.TextView)findViewById(R.id.tv_login)).setText("Hồ Tiến Đạt"); // demo
-        findViewById(R.id.btnTrackOrder).setOnClickListener(v->{
-            // TODO open order tracking
+
+        // Gắn BottomNavigationFragment và highlight tab "Trang chủ" mặc định
+        setupBottomNavigationFragment(R.id.nav_home);
+
+        // Theo dõi đơn hàng
+        findViewById(R.id.btnTrackOrder).setOnClickListener(v -> {
+            Intent it = new Intent(PaymentSuccessActivity.this, com.example.bepnhataapp.features.manage_order.keep_track_order.class);
+            // Truyền kèm orderId nếu có
+            if (getIntent() != null && getIntent().hasExtra("order_id")) {
+                it.putExtra("orderId", getIntent().getLongExtra("order_id", -1));
+            }
+            startActivity(it);
+            // Không finish – cho phép người dùng quay lại màn hình này nếu cần
         });
-        findViewById(R.id.btnGoHome).setOnClickListener(v->{
-            Intent i=new Intent(this, HomeActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Về trang chủ
+        findViewById(R.id.btnGoHome).setOnClickListener(v -> {
+            Intent i = new Intent(PaymentSuccessActivity.this, HomeActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(i);
             finish();
         });
+    }
+
+    @Override
+    protected int getBottomNavigationContainerId() {
+        return R.id.bottom_navigation_container;
+    }
+
+    @Override
+    public void onNavigationItemReselected(int itemId) {
+        // Sử dụng logic điều hướng chung trong BaseActivity
+        handleNavigation(itemId);
     }
 } 

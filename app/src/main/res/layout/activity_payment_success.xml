@@ -69,6 +69,8 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- bottom navigation -->
-    <include layout="@layout/layout_bottom_navigation"/>
+    <!-- Bottom Navigation Bar -->
+    <include
+        android:id="@+id/bottom_navigation_container"
+        layout="@layout/layout_bottom_navigation" />
 </LinearLayout> 
