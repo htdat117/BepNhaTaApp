@@ -49,10 +49,12 @@ public class ShippingInfoActivity extends AppCompatActivity {
                 ((EditText) findViewById(R.id.edtCity)).setText(editingAddr.getProvince());
                 ((EditText) findViewById(R.id.edtDistrict)).setText(editingAddr.getDistrict());
                 ((EditText) findViewById(R.id.edtAddress)).setText(editingAddr.getAddressLine());
-                ((EditText) findViewById(R.id.edtEmail)).setText(editingAddr.getNote()!=null?editingAddr.getNote():"");
+                ((EditText) findViewById(R.id.edtNote)).setText(editingAddr.getNote()!=null?editingAddr.getNote():"");
                 if(cbDefault!=null) cbDefault.setChecked(editingAddr.isDefault());
             }
         }
+
+        if(!SessionManager.isLoggedIn(this) && cbDefault!=null) cbDefault.setVisibility(View.GONE);
 
         Address finalEditingAddr = editingAddr; // need effectively final for lambda
 
@@ -62,7 +64,7 @@ public class ShippingInfoActivity extends AppCompatActivity {
             String city = ((EditText) findViewById(R.id.edtCity)).getText().toString().trim();
             String district = ((EditText) findViewById(R.id.edtDistrict)).getText().toString().trim();
             String addressLine = ((EditText) findViewById(R.id.edtAddress)).getText().toString().trim();
-            String noteStr = ((EditText) findViewById(R.id.edtEmail)).getText().toString().trim();
+            String noteStr = ((EditText) findViewById(R.id.edtNote)).getText().toString().trim();
             boolean isDefaultChecked = cbDefault!=null && cbDefault.isChecked();
 
             if (name.isEmpty() || phone.isEmpty() || city.isEmpty() || addressLine.isEmpty()) {
@@ -141,8 +143,15 @@ public class ShippingInfoActivity extends AppCompatActivity {
 
         // Delete button (visible only when editing existing address)
         android.widget.Button btnDelete = findViewById(R.id.btnDelete);
-        if(finalEditingAddr==null){
+        if(finalEditingAddr==null || (finalEditingAddr!=null && finalEditingAddr.getCustomerID()==0)){
             if(btnDelete!=null) btnDelete.setVisibility(View.GONE);
+            View spacer = findViewById(R.id.spacerDelete);
+            if(spacer!=null) spacer.setVisibility(View.GONE);
+            android.widget.Button btnSubmit = findViewById(R.id.btnSubmit);
+            if(btnSubmit!=null){
+                if(finalEditingAddr==null) btnSubmit.setText("Đồng ý");
+                else btnSubmit.setText("Lưu");
+            }
         }else{
             if(btnDelete!=null){
                 btnDelete.setOnClickListener(v->{

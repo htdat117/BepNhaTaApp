@@ -34,7 +34,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private TextView tvShipName, tvShipPhone, tvShipLabel;
     private View layoutNamePhone;
     private com.example.bepnhataapp.common.models.AddressItem currentAddress;
-    private String currentEmail="";
+    private String currentShipNote="";
     private int selectedPaymentIdx = -1; // 0 COD,1 VCB
     private int goodsTotalOld=0, shippingFee=0, discount=0, grandTotal=0;
 
@@ -105,7 +105,7 @@ public class CheckoutActivity extends AppCompatActivity {
             com.example.bepnhataapp.common.model.Address def = new com.example.bepnhataapp.common.dao.AddressDao(this).getDefault(getCurrentCustomerId());
             if(def!=null){
                 currentAddress = new com.example.bepnhataapp.common.models.AddressItem(def.getAddressID(),def.getReceiverName(),def.getPhone(),def.getAddressLine()+", "+def.getDistrict()+", "+def.getProvince(),def.isDefault());
-                currentEmail = def.getNote();
+                currentShipNote = def.getNote();
             }
         }
 
@@ -199,7 +199,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     it.putExtra("name", currentAddress.getName());
                     it.putExtra("phone", currentAddress.getPhone());
                     it.putExtra("address", currentAddress.getAddress());
-                    if(currentEmail!=null) it.putExtra("email", currentEmail);
+                    if(currentShipNote!=null && !currentShipNote.trim().isEmpty()) it.putExtra("email", currentShipNote);
                     if(!noteStr.isEmpty()) it.putExtra("note", noteStr);
                 }
                 it.putExtra("goods_total_old", goodsTotalOld);
@@ -249,7 +249,9 @@ public class CheckoutActivity extends AppCompatActivity {
             com.example.bepnhataapp.common.models.AddressItem addr = (com.example.bepnhataapp.common.models.AddressItem) data.getSerializableExtra("selected_address");
             if(addr!=null){
                 currentAddress = addr;
-                currentEmail = data.getStringExtra("selected_email");
+                String tmpNote = data.getStringExtra("selected_note");
+                if(tmpNote==null) tmpNote = data.getStringExtra("selected_email");
+                currentShipNote = tmpNote;
                 if(tvShipLabel!=null) tvShipLabel.setVisibility(View.VISIBLE);
                 if(layoutNamePhone!=null) layoutNamePhone.setVisibility(View.VISIBLE);
                 if(tvShipName!=null) tvShipName.setText(addr.getName());

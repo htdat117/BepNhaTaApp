@@ -53,7 +53,17 @@ public final class CartHelper {
             }
         }
         if(existing==null){
-            detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, 1));
+            try{
+                helper(ctx).getWritableDatabase().execSQL("ALTER TABLE "+ com.example.bepnhataapp.common.databases.DBHelper.TBL_CART_DETAILS +" ADD COLUMN servingFactor INTEGER DEFAULT 1");
+            }catch(Exception ignored){}
+            // Re-open DAO to make sure SQLite re-parses the just-altered schema
+            detailDao = new CartDetailDao(ctx);
+            try{
+                detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, 1));
+            }catch(Exception inner){
+                // If it still fails, bubble up so that we can notice & fix
+                throw inner;
+            }
         }else{
             existing.setQuantity(existing.getQuantity()+1);
             detailDao.update(existing);
@@ -109,5 +119,9 @@ public final class CartHelper {
         CustomerDao dao = new CustomerDao(ctx);
         Customer c = dao.findByPhone(phone);
         return c != null ? c.getCustomerID() : 0;
+    }
+
+    private static com.example.bepnhataapp.common.databases.DBHelper helper(Context ctx){
+        return new com.example.bepnhataapp.common.databases.DBHelper(ctx);
     }
 } 
