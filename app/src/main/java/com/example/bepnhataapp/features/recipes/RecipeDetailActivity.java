@@ -8,6 +8,9 @@ import android.widget.Toast;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
@@ -18,13 +21,16 @@ import com.example.bepnhataapp.common.dao.RecipeDetailDao;
 import com.example.bepnhataapp.common.dao.RecipeDownloadDao;
 import com.example.bepnhataapp.common.dao.RecipeIngredientDao;
 import com.example.bepnhataapp.common.dao.IngredientDao;
+import com.example.bepnhataapp.common.dao.InstructionRecipeDao;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.RecipeDetail;
 import com.example.bepnhataapp.common.model.RecipeEntity;
 import com.example.bepnhataapp.common.model.RecipeDownload;
 import com.example.bepnhataapp.common.model.RecipeIngredient;
 import com.example.bepnhataapp.common.model.Ingredient;
+import com.example.bepnhataapp.common.model.InstructionRecipe;
 import com.example.bepnhataapp.common.utils.SessionManager;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +43,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        int recipeId = getIntent().getIntExtra("recipeId", -1);
+        long recipeId = getIntent().hasExtra("recipeId") ? getIntent().getLongExtra("recipeId", -1) : getIntent().getIntExtra("recipeId", -1);
         if (recipeId == -1) {
             finish();
             return;
@@ -114,14 +120,28 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
 
         // Hiển thị nguyên liệu
         LinearLayout layoutIngredients = findViewById(R.id.layoutIngredients);
-        RecipeIngredientDao ingredientDao = new RecipeIngredientDao(this);
-        java.util.List<RecipeIngredient> ingredients = ingredientDao.getByRecipeID(recipeId);
-        IngredientDao ingDao = new IngredientDao(this);
-        layoutIngredients.removeAllViews();
-        for (RecipeIngredient ing : ingredients) {
-            Ingredient ingEntity = ingDao.getById(ing.getIngredientID());
-            addIngredient(layoutIngredients, ingEntity, ing.getQuantity());
-        }
+        RecyclerView rcStepGuide = findViewById(R.id.rcStepGuide);
+        MaterialButtonToggleGroup toggleGroupTab = findViewById(R.id.toggleGroupTab);
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        RecipeDetailPagerAdapter pagerAdapter = new RecipeDetailPagerAdapter(this, recipeId);
+        viewPager.setAdapter(pagerAdapter);
+        // Đồng bộ tab và page
+        toggleGroupTab.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == R.id.btnTabIngredient) {
+                    viewPager.setCurrentItem(0);
+                } else if (checkedId == R.id.btnTabGuide) {
+                    viewPager.setCurrentItem(1);
+                }
+            }
+        });
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) toggleGroupTab.check(R.id.btnTabIngredient);
+                else toggleGroupTab.check(R.id.btnTabGuide);
+            }
+        });
 
         // bottom nav
         setupBottomNavigationFragment(R.id.nav_recipes);

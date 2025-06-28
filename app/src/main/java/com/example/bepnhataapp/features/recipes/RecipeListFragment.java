@@ -73,7 +73,7 @@ public class RecipeListFragment extends Fragment {
                 }
                 if (found != null) {
                     Intent intent = new Intent(getContext(), RecipeDetailActivity.class);
-                    intent.putExtra("recipeId", found.getRecipeID());
+                    intent.putExtra("recipeId", (long) found.getRecipeID());
                     startActivity(intent);
                 }
             }
