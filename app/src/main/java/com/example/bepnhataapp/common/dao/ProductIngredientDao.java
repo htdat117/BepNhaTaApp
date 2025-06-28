@@ -22,7 +22,11 @@ public class ProductIngredientDao {
         ProductIngredient pi = new ProductIngredient();
         pi.setProductID(c.getLong(c.getColumnIndexOrThrow("productID")));
         pi.setIngredientID(c.getLong(c.getColumnIndexOrThrow("ingredientID")));
-        pi.setQuantity(c.getInt(c.getColumnIndexOrThrow("quantity")));
+        int idxQ2 = c.getColumnIndex("quantity2");
+        if (idxQ2 == -1) idxQ2 = c.getColumnIndex("quantity");
+        if (idxQ2 != -1) pi.setQuantity2(c.getInt(idxQ2));
+        int idxQ4 = c.getColumnIndex("quantity4");
+        if (idxQ4 != -1) pi.setQuantity4(c.getInt(idxQ4));
         return pi;
     }
 
@@ -65,7 +69,8 @@ public class ProductIngredientDao {
         ContentValues cv = new ContentValues();
         cv.put("productID", pi.getProductID());
         cv.put("ingredientID", pi.getIngredientID());
-        cv.put("quantity", pi.getQuantity());
+        cv.put("quantity2", pi.getQuantity2());
+        cv.put("quantity4", pi.getQuantity4());
         return cv;
     }
 }
