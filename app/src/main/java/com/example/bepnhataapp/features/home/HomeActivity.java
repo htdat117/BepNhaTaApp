@@ -26,6 +26,8 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import com.example.bepnhataapp.common.dao.ProductDao;
 import com.example.bepnhataapp.common.model.Product;
+import android.widget.ImageView;
+import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +108,14 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         if (xemTatCaCookingTips != null) {
             xemTatCaCookingTips.setOnClickListener(v -> {
                 startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.blog.BlogActivity.class));
+            });
+        }
+
+        // Thêm sự kiện click cho banner lên thực đơn
+        ImageView banner = findViewById(R.id.home_banner);
+        if (banner != null) {
+            banner.setOnClickListener(v -> {
+                startActivity(new Intent(this, com.example.bepnhataapp.features.mealplan.MealPlanActivity.class));
             });
         }
     }

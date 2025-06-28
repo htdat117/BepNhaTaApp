@@ -27,16 +27,25 @@ public class MealPlanViewModel extends ViewModel {
     public LiveData<State> getState() { return state; }
 
     public void refresh() {
-        state.postValue(new State(repository.hasPlan() ? repository.getWeekPlan() : null));
+        state.setValue(new State(repository.hasPlan() ? repository.getWeekPlan() : null));
     }
 
     public void autoGenerate() {
-        repository.generateWeekPlan(LocalDate.now());
+        autoGenerateFor(LocalDate.now());
+    }
+
+    public void autoGenerateFor(java.time.LocalDate date){
+        repository.generateWeekPlan(date);
         refresh();
     }
 
     public void generateEmpty() {
         repository.generateEmptyWeekPlan(LocalDate.now());
+        refresh();
+    }
+
+    public void deletePlanForDate(LocalDate date) {
+        repository.deletePlanForDate(date);
         refresh();
     }
 } 

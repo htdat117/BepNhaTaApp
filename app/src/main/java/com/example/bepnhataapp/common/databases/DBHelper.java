@@ -470,8 +470,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Schema is already included in the pre-populated database copied from assets.
-        // No table-creation statements are necessary here.
+        db.execSQL(SQL_CREATE_MEAL_PLAN);
+        db.execSQL(SQL_CREATE_MEAL_DAY);
+        db.execSQL(SQL_CREATE_MEAL_TIME);
+        db.execSQL(SQL_CREATE_MEAL_RECIPE);
+        db.execSQL(SQL_CREATE_CUSTOMER_HEALTH);
     }
 
     @Override

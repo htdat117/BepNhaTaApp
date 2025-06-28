@@ -15,6 +15,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.features.mealplan.MealPlanWizardActivity;
+import android.content.res.ColorStateList;
+import androidx.core.content.ContextCompat;
+import com.google.android.material.button.MaterialButton;
 
 public class StepGeneralGoalFragment extends Fragment {
 
@@ -23,6 +26,12 @@ public class StepGeneralGoalFragment extends Fragment {
     private FrameLayout goalContentContainer;
     private View generalGoalView;
     private View specificGoalView;
+
+    // Buttons inside General Goal content
+    private MaterialButton btnLoseWeight;
+    private MaterialButton btnMaintainWeight;
+    private MaterialButton btnGainMuscle;
+    private MaterialButton selectedGoalButton;
 
     @Nullable
     @Override
@@ -86,6 +95,20 @@ public class StepGeneralGoalFragment extends Fragment {
         generalGoalView = inflater.inflate(R.layout.fragment_mealplan_general_goal_content, goalContentContainer, false);
         specificGoalView = inflater.inflate(R.layout.fragment_mealplan_specific_goal, goalContentContainer, false);
 
+        // Lấy reference tới 3 button mục tiêu chung
+        btnLoseWeight = generalGoalView.findViewById(R.id.btnLoseWeight);
+        btnMaintainWeight = generalGoalView.findViewById(R.id.btnMaintainWeight);
+        btnGainMuscle = generalGoalView.findViewById(R.id.btnGainMuscle);
+
+        View.OnClickListener goalClickListener = v -> {
+            if (v instanceof MaterialButton) {
+                selectGoal((MaterialButton) v);
+            }
+        };
+        btnLoseWeight.setOnClickListener(goalClickListener);
+        btnMaintainWeight.setOnClickListener(goalClickListener);
+        btnGainMuscle.setOnClickListener(goalClickListener);
+
         // Mặc định: btnGeneralGoalTab được chọn, btnSpecificGoalTab không chọn
         btnGeneralGoalTab.setSelected(true);
         btnSpecificGoalTab.setSelected(false);
@@ -125,5 +148,28 @@ public class StepGeneralGoalFragment extends Fragment {
 
     private void showSpecificGoal() {
         // Implementation of showing specific goal
+    }
+
+    private void selectGoal(MaterialButton button) {
+        // Cập nhật trạng thái đã chọn cho 3 nút
+        selectedGoalButton = button;
+        updateGoalButtonsAppearance();
+    }
+
+    private void updateGoalButtonsAppearance() {
+        int primaryColor = ContextCompat.getColor(requireContext(), R.color.primary1);
+        int whiteColor = ContextCompat.getColor(requireContext(), R.color.white);
+
+        MaterialButton[] buttons = {btnLoseWeight, btnMaintainWeight, btnGainMuscle};
+        for (MaterialButton b : buttons) {
+            if (b == null) continue; // Guard null in case view chưa inflate
+            if (b == selectedGoalButton) {
+                b.setBackgroundTintList(ColorStateList.valueOf(primaryColor));
+                b.setTextColor(whiteColor);
+            } else {
+                b.setBackgroundTintList(ColorStateList.valueOf(whiteColor));
+                b.setTextColor(primaryColor);
+            }
+        }
     }
 } 

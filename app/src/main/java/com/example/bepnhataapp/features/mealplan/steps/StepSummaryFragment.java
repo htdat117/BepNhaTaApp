@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +49,10 @@ public class StepSummaryFragment extends Fragment {
                 if(existing==null) dao.insert(vm.draft); else {vm.draft.setCustomerHealthID(existing.getCustomerHealthID()); dao.update(vm.draft);} }
 
             Toast.makeText(getContext(),"Đã lưu thông tin sức khỏe",Toast.LENGTH_SHORT).show();
+
+            // Đánh dấu đã hoàn thành khảo sát
+            SharedPreferences prefs = requireContext().getSharedPreferences("MealPlanPrefs", android.content.Context.MODE_PRIVATE);
+            prefs.edit().putBoolean("onboarding_completed", true).apply();
 
             Intent intent = new Intent(getActivity(), MealPlanContentActivity.class);
             startActivity(intent);

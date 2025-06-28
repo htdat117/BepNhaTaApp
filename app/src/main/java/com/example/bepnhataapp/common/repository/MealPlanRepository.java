@@ -8,5 +8,6 @@ public interface MealPlanRepository {
     WeekPlan getWeekPlan();
     WeekPlan generateWeekPlan(LocalDate start);
     WeekPlan generateEmptyWeekPlan(LocalDate start);
+    void deletePlanForDate(LocalDate date);
     void clear();
 } 

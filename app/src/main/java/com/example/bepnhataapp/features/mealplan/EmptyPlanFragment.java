@@ -24,7 +24,11 @@ public class EmptyPlanFragment extends Fragment {
         Button btnAuto = view.findViewById(R.id.btnAutoGenerate);
         btnAuto.setOnClickListener(v -> {
             MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
-            vm.autoGenerate();
+            java.time.LocalDate date;
+            if(requireActivity() instanceof com.example.bepnhataapp.features.mealplan.MealPlanContentActivity){
+                date = ((com.example.bepnhataapp.features.mealplan.MealPlanContentActivity)requireActivity()).getCurrentDate();
+            }else{ date = java.time.LocalDate.now(); }
+            vm.autoGenerateFor(date);
         });
 
         MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);

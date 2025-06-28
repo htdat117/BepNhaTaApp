@@ -148,6 +148,8 @@ public class AccountInfoActivity extends AppCompatActivity {
             long id = dao.insert(c);
 
             android.widget.Toast.makeText(this, "Đăng ký thành công!", android.widget.Toast.LENGTH_SHORT).show();
+            // Tự động đăng nhập sau khi đăng ký
+            com.example.bepnhataapp.common.utils.SessionManager.login(this, phoneRegistered != null ? phoneRegistered : "");
 
             android.content.Intent intent = new android.content.Intent(this, com.example.bepnhataapp.features.manage_account.ManageAccountActivity.class);
             intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);

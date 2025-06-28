@@ -18,37 +18,35 @@ public class MealRecipeDao {
         this.helper = new DBHelper(ctx.getApplicationContext());
     }
 
-    public long insert(MealRecipe mr) {
-        return helper.getWritableDatabase().insert(DBHelper.TBL_MEAL_RECIPES, null, toContentValues(mr));
+    public void insert(MealRecipe mealRecipe) {
+        ContentValues values = new ContentValues();
+        values.put("mealTimeID", mealRecipe.getMealTimeID());
+        values.put("recipeID", mealRecipe.getRecipeID());
+        helper.getWritableDatabase().insert(DBHelper.TBL_MEAL_RECIPES, null, values);
     }
 
-    public int delete(long mealTimeID, long recipeID) {
-        return helper.getWritableDatabase().delete(DBHelper.TBL_MEAL_RECIPES, "mealTimeID=? AND recipeID=?", new String[]{String.valueOf(mealTimeID), String.valueOf(recipeID)});
-    }
-
-    public List<MealRecipe> getByMealTime(long mealTimeID) {
+    public List<MealRecipe> getRecipesForMealTime(long mealTimeID) {
         List<MealRecipe> list = new ArrayList<>();
-        Cursor cur = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_MEAL_RECIPES + " WHERE mealTimeID=?", new String[]{String.valueOf(mealTimeID)});
-        if (cur.moveToFirst()) {
-            do {
-                list.add(fromCursor(cur));
-            } while (cur.moveToNext());
+        Cursor c = null;
+        try {
+            c = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_MEAL_RECIPES + " WHERE mealTimeID=?", new String[]{String.valueOf(mealTimeID)});
+            if (c.moveToFirst()) {
+                do {
+                    list.add(new MealRecipe(
+                        c.getLong(c.getColumnIndexOrThrow("mealTimeID")),
+                        c.getLong(c.getColumnIndexOrThrow("recipeID"))
+                    ));
+                } while (c.moveToNext());
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
         }
-        cur.close();
         return list;
     }
 
-    private ContentValues toContentValues(MealRecipe mr) {
-        ContentValues v = new ContentValues();
-        v.put("mealTimeID", mr.getMealTimeID());
-        v.put("recipeID", mr.getRecipeID());
-        return v;
-    }
-
-    private MealRecipe fromCursor(Cursor cur) {
-        return new MealRecipe(
-                cur.getLong(cur.getColumnIndexOrThrow("mealTimeID")),
-                cur.getLong(cur.getColumnIndexOrThrow("recipeID"))
-        );
+    public void deleteByMealTime(long mealTimeID) {
+        helper.getWritableDatabase().delete(DBHelper.TBL_MEAL_RECIPES, "mealTimeID=?", new String[]{String.valueOf(mealTimeID)});
     }
 } 

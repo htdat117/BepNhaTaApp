@@ -51,7 +51,11 @@ public class MealPlanDao {
 
     public List<MealPlan> getTemplates() {
         List<MealPlan> list = new ArrayList<>();
-        Cursor cur = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_MEAL_PLANS + " WHERE customerID IS NULL", null);
+        Cursor cur = helper.getReadableDatabase().rawQuery(
+            "SELECT * FROM " + DBHelper.TBL_MEAL_PLANS +
+            " WHERE customerID IS NULL AND (type!='AUTO' OR type IS NULL)",
+            null
+        );
         if (cur.moveToFirst()) {
             do {
                 list.add(fromCursor(cur));
@@ -59,6 +63,59 @@ public class MealPlanDao {
         }
         cur.close();
         return list;
+    }
+
+    public List<MealPlan> getAutoPlans() {
+        List<MealPlan> list = new ArrayList<>();
+        Cursor cur = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_MEAL_PLANS + " WHERE type='AUTO'", null);
+        if (cur.moveToFirst()) {
+            do {
+                list.add(fromCursor(cur));
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return list;
+    }
+
+    public MealPlan getPersonalPlan(long customerId) {
+        Cursor cur = null;
+        try {
+            cur = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_MEAL_PLANS + " WHERE customerID=? AND type='PERSONAL' LIMIT 1", new String[]{String.valueOf(customerId)});
+            if (cur.moveToFirst()) {
+                return fromCursor(cur);
+            }
+        } finally {
+            if (cur != null) {
+                cur.close();
+            }
+        }
+        return null;
+    }
+
+    public String getRandomRecipeImageForPlan(long mealPlanId) {
+        String imageThumb = null;
+        String query = "SELECT R.imageThumb FROM " + DBHelper.TBL_RECIPES + " R" +
+                " JOIN " + DBHelper.TBL_MEAL_RECIPES + " MR ON R.recipeID = MR.recipeID" +
+                " JOIN " + DBHelper.TBL_MEAL_TIMES + " MT ON MR.mealTimeID = MT.mealTimeID" +
+                " JOIN " + DBHelper.TBL_MEAL_DAYS + " MD ON MT.mealDayID = MD.mealDayID" +
+                " WHERE MD.mealPlanID = ?" +
+                " ORDER BY RANDOM() LIMIT 1";
+
+        Cursor cur = helper.getReadableDatabase().rawQuery(query, new String[]{String.valueOf(mealPlanId)});
+        if (cur.moveToFirst()) {
+            imageThumb = cur.getString(cur.getColumnIndexOrThrow("imageThumb"));
+        }
+        cur.close();
+        return imageThumb;
+    }
+
+    public boolean existsPersonalPlanForCustomer(long customerId){
+        Cursor cur = helper.getReadableDatabase().rawQuery(
+            "SELECT 1 FROM " + DBHelper.TBL_MEAL_PLANS + " WHERE customerID=? AND type='PERSONAL' LIMIT 1",
+            new String[]{String.valueOf(customerId)});
+        boolean ok = cur.moveToFirst();
+        cur.close();
+        return ok;
     }
 
     private ContentValues toContentValues(MealPlan m) {

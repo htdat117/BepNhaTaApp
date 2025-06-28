@@ -78,6 +78,16 @@ public class RecipeDao {
         return list;
     }
 
+    public RecipeEntity getById(long id){
+        Cursor c = null;
+        try{
+            String sql = "SELECT recipeID, recipeName, description, tag, createdAt, imageThumb, category, commentAmount, likeAmount, sectionAmount FROM RECIPES WHERE recipeID=? LIMIT 1";
+            c = helper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(id)});
+            if(c.moveToFirst()) return fromCursor(c);
+        }finally{ if(c!=null) c.close(); }
+        return null;
+    }
+
     private RecipeEntity fromCursor(Cursor cur) {
         RecipeEntity r = new RecipeEntity();
         r.setRecipeID(cur.getInt(cur.getColumnIndexOrThrow("recipeID")));

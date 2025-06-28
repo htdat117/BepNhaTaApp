@@ -54,6 +54,16 @@ public class MealDayDao {
         return list;
     }
 
+    public MealDay getByDate(String date) {
+        MealDay d = null;
+        Cursor cur = helper.getReadableDatabase().rawQuery("SELECT * FROM " + DBHelper.TBL_MEAL_DAYS + " WHERE date=?", new String[]{date});
+        if (cur.moveToFirst()) {
+            d = fromCursor(cur);
+        }
+        cur.close();
+        return d;
+    }
+
     private ContentValues toContentValues(MealDay d) {
         ContentValues v = new ContentValues();
         v.put("mealPlanID", d.getMealPlanID());
@@ -69,5 +79,22 @@ public class MealDayDao {
         d.setDate(cur.getString(cur.getColumnIndexOrThrow("date")));
         d.setNote(cur.getString(cur.getColumnIndexOrThrow("note")));
         return d;
+    }
+
+    /**
+     * Lấy tất cả bản ghi MealDay của ngày cụ thể.
+     */
+    public List<MealDay> getAllByDate(String date) {
+        List<MealDay> list = new ArrayList<>();
+        Cursor cur = helper.getReadableDatabase().rawQuery(
+            "SELECT * FROM " + DBHelper.TBL_MEAL_DAYS + " WHERE date=?", new String[]{date}
+        );
+        if (cur.moveToFirst()) {
+            do {
+                list.add(fromCursor(cur));
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return list;
     }
 } 

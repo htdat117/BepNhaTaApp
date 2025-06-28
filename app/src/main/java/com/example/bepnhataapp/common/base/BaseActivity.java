@@ -181,7 +181,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else if (itemId == R.id.nav_recipes) {
             targetActivity = com.example.bepnhataapp.features.recipes.RecipesActivity.class;
         } else if (itemId == R.id.nav_meal_plan) {
-            // Determine whether user already has a saved meal plan
             Class<?> defaultMealPlanActivity = MealPlanActivity.class;
             Class<?> mealPlanContentActivity = com.example.bepnhataapp.features.mealplan.MealPlanContentActivity.class;
 
@@ -193,7 +192,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                         com.example.bepnhataapp.common.model.Customer customer = cDao.findByPhone(phone);
                         if (customer != null) {
                             com.example.bepnhataapp.common.dao.MealPlanDao mpDao = new com.example.bepnhataapp.common.dao.MealPlanDao(this);
-                            if (mpDao.hasMealPlanForCustomer(customer.getCustomerID())) {
+                            // Check for personal plan (customerID matching & type='PERSONAL')
+                            if (mpDao.existsPersonalPlanForCustomer(customer.getCustomerID())) {
                                 targetActivity = mealPlanContentActivity;
                             } else {
                                 targetActivity = defaultMealPlanActivity;

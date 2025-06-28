@@ -1,6 +1,7 @@
 package com.example.bepnhataapp.features.mealplan;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,32 +10,55 @@ import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.example.bepnhataapp.common.utils.SessionManager;
+import com.example.bepnhataapp.common.repository.LocalMealPlanRepository;
+import java.time.LocalDate;
 
 public class MealPlanActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initial login check removed to allow viewing onboarding screen
+
+        // Nếu đã hoàn thành khảo sát hoặc tạo thực đơn, chuyển thẳng vào nội dung kế hoạch bữa ăn
+        SharedPreferences prefs = getSharedPreferences("MealPlanPrefs", MODE_PRIVATE);
+        if (prefs.getBoolean("onboarding_completed", false)) {
+            startActivity(new Intent(this, MealPlanContentActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_meal_plan);
 
         // Setup the bottom navigation fragment
         setupBottomNavigationFragment(R.id.nav_meal_plan);
 
-        // Setup the "Điền thông tin" button click listener
+        // Setup the "Điền thông tin" button click listener with login requirement
         MaterialButton btnFillInfo = findViewById(R.id.btnFillInfo);
-        btnFillInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MealPlanActivity.this, MealPlanWizardActivity.class);
-                startActivity(intent);
+        btnFillInfo.setOnClickListener(v -> {
+            if (!SessionManager.isLoggedIn(MealPlanActivity.this)) {
+                startActivity(new Intent(MealPlanActivity.this, com.example.bepnhataapp.features.login.LoginActivity.class));
+            } else {
+                startActivity(new Intent(MealPlanActivity.this, MealPlanWizardActivity.class));
             }
         });
 
-        // Setup "Tạo thực đơn ngay" button listener
+        // Setup "Tạo thực đơn ngay" button listener with login requirement
         Button btnCreateMenu = findViewById(R.id.btnCreateMenuNow);
         btnCreateMenu.setOnClickListener(v -> {
-            Intent intent = new Intent(MealPlanActivity.this, MealPlanContentActivity.class);
-            startActivity(intent);
+            if (!SessionManager.isLoggedIn(MealPlanActivity.this)) {
+                startActivity(new Intent(MealPlanActivity.this, com.example.bepnhataapp.features.login.LoginActivity.class));
+            } else {
+                // Generate and save the week plan for today into database
+                LocalMealPlanRepository repo = new LocalMealPlanRepository(MealPlanActivity.this);
+                repo.generateWeekPlan(LocalDate.now());
+                // Đánh dấu đã hoàn thành onboarding
+                prefs.edit().putBoolean("onboarding_completed", true).apply();
+                // Navigate to meal plan content
+                startActivity(new Intent(MealPlanActivity.this, MealPlanContentActivity.class));
+            }
         });
 
         // ---------------- Popular recipes section ----------------

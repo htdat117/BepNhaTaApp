@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -17,9 +18,18 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
 
     public static class RecipeItem {
         public final int imageRes;
+        public final String imageUrl;
         public final String name;
         public final int kcal;
-        public RecipeItem(int img, String n, int kc) { imageRes = img; name = n; kcal = kc; }
+
+        public RecipeItem(int resId, String n, int kc) { this(resId, null, n, kc); }
+        public RecipeItem(String url, String n, int kc) { this(0, url, n, kc); }
+        private RecipeItem(int resId, String url, String n, int kc) {
+            this.imageRes = resId;
+            this.imageUrl = url;
+            this.name = n;
+            this.kcal = kc;
+        }
     }
 
     public static class MealTimeSection {
@@ -50,7 +60,12 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
         LayoutInflater inflater = LayoutInflater.from(holder.itemView.getContext());
         for (RecipeItem r : s.recipes) {
             View row = inflater.inflate(R.layout.item_recipe, holder.container, false);
-            ((android.widget.ImageView) row.findViewById(R.id.imgRecipe)).setImageResource(r.imageRes);
+            android.widget.ImageView img = row.findViewById(R.id.imgRecipe);
+            if(r.imageUrl!=null && !r.imageUrl.isEmpty()){
+                Glide.with(img.getContext()).load(r.imageUrl).placeholder(r.imageRes==0? R.drawable.placeholder_banner_background : r.imageRes).into(img);
+            } else {
+                img.setImageResource(r.imageRes);
+            }
             ((TextView) row.findViewById(R.id.tvRecipeName)).setText(r.name);
             ((TextView) row.findViewById(R.id.tvRecipeKcal)).setText("~ " + r.kcal + " Kcal");
 

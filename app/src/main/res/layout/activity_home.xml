@@ -163,6 +163,25 @@
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2" />
 
+            <!-- Banner Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="16dp">
+
+                <ImageView
+                    android:id="@+id/home_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/banner_lenthucdon" />
+
+            </androidx.cardview.widget.CardView>
+
             <!-- "Mẹo vặt bí quyết nấu ăn" Section -->
             <LinearLayout
                 android:layout_width="match_parent"

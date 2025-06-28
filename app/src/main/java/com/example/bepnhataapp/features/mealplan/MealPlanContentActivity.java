@@ -26,6 +26,10 @@ import androidx.annotation.NonNull;
 import com.google.android.material.button.MaterialButton;
 import com.example.bepnhataapp.common.dao.MealPlanDao;
 import com.example.bepnhataapp.common.model.MealPlan;
+import com.example.bepnhataapp.common.utils.SessionManager;
+import com.example.bepnhataapp.common.dao.CustomerDao;
+import com.example.bepnhataapp.common.model.Customer;
+import android.app.AlertDialog;
 
 public class MealPlanContentActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -33,12 +37,22 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
     private TextView tvCurrentDate;
     private boolean showingWeek = false;
     private MaterialButton btnDayTab, btnWeekTab;
+    private MealPlanViewModel mealPlanViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_plan_content);
 
+        // Khởi tạo ViewModel
+        mealPlanViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends androidx.lifecycle.ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new MealPlanViewModel(new LocalMealPlanRepository(MealPlanContentActivity.this));
+            }
+        }).get(MealPlanViewModel.class);
+        
         // Back button
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
@@ -49,10 +63,12 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
         findViewById(R.id.btnPrevDay).setOnClickListener(v -> {
             currentDate = showingWeek ? currentDate.minusWeeks(1) : currentDate.minusDays(1);
             updateDateLabel();
+            if (!showingWeek) loadDayFragment(); else loadWeekFragment();
         });
         findViewById(R.id.btnNextDay).setOnClickListener(v -> {
             currentDate = showingWeek ? currentDate.plusWeeks(1) : currentDate.plusDays(1);
             updateDateLabel();
+            if (!showingWeek) loadDayFragment(); else loadWeekFragment();
         });
 
         // Action menu
@@ -90,6 +106,18 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
 
         // Setup bottom navigation
         setupBottomNavigationFragment(R.id.nav_meal_plan);
+
+        mealPlanViewModel.getState().observe(this, state -> {
+            // Khi dữ liệu thay đổi (ví dụ: sau khi xoá), load lại fragment cho ngày hiện tại
+            if (!showingWeek) {
+                loadDayFragment();
+            } else {
+                loadWeekFragment();
+            }
+        });
+
+        // Đảm bảo người dùng có một kế hoạch cá nhân nếu đã đăng nhập
+        ensurePersonalPlanExists();
     }
     
     private void setupRecommendedSectionAfterFragmentLoad() {
@@ -117,7 +145,8 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
         RecyclerView rvReco = findViewById(R.id.rvRecommended);
         java.util.List<Object> recoData = new java.util.ArrayList<>();
         
-        java.util.List<MealPlan> templates = new MealPlanDao(this).getTemplates();
+        MealPlanDao mealPlanDao = new MealPlanDao(this);
+        java.util.List<MealPlan> templates = mealPlanDao.getTemplates();
 
         java.util.Map<String, java.util.List<MealPlan>> byCat = new java.util.LinkedHashMap<>();
         for (MealPlan mp : templates) {
@@ -129,7 +158,8 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
             recoData.add(e.getKey()); // header
             for (MealPlan mp : e.getValue()) {
                 int imgRes = R.drawable.placeholder_banner_background;
-                String imgStr = mp.getImageThumb() != null ? mp.getImageThumb().trim() : "";
+                String randomImageThumb = mealPlanDao.getRandomRecipeImageForPlan(mp.getMealPlanID());
+                String imgStr = randomImageThumb != null ? randomImageThumb : (mp.getImageThumb() != null ? mp.getImageThumb().trim() : "");
                 String url = null;
                 if (!imgStr.isEmpty()) {
                     if (imgStr.startsWith("http")) {
@@ -238,7 +268,15 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
             } else if (id == R.id.menu_add_note) {
                 Toast.makeText(this, "Thêm ghi chú", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.menu_delete_day) {
-                Toast.makeText(this, "Xoá thực đơn", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this)
+                    .setTitle("Xác nhận xoá")
+                    .setMessage("Bạn có chắc chắn muốn xoá toàn bộ thực đơn cho ngày này không?")
+                    .setPositiveButton("Xoá", (dialog, which) -> {
+                        mealPlanViewModel.deletePlanForDate(currentDate);
+                        Toast.makeText(this, "Đã xoá thực đơn", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Huỷ", null)
+                    .show();
             }
             return true;
         });
@@ -257,23 +295,30 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
     }
 
     private void loadDayFragment() {
-        MealPlanViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
-            @NonNull
-            @Override
-            public <T extends androidx.lifecycle.ViewModel> T create(@NonNull Class<T> modelClass) {
-                //noinspection unchecked
-                return (T) new MealPlanViewModel(new com.example.bepnhataapp.common.repository.LocalMealPlanRepository(MealPlanContentActivity.this));
+        MealPlanViewModel.State state = mealPlanViewModel.getState().getValue();
+
+        boolean hasDataForDay = false;
+        if (state != null && state.week != null) {
+            for (com.example.bepnhataapp.common.model.DayPlan d : state.week.days) {
+                if (d.date.equals(currentDate)) {
+                    hasDataForDay = true;
+                    break;
+                }
             }
-        }).get(MealPlanViewModel.class);
-        viewModel.getState().observe(this, state -> {
-            Fragment fragment = (state.week == null) ? new EmptyPlanFragment() : TimelineFragment.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.dayPlanContainer, fragment)
-                    .commit();
-            
-            // Setup recommended section after layout pass
-            setupRecommendedSectionAfterFragmentLoad();
-        });
+        }
+
+        Fragment fragment;
+        if (!hasDataForDay) {
+            fragment = new EmptyPlanFragment();
+        } else {
+            fragment = TimelineFragment.newInstance();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.dayPlanContainer, fragment)
+                .commit();
+        
+        // Setup recommended section after layout pass
+        setupRecommendedSectionAfterFragmentLoad();
     }
 
     private void loadWeekFragment() {
@@ -283,5 +328,29 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
 
         // Setup recommended section after layout pass
         setupRecommendedSectionAfterFragmentLoad();
+    }
+
+    public LocalDate getCurrentDate() { return currentDate; }
+
+    private void ensurePersonalPlanExists() {
+        if (SessionManager.isLoggedIn(this)) {
+            new Thread(() -> {
+                CustomerDao customerDao = new CustomerDao(this);
+                Customer customer = customerDao.findByPhone(SessionManager.getPhone(this));
+                if (customer != null) {
+                    long customerId = customer.getCustomerID();
+                    MealPlanDao mealPlanDao = new MealPlanDao(this);
+                    if (mealPlanDao.getPersonalPlan(customerId) == null) {
+                        // Kế hoạch cá nhân chưa tồn tại -> tạo mới
+                        MealPlan personalPlan = new MealPlan();
+                        personalPlan.setCustomerID(customerId);
+                        personalPlan.setType("PERSONAL");
+                        personalPlan.setTitle("Kế hoạch của tôi");
+                        personalPlan.setCreatedAt(java.time.LocalDateTime.now().toString());
+                        mealPlanDao.insert(personalPlan);
+                    }
+                }
+            }).start();
+        }
     }
 } 
