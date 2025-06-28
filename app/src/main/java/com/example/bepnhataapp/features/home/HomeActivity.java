@@ -67,10 +67,27 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         hotIngredientsRecyclerView = findViewById(R.id.hot_ingredients_recycler_view);
         hotIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        // Click "Xem tất cả" Hot Ingredients
+        TextView tvSeeAllHot = findViewById(R.id.tvSeeAllHotIngredients);
+        if(tvSeeAllHot!=null){
+            tvSeeAllHot.setOnClickListener(v -> {
+                // mở ProductActivity, có thể cuộn đến danh mục khuyến mãi/hot
+                startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.products.ProductActivity.class));
+            });
+        }
+
         loadHotIngredientsAsync();
 
         // Setup Recipe Categories (dynamic)
         loadCategoriesAsync();
+
+        // After category dynamic section, before recipe grid maybe create TextView; near where categories built we can set listener earlier in onCreate.
+        TextView tvSeeAllRecipes = findViewById(R.id.tvSeeAllRecipes);
+        if(tvSeeAllRecipes!=null){
+            tvSeeAllRecipes.setOnClickListener(v -> {
+                startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.recipes.RecipesActivity.class));
+            });
+        }
 
         // Setup Recipes Grid RecyclerView
         recipesGridRecyclerView = findViewById(R.id.recipes_grid_recycler_view);

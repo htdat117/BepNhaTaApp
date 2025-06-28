@@ -71,6 +71,7 @@
                     android:textColor="@color/primary1" />
 
                 <TextView
+                    android:id="@+id/tvSeeAllHotIngredients"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem tất cả "
@@ -114,6 +115,7 @@
                     android:textColor="@color/primary1" />
 
                 <TextView
+                    android:id="@+id/tvSeeAllRecipes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem tất cả "

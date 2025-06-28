@@ -149,6 +149,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/tvSeeAllPopular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem ngay"
@@ -179,6 +180,7 @@
                         android:paddingBottom="12dp">
 
                         <ImageView
+                            android:id="@+id/imgPopular1"
                             android:layout_width="match_parent"
                             android:layout_height="120dp"
                             android:src="@drawable/placeholder_banner_background"
@@ -186,6 +188,7 @@
                             android:layout_marginBottom="8dp"/>
 
                         <TextView
+                            android:id="@+id/tvTitlePopular1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Healthy Taco Salad with fresh vegetable"
@@ -209,6 +212,7 @@
                                 android:layout_marginEnd="4dp"/>
 
                             <TextView
+                                android:id="@+id/tvKcalPopular1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="120 Kcal"
@@ -229,6 +233,7 @@
                                 android:layout_marginEnd="4dp"/>
 
                             <TextView
+                                android:id="@+id/tvTimePopular1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="20 Min"
@@ -253,6 +258,7 @@
                         android:paddingBottom="12dp">
 
                         <ImageView
+                            android:id="@+id/imgPopular2"
                             android:layout_width="match_parent"
                             android:layout_height="120dp"
                             android:src="@drawable/placeholder_banner_background"
@@ -260,6 +266,7 @@
                             android:layout_marginBottom="8dp"/>
 
                         <TextView
+                            android:id="@+id/tvTitlePopular2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Japanese-style Pancakes Recip"
@@ -283,6 +290,7 @@
                                 android:layout_marginEnd="4dp"/>
 
                             <TextView
+                                android:id="@+id/tvKcalPopular2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="64 Kcal"
@@ -303,6 +311,7 @@
                                 android:layout_marginEnd="4dp"/>
 
                             <TextView
+                                android:id="@+id/tvTimePopular2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="15 Min"
