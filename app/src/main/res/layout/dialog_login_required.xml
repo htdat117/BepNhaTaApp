@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/bg_dialog_rounded_white">
+
+    <ImageView
+        android:id="@+id/imgIllustration"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/ic_popup_login_require"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Đăng nhập để lưu lại lịch sử mua hàng và theo dõi đơn hàng bạn nhé!"
+        android:textAlignment="center"
+        android:textColor="@color/dark1"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="OK bạn ơi!"
+        android:background="@drawable/bg_button_primary"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btnGuest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Mua hàng không cần đăng nhập"
+        android:background="@drawable/bg_button_outline_orange"
+        android:textColor="@color/primary1"
+        android:textStyle="bold"/>
+
+</LinearLayout> 

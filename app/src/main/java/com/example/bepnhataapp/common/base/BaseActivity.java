@@ -76,6 +76,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
         if (ivLogo != null) ivLogo.setOnClickListener(goToManageAccount);
         if (tvLogin != null) tvLogin.setOnClickListener(goToManageAccount);
+
+        if (ivCart != null) {
+            ivCart.setOnClickListener(v -> {
+                if (!BaseActivity.this.getClass().equals(com.example.bepnhataapp.features.cart.CartActivity.class)) {
+                    Intent it = new Intent(BaseActivity.this, com.example.bepnhataapp.features.cart.CartActivity.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(it);
+                }
+            });
+        }
     }
 
     /**

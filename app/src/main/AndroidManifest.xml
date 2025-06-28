@@ -226,6 +226,9 @@
         <activity
             android:name=".features.recipes.RecipeDetailActivity"
             android:exported="false" />
+        <activity
+            android:name="com.example.bepnhataapp.features.cart.CartActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

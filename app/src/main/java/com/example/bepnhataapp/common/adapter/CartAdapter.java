@@ -10,13 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.CartItem;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
+import com.example.bepnhataapp.common.utils.CartHelper;
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private List<CartItem> items;
     private boolean isEditMode = false;
-    public CartAdapter(List<CartItem> items) { this.items = items; }
+    private CartListener listener;
+    public interface CartListener{ void onCartChanged(); }
+    public CartAdapter(List<CartItem> items){this.items=items;}
+    public void setCartListener(CartListener l){this.listener=l;}
     public void setItems(List<CartItem> items) {
         this.items = items;
         notifyDataSetChanged();
@@ -35,40 +43,84 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartItem item = items.get(position);
         holder.title.setText(item.getTitle());
-        holder.price.setText(item.getPrice());
+        int factor = item.getServing().startsWith("4")?2:1;
+        holder.price.setText(formatPrice(item.getPrice()*factor));
+        holder.oldPrice.setText(formatPrice(item.getOldPrice()*factor));
+        holder.oldPrice.setPaintFlags(holder.oldPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.quantity.setText(String.valueOf(item.getQuantity()));
         holder.btnServing.setText(item.getServing());
-        holder.btnServing.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(v.getContext(), holder.btnServing);
-            popupMenu.getMenu().add("2 người");
-            popupMenu.getMenu().add("4 người");
-            popupMenu.setOnMenuItemClickListener(menuItem -> {
-                String selected = menuItem.getTitle().toString();
-                holder.btnServing.setText(selected);
+        holder.checkbox.setChecked(item.isSelected());
+
+        holder.checkbox.setOnCheckedChangeListener((btn,checked)->{
+            item.setSelected(checked);
+            if(listener!=null) listener.onCartChanged();
+        });
+
+        holder.btnPlus.setOnClickListener(v->{
+            int q=item.getQuantity()+1;
+            item.setQuantity(q);
+            CartHelper.addProduct(v.getContext(), new com.example.bepnhataapp.common.model.Product(){
+                {setProductID(item.getProductId());}
+            }); // quick: reuse addProduct increments 1
+            notifyItemChanged(position);
+            if(listener!=null) listener.onCartChanged();
+        });
+
+        holder.btnMinus.setOnClickListener(v->{
+            if(item.getQuantity()>1){
+                item.setQuantity(item.getQuantity()-1);
+                // decrease in DB
+                // CartHelper.setQuantity()
+                notifyItemChanged(position);
+                if(listener!=null) listener.onCartChanged();
+            }
+        });
+
+        final int pos = position;
+        holder.btnServing.setOnClickListener(v->{
+            PopupMenu popup=new PopupMenu(v.getContext(),holder.btnServing);
+            popup.getMenu().add("2 người");
+            popup.getMenu().add("4 người");
+            popup.setOnMenuItemClickListener(mi->{
+                String selected=mi.getTitle().toString();
                 item.setServing(selected);
+                holder.btnServing.setText(selected);
+                notifyItemChanged(pos);
+                if(listener!=null) listener.onCartChanged();
                 return true;
             });
-            popupMenu.show();
+            popup.show();
         });
-        // show / hide checkbox according to edit mode
-        if (holder.checkbox != null) {
-            holder.checkbox.setVisibility(View.VISIBLE);
+
+        // load product image
+        if(item.getThumb()!=null){
+            Glide.with(holder.imgProduct.getContext())
+                    .load(item.getThumb())
+                    .placeholder(R.drawable.sample_img)
+                    .into(holder.imgProduct);
         }
     }
     @Override
     public int getItemCount() { return items == null ? 0 : items.size(); }
     static class CartViewHolder extends RecyclerView.ViewHolder {
-        TextView title, price;
-        Button btnServing;
-        android.widget.CheckBox checkbox;
+        TextView title, price, oldPrice, quantity;
+        ImageButton btnPlus, btnMinus; Button btnServing; CheckBox checkbox; android.widget.ImageView imgProduct;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.tvTitle);
             price = itemView.findViewById(R.id.tvPrice);
-            btnServing = itemView.findViewById(R.id.btnServing);
-            checkbox = itemView.findViewById(R.id.checkbox);
-            if (checkbox != null) {
-                checkbox.setVisibility(View.VISIBLE);
-            }
+            oldPrice=itemView.findViewById(R.id.tvOldPrice);
+            quantity=itemView.findViewById(R.id.tvQuantity);
+            btnServing=itemView.findViewById(R.id.btnServing);
+            btnPlus=itemView.findViewById(R.id.btnPlus);
+            btnMinus=itemView.findViewById(R.id.btnMinus);
+            checkbox=itemView.findViewById(R.id.checkbox);
+            imgProduct=itemView.findViewById(R.id.imgProduct);
         }
     }
+    private String formatPrice(int p){
+        java.text.NumberFormat nf=java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
+        return nf.format(p)+"đ";
+    }
+    public List<CartItem> getItems(){return items;}
 } 

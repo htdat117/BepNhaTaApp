@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 2; // bumped to prevent downgrade crash
+    private static final int DB_VERSION = 3; // bumped for servingFactor column in CART_DETAILS
     private static final String DB_NAME = "BepNhaTa.db";
     private static final String DB_PATH_SUFFIX = "/databases/";
     // Alias for teacher-style constant name
@@ -207,9 +207,11 @@ public class DBHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS " + TBL_CART_DETAILS + " (" +
                     "cartID INTEGER," +
                     "productID INTEGER," +
+                    "servingFactor INTEGER," +
                     "quantity INTEGER," +
-                    "PRIMARY KEY(cartID, productID)," +
-                    "FOREIGN KEY(cartID) REFERENCES " + TBL_CARTS + "(cartID)" +
+                    "PRIMARY KEY(cartID, productID, servingFactor)," +
+                    "FOREIGN KEY(cartID) REFERENCES " + TBL_CARTS + "(cartID)," +
+                    "FOREIGN KEY(productID) REFERENCES " + TBL_PRODUCTS + "(productID)" +
                     ")";
 
     private static final String SQL_CREATE_ADDRESS =
@@ -474,8 +476,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        // No migration logic for now because we rely on the pre-populated DB.
-        // Bump DB_VERSION and implement migrations when you need to change schema.
+        if(oldV < 3){
+            // Recreate CART_DETAILS with servingFactor column
+            db.execSQL("DROP TABLE IF EXISTS " + TBL_CART_DETAILS);
+            db.execSQL(SQL_CREATE_CART_DETAIL);
+        }
     }
 
     @Override

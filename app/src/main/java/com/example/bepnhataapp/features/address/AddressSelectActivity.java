@@ -13,6 +13,10 @@ import com.example.bepnhataapp.common.models.AddressItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.bepnhataapp.common.dao.AddressDao;
+import com.example.bepnhataapp.common.model.Address;
+import com.example.bepnhataapp.common.utils.SessionManager;
+
 public class AddressSelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,15 +33,76 @@ public class AddressSelectActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recyclerAddress);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        AddressAdapter adapter = new AddressAdapter(getMockData());
+
+        List<AddressItem> addrItems = loadAddresses();
+        AddressAdapter adapter = new AddressAdapter(addrItems, item -> {
+            android.content.Intent it = new android.content.Intent(AddressSelectActivity.this, com.example.bepnhataapp.features.checkout.ShippingInfoActivity.class);
+            it.putExtra("address_id", item.getId());
+            startActivityForResult(it, 101);
+        });
         recyclerView.setAdapter(adapter);
+
+        View layoutEmpty = findViewById(R.id.layoutEmpty);
+        if(addrItems.isEmpty()){
+            if(layoutEmpty!=null) layoutEmpty.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            findViewById(R.id.btnAccept).setVisibility(View.GONE);
+        }else{
+            if(layoutEmpty!=null) layoutEmpty.setVisibility(View.GONE);
+        }
+
+        // handle add new button in both cases
+        View btnAdd = findViewById(R.id.btnAddAddress);
+        View btnAddEmpty = findViewById(R.id.btnAddEmpty);
+        View.OnClickListener addListener = v -> {
+            android.content.Intent it = new android.content.Intent(AddressSelectActivity.this, com.example.bepnhataapp.features.checkout.ShippingInfoActivity.class);
+            startActivityForResult(it, 100);
+        };
+        if(btnAdd!=null) btnAdd.setOnClickListener(addListener);
+        if(btnAddEmpty!=null) btnAddEmpty.setOnClickListener(addListener);
+
+        View btnAccept = findViewById(R.id.btnAccept);
+        if(btnAccept!=null){
+            btnAccept.setOnClickListener(v->{
+                AddressItem sel = adapter.getSelectedItem();
+                if(sel==null){
+                    android.widget.Toast.makeText(this, "Vui lòng chọn địa chỉ", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                android.widget.Toast.makeText(this,"Đã chọn địa chỉ",android.widget.Toast.LENGTH_SHORT).show();
+                android.content.Intent res = new android.content.Intent();
+                res.putExtra("selected_address", sel);
+                // query email
+                com.example.bepnhataapp.common.model.Address a = new com.example.bepnhataapp.common.dao.AddressDao(AddressSelectActivity.this).get(sel.getId());
+                if(a!=null && a.getNote()!=null) res.putExtra("selected_email", a.getNote());
+                setResult(RESULT_OK,res);
+                finish();
+            });
+        }
     }
 
-    private List<AddressItem> getMockData(){
+    private List<AddressItem> loadAddresses(){
         List<AddressItem> list = new ArrayList<>();
-        list.add(new AddressItem("Đoàn Kiên","033 523 6269","312 Quang Trung, Phường 10, Gò Vấp",true));
-        list.add(new AddressItem("Đoàn Kiên","033 523 6269","312 Quang Trung, Phường 10, Gò Vấp",false));
-        list.add(new AddressItem("Đoàn Kiên","033 523 6269","312 Quang Trung, Phường 10, Gò Vấp",false));
+        if(!SessionManager.isLoggedIn(this)) return list;
+
+        String phone = SessionManager.getPhone(this);
+        if(phone==null) return list;
+
+        long customerId = new com.example.bepnhataapp.common.dao.CustomerDao(this).findByPhone(phone).getCustomerID();
+        AddressDao dao = new AddressDao(this);
+        List<Address> addresses = dao.getByCustomer(customerId);
+        for(Address a: addresses){
+            String fullAddr = a.getAddressLine()+", "+a.getDistrict()+", "+a.getProvince();
+            list.add(new AddressItem(a.getAddressID(), a.getReceiverName(), a.getPhone(), fullAddr, a.isDefault()));
+        }
         return list;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable android.content.Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if((requestCode==100 || requestCode==101) && resultCode==RESULT_OK){
+            recreate(); // simple way: recreate activity to reload list
+        }
     }
 } 

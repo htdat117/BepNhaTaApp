@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.CartItem;
+import com.bumptech.glide.Glide;
+import android.graphics.Paint;
 
 import java.util.List;
 
@@ -31,9 +33,17 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         CartItem item = items.get(position);
         holder.tvTitle.setText(item.getTitle());
-        holder.tvPrice.setText(item.getPrice());
-        holder.tvVariant.setText("Phân loại: " + item.getServing());
-        holder.tvQuantity.setText("x1");
+        java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
+        int factor = item.getServing().startsWith("4")?2:1;
+        holder.tvPrice.setText(nf.format(item.getPrice()*factor)+"đ");
+        holder.tvOldPrice.setText(nf.format(item.getOldPrice()*factor)+"đ");
+        holder.tvOldPrice.setPaintFlags(holder.tvOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.tvVariant.setText("Phân loại: "+item.getServing());
+        holder.tvQuantity.setText("x"+item.getQuantity());
+        Glide.with(holder.imgProduct.getContext())
+                .load(item.getThumb())
+                .placeholder(R.drawable.sample_img)
+                .into(holder.imgProduct);
     }
 
     @Override
@@ -42,7 +52,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     }
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvVariant, tvPrice, tvQuantity;
+        TextView tvTitle, tvVariant, tvPrice, tvOldPrice, tvQuantity;
         ImageView imgProduct;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -50,6 +60,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvVariant = itemView.findViewById(R.id.tvVariant);
             tvPrice = itemView.findViewById(R.id.tvPrice);
+            tvOldPrice = itemView.findViewById(R.id.tvOldPrice);
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
         }
     }

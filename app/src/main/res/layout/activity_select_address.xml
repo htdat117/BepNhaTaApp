@@ -48,6 +48,12 @@
         android:layout_weight="1"
         android:paddingHorizontal="16dp"/>
 
+    <!-- empty state -->
+    <include
+        android:id="@+id/layoutEmpty"
+        layout="@layout/layout_empty_address"
+        android:visibility="gone"/>
+
     <!-- button add new -->
     <Button
         android:id="@+id/btnAddAddress"

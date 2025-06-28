@@ -129,7 +129,7 @@ public class change_infor extends AppCompatActivity {
         String name = edtName.getText().toString().trim();
         String phone = edtPhone.getText().toString().trim();
         if (name.isEmpty() || phone.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ các trường bắt buộc", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin bắt buộc", Toast.LENGTH_SHORT).show();
             return;
         }
 

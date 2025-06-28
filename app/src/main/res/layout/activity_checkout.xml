@@ -39,19 +39,57 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1">
+
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Thông tin giao hàng"
                         android:textStyle="bold"
                         android:textSize="18sp"/>
+
+                    <!-- sub label -->
+                    <TextView
+                        android:id="@+id/tvShippingLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Giao hàng đến"
+                        android:textColor="@color/dark2"
+                        android:textSize="12sp"
+                        android:visibility="gone"/>
+
+                    <!-- name & phone row -->
+                    <LinearLayout
+                        android:id="@+id/layoutNamePhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="4dp">
+                        <TextView
+                            android:id="@+id/tvShippingName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đoàn Kiên"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
+                        <TextView
+                            android:id="@+id/tvShippingPhone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="033 523 6269"
+                            android:textSize="14sp"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+
+                    <!-- address -->
                     <TextView
                         android:id="@+id/tvShippingAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nhập địa chỉ giao hàng"
+                        android:text="69 đường số 8, Linh Xuân, TP. Thủ Đức"
                         android:textColor="@color/dark2"
-                        android:layout_marginTop="4dp"/>
+                        android:layout_marginTop="2dp"/>
                 </LinearLayout>
                 <ImageView
                     android:layout_width="wrap_content"
@@ -160,25 +198,12 @@
                     android:textStyle="bold"
                     android:textSize="18sp"/>
 
-                <!-- Example options -->
-                <RadioGroup
-                    android:id="@+id/rgPayment"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="8dp">
-
-                    <RadioButton
-                        android:id="@+id/rbCod"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="COD"/>
-                    <RadioButton
-                        android:id="@+id/rbBank"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="VCB"/>
-                </RadioGroup>
+                    android:nestedScrollingEnabled="false"
+                    android:layout_marginTop="8dp"/>
             </LinearLayout>
 
             <!-- Payment detail card -->
@@ -329,7 +354,7 @@
                     android:text="90.000đ"
                     android:textColor="@color/primary1"
                     android:fontFamily="@font/inter_bold"
-                    android:textSize="@dimen/header3"/>
+                    android:textSize="@dimen/header4"/>
             </LinearLayout>
 
             <LinearLayout

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_location"
+        android:tint="@color/primary1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bạn chưa có địa chỉ giao hàng"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/dark1"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hãy thêm địa chỉ mới để hoàn tất đơn hàng của bạn"
+        android:textSize="14sp"
+        android:textColor="@color/dark2"
+        android:layout_marginTop="4dp" />
+
+    <Button
+        android:id="@+id/btnAddEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thêm địa chỉ mới"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_button_primary"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+</LinearLayout> 

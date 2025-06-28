@@ -87,6 +87,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             intent.putExtra("productId", product.getProductID());
             context.startActivity(intent);
         });
+
+        holder.btnAddCart.setOnClickListener(v -> {
+            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product);
+            android.widget.Toast.makeText(context, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
+            // Muốn mở giỏ ngay:
+            // context.startActivity(new Intent(context, com.example.bepnhataapp.features.cart.CartActivity.class));
+        });
     }
 
     @Override
@@ -101,7 +108,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imgProduct, imgFavorite;
-        TextView tvProductName, tvKcal, tvNutrition, tvTime, tvFor2, tvFor4, tvOldPrice, tvPrice, tvRating, tvReviewCount, btnBuy;
+        TextView tvProductName, tvKcal, tvNutrition, tvTime, tvFor2, tvFor4, tvOldPrice, tvPrice, tvRating, tvReviewCount;
+        ImageView btnAddCart;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
@@ -116,7 +124,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvRating = itemView.findViewById(R.id.tvRating);
             tvReviewCount = itemView.findViewById(R.id.tvReviewCount);
-            btnBuy = itemView.findViewById(R.id.btnBuy);
+            btnAddCart = itemView.findViewById(R.id.btnAddCart);
         }
     }
 }

@@ -23,11 +23,11 @@ public class CartDetailDao {
     }
 
     public int update(CartDetail cd) {
-        return helper.getWritableDatabase().update(DBHelper.TBL_CART_DETAILS, toContentValues(cd), "cartID=? AND productID=?", new String[]{String.valueOf(cd.getCartID()), String.valueOf(cd.getProductID())});
+        return helper.getWritableDatabase().update(DBHelper.TBL_CART_DETAILS, toContentValues(cd), "cartID=? AND productID=? AND servingFactor=?", new String[]{String.valueOf(cd.getCartID()), String.valueOf(cd.getProductID()), String.valueOf(cd.getServingFactor())});
     }
 
-    public int delete(long cartID, long productID) {
-        return helper.getWritableDatabase().delete(DBHelper.TBL_CART_DETAILS, "cartID=? AND productID=?", new String[]{String.valueOf(cartID), String.valueOf(productID)});
+    public int delete(long cartID, long productID, int servingFactor) {
+        return helper.getWritableDatabase().delete(DBHelper.TBL_CART_DETAILS, "cartID=? AND productID=? AND servingFactor=?", new String[]{String.valueOf(cartID), String.valueOf(productID), String.valueOf(servingFactor)});
     }
 
     public List<CartDetail> getByCart(long cartID) {
@@ -46,6 +46,7 @@ public class CartDetailDao {
         ContentValues v = new ContentValues();
         v.put("cartID", cd.getCartID());
         v.put("productID", cd.getProductID());
+        v.put("servingFactor", cd.getServingFactor());
         v.put("quantity", cd.getQuantity());
         return v;
     }
@@ -54,6 +55,7 @@ public class CartDetailDao {
         return new CartDetail(
                 cur.getLong(cur.getColumnIndexOrThrow("cartID")),
                 cur.getLong(cur.getColumnIndexOrThrow("productID")),
+                cur.getInt(cur.getColumnIndexOrThrow("servingFactor")),
                 cur.getInt(cur.getColumnIndexOrThrow("quantity"))
         );
     }

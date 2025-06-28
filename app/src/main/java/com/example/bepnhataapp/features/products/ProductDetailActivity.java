@@ -58,6 +58,12 @@ public class ProductDetailActivity extends BaseActivity {
             if(id!=-1){
                 product = new ProductDao(this).getById(id);
             }
+
+            final Product finalProduct = product;
+            findViewById(R.id.btnAddToCart).setOnClickListener(v -> {
+                com.example.bepnhataapp.common.utils.CartHelper.addProduct(ProductDetailActivity.this, finalProduct, currentServingFactor);
+                android.widget.Toast.makeText(ProductDetailActivity.this, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
+            });
         }
         if (product != null) {
             String thumb = product.getProductThumb();

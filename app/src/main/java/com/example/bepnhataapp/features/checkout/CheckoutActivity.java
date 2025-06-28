@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.CartItem;
+import com.example.bepnhataapp.common.utils.CartHelper;
+import com.example.bepnhataapp.common.utils.SessionManager;
+import com.example.bepnhataapp.common.utils.OrderHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +27,16 @@ public class CheckoutActivity extends AppCompatActivity {
      */
     private static final boolean DEMO_LOGGED_IN = false;
     private RecyclerView recyclerView;
+    private java.util.List<CartItem> orderItems;
     private TextView tvGrandTotal, tvBottomTotal, tvBottomSave;
     private Button btnPlaceOrder;
     private View cardShipping;
+    private TextView tvShipName, tvShipPhone, tvShipLabel;
+    private View layoutNamePhone;
+    private com.example.bepnhataapp.common.models.AddressItem currentAddress;
+    private String currentEmail="";
+    private int selectedPaymentIdx = -1; // 0 COD,1 VCB
+    private int goodsTotalOld=0, shippingFee=0, discount=0, grandTotal=0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +48,7 @@ public class CheckoutActivity extends AppCompatActivity {
         TextView tvTitle = findViewById(R.id.txtContent);
         TextView tvChange = findViewById(R.id.txtChange);
         if (tvTitle != null) tvTitle.setText("Thanh toán");
-        if (tvChange != null) tvChange.setVisibility(View.GONE);
+        if (tvChange != null) tvChange.setVisibility(View.INVISIBLE); // keep space for centering
         if (ivBack != null) ivBack.setOnClickListener(v -> finish());
 
         recyclerView = findViewById(R.id.recyclerOrderItems);
@@ -48,20 +58,89 @@ public class CheckoutActivity extends AppCompatActivity {
         btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        OrderItemAdapter adapter = new OrderItemAdapter(getSampleItems());
+        List<CartItem> items;
+        java.io.Serializable extra = getIntent().getSerializableExtra("selected_items");
+        if(extra!=null && extra instanceof java.util.ArrayList){
+            //noinspection unchecked
+            items = (java.util.ArrayList<CartItem>) extra;
+        }else{
+            items = CartHelper.loadItems(this);
+        }
+        orderItems = items;
+        OrderItemAdapter adapter = new OrderItemAdapter(items);
         recyclerView.setAdapter(adapter);
 
-        boolean isLoggedIn = DEMO_LOGGED_IN;
+        // Calculate totals
+        int totalGoods=0, save=0;
+        for(CartItem ci: items){
+            totalGoods+=ci.getTotal();
+            save+=ci.getTotalSave();
+        }
+        goodsTotalOld = totalGoods + save;
+        shippingFee = 20000;
+        discount = save;
+        grandTotal = goodsTotalOld + shippingFee - discount;
+        java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
+
+        TextView tvGoodsTotal = findViewById(R.id.tvGoodsTotal);
+        TextView tvShippingFee = findViewById(R.id.tvShippingFee);
+        TextView tvVoucherDiscount = findViewById(R.id.tvVoucherDiscount);
+
+        if(tvGoodsTotal!=null) tvGoodsTotal.setText(nf.format(goodsTotalOld)+"đ");
+        if(tvShippingFee!=null) tvShippingFee.setText(nf.format(shippingFee)+"đ");
+        if(tvVoucherDiscount!=null) tvVoucherDiscount.setText("-"+nf.format(discount)+"đ");
+
+        if(tvGrandTotal!=null) tvGrandTotal.setText(nf.format(grandTotal)+"đ");
+        if(tvBottomTotal!=null) tvBottomTotal.setText(nf.format(grandTotal)+"đ");
+        if(tvBottomSave!=null) tvBottomSave.setText("-"+nf.format(discount)+"đ");
+
         cardShipping = findViewById(R.id.cardShipping);
+        tvShipName = findViewById(R.id.tvShippingName);
+        tvShipPhone = findViewById(R.id.tvShippingPhone);
+        layoutNamePhone = findViewById(R.id.layoutNamePhone);
+
+        // initial state
+        if(SessionManager.isLoggedIn(this)){
+            // load default address for current customer
+            com.example.bepnhataapp.common.model.Address def = new com.example.bepnhataapp.common.dao.AddressDao(this).getDefault(getCurrentCustomerId());
+            if(def!=null){
+                currentAddress = new com.example.bepnhataapp.common.models.AddressItem(def.getAddressID(),def.getReceiverName(),def.getPhone(),def.getAddressLine()+", "+def.getDistrict()+", "+def.getProvince(),def.isDefault());
+                currentEmail = def.getNote();
+            }
+        }
+
+        if(currentAddress==null){
+            // show placeholder
+            if(tvShipLabel!=null) tvShipLabel.setVisibility(View.GONE);
+            if(layoutNamePhone!=null) layoutNamePhone.setVisibility(View.GONE);
+            TextView tvAddr = findViewById(R.id.tvShippingAddress);
+            if(tvAddr!=null) tvAddr.setText("Nhập địa chỉ giao hàng");
+        }else{
+            if(tvShipLabel!=null) tvShipLabel.setVisibility(View.VISIBLE);
+            if(layoutNamePhone!=null) layoutNamePhone.setVisibility(View.VISIBLE);
+            if(tvShipName!=null) tvShipName.setText(currentAddress.getName());
+            if(tvShipPhone!=null) tvShipPhone.setText(currentAddress.getPhone());
+            TextView tvAddr = findViewById(R.id.tvShippingAddress);
+            if(tvAddr!=null) tvAddr.setText(currentAddress.getAddress());
+        }
+
         if(cardShipping!=null){
             cardShipping.setOnClickListener(v->{
-                android.content.Intent intent;
-                if(isLoggedIn){
-                    intent = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.address.AddressSelectActivity.class);
+                if(SessionManager.isLoggedIn(CheckoutActivity.this)){
+                    // đã đăng nhập: chọn địa chỉ từ danh sách
+                    android.content.Intent intent = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.address.AddressSelectActivity.class);
+                    startActivityForResult(intent, 201);
                 }else{
-                    intent = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.ShippingInfoActivity.class);
+                    if(currentAddress!=null){
+                        // đã có địa chỉ tạm, mở form chỉnh sửa
+                        android.content.Intent it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.ShippingInfoActivity.class);
+                        it.putExtra("address_id", currentAddress.getId());
+                        startActivityForResult(it, 201);
+                    }else{
+                        // chưa có -> hiển thị dialog chọn login hay mua nhanh
+                        showLoginDialog();
+                    }
                 }
-                startActivity(intent);
             });
         }
 
@@ -74,15 +153,156 @@ public class CheckoutActivity extends AppCompatActivity {
         }
 
         btnPlaceOrder.setOnClickListener(v -> {
-            android.content.Intent it = new android.content.Intent(CheckoutActivity.this, ConfirmPaymentActivity.class);
-            startActivity(it);
+            // Validate address
+            boolean hasAddress;
+            if(SessionManager.isLoggedIn(this)){
+                hasAddress = (new com.example.bepnhataapp.common.dao.AddressDao(this).getDefault( getCurrentCustomerId() )!=null);
+            }else{
+                hasAddress = currentAddress!=null;
+            }
+            if(!hasAddress){
+                android.widget.Toast.makeText(this,"Vui lòng nhập thông tin giao hàng",android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(selectedPaymentIdx==-1){
+                android.widget.Toast.makeText(this,"Vui lòng chọn phương thức thanh toán",android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // gather purchased items
+            java.util.ArrayList<CartItem> purchased = new java.util.ArrayList<>();
+            for(CartItem ci: orderItems) purchased.add(ci);
+
+            // note & email
+            String noteStr = ((android.widget.EditText)findViewById(R.id.edtNote)).getText().toString().trim();
+
+            if(selectedPaymentIdx==0){ // COD
+                // Lưu đơn hàng xuống DB
+                OrderHelper.saveOrder(
+                        CheckoutActivity.this,
+                        purchased,
+                        "COD",
+                        currentAddress!=null? currentAddress.getId():0,
+                        shippingFee,
+                        discount,
+                        noteStr
+                );
+
+                com.example.bepnhataapp.common.utils.CartHelper.removeProducts(CheckoutActivity.this, purchased);
+                android.content.Intent it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.PaymentSuccessActivity.class);
+                startActivity(it);
+                finish();
+            }else{ // Các cổng thanh toán khác (VCB, Momo, ZaloPay, ...)
+                android.content.Intent it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.ConfirmPaymentActivity.class);
+                // pass data
+                if(currentAddress!=null){
+                    it.putExtra("name", currentAddress.getName());
+                    it.putExtra("phone", currentAddress.getPhone());
+                    it.putExtra("address", currentAddress.getAddress());
+                    if(currentEmail!=null) it.putExtra("email", currentEmail);
+                    if(!noteStr.isEmpty()) it.putExtra("note", noteStr);
+                }
+                it.putExtra("goods_total_old", goodsTotalOld);
+                it.putExtra("shipping_fee", shippingFee);
+                it.putExtra("discount", discount);
+                it.putExtra("grand_total", grandTotal);
+                // selected items
+                it.putExtra("selected_items", purchased);
+                String paymentMethodStr;
+                switch (selectedPaymentIdx){
+                    case 1: paymentMethodStr="VCB"; break;
+                    case 2: paymentMethodStr="Momo"; break;
+                    case 3: paymentMethodStr="ZaloPay"; break;
+                    default: paymentMethodStr="Other"; break;
+                }
+                it.putExtra("payment_method", paymentMethodStr);
+                startActivity(it);
+            }
         });
+
+        androidx.recyclerview.widget.RecyclerView rvPayment = findViewById(R.id.recyclerPayment);
+        if(rvPayment!=null){
+            rvPayment.setLayoutManager(new LinearLayoutManager(this));
+            java.util.List<PaymentAdapter.Method> methods = java.util.Arrays.asList(
+                    new PaymentAdapter.Method(R.drawable.ic_truck,"COD"),
+                    new PaymentAdapter.Method(R.drawable.ic_vcb,"VCB"),
+                    new PaymentAdapter.Method(R.drawable.ic_momo,"Momo"),
+                    new PaymentAdapter.Method(R.drawable.ic_zlpay,"ZaloPay")
+            );
+            PaymentAdapter payAdapter = new PaymentAdapter(methods, idx -> selectedPaymentIdx = idx);
+            rvPayment.setAdapter(payAdapter);
+            rvPayment.setNestedScrollingEnabled(false);
+            rvPayment.setHasFixedSize(false);
+            rvPayment.setItemAnimator(null);
+            rvPayment.setFocusable(false);
+
+            androidx.recyclerview.widget.DividerItemDecoration div = new androidx.recyclerview.widget.DividerItemDecoration(this, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL);
+            div.setDrawable(androidx.core.content.ContextCompat.getDrawable(this, R.drawable.divider_1dp));
+            rvPayment.addItemDecoration(div);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable android.content.Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==201 && resultCode==RESULT_OK && data!=null){
+            com.example.bepnhataapp.common.models.AddressItem addr = (com.example.bepnhataapp.common.models.AddressItem) data.getSerializableExtra("selected_address");
+            if(addr!=null){
+                currentAddress = addr;
+                currentEmail = data.getStringExtra("selected_email");
+                if(tvShipLabel!=null) tvShipLabel.setVisibility(View.VISIBLE);
+                if(layoutNamePhone!=null) layoutNamePhone.setVisibility(View.VISIBLE);
+                if(tvShipName!=null) tvShipName.setText(addr.getName());
+                if(tvShipPhone!=null) tvShipPhone.setText(addr.getPhone());
+                TextView tvAddr = findViewById(R.id.tvShippingAddress);
+                if(tvAddr!=null){
+                    tvAddr.setText(addr.getAddress());
+                }
+            }
+        }
     }
 
     private List<CartItem> getSampleItems() {
         List<CartItem> list = new ArrayList<>();
-        list.add(new CartItem("Gói nguyên liệu Bò kho","90.000đ","2 người"));
-        list.add(new CartItem("Gói nguyên liệu Bò kho","90.000đ","2 người"));
+        list.add(new CartItem(0L,"Gói nguyên liệu Bò kho",90000,150000,1,null));
+        list.add(new CartItem(0L,"Gói nguyên liệu Bò kho",90000,150000,1,null));
         return list;
+    }
+
+    private void showLoginDialog(){
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_login_required);
+        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        android.widget.Button btnLogin = dialog.findViewById(R.id.btnLogin);
+        android.widget.Button btnGuest = dialog.findViewById(R.id.btnGuest);
+
+        if(btnLogin!=null){
+            btnLogin.setOnClickListener(v->{
+                dialog.dismiss();
+                android.content.Intent it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.login.LoginActivity.class);
+                startActivity(it);
+            });
+        }
+
+        if(btnGuest!=null){
+            btnGuest.setOnClickListener(v->{
+                dialog.dismiss();
+                android.content.Intent it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.ShippingInfoActivity.class);
+                startActivityForResult(it, 201);
+            });
+        }
+
+        dialog.show();
+    }
+
+    private long getCurrentCustomerId(){
+        if(!SessionManager.isLoggedIn(this)) return 0;
+        String phone = SessionManager.getPhone(this);
+        if(phone==null) return 0;
+        com.example.bepnhataapp.common.dao.CustomerDao dao=new com.example.bepnhataapp.common.dao.CustomerDao(this);
+        com.example.bepnhataapp.common.model.Customer c=dao.findByPhone(phone);
+        return c!=null?c.getCustomerID():0;
     }
 } 
