@@ -5,9 +5,10 @@
     android:orientation="vertical"
     android:background="#FFFFFF">
     <!-- Header with back arrow and title -->
-    <include
-        layout="@layout/layout_back_header"
-        android:id="@+id/header"/>
+    <include layout="@layout/layout_back_header"
+        android:id="@+id/customer_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

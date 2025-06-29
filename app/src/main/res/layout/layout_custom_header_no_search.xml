@@ -38,25 +38,60 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/iv_cart"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_cart_header"
-            android:layout_marginEnd="12dp"/>
+        <!-- Cart with badge -->
+        <FrameLayout
+            android:id="@+id/container_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp">
+            <ImageView
+                android:id="@+id/iv_cart"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_cart_header"/>
+            <TextView
+                android:id="@+id/tv_badge_cart"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="end|top"
+                android:background="@drawable/bg_badge_white"
+                android:textColor="@color/primary1"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:visibility="gone"/>
+        </FrameLayout>
 
+        <!-- Message icon remains -->
         <ImageView
             android:id="@+id/iv_message"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_message"
             android:layout_marginEnd="12dp"/>
 
-        <ImageView
-            android:id="@+id/iv_notification"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_notification"/>
+        <!-- Notification with badge -->
+        <FrameLayout
+            android:id="@+id/container_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_notification"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_notification"/>
+            <TextView
+                android:id="@+id/tv_badge_noti"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="end|top"
+                android:background="@drawable/bg_badge_white"
+                android:textColor="@color/primary1"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:visibility="gone"/>
+        </FrameLayout>
 
     </LinearLayout>
 

@@ -68,6 +68,8 @@ public final class CartHelper {
             existing.setQuantity(existing.getQuantity()+1);
             detailDao.update(existing);
         }
+
+        ctx.sendBroadcast(new android.content.Intent("com.bepnhata.CART_CHANGED"));
     }
 
     /** Trả về danh sách CartItem để hiển thị UI. */
@@ -100,6 +102,7 @@ public final class CartHelper {
         Cart cart = cartDao.getByCustomer(customerId).stream().findFirst().orElse(null);
         if(cart==null) return;
         new CartDetailDao(ctx).delete(cart.getCartID(), productId, servingFactor);
+        ctx.sendBroadcast(new android.content.Intent("com.bepnhata.CART_CHANGED"));
     }
 
     /** Xoá danh sách sản phẩm theo variant */
@@ -110,6 +113,7 @@ public final class CartHelper {
             removeProduct(ctx, ci.getProductId(), 1);
             removeProduct(ctx, ci.getProductId(), 2);
         }
+        ctx.sendBroadcast(new android.content.Intent("com.bepnhata.CART_CHANGED"));
     }
 
     private static long getCurrentCustomerId(Context ctx) {

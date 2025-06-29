@@ -11,6 +11,8 @@ import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.Order;
 import com.example.bepnhataapp.common.model.OrderLine;
 import com.example.bepnhataapp.common.models.CartItem;
+import com.example.bepnhataapp.common.utils.NotificationHelper;
+import com.example.bepnhataapp.common.model.OrderStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,6 +78,9 @@ public final class OrderHelper {
             ol.setTotalPrice(ci.getTotal());
             lineDao.insert(ol);
         }
+        // Push notification lên Firebase và hiển thị local
+        OrderStatus status = "COD".equalsIgnoreCase(paymentMethod)?OrderStatus.WAIT_CONFIRM:OrderStatus.WAIT_PICKUP;
+        NotificationHelper.pushOrderStatus(ctx, orderId, totalPrice, status);
         return orderId;
     }
 

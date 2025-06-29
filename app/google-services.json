@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "373475102795",
+    "project_id": "bepnhataapp",
+    "storage_bucket": "bepnhataapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373475102795:android:da2a21de79760ccff13dce",
+        "android_client_info": {
+          "package_name": "com.example.bepnhataapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Tja3JM_joqHCwdqF9xD73ZvFrD42eGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

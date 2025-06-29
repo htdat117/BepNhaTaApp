@@ -55,7 +55,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
         // Refresh header every time activity is resumed to reflect possible login state change
         updateHeaderInfo();
+        updateBadgeCounts();
+
+        // register cart receiver
+        if(cartReceiver==null){
+            cartReceiver = new android.content.BroadcastReceiver(){
+                @Override public void onReceive(android.content.Context c, android.content.Intent i){ updateBadgeCounts(); }
+            };
+            registerReceiver(cartReceiver, new android.content.IntentFilter("com.bepnhata.CART_CHANGED"));
+        }
     }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        if(cartReceiver!=null){
+            unregisterReceiver(cartReceiver);
+            cartReceiver=null;
+        }
+    }
+
+    private android.content.BroadcastReceiver cartReceiver;
 
     private void setupHeaderClicks() {
         // Tìm các icon trên header (nếu layout hiện tại có include header)
@@ -91,6 +111,16 @@ public abstract class BaseActivity extends AppCompatActivity {
             ivMessage.setOnClickListener(v -> {
                 if (!BaseActivity.this.getClass().equals(com.example.bepnhataapp.features.message.conversation.class)) {
                     android.content.Intent it = new android.content.Intent(BaseActivity.this, com.example.bepnhataapp.features.message.conversation.class);
+                    it.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(it);
+                }
+            });
+        }
+
+        if (ivNotification != null) {
+            ivNotification.setOnClickListener(v -> {
+                if (!(BaseActivity.this.getClass().equals(com.example.bepnhataapp.features.message.notification_list.class))) {
+                    android.content.Intent it = new android.content.Intent(BaseActivity.this, com.example.bepnhataapp.features.message.notification_list.class);
                     it.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(it);
                 }
@@ -260,5 +290,47 @@ public abstract class BaseActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(getBottomNavigationContainerId(), bottomNavFragment)
                 .commit();
+    }
+
+    protected void updateBadgeCounts() {
+        View root = findViewById(android.R.id.content);
+        if (root == null) return;
+        TextView tvCart = root.findViewById(R.id.tv_badge_cart);
+        TextView tvNoti = root.findViewById(R.id.tv_badge_noti);
+
+        // cart count
+        if (tvCart != null) {
+            int cnt = com.example.bepnhataapp.common.utils.CartHelper.loadItems(this).size();
+            if (cnt > 0) {
+                tvCart.setVisibility(View.VISIBLE);
+                tvCart.setText(cnt > 9 ? "9+" : String.valueOf(cnt));
+            } else tvCart.setVisibility(View.GONE);
+        }
+
+        // notifications unread count – query Firestore (async)
+        if (tvNoti != null) {
+            long userId = com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this) ? getCurrentCustomerId() : 0;
+            com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                    .collection("notifications")
+                    .whereEqualTo("userId", userId)
+                    .whereEqualTo("read", false)
+                    .get()
+                    .addOnSuccessListener(snap -> {
+                        int c = snap.size();
+                        if (c > 0) {
+                            tvNoti.setVisibility(View.VISIBLE);
+                            tvNoti.setText(c > 9 ? "9+" : String.valueOf(c));
+                        } else tvNoti.setVisibility(View.GONE);
+                    })
+                    .addOnFailureListener(e -> tvNoti.setVisibility(View.GONE));
+        }
+    }
+
+    private long getCurrentCustomerId(){
+        String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+        if(phone==null) return 0;
+        com.example.bepnhataapp.common.dao.CustomerDao dao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+        com.example.bepnhataapp.common.model.Customer c = dao.findByPhone(phone);
+        return c!=null?c.getCustomerID():0;
     }
 } 

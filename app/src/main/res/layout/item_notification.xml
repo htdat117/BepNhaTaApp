@@ -1,83 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp">
+    android:orientation="vertical"
+    android:paddingVertical="12dp">
 
+    <!-- Row content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+        <!-- Icon holder -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_circle_light_gray"
+            android:layout_gravity="center"
+            >
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/bg_grey_circle"
-                android:clipToOutline="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_completed_shipping" />
+                android:id="@+id/imgIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_truck"/>
+        </FrameLayout>
 
-            <LinearLayout
+        <!-- Texts container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giao hàng thành công"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/dark1" />
+
+            <TextView
+                android:id="@+id/tvBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="2dp"
+                android:text="Đơn hàng BNT120525 đã được giao thành công ..."
+                android:textSize="14sp"
+                android:textColor="@color/dark1" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/Body.Bold.Ag4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:text="Giao hàng thành công"
-                        android:textColor="@color/dark1"
-                        android:textSize="@dimen/header4" />
-
-                    <ImageView
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_dot_orange" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:text="Đơn hàng BNT120525 đã được giao thành công. Bạn hãy đánh giá sản phẩm trước ngày 30.05.2025 để nhận 200 điểm và giúp người dùng khác hiểu hơn về sản phẩm nhé!"
-                    android:textColor="@color/dark1"
-                    android:textSize="@dimen/body2" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:text="Hôm nay 11:00"
-                    android:textColor="@color/dark2"
-                    android:textSize="@dimen/body2" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Hôm nay 11:10"
+                android:textSize="12sp"
+                android:textColor="@color/dark2" />
         </LinearLayout>
 
+        <!-- unread dot -->
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/dark2" />
+            android:id="@+id/viewUnreadDot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_badge_orange"
+            android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 
+<!--    &lt;!&ndash; Divider &ndash;&gt;-->
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:background="@color/dark4" />-->
 </LinearLayout>

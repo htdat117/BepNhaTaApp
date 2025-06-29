@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.bepnhataapp.common.databases.DBHelper;
+import com.google.firebase.FirebaseApp;
 
 public class MyApplication extends Application {
 
@@ -13,6 +14,9 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        // Khởi tạo Firebase
+        FirebaseApp.initializeApp(this);
         
         new Thread(() -> {
             DBHelper dbHelper = new DBHelper(this);
