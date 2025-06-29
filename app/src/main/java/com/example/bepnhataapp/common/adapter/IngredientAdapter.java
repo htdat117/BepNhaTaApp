@@ -29,7 +29,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     @NonNull
     @Override
     public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_ingredient_grid, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_ingredient_row, parent, false);
         return new IngredientViewHolder(view);
     }
 
@@ -54,6 +54,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void updateData(List<Ingredient> newList){
+        this.list = newList;
+        notifyDataSetChanged();
     }
 
     static class IngredientViewHolder extends RecyclerView.ViewHolder {

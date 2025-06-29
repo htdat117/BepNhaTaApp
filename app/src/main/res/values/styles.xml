@@ -234,4 +234,9 @@
         <!-- Make container transparent so card's own white background shows -->
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="Rounded8Image">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
 </resources> 

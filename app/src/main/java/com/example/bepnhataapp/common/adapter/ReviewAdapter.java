@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.Review;
 
@@ -36,7 +37,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     @Override
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         Review review = list.get(position);
-        holder.ivAvatar.setImageResource(review.avatarResId);
+        if(review.avatarUrl!=null && !review.avatarUrl.isEmpty()){
+            Glide.with(context).load(review.avatarUrl).placeholder(R.drawable.profile_placeholder).into(holder.ivAvatar);
+        } else if(review.avatarResId!=0){
+            holder.ivAvatar.setImageResource(review.avatarResId);
+        } else {
+            holder.ivAvatar.setImageResource(R.drawable.profile_placeholder);
+        }
         holder.tvUserName.setText(review.userName);
         holder.tvTimeAgo.setText(review.timeAgo);
         holder.tvComment.setText(review.comment);
@@ -44,6 +51,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         ReviewImageAdapter imgAdapter = new ReviewImageAdapter(context, review.imageResIds);
         holder.rvImages.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.rvImages.setAdapter(imgAdapter);
+
+        ImageView[] stars = {holder.itemView.findViewById(R.id.ivStar1),
+                             holder.itemView.findViewById(R.id.ivStar2),
+                             holder.itemView.findViewById(R.id.ivStar3),
+                             holder.itemView.findViewById(R.id.ivStar4),
+                             holder.itemView.findViewById(R.id.ivStar5)};
+        int full = Math.round(review.rating);
+        for(int i=0;i<5;i++){
+            stars[i].setImageResource(i<full ? R.drawable.ic_star : R.drawable.ic_star_not_filled);
+        }
     }
 
     @Override

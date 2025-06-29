@@ -59,11 +59,14 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         if(detail!=null){
             holder.tvKcal.setText((int)detail.getCalo()+" Kcal");
             holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
+            String tag = detail.getNutritionTag();
+            if(tag!=null && !tag.isEmpty()) holder.tvNutrition.setText(capitalize(tag));
+            else holder.tvNutrition.setText("");
         }else{
             holder.tvKcal.setText("");
             holder.tvTime.setText("");
+            holder.tvNutrition.setText("");
         }
-        holder.tvNutrition.setText("");
         holder.tvPrice.setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
 
         // Add to cart button shows quick-add dialog
@@ -125,11 +128,11 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
         ((TextView)sheet.findViewById(R.id.tvName)).setText(p.getProductName());
 
-        int currentPrice = p.getProductPrice() * (100 - p.getSalePercent()) / 100;
+        int currentPrice = p.getProductPrice2() * (100 - p.getSalePercent2()) / 100;
         ((TextView)sheet.findViewById(R.id.tvPrice)).setText(formatPrice(currentPrice));
         TextView tvOld = sheet.findViewById(R.id.tvOldPrice);
-        if(p.getSalePercent()>0){
-            tvOld.setText(formatPrice(p.getProductPrice()));
+        if(p.getSalePercent2()>0){
+            tvOld.setText(formatPrice(p.getProductPrice2()));
             tvOld.setPaintFlags(tvOld.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
             tvOld.setVisibility(View.VISIBLE);
         } else {
@@ -139,7 +142,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         ((TextView)sheet.findViewById(R.id.tvDesc)).setText(p.getProductDescription()!=null ? p.getProductDescription() : "");
 
         // Stock information if available
-        ((TextView)sheet.findViewById(R.id.tvStock)).setText("Kho: " + p.getInventory());
+        TextView tvStock = sheet.findViewById(R.id.tvStock);
+        tvStock.setText("Kho: " + p.getInventory2());
 
         // Bind nutrition macros if available
         ProductDetail detail = new ProductDetailDao(context).getByProductId(p.getProductID());
@@ -161,23 +165,27 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         View btnPlus = sheet.findViewById(R.id.btnPlus);
 
         // initial total price display
-        tvTotalPrice.setText(formatPrice(currentPrice));
+        final int[] pricePerPack = {currentPrice};
+        updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], 1);
 
         btnPlus.setOnClickListener(v -> {
             quantity[0]++;
             tvQuantity.setText(String.valueOf(quantity[0]));
-            updateTotalPrice(tvTotalPrice, currentPrice, quantity[0], servingFactor[0]);
+            updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], servingFactor[0]);
         });
 
         btnMinus.setOnClickListener(v -> {
             if(quantity[0]>1){
                 quantity[0]--;
                 tvQuantity.setText(String.valueOf(quantity[0]));
-                updateTotalPrice(tvTotalPrice, currentPrice, quantity[0], servingFactor[0]);
+                updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], servingFactor[0]);
             }
         });
 
         com.google.android.material.button.MaterialButtonToggleGroup group = sheet.findViewById(R.id.toggleServing);
+        // initial macro display
+        updateMacroViews(sheet, detail, servingFactor[0]);
+
         group.addOnButtonCheckedListener((g, checkedId, isChecked) -> {
             if(isChecked){
                 if(checkedId==R.id.btnServing2){
@@ -185,7 +193,25 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 }else if(checkedId==R.id.btnServing4){
                     servingFactor[0] = 2;
                 }
-                updateTotalPrice(tvTotalPrice, currentPrice, quantity[0], servingFactor[0]);
+                pricePerPack[0] = servingFactor[0]==1 ? p.getProductPrice2() * (100-p.getSalePercent2())/100
+                                                      : p.getProductPrice4() * (100-p.getSalePercent4())/100;
+                ((TextView)sheet.findViewById(R.id.tvPrice)).setText(formatPrice(pricePerPack[0]));
+                TextView tvOldP = sheet.findViewById(R.id.tvOldPrice);
+                if((servingFactor[0]==1 && p.getSalePercent2()>0) || (servingFactor[0]==2 && p.getSalePercent4()>0)){
+                    tvOldP.setVisibility(View.VISIBLE);
+                    int old = servingFactor[0]==1 ? p.getProductPrice2() : p.getProductPrice4();
+                    tvOldP.setText(formatPrice(old));
+                    tvOldP.setPaintFlags(tvOldP.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    tvOldP.setVisibility(View.GONE);
+                }
+
+                // update stock availability (inventory per package)
+                int stockPackages = servingFactor[0]==1 ? p.getInventory2() : p.getInventory4();
+                tvStock.setText("Kho: " + stockPackages);
+
+                updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], 1);
+                updateMacroViews(sheet, detail, servingFactor[0]);
             }
         });
 
@@ -203,5 +229,23 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             return (int)value+" "+label;
         }
         return (int)value+"g "+label;
+    }
+
+    private void updateMacroViews(View root, ProductDetail detail, int factor){
+        if(detail==null) return;
+        double carbs = factor==1 ? (detail.getCarbs2()!=0?detail.getCarbs2():detail.getCarbs()) : (detail.getCarbs4()!=0?detail.getCarbs4():detail.getCarbs2()*2);
+        double protein = factor==1 ? (detail.getProtein2()!=0?detail.getProtein2():detail.getProtein()) : (detail.getProtein4()!=0?detail.getProtein4():detail.getProtein2()*2);
+        double fat = factor==1 ? (detail.getFat2()!=0?detail.getFat2():detail.getFat()) : (detail.getFat4()!=0?detail.getFat4():detail.getFat2()*2);
+        double calo = factor==1 ? (detail.getCalo2()!=0?detail.getCalo2():detail.getCalo()) : (detail.getCalo4()!=0?detail.getCalo4():detail.getCalo2()*2);
+
+        ((TextView)root.findViewById(R.id.tvCarbs)).setText(formatMacro(carbs,"carbs"));
+        ((TextView)root.findViewById(R.id.tvProtein)).setText(formatMacro(protein,"proteins"));
+        ((TextView)root.findViewById(R.id.tvCalo)).setText(formatMacro(calo,"Kcal"));
+        ((TextView)root.findViewById(R.id.tvFat)).setText(formatMacro(fat,"fat"));
+    }
+
+    private String capitalize(String s){
+        if(s==null || s.isEmpty()) return s;
+        return s.substring(0,1).toUpperCase()+s.substring(1);
     }
 } 
