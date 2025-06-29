@@ -55,7 +55,7 @@ public class conversation extends AppCompatActivity {
         faqAnswers.put("phí vận chuyển", "Phí vận chuyển được tính dựa trên địa chỉ giao hàng và trọng lượng đơn hàng.");
         faqAnswers.put("thanh toán", "Bếp Nhà Ta hỗ trợ chuyển khoản ngân hàng, ví điện tử (Momo, ZaloPay), và tiền mặt khi nhận hàng (COD).");
         faqAnswers.put("nguyên liệu", "Bếp Nhà Ta sử dụng nguyên liệu chất lượng cao, đảm bảo an toàn và ngon miệng.");
-        faqAnswers.put("Làm sao để biết đơn hàng đã được đặt thành công?", "Bạn sẽ nhận email xác nhận và có thể kiểm tra trong mục 'Đơn hàng của tôi'.");
+        faqAnswers.put("đặt thành công?", "Bạn sẽ nhận email xác nhận và có thể kiểm tra trong mục 'Đơn hàng của tôi'.");
         // Thêm các câu hỏi khác tại đây
     }
 
@@ -258,7 +258,7 @@ public class conversation extends AppCompatActivity {
         // background and text colors based on sender
         if(isUser){
             tvMsg.setTextColor(android.graphics.Color.WHITE);
-            bubble.setBackgroundResource(R.drawable.bg_button_primary);
+            bubble.setBackgroundResource(R.drawable.bg_button_primary2);
         }else{
             tvMsg.setTextColor(getResources().getColor(R.color.dark1));
             bubble.setBackgroundResource(R.drawable.button_rounded_gray);
