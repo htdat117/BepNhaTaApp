@@ -68,6 +68,10 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         // Setup Hot Ingredients RecyclerView
         hotIngredientsRecyclerView = findViewById(R.id.hot_ingredients_recycler_view);
         hotIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        
+        // Set empty adapter initially to prevent "No adapter attached" error
+        HotIngredientAdapter emptyHotAdapter = new HotIngredientAdapter(new ArrayList<>());
+        hotIngredientsRecyclerView.setAdapter(emptyHotAdapter);
 
         // Click "Xem tất cả" Hot Ingredients
         TextView tvSeeAllHot = findViewById(R.id.tvSeeAllHotIngredients);
@@ -95,12 +99,22 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         recipesGridRecyclerView = findViewById(R.id.recipes_grid_recycler_view);
         recipesGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recipesGridRecyclerView.setNestedScrollingEnabled(false);
+        
+        // Set empty adapter initially to prevent "No adapter attached" error
+        RecipeAdapter emptyRecipeAdapter = new RecipeAdapter(new ArrayList<>());
+        recipesGridRecyclerView.setAdapter(emptyRecipeAdapter);
+        
         // Recipes sẽ được load sau khi categories sẵn sàng.
 
         // Setup Cooking Tips RecyclerView
         cookingTipsRecyclerView = findViewById(R.id.cooking_tips_recycler_view);
         cookingTipsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         cookingTipsRecyclerView.setNestedScrollingEnabled(false);
+        
+        // Set empty adapter initially to prevent "No adapter attached" error
+        CookingTipAdapter emptyCookingAdapter = new CookingTipAdapter(this, new ArrayList<>());
+        cookingTipsRecyclerView.setAdapter(emptyCookingAdapter);
+        
         loadCookingTipsAsync();
 
         // Thêm sự kiện click cho nút 'Xem tất cả' phần mẹo vặt bí quyết nấu ăn

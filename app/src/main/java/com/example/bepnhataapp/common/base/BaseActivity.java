@@ -62,7 +62,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             cartReceiver = new android.content.BroadcastReceiver(){
                 @Override public void onReceive(android.content.Context c, android.content.Intent i){ updateBadgeCounts(); }
             };
-            registerReceiver(cartReceiver, new android.content.IntentFilter("com.bepnhata.CART_CHANGED"));
+            if (android.os.Build.VERSION.SDK_INT >= 33) {
+                registerReceiver(cartReceiver, new android.content.IntentFilter("com.bepnhata.CART_CHANGED"), android.content.Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(cartReceiver, new android.content.IntentFilter("com.bepnhata.CART_CHANGED"));
+            }
         }
     }
 

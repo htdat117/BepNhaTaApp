@@ -21,6 +21,8 @@ import com.example.bepnhataapp.common.model.OrderLine;
 import com.example.bepnhataapp.common.model.Product;
 import java.util.List;
 import android.widget.LinearLayout;
+import android.widget.Button;
+import androidx.core.content.ContextCompat;
 
 public class OrderListFragment extends Fragment {
     private static final String ARG_STATUS = "order_status";
@@ -100,7 +102,8 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderVH> {
         List<OrderLine> lines = new OrderLineDao(h.itemView.getContext()).getByOrder(o.getOrderID());
         ProductDao productDao = new ProductDao(h.itemView.getContext());
         LayoutInflater inflater = LayoutInflater.from(h.itemView.getContext());
-        for (OrderLine line : lines) {
+        for (int i = 0; i < lines.size(); i++) {
+            OrderLine line = lines.get(i);
             Product p = productDao.getById(line.getProductID());
             View itemView = inflater.inflate(R.layout.item_order_product, h.layoutOrderProducts, false);
             ImageView img = itemView.findViewById(R.id.imgProduct);
@@ -127,12 +130,60 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderVH> {
                 tvPrice.setText(formatMoney(line.getTotalPrice()) + "đ");
             }
             tvQuantity.setText("x" + line.getQuantity());
+            // Thêm margin top cho các sản phẩm từ thứ 2 trở đi
+            if (i > 0) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) itemView.getLayoutParams();
+                params.topMargin = (int) (itemView.getContext().getResources().getDisplayMetrics().density * 8); // 8dp
+                itemView.setLayoutParams(params);
+            }
             h.layoutOrderProducts.addView(itemView);
         }
+        // Xử lý click vào item để xem chi tiết đơn hàng
         h.itemView.setOnClickListener(v -> {
             android.content.Intent it = new android.content.Intent(v.getContext(), com.example.bepnhataapp.features.manage_order.order_detail.class);
             it.putExtra("orderId", o.getOrderID());
             v.getContext().startActivity(it);
+        });
+        // Hiển thị nút phù hợp theo trạng thái
+        if (status == OrderStatus.CANCELED) {
+            h.btnReorder.setVisibility(View.VISIBLE);
+            h.btnReturn.setVisibility(View.GONE);
+            h.btnReview.setVisibility(View.GONE);
+            h.btnCancelOrder.setVisibility(View.GONE);
+            h.tvOrderStatus.setText("Đã huỷ");
+            h.tvOrderStatus.setTextColor(ContextCompat.getColor(h.itemView.getContext(), R.color.orange));
+            h.tvOrderStatus.setGravity(android.view.Gravity.END);
+        } else if (status == OrderStatus.DELIVERED) {
+            h.btnReview.setVisibility(View.VISIBLE);
+            h.btnReturn.setVisibility(View.VISIBLE);
+            h.btnReorder.setVisibility(View.VISIBLE);
+            h.btnCancelOrder.setVisibility(View.GONE);
+        } else {
+            h.btnReview.setVisibility(View.GONE);
+            h.btnReturn.setVisibility(View.GONE);
+            h.btnReorder.setVisibility(View.GONE);
+            h.btnCancelOrder.setVisibility(View.VISIBLE);
+        }
+        // Xử lý huỷ đơn hàng
+        h.btnCancelOrder.setOnClickListener(v -> {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(v.getContext());
+            android.view.LayoutInflater inflaterDialog = android.view.LayoutInflater.from(v.getContext());
+            android.view.View dialogView = inflaterDialog.inflate(R.layout.popup_cancel_order, null);
+            builder.setView(dialogView);
+            final android.app.AlertDialog dialog = builder.create();
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialogView.findViewById(R.id.btnQuit).setOnClickListener(view -> dialog.dismiss());
+            dialogView.findViewById(R.id.btnAccept).setOnClickListener(view -> {
+                // Cập nhật trạng thái đơn hàng sang CANCELED
+                com.example.bepnhataapp.common.model.Order order = o;
+                order.setStatus(com.example.bepnhataapp.common.model.OrderStatus.CANCELED.name());
+                new com.example.bepnhataapp.common.dao.OrderDao(v.getContext()).update(order);
+                android.widget.Toast.makeText(v.getContext(), "Đã huỷ đơn hàng", android.widget.Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                // Cập nhật lại danh sách
+                notifyDataSetChanged();
+            });
+            dialog.show();
         });
     }
     private int getProductCount(long orderId, OrderVH h) {
@@ -150,12 +201,20 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderVH> {
     static class OrderVH extends RecyclerView.ViewHolder {
         TextView tvCode, tvStatus, tvTotal;
         LinearLayout layoutOrderProducts;
+        Button btnReview, btnCancelOrder;
+        TextView tvOrderStatus;
+        Button btnReorder, btnReturn;
         OrderVH(View v) {
             super(v);
             tvCode = v.findViewById(R.id.tvOrderCode);
             tvStatus = v.findViewById(R.id.tvOrderStatus);
             tvTotal = v.findViewById(R.id.tvOrderTotal);
             layoutOrderProducts = v.findViewById(R.id.layoutOrderProducts);
+            btnReview = v.findViewById(R.id.btnReview);
+            btnCancelOrder = v.findViewById(R.id.btnCancelOrder);
+            tvOrderStatus = v.findViewById(R.id.tvOrderStatus);
+            btnReorder = v.findViewById(R.id.btnReorder);
+            btnReturn = v.findViewById(R.id.btnReturn);
         }
     }
 } 
