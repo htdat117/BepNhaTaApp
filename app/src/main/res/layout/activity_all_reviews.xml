@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary1"
-        android:padding="16dp"
+        android:paddingBottom="8dp"
+        android:paddingHorizontal="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -35,20 +36,8 @@
                 android:gravity="center"
                 android:text="Chi tiết sản phẩm"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                style="@style/Header.Ag3"
                 android:layout_marginStart="12dp"/>
-            <!-- Breadcrumb -->
-            <TextView
-                android:id="@+id/tvBreadcrumb"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="Sản phẩm > Tất cả > Bánh canh cua > Đánh giá"
-                android:textSize="12sp"
-                android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
 

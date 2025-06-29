@@ -133,12 +133,15 @@ public class ProductDetailActivity extends BaseActivity {
         }
 
         if(reviewList.isEmpty()){
-            List<Integer> sampleImgs = new java.util.ArrayList<>();
-            sampleImgs.add(R.drawable.food);
-            reviewList.add(new Review(R.drawable.profile_placeholder, "Chưa có đánh giá", 0f, "", "Hãy là người đầu tiên đánh giá sản phẩm này", sampleImgs));
+            java.util.List<Integer> sampleImgsRes = new java.util.ArrayList<>();
+            sampleImgsRes.add(R.drawable.food);
+            reviewList.add(new Review(R.drawable.profile_placeholder, "Chưa có đánh giá", 0f, "", "Hãy là người đầu tiên đánh giá sản phẩm này", sampleImgsRes));
         }
 
-        ReviewAdapter reviewAdapter = new ReviewAdapter(this, reviewList);
+        // Chỉ hiển thị tối đa 2 đánh giá gần nhất
+        List<Review> displayedReviews = reviewList.size() > 2 ? reviewList.subList(0, 2) : reviewList;
+
+        ReviewAdapter reviewAdapter = new ReviewAdapter(this, displayedReviews);
         binding.rvReviews.setLayoutManager(new LinearLayoutManager(this));
         binding.rvReviews.setAdapter(reviewAdapter);
 
@@ -182,6 +185,9 @@ public class ProductDetailActivity extends BaseActivity {
 
         binding.tvAllReviews.setOnClickListener(v -> {
             Intent intent = new Intent(ProductDetailActivity.this, AllReviewsActivity.class);
+            if(currentProduct != null){
+                intent.putExtra("productId", currentProduct.getProductID());
+            }
             startActivity(intent);
         });
     }
@@ -204,14 +210,34 @@ public class ProductDetailActivity extends BaseActivity {
 
     private void updatePriceText() {
         if(currentProduct==null) return;
-        int pricePerPack;
+
+        int originalPricePerPack;
+        int salePercent;
         if(currentServingFactor==1){
-            pricePerPack = currentProduct.getProductPrice2() * (100-currentProduct.getSalePercent2())/100;
+            originalPricePerPack = currentProduct.getProductPrice2();
+            salePercent = currentProduct.getSalePercent2();
         } else {
-            pricePerPack = currentProduct.getProductPrice4() * (100-currentProduct.getSalePercent4())/100;
+            originalPricePerPack = currentProduct.getProductPrice4();
+            salePercent = currentProduct.getSalePercent4();
         }
-        int total = pricePerPack * quantity;
-        binding.tvPrice.setText(String.valueOf(total));
+
+        java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
+
+        int discountedPricePerPack = originalPricePerPack * (100 - salePercent) / 100;
+
+        int totalDiscounted = discountedPricePerPack * quantity;
+        binding.tvPrice.setText(nf.format(totalDiscounted)+"đ");
+
+        // Old price handling
+        if(salePercent > 0){
+            int totalOriginal = originalPricePerPack * quantity;
+            binding.tvOldPrice.setVisibility(android.view.View.VISIBLE);
+            binding.tvOldPrice.setText(nf.format(totalOriginal)+"đ");
+            // strike through
+            binding.tvOldPrice.setPaintFlags(binding.tvOldPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            binding.tvOldPrice.setVisibility(android.view.View.GONE);
+        }
     }
 
     private void refreshMacroAndTime(){

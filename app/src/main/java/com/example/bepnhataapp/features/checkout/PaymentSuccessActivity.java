@@ -24,13 +24,9 @@ public class PaymentSuccessActivity extends BaseActivity implements BaseActivity
 
         // Theo dõi đơn hàng
         findViewById(R.id.btnTrackOrder).setOnClickListener(v -> {
-            Intent it = new Intent(PaymentSuccessActivity.this, com.example.bepnhataapp.features.manage_order.keep_track_order.class);
-            // Truyền kèm orderId nếu có
-            if (getIntent() != null && getIntent().hasExtra("order_id")) {
-                it.putExtra("orderId", getIntent().getLongExtra("order_id", -1));
-            }
+            Intent it = new Intent(PaymentSuccessActivity.this, com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+            it.putExtra("tab_index", 0); // tab Chờ xác nhận
             startActivity(it);
-            // Không finish – cho phép người dùng quay lại màn hình này nếu cần
         });
 
         // Về trang chủ

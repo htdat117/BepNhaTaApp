@@ -26,6 +26,41 @@ public class AccountLoggedInFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateUserName();
+
+        // Liên kết các nút trạng thái đơn hàng với ManageOrderActivity
+        View waitConfirm = view.findViewById(R.id.layout_wait_confirm);
+        View waitPickup = view.findViewById(R.id.layout_wait_pickup);
+        View outForDelivery = view.findViewById(R.id.layout_out_for_delivery);
+        View reviewOrder = view.findViewById(R.id.layout_review_order);
+
+        if (waitConfirm != null) {
+            waitConfirm.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(getContext(), com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                intent.putExtra("tab_index", 0); // Chờ xác nhận
+                startActivity(intent);
+            });
+        }
+        if (waitPickup != null) {
+            waitPickup.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(getContext(), com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                intent.putExtra("tab_index", 1); // Chờ lấy hàng
+                startActivity(intent);
+            });
+        }
+        if (outForDelivery != null) {
+            outForDelivery.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(getContext(), com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                intent.putExtra("tab_index", 2); // Chờ giao hàng
+                startActivity(intent);
+            });
+        }
+        if (reviewOrder != null) {
+            reviewOrder.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(getContext(), com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                intent.putExtra("tab_index", 3); // Đánh giá (hoặc Đã giao tuỳ theo thứ tự tab)
+                startActivity(intent);
+            });
+        }
     }
 
     private void updateUserName() {

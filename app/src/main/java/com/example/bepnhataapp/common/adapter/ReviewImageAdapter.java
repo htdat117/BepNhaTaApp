@@ -16,11 +16,11 @@ import java.util.List;
 public class ReviewImageAdapter extends RecyclerView.Adapter<ReviewImageAdapter.ImageViewHolder> {
 
     private Context context;
-    private List<Integer> imageResIds;
+    private List<?> images;
 
-    public ReviewImageAdapter(Context context, List<Integer> imageResIds) {
+    public ReviewImageAdapter(Context context, List<?> images) {
         this.context = context;
-        this.imageResIds = imageResIds;
+        this.images = images;
     }
 
     @NonNull
@@ -32,12 +32,20 @@ public class ReviewImageAdapter extends RecyclerView.Adapter<ReviewImageAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        holder.image.setImageResource(imageResIds.get(position));
+        Object obj = images.get(position);
+        if(obj instanceof Integer){
+            holder.image.setImageResource((Integer)obj);
+        } else if(obj instanceof String){
+            com.bumptech.glide.Glide.with(context).load((String)obj)
+                    .placeholder(R.drawable.food)
+                    .error(R.drawable.food)
+                    .into(holder.image);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return imageResIds.size();
+        return images.size();
     }
 
     static class ImageViewHolder extends RecyclerView.ViewHolder {

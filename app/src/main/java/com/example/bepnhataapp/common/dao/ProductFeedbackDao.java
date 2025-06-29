@@ -66,22 +66,33 @@ public class ProductFeedbackDao {
 
     public List<com.example.bepnhataapp.common.models.Review> getReviewsByProductId(long productID){
         List<com.example.bepnhataapp.common.models.Review> reviews = new ArrayList<>();
-        String sql = "SELECT pf.content, pf.rating, pf.createdAt, c.fullName, c.avatar " +
+        String sql = "SELECT pf.content, pf.rating, pf.createdAt, pf.image, c.fullName, c.avatar " +
                 "FROM " + DBHelper.TBL_PRODUCT_FEEDBACK + " pf " +
                 "JOIN " + DBHelper.TBL_ORDER_LINES + " ol ON pf.orderLineID = ol.orderLineID " +
                 "JOIN " + DBHelper.TBL_ORDERS + " o ON ol.orderID = o.orderID " +
                 "JOIN " + DBHelper.TBL_CARTS + " ct ON o.cartID = ct.cartID " +
                 "JOIN " + DBHelper.TBL_CUSTOMERS + " c ON ct.customerID = c.customerID " +
-                "WHERE ol.productID = ?";
+                "WHERE ol.productID = ? ORDER BY pf.createdAt DESC";
         Cursor cur = helper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(productID)});
         if(cur.moveToFirst()){
             do{
                 String content = cur.getString(0);
                 int rating = cur.getInt(1);
                 String createdAt = cur.getString(2);
-                String fullName = cur.getString(3);
-                String avatar = cur.getString(4);
-                reviews.add(new com.example.bepnhataapp.common.models.Review(avatar, fullName, rating, createdAt, content, new ArrayList<>()));
+                String imageStr = cur.getString(3);
+                String fullName = cur.getString(4);
+                String avatar = cur.getString(5);
+
+                java.util.List<String> imgUrls = new java.util.ArrayList<>();
+                if(imageStr!=null && !imageStr.isEmpty()){
+                    String[] parts = imageStr.split("[;,]");
+                    for(String p: parts){
+                        p = p.trim();
+                        if(!p.isEmpty()) imgUrls.add(p);
+                    }
+                }
+
+                reviews.add(new com.example.bepnhataapp.common.models.Review(avatar, fullName, rating, createdAt, content, imgUrls, true));
             }while(cur.moveToNext());
         }
         cur.close();

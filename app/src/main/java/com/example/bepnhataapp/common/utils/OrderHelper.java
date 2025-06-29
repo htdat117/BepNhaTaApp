@@ -84,7 +84,7 @@ public final class OrderHelper {
         return orderId;
     }
 
-    private static long getCurrentCustomerId(Context ctx){
+    public static long getCurrentCustomerId(Context ctx){
         String phone = SessionManager.getPhone(ctx);
         if(phone==null) return 0;
         CustomerDao dao=new CustomerDao(ctx);

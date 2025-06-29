@@ -230,6 +230,9 @@
         <activity
             android:name="com.example.bepnhataapp.features.cart.CartActivity"
             android:exported="false" />
+        <activity
+            android:name=".features.manage_order.ManageOrderActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
