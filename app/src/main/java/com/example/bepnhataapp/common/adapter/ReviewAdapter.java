@@ -48,7 +48,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.tvTimeAgo.setText(review.timeAgo);
         holder.tvComment.setText(review.comment);
         // For stars, could set ratingBar but using static image placeholder.
-        ReviewImageAdapter imgAdapter = new ReviewImageAdapter(context, review.imageResIds);
+        java.util.List<?> imgs = (review.imageResIds!=null && !review.imageResIds.isEmpty()) ? review.imageResIds : review.imageUrls;
+        ReviewImageAdapter imgAdapter = new ReviewImageAdapter(context, imgs);
         holder.rvImages.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.rvImages.setAdapter(imgAdapter);
 
