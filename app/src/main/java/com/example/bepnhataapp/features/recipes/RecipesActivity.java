@@ -33,6 +33,6 @@ public class RecipesActivity extends BaseActivity implements BaseActivity.OnNavi
 
     @Override
     public void onNavigationItemReselected(int itemId) {
-        // Không cần xử lý gì ở đây
+        handleNavigation(itemId);
     }
 }
