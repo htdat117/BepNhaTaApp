@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sample_img" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gói nguyên liệu Bò kho"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tvVariant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phân loại: 2 người"
+            android:textSize="13sp"
+            android:textColor="@color/gray_700"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="2dp">
+            <TextView
+                android:id="@+id/tvOldPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="150.000đ"
+                android:textSize="13sp"
+                android:textColor="@color/gray_500"/>
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="90.000đ"
+                android:textSize="15sp"
+                android:textColor="@color/orange"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x1"
+            android:textSize="13sp"
+            android:textColor="@color/gray_700"
+            android:layout_marginTop="2dp"/>
+    </LinearLayout>
+</LinearLayout> 

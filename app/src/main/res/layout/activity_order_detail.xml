@@ -1,180 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".features.manage_order.order_detail">
+    android:background="#FFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvExpectedTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thời gian nhận hàng dự kiến: 17 - 18h, 27 Th 5 2025"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            android:background="@drawable/bg_card_round"
+            android:padding="8dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:id="@+id/tvAddressLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ nhận hàng"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginBottom="4dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/primary1"
-            android:gravity="center_vertical"
-            android:padding="8dp">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Quản lý đơn hàng"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/header3"
-                    android:textStyle="bold"
-                    android:gravity="center" />
-
-                <ImageButton
-                    android:id="@+id/btn_back"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_back_left"
-                    android:contentDescription="Back"
-                    android:layout_gravity="start|center_vertical" />
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Thông tin đơn hàng"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:textSize="@dimen/body3" />
-
-        </LinearLayout>
-
-
-
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/primary1" />
-
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp">
-
+            android:orientation="horizontal"
+            android:background="@drawable/bg_card_round"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp">
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="vertical"
-                android:layout_gravity="center">
-
-                <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvReceiverName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/bg_button_orange"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
-
-                    <TextView
-                        style="@style/Body.Bold.Ag1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Thời gian nhận hàng dự kiến:"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/body2"/>
-
-                    <TextView
-                        android:id="@+id/order_detail_Shipping_Time"
-                        style="@style/Body.Bold.Ag1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="***Time***"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/body2" />
-
-                </LinearLayout>
+                    android:text="Đoàn Kiên"
+                    android:textStyle="bold"
+                    android:textSize="15sp"/>
+                <TextView
+                    android:id="@+id/tvReceiverPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="033 523 6269"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/tvReceiverAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="312 Quang Trung, Phường 10, Gò Vấp"
+                    android:textSize="14sp"/>
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Địa chỉ nhận hàng"
-                android:textSize="@dimen/body2"
-                android:textColor="@color/dark1"
-                style="@style/Body.Bold.Ag2"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
-
-            <ScrollView
-                android:id="@+id/sv_shipping_address"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fillViewport="true"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary1" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/wait_confirm_Product"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <ScrollView
-                android:id="@+id/sv_list_price"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fillViewport="true"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary1" />
-
-            <ScrollView
-                android:id="@+id/sv_list_Time"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fillViewport="true"/>
-
         </LinearLayout>
 
+        <include layout="@layout/item_order_list" />
 
-    </ScrollView>
+        <TextView
+            android:id="@+id/tvOrderSummaryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng kết đơn hàng"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
 
-    <include
-        layout="@layout/layout_bottom_navigation"
-        android:id="@+id/bottom_navigation_container"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_round"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/tvOrderTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tổng tiền hàng: 90.000đ"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvShippingFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phí vận chuyển: 45.000đ"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvShippingDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ưu đãi phí vận chuyển: -45.000đ"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvFinalTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thành tiền: 90.000đ"
+                android:textStyle="bold"
+                android:textColor="@color/orange"
+                android:textSize="15sp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvOrderInfoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mã đơn hàng: GNLBK2N_1"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_round"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/tvPaymentMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phương thức thanh toán: COD"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvOrderTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thời gian đặt hàng: 10:00 27-05-2025"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvConfirmTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thời gian xác nhận đơn hàng"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvPickupTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thời gian lấy hàng"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvReceiveTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thời gian nhận hàng"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

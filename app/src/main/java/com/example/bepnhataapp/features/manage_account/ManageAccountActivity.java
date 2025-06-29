@@ -132,7 +132,8 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
         if (waitConfirmView != null) {
             waitConfirmView.setOnClickListener(v -> {
                 if (isLoggedIn()) {
-                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.wait_confirm.class);
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                    intent.putExtra("tab_index", 0); // Chờ xác nhận
                     startActivity(intent);
                 } else {
                     showLoginPromptDialog();
@@ -144,7 +145,8 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
         if (waitPickupView != null) {
             waitPickupView.setOnClickListener(v -> {
                 if (isLoggedIn()) {
-                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.wait_pickup.class);
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                    intent.putExtra("tab_index", 1); // Chờ lấy hàng
                     startActivity(intent);
                 } else {
                     showLoginPromptDialog();
@@ -156,7 +158,8 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
         if (outForDeliveryView != null) {
             outForDeliveryView.setOnClickListener(v -> {
                 if (isLoggedIn()) {
-                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.out_for_delivery.class);
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                    intent.putExtra("tab_index", 2); // Chờ giao hàng
                     startActivity(intent);
                 } else {
                     showLoginPromptDialog();
@@ -168,7 +171,8 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
         if (reviewOrderView != null) {
             reviewOrderView.setOnClickListener(v -> {
                 if (isLoggedIn()) {
-                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.review_order.class);
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                    intent.putExtra("tab_index", 3); // Đánh giá/Đã giao
                     startActivity(intent);
                 } else {
                     showLoginPromptDialog();
