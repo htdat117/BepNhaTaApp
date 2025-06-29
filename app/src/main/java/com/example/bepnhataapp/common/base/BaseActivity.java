@@ -86,6 +86,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             });
         }
+
+        if (ivMessage != null) {
+            ivMessage.setOnClickListener(v -> {
+                if (!BaseActivity.this.getClass().equals(com.example.bepnhataapp.features.message.conversation.class)) {
+                    android.content.Intent it = new android.content.Intent(BaseActivity.this, com.example.bepnhataapp.features.message.conversation.class);
+                    it.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(it);
+                }
+            });
+        }
     }
 
     /**

@@ -216,7 +216,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     default: paymentMethodStr="Other"; break;
                 }
                 it.putExtra("payment_method", paymentMethodStr);
-                startActivity(it);
+            startActivity(it);
             }
         });
 

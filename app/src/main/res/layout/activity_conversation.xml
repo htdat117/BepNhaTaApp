@@ -1,37 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF">
-
-    <!-- Header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/primary1"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_circle_left_back"
-            android:contentDescription="Back" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Chat cùng bếp nhà ta"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-    </LinearLayout>
-
+    <!-- Header with back arrow and title -->
+    <include
+        layout="@layout/layout_back_header"
+        android:id="@+id/header"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -42,23 +18,49 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="22 tháng 5"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="@dimen/body1"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/dark1"/>
-            <ListView
+            <LinearLayout
+                android:id="@+id/llMessages"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </ListView>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- Suggested quick questions -->
+            <LinearLayout
+                android:id="@+id/llSuggestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp" />
+
         </LinearLayout>
     </ScrollView>
+
+    <!-- Quick action chips fixed at bottom (above input bar) -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:id="@+id/llQuickActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,10 +72,18 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_rounded_gray"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:padding="8dp">
 
+        <ImageView
+            android:id="@+id/btn_camera"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/baseline_camera_alt_24" />
+
         <EditText
+            android:id="@+id/message_input"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
@@ -83,6 +93,7 @@
             android:background="@android:color/transparent"/>
 
         <ImageView
+            android:id="@+id/btn_send"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="8dp"

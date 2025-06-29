@@ -59,7 +59,7 @@ public final class CartHelper {
             // Re-open DAO to make sure SQLite re-parses the just-altered schema
             detailDao = new CartDetailDao(ctx);
             try{
-                detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, 1));
+            detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, 1));
             }catch(Exception inner){
                 // If it still fails, bubble up so that we can notice & fix
                 throw inner;

@@ -97,7 +97,7 @@ public class ShippingInfoActivity extends AppCompatActivity {
                 addr = finalEditingAddr;
             } else {
                 addr = new Address();
-                addr.setCustomerID(customerId);
+            addr.setCustomerID(customerId);
                 // default true for new address
                 addr.setDefault(true);
             }
@@ -122,7 +122,7 @@ public class ShippingInfoActivity extends AppCompatActivity {
             } else {
                 long id = dao.insert(addr);
                 addr.setAddressID(id);
-                Toast.makeText(this, "Đã lưu địa chỉ mới", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã lưu địa chỉ mới", Toast.LENGTH_SHORT).show();
             }
 
             // trả về để CheckoutActivity hiển thị
