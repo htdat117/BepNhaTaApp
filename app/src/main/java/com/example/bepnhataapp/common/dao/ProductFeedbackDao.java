@@ -46,6 +46,48 @@ public class ProductFeedbackDao {
         return list;
     }
 
+    /**
+     * Get all feedbacks of a product by joining order lines.
+     */
+    public List<ProductFeedback> getByProductId(long productID){
+        List<ProductFeedback> list = new ArrayList<>();
+        String sql = "SELECT pf.* FROM " + DBHelper.TBL_PRODUCT_FEEDBACK + " pf " +
+                "JOIN " + DBHelper.TBL_ORDER_LINES + " ol ON pf.orderLineID = ol.orderLineID " +
+                "WHERE ol.productID = ?";
+        Cursor cur = helper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(productID)});
+        if(cur.moveToFirst()){
+            do {
+                list.add(fromCursor(cur));
+            } while(cur.moveToNext());
+        }
+        cur.close();
+        return list;
+    }
+
+    public List<com.example.bepnhataapp.common.models.Review> getReviewsByProductId(long productID){
+        List<com.example.bepnhataapp.common.models.Review> reviews = new ArrayList<>();
+        String sql = "SELECT pf.content, pf.rating, pf.createdAt, c.fullName, c.avatar " +
+                "FROM " + DBHelper.TBL_PRODUCT_FEEDBACK + " pf " +
+                "JOIN " + DBHelper.TBL_ORDER_LINES + " ol ON pf.orderLineID = ol.orderLineID " +
+                "JOIN " + DBHelper.TBL_ORDERS + " o ON ol.orderID = o.orderID " +
+                "JOIN " + DBHelper.TBL_CARTS + " ct ON o.cartID = ct.cartID " +
+                "JOIN " + DBHelper.TBL_CUSTOMERS + " c ON ct.customerID = c.customerID " +
+                "WHERE ol.productID = ?";
+        Cursor cur = helper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(productID)});
+        if(cur.moveToFirst()){
+            do{
+                String content = cur.getString(0);
+                int rating = cur.getInt(1);
+                String createdAt = cur.getString(2);
+                String fullName = cur.getString(3);
+                String avatar = cur.getString(4);
+                reviews.add(new com.example.bepnhataapp.common.models.Review(avatar, fullName, rating, createdAt, content, new ArrayList<>()));
+            }while(cur.moveToNext());
+        }
+        cur.close();
+        return reviews;
+    }
+
     private ContentValues toContentValues(ProductFeedback pf) {
         ContentValues cv = new ContentValues();
         cv.put("orderLineID", pf.getOrderLineID());

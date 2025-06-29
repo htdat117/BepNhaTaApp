@@ -7,16 +7,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="16dp"
+        android:paddingStart="8dp"
         android:paddingEnd="16dp">
 
         <!-- Ingredient header -->
         <TextView
+            android:id="@+id/tvServingHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nguyên liệu cho 2 người"
-            android:textStyle="bold"
-            android:textSize="16sp"
+            android:textColor="@color/dark1"
+            android:fontFamily="@font/inter_bold"
+            android:textSize="@dimen/body1"
             android:layout_marginTop="8dp"/>
 
         <!-- Ingredient list -->

@@ -217,7 +217,7 @@
                     android:layout_height="wrap_content"
                     app:singleSelection="true"
                     app:selectionRequired="true"
-                    app:checkedButton="@id/btnFor4">
+                    app:checkedButton="@id/btnFor2">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnFor2"

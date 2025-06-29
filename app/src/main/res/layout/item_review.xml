@@ -45,21 +45,25 @@
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_star"/>
                 <ImageView
+                    android:id="@+id/ivStar2"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_star"/>
                 <ImageView
+                    android:id="@+id/ivStar3"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_star"/>
                 <ImageView
+                    android:id="@+id/ivStar4"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_star"/>
                 <ImageView
+                    android:id="@+id/ivStar5"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="4dp"

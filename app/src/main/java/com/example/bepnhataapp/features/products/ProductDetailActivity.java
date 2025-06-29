@@ -36,66 +36,63 @@ public class ProductDetailActivity extends BaseActivity {
     private int basePrice = 0; // giá 1 gói 2 người sau khi trừ sale
     private int currentServingFactor = 1; // 1 cho 2 người, 2 cho 4 người (giá gấp đôi)
 
+    private ProductDetail detail;
+    private ProductDetailPagerAdapter pagerAdapter;
+    private Product currentProduct;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProductDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Product product = null;
+        currentProduct = null;
             
         // Ưu tiên lấy dữ liệu từ Intent
         if(getIntent().hasExtra("productName")){
-            product = new Product();
-            product.setProductID(getIntent().getLongExtra("productId", -1));
-            product.setProductName(getIntent().getStringExtra("productName"));
-            product.setProductPrice(getIntent().getIntExtra("productPrice", 0));
-            product.setProductThumb(getIntent().getStringExtra("productThumb"));
-            product.setProductDescription(getIntent().getStringExtra("productDescription"));
-            product.setSalePercent(getIntent().getIntExtra("salePercent", 0));
+            currentProduct = new Product();
+            currentProduct.setProductID(getIntent().getLongExtra("productId", -1));
+            currentProduct.setProductName(getIntent().getStringExtra("productName"));
+            currentProduct.setProductPrice(getIntent().getIntExtra("productPrice", 0));
+            currentProduct.setProductThumb(getIntent().getStringExtra("productThumb"));
+            currentProduct.setProductDescription(getIntent().getStringExtra("productDescription"));
+            currentProduct.setSalePercent(getIntent().getIntExtra("salePercent", 0));
         } else if(getIntent().hasExtra("productId")){
             long id = getIntent().getLongExtra("productId",-1);
             if(id!=-1){
-                product = new ProductDao(this).getById(id);
+                currentProduct = new ProductDao(this).getById(id);
             }
 
-            final Product finalProduct = product;
+            final Product finalProduct = currentProduct;
             findViewById(R.id.btnAddToCart).setOnClickListener(v -> {
                 com.example.bepnhataapp.common.utils.CartHelper.addProduct(ProductDetailActivity.this, finalProduct, currentServingFactor);
                 android.widget.Toast.makeText(ProductDetailActivity.this, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
             });
         }
-        if (product != null) {
-            String thumb = product.getProductThumb();
+        if (currentProduct != null) {
+            String thumb = currentProduct.getProductThumb();
             if (thumb != null && !thumb.isEmpty()) {
                 Glide.with(this).load(thumb).placeholder(R.drawable.sample_img).error(R.drawable.sample_img).into(binding.ivProduct);
             } else {
                 binding.ivProduct.setImageResource(R.drawable.sample_img);
             }
-            binding.tvProductName.setText(product.getProductName());
-            binding.tvDescription.setText(product.getProductDescription());
+            binding.tvProductName.setText(currentProduct.getProductName());
+            binding.tvDescription.setText(currentProduct.getProductDescription());
             binding.tvTime.setText("");
-            basePrice = product.getProductPrice() * (100 - product.getSalePercent()) / 100;
             updatePriceText();
             // Additional binding like kcal, nutrition, etc. can be done here.
 
             // Load detail
-            ProductDetail detail = new ProductDetailDao(this).getByProductId(product.getProductID());
-            if(detail!=null){
-                ((android.widget.TextView)findViewById(R.id.tvCarbs)).setText(formatMacro(detail.getCarbs(),"carbs"));
-                ((android.widget.TextView)findViewById(R.id.tvProtein)).setText(formatMacro(detail.getProtein(),"proteins"));
-                ((android.widget.TextView)findViewById(R.id.tvCalo)).setText(formatMacro(detail.getCalo(),"calo"));
-                ((android.widget.TextView)findViewById(R.id.tvFat)).setText(formatMacro(detail.getFat(),"fat"));
-                binding.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
-            }
+            detail = new ProductDetailDao(this).getByProductId(currentProduct.getProductID());
+            refreshMacroAndTime();
 
             // Setup ViewPager with two fragments
-            ProductDetailPagerAdapter adapter = new ProductDetailPagerAdapter(this, detail, product.getProductID());
-            binding.viewPager.setAdapter(adapter);
+            pagerAdapter = new ProductDetailPagerAdapter(this, detail, currentProduct.getProductID(), currentServingFactor);
+            binding.viewPager.setAdapter(pagerAdapter);
         } else {
             // still create adapter with null detail to avoid crash
-            ProductDetailPagerAdapter adapter = new ProductDetailPagerAdapter(this, null, -1);
-            binding.viewPager.setAdapter(adapter);
+            pagerAdapter = new ProductDetailPagerAdapter(this, null, -1, currentServingFactor);
+            binding.viewPager.setAdapter(pagerAdapter);
         }
 
         // Quantity +/- logic
@@ -122,29 +119,39 @@ public class ProductDetailActivity extends BaseActivity {
                     currentServingFactor = 2;
                 }
                 updatePriceText();
+                refreshMacroAndTime();
+                if(pagerAdapter!=null) pagerAdapter.updateServingFactor(currentServingFactor);
             }
         });
 
         binding.ivBack.setOnClickListener(v -> onBackPressed());
 
         // Demo reviews & suggestions data
-        List<Integer> sampleImgs = new ArrayList<>();
-        sampleImgs.add(R.drawable.food);
-        sampleImgs.add(R.drawable.food);
-        sampleImgs.add(R.drawable.food);
-
         List<Review> reviewList = new ArrayList<>();
-        reviewList.add(new Review(R.drawable.profile_placeholder, "Đức Mạnh", 5f, "2 giờ trước", "Nguyên liệu được đóng gói rất chỉnh chu. Món ăn rất ngon! Cả gia đình tôi đều thích!", sampleImgs));
-        reviewList.add(new Review(R.drawable.profile_placeholder, "Kiên Đoàn", 5f, "2 giờ trước", "Tôi đã nấu thử và rất thành công món bánh canh cua...", sampleImgs));
+        if(currentProduct!=null){
+            reviewList = new com.example.bepnhataapp.common.dao.ProductFeedbackDao(this).getReviewsByProductId(currentProduct.getProductID());
+        }
+
+        if(reviewList.isEmpty()){
+            List<Integer> sampleImgs = new java.util.ArrayList<>();
+            sampleImgs.add(R.drawable.food);
+            reviewList.add(new Review(R.drawable.profile_placeholder, "Chưa có đánh giá", 0f, "", "Hãy là người đầu tiên đánh giá sản phẩm này", sampleImgs));
+        }
 
         ReviewAdapter reviewAdapter = new ReviewAdapter(this, reviewList);
         binding.rvReviews.setLayoutManager(new LinearLayoutManager(this));
         binding.rvReviews.setAdapter(reviewAdapter);
 
+        // update review header count
+        android.widget.TextView tvHeaderRev = findViewById(R.id.tvReviewHeader);
+        if(tvHeaderRev!=null){
+            tvHeaderRev.setText("Đánh giá sản phẩm ("+reviewList.size()+")");
+        }
+
         // Load suggestion products (3 random others)
         List<Product> allProducts = new ProductDao(this).getAll();
-        if(product!=null){
-            final long curId = product.getProductID();
+        if(currentProduct!=null){
+            final long curId = currentProduct.getProductID();
             allProducts.removeIf(p -> p.getProductID()==curId);
         }
         Collections.shuffle(allProducts);
@@ -196,7 +203,30 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
     private void updatePriceText() {
-        int total = basePrice * currentServingFactor * quantity;
+        if(currentProduct==null) return;
+        int pricePerPack;
+        if(currentServingFactor==1){
+            pricePerPack = currentProduct.getProductPrice2() * (100-currentProduct.getSalePercent2())/100;
+        } else {
+            pricePerPack = currentProduct.getProductPrice4() * (100-currentProduct.getSalePercent4())/100;
+        }
+        int total = pricePerPack * quantity;
         binding.tvPrice.setText(String.valueOf(total));
+    }
+
+    private void refreshMacroAndTime(){
+        if(detail==null) return;
+        int factor = currentServingFactor;
+        double carbs = factor==1 ? (detail.getCarbs2()!=0?detail.getCarbs2():detail.getCarbs()) : (detail.getCarbs4()!=0?detail.getCarbs4():detail.getCarbs2()*2);
+        double protein = factor==1 ? (detail.getProtein2()!=0?detail.getProtein2():detail.getProtein()) : (detail.getProtein4()!=0?detail.getProtein4():detail.getProtein2()*2);
+        double fat = factor==1 ? (detail.getFat2()!=0?detail.getFat2():detail.getFat()) : (detail.getFat4()!=0?detail.getFat4():detail.getFat2()*2);
+        double calo = factor==1 ? (detail.getCalo2()!=0?detail.getCalo2():detail.getCalo()) : (detail.getCalo4()!=0?detail.getCalo4():detail.getCalo2()*2);
+        int time = factor==1 ? (detail.getCookingTimeMinutes2()!=0?detail.getCookingTimeMinutes2():detail.getCookingTimeMinutes()) : (detail.getCookingTimeMinutes4()!=0?detail.getCookingTimeMinutes4():detail.getCookingTimeMinutes2()*2);
+
+        ((android.widget.TextView)findViewById(R.id.tvCarbs)).setText(formatMacro(carbs,"carbs"));
+        ((android.widget.TextView)findViewById(R.id.tvProtein)).setText(formatMacro(protein,"proteins"));
+        ((android.widget.TextView)findViewById(R.id.tvCalo)).setText(formatMacro(calo,"calo"));
+        ((android.widget.TextView)findViewById(R.id.tvFat)).setText(formatMacro(fat,"fat"));
+        binding.tvTime.setText(time+" phút");
     }
 } 

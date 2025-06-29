@@ -59,19 +59,34 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         if(detail!=null){
             holder.tvKcal.setText((int)detail.getCalo()+" Kcal");
             holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
+            String tag = detail.getNutritionTag();
+            if(tag!=null && !tag.isEmpty()) holder.tvNutrition.setText(capitalize(tag));
+            else holder.tvNutrition.setText("");
         }else{
             holder.tvKcal.setText("");
             holder.tvTime.setText("");
+            holder.tvNutrition.setText("");
         }
-        holder.tvNutrition.setText("");
         holder.tvFor2.setText("2 người");
         holder.tvFor4.setText("4 người");
 
-        int price = product.getProductPrice() * (100 - product.getSalePercent()) / 100;
-        String priceStr = formatPrice(price);
+        // Serving toggle listener
+        com.google.android.material.button.MaterialButtonToggleGroup servingGroup = holder.itemView.findViewById(R.id.toggleGroupServing);
+        if(servingGroup!=null){
+            servingGroup.addOnButtonCheckedListener((g, checkedId, isChecked) -> {
+                if(!isChecked) return;
+                int factor = checkedId == R.id.btnFor2 ? 1 : 2;
+                refreshViews(holder, product, detail, factor);
+            });
+            // default factor 1
+            refreshViews(holder, product, detail, 1);
+        }
+
+        int price2 = product.getProductPrice2() * (100 - product.getSalePercent2()) / 100;
+        String priceStr = formatPrice(price2);
         holder.tvPrice.setText(priceStr);
-        if (product.getSalePercent() > 0) {
-            holder.tvOldPrice.setText(formatPrice(product.getProductPrice()));
+        if (product.getSalePercent2() > 0) {
+            holder.tvOldPrice.setText(formatPrice(product.getProductPrice2()));
             holder.tvOldPrice.setPaintFlags(holder.tvOldPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvOldPrice.setVisibility(View.VISIBLE);
         } else {
@@ -104,6 +119,31 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private String formatPrice(int price){
         NumberFormat nf = NumberFormat.getInstance(new Locale("vi","VN"));
         return nf.format(price)+"đ";
+    }
+
+    private void refreshViews(ProductViewHolder holder, Product product, ProductDetail detail, int factor){
+        if(detail!=null){
+            double kcal = factor==1 ? (detail.getCalo2()!=0?detail.getCalo2():detail.getCalo()) : (detail.getCalo4()!=0?detail.getCalo4():detail.getCalo2()*2);
+            int time = factor==1 ? (detail.getCookingTimeMinutes2()!=0?detail.getCookingTimeMinutes2():detail.getCookingTimeMinutes()) : (detail.getCookingTimeMinutes4()!=0?detail.getCookingTimeMinutes4():detail.getCookingTimeMinutes2()*2);
+            holder.tvKcal.setText((int)kcal+" Kcal");
+            holder.tvTime.setText(time+" phút");
+        }
+        int basePrice = factor==1 ? product.getProductPrice2()*(100-product.getSalePercent2())/100
+                                  : product.getProductPrice4()*(100-product.getSalePercent4())/100;
+        holder.tvPrice.setText(formatPrice(basePrice));
+
+        if((factor==1 && product.getSalePercent2()>0) || (factor==2 && product.getSalePercent4()>0)){
+            holder.tvOldPrice.setVisibility(View.VISIBLE);
+            int old = factor==1? product.getProductPrice2() : product.getProductPrice4();
+            holder.tvOldPrice.setText(formatPrice(old));
+        } else {
+            holder.tvOldPrice.setVisibility(View.GONE);
+        }
+    }
+
+    private String capitalize(String s){
+        if(s==null || s.isEmpty()) return s;
+        return s.substring(0,1).toUpperCase()+s.substring(1);
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

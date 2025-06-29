@@ -13,18 +13,22 @@ public class ProductDetailPagerAdapter extends FragmentStateAdapter {
 
     private final ProductDetail detail;
     private final long productId;
+    private int servingFactor;
+    private IngredientPackageFragment ingredientFragment;
 
-    public ProductDetailPagerAdapter(@NonNull FragmentActivity fragmentActivity, ProductDetail detail, long productId) {
+    public ProductDetailPagerAdapter(@NonNull FragmentActivity fragmentActivity, ProductDetail detail, long productId, int servingFactor) {
         super(fragmentActivity);
         this.detail = detail;
         this.productId = productId;
+        this.servingFactor = servingFactor;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         if (position == 0) {
-            return IngredientPackageFragment.newInstance(productId);
+            ingredientFragment = IngredientPackageFragment.newInstance(productId, servingFactor);
+            return ingredientFragment;
         } else {
             return UsageGuideFragment.newInstance(
                     detail != null ? detail.getStorageGuide() : "",
@@ -37,5 +41,16 @@ public class ProductDetailPagerAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return 2;
+    }
+
+    public IngredientPackageFragment getIngredientFragment(){
+        return ingredientFragment;
+    }
+
+    public void updateServingFactor(int factor){
+        this.servingFactor = factor;
+        if(ingredientFragment!=null){
+            ingredientFragment.setServingFactor(factor);
+        }
     }
 } 
