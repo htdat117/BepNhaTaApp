@@ -26,6 +26,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import java.util.Collections;
 import java.util.Comparator;
+import java.text.Normalizer;
 
 public class ProductActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -189,36 +190,93 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
         adapter.notifyDataSetChanged();
     }
 
+    // Utility: remove Vietnamese accents & lowercase for insensitive compare
+    private String unaccent(String str){
+        if(str==null) return "";
+        String n = Normalizer.normalize(str, Normalizer.Form.NFD);
+        return n.replaceAll("\\p{InCombiningDiacriticalMarks}+", "").toLowerCase();
+    }
+
     private void applyAdvancedFilter(FilterProductBottomSheet.FilterCriteria c){
         productList.clear();
         ProductDetailDao detailDao = new ProductDetailDao(this);
         for(Product p: allProducts){
             boolean ok=true;
             ProductDetail d=detailDao.getByProductId(p.getProductID());
-            // Lọc theo địa phương (cuisine)
-            if(c.regions!=null && !c.regions.isEmpty()){
-                if(d==null || d.getCuisine()==null || !c.regions.contains(d.getCuisine())) ok=false;
-            }
-            // Lọc theo nhóm dinh dưỡng (nutritionTag)
-            if(ok && c.nutritions!=null && !c.nutritions.isEmpty()){
-                boolean found = false;
-                if(d!=null && d.getNutritionTag()!=null){
-                    for(String tag : c.nutritions){
-                        if(d.getNutritionTag().toLowerCase().contains(tag.toLowerCase())){
-                            found = true;
+            
+            // Lọc theo nguyên liệu (foodTag)
+            if(c.ingredients!=null && !c.ingredients.isEmpty()){
+                boolean ingredientFound=false;
+                if(d!=null && d.getFoodTag()!=null){
+                    String foodTagNorm = unaccent(d.getFoodTag());
+                    for(String ingredient:c.ingredients){
+                        if(foodTagNorm.contains(unaccent(ingredient))){
+                            ingredientFound=true;
                             break;
                         }
                     }
                 }
-                if(!found) ok=false;
+                if(!ingredientFound) ok=false;
+            }
+            
+            // Lọc theo địa phương (cuisine)
+            if(ok && c.regions!=null && !c.regions.isEmpty()){
+                boolean regionFound=false;
+                if(d!=null && d.getCuisine()!=null){
+                    String cuisineNorm = normalizeKeyword(d.getCuisine());
+                    for(String region:c.regions){
+                        String regionKey = normalizeKeyword(region);
+                        if(cuisineNorm.contains(regionKey) || regionKey.contains(cuisineNorm)){
+                            regionFound=true; break;
+                        }
+                    }
+                }
+                if(!regionFound) ok=false;
             }
             // Lọc kcal, time như cũ
             if(ok && d!=null){
                 if(d.getCalo() > c.maxKcal) ok=false;
                 if(d.getCookingTimeMinutes() > c.maxTime) ok=false;
             }
+            if(ok && c.nutritions!=null && !c.nutritions.isEmpty()){
+                boolean found = false;
+                if(d!=null && d.getNutritionTag()!=null){
+                    // Chia chuỗi nutritionTag trong DB thành các token riêng lẻ
+                    java.util.Set<String> storedTags = splitTags(d.getNutritionTag());
+                    for(String chipTag : c.nutritions){
+                        String key = normalizeKeyword(chipTag);
+                        for(String store : storedTags){
+                            if(store.equals(key)) { found=true; break; }
+                        }
+                        if(found) break;
+                    }
+                }
+                if(!found) ok=false;
+            }
             if(ok) productList.add(p);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    // Helper: normalize keyword/tags for matching (remove accents, lower case, strip prefixes/delimiters)
+    private String normalizeKeyword(String str){
+        if(str==null) return "";
+        String s = unaccent(str);
+        s = s.replace("-"," ").replace("_"," ");
+        // Loại bỏ tiền tố "mien " hoặc "mon " nếu có
+        s = s.replace("mien ","").replace("mon ","");
+        return s.trim();
+    }
+
+    // Tách chuỗi tag thành set đã chuẩn hoá
+    private java.util.Set<String> splitTags(String raw){
+        java.util.Set<String> set = new java.util.HashSet<>();
+        if(raw==null) return set;
+        String[] parts = raw.split("[,;|/\\\\]"); // , ; | / \ 
+        for(String p : parts){
+            String k = normalizeKeyword(p);
+            if(!k.isEmpty()) set.add(k);
+        }
+        return set;
     }
 }

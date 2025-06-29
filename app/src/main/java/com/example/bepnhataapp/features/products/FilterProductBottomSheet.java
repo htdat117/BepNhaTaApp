@@ -30,7 +30,7 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
 
     private final String[] ingredientTags = {"Thịt heo", "Thịt gà", "Thịt bò", "Hải sản", "Trứng", "Đậu phụ", "Rau củ", "Nấm"};
     private final String[] regionTags = {"Miền Bắc", "Miền Trung", "Miền Nam", "Miền Tây", "Món Âu"};
-    private final String[] nutritionTags = {"Giàu đạm", "Giàu chất xơ", "Nhiều canxi", "Giàu vitamin C", "Ít chất béo", "Giàu omega-3", "Không cholesterol", "Ít calo"};
+    private final String[] nutritionTags = {"Giàu đạm", "Giàu Vitamin", "Thanh đạm", "Omega-3", "Ít calo", "Carb cao", "Năng lượng cao", "Cân bằng", "Nhẹ bụng"};
 
     public static class FilterCriteria {
         public Set<String> ingredients;
@@ -70,11 +70,15 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
         // sliders setup
         binding.sliderKcal.setLabelFormatter(value -> String.valueOf((int) value));
         binding.sliderKcal.addOnChangeListener((slider, value, fromUser) -> binding.tvKcalValue.setText(String.valueOf((int) value)));
-        binding.sliderKcal.setValue(200);
+        float maxKcal = binding.sliderKcal.getValueTo();
+        binding.sliderKcal.setValue(maxKcal);
+        binding.tvKcalValue.setText(String.valueOf((int) maxKcal));
 
         binding.sliderTime.setLabelFormatter(value -> String.valueOf((int) value));
         binding.sliderTime.addOnChangeListener((slider, value, fromUser) -> binding.tvTimeValue.setText(String.valueOf((int) value)));
-        binding.sliderTime.setValue(20);
+        float maxTime = binding.sliderTime.getValueTo();
+        binding.sliderTime.setValue(maxTime);
+        binding.tvTimeValue.setText(String.valueOf((int) maxTime));
 
         // actions
         binding.btnClose.setOnClickListener(v -> dismiss());

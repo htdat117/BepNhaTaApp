@@ -35,7 +35,7 @@ public class FilterProductActivity extends AppCompatActivity {
 
         binding.sliderTime.setLabelFormatter(value -> String.valueOf((int) value));
         binding.sliderTime.addOnChangeListener((slider, value, fromUser) -> binding.tvTimeValue.setText(String.valueOf((int) value)));
-        binding.sliderTime.setValue(20);
+        binding.sliderTime.setValue(10);
 
         binding.btnClose.setOnClickListener(v -> finish());
         binding.btnApply.setOnClickListener(v -> finish());
