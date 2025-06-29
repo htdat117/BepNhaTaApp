@@ -81,8 +81,16 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderVH> {
     @NonNull
     @Override
     public OrderVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_list, parent, false);
-        return new OrderVH(v);
+        int layoutId;
+        if (status == OrderStatus.WAIT_CONFIRM) {
+            layoutId = R.layout.item_order_list_wait_confirm;
+        } else if (status == OrderStatus.CANCELED) {
+            layoutId = R.layout.item_order_list_canceled;
+        } else {
+            layoutId = R.layout.item_order_list;
+        }
+        View v = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+        return new OrderVH(v, status);
     }
     @Override
     public void onBindViewHolder(@NonNull OrderVH h, int pos) {
@@ -144,47 +152,35 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderVH> {
             it.putExtra("orderId", o.getOrderID());
             v.getContext().startActivity(it);
         });
-        // Hiển thị nút phù hợp theo trạng thái
-        if (status == OrderStatus.CANCELED) {
-            h.btnReorder.setVisibility(View.VISIBLE);
-            h.btnReturn.setVisibility(View.GONE);
-            h.btnReview.setVisibility(View.GONE);
-            h.btnCancelOrder.setVisibility(View.GONE);
-            h.tvOrderStatus.setText("Đã huỷ");
-            h.tvOrderStatus.setTextColor(ContextCompat.getColor(h.itemView.getContext(), R.color.orange));
-            h.tvOrderStatus.setGravity(android.view.Gravity.END);
-        } else if (status == OrderStatus.DELIVERED) {
-            h.btnReview.setVisibility(View.VISIBLE);
-            h.btnReturn.setVisibility(View.VISIBLE);
-            h.btnReorder.setVisibility(View.VISIBLE);
-            h.btnCancelOrder.setVisibility(View.GONE);
-        } else {
-            h.btnReview.setVisibility(View.GONE);
-            h.btnReturn.setVisibility(View.GONE);
-            h.btnReorder.setVisibility(View.GONE);
-            h.btnCancelOrder.setVisibility(View.VISIBLE);
-        }
-        // Xử lý huỷ đơn hàng
-        h.btnCancelOrder.setOnClickListener(v -> {
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(v.getContext());
-            android.view.LayoutInflater inflaterDialog = android.view.LayoutInflater.from(v.getContext());
-            android.view.View dialogView = inflaterDialog.inflate(R.layout.popup_cancel_order, null);
-            builder.setView(dialogView);
-            final android.app.AlertDialog dialog = builder.create();
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-            dialogView.findViewById(R.id.btnQuit).setOnClickListener(view -> dialog.dismiss());
-            dialogView.findViewById(R.id.btnAccept).setOnClickListener(view -> {
-                // Cập nhật trạng thái đơn hàng sang CANCELED
-                com.example.bepnhataapp.common.model.Order order = o;
-                order.setStatus(com.example.bepnhataapp.common.model.OrderStatus.CANCELED.name());
-                new com.example.bepnhataapp.common.dao.OrderDao(v.getContext()).update(order);
-                android.widget.Toast.makeText(v.getContext(), "Đã huỷ đơn hàng", android.widget.Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                // Cập nhật lại danh sách
-                notifyDataSetChanged();
+        // Hiển thị nút phù hợp theo trạng thái (đã tách layout nên không cần set visibility nhiều)
+        if (status == OrderStatus.WAIT_CONFIRM && h.btnCancelOrder != null) {
+            h.btnCancelOrder.setOnClickListener(v -> {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(v.getContext());
+                android.view.LayoutInflater inflaterDialog = android.view.LayoutInflater.from(v.getContext());
+                android.view.View dialogView = inflaterDialog.inflate(R.layout.popup_cancel_order, null);
+                builder.setView(dialogView);
+                final android.app.AlertDialog dialog = builder.create();
+                dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialogView.findViewById(R.id.btnQuit).setOnClickListener(view -> dialog.dismiss());
+                dialogView.findViewById(R.id.btnAccept).setOnClickListener(view -> {
+                    // Cập nhật trạng thái đơn hàng sang CANCELED
+                    com.example.bepnhataapp.common.model.Order order = o;
+                    order.setStatus(com.example.bepnhataapp.common.model.OrderStatus.CANCELED.name());
+                    new com.example.bepnhataapp.common.dao.OrderDao(v.getContext()).update(order);
+                    android.widget.Toast.makeText(v.getContext(), "Đã huỷ đơn hàng", android.widget.Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    // Cập nhật lại danh sách
+                    notifyDataSetChanged();
+                });
+                dialog.show();
             });
-            dialog.show();
-        });
+        }
+        if (status == OrderStatus.CANCELED && h.btnReorder != null) {
+            h.btnReorder.setOnClickListener(v -> {
+                // TODO: Xử lý logic mua lại đơn hàng
+                android.widget.Toast.makeText(v.getContext(), "Chức năng MUA LẠI đang phát triển", android.widget.Toast.LENGTH_SHORT).show();
+            });
+        }
     }
     private int getProductCount(long orderId, OrderVH h) {
         List<OrderLine> lines = new OrderLineDao(h.itemView.getContext()).getByOrder(orderId);
@@ -204,17 +200,29 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderVH> {
         Button btnReview, btnCancelOrder;
         TextView tvOrderStatus;
         Button btnReorder, btnReturn;
-        OrderVH(View v) {
+        OrderVH(View v, OrderStatus status) {
             super(v);
             tvCode = v.findViewById(R.id.tvOrderCode);
             tvStatus = v.findViewById(R.id.tvOrderStatus);
             tvTotal = v.findViewById(R.id.tvOrderTotal);
             layoutOrderProducts = v.findViewById(R.id.layoutOrderProducts);
-            btnReview = v.findViewById(R.id.btnReview);
-            btnCancelOrder = v.findViewById(R.id.btnCancelOrder);
             tvOrderStatus = v.findViewById(R.id.tvOrderStatus);
-            btnReorder = v.findViewById(R.id.btnReorder);
-            btnReturn = v.findViewById(R.id.btnReturn);
+            if (status == OrderStatus.WAIT_CONFIRM) {
+                btnCancelOrder = v.findViewById(R.id.btnCancelOrder);
+                btnReorder = null;
+                btnReview = null;
+                btnReturn = null;
+            } else if (status == OrderStatus.CANCELED) {
+                btnReorder = v.findViewById(R.id.btnReorder);
+                btnCancelOrder = null;
+                btnReview = null;
+                btnReturn = null;
+            } else {
+                btnReview = v.findViewById(R.id.btnReview);
+                btnCancelOrder = v.findViewById(R.id.btnCancelOrder);
+                btnReorder = v.findViewById(R.id.btnReorder);
+                btnReturn = v.findViewById(R.id.btnReturn);
+            }
         }
     }
 } 

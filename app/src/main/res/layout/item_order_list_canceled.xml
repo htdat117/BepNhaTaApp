@@ -92,7 +92,7 @@
             android:id="@+id/tvOrderStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chờ xác nhận"
+            android:text="Đã huỷ"
             android:textColor="@color/orange"
             android:textStyle="bold"
             android:gravity="end"
@@ -113,22 +113,6 @@
         android:gravity="center_vertical"
         android:layout_marginTop="4dp">
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancelOrder"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:minWidth="0dp"
-            android:text="Huỷ đơn hàng"
-            android:textColor="@color/orange"
-            android:backgroundTint="@android:color/transparent"
-            app:strokeColor="@color/orange"
-            app:strokeWidth="1dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingHorizontal="8dp"
-            android:textSize="13sp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            />
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReorder"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
@@ -143,7 +127,7 @@
             android:paddingHorizontal="8dp"
             android:textSize="13sp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:visibility="gone"/>
+            />
         <TextView
             android:id="@+id/tvOrderTotal"
             android:layout_width="0dp"
@@ -155,42 +139,6 @@
             android:textStyle="bold"
             android:gravity="end"
             android:paddingEnd="8dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutOrderActions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnReturn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Trả hàng"
-            android:textColor="@color/orange"
-            android:backgroundTint="@color/white"
-            android:textSize="15sp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/orange"
-            android:layout_marginEnd="8dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:visibility="gone"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnReview"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Đánh giá"
-            android:textColor="@color/orange"
-            android:backgroundTint="@color/white"
-            android:textSize="15sp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/orange"
-            android:layout_marginEnd="8dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:visibility="gone"/>
     </LinearLayout>
 
     <View
