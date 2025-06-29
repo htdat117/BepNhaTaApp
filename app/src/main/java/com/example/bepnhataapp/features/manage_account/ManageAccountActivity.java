@@ -180,6 +180,20 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
             });
         }
 
+        // Xử lý click cho 'Xem lịch sử mua hàng' (chuyển sang tab Đã giao)
+        android.widget.TextView viewHistory = findViewById(R.id.view_history_order);
+        if (viewHistory != null) {
+            viewHistory.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.manage_order.ManageOrderActivity.class);
+                    intent.putExtra("tab_index", 3); // Đã giao
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
+
         // Thiết lập Bottom Navigation
         setupBottomNavigationFragment(R.id.nav_home); // chọn mặc định Trang chủ
     }

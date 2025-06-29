@@ -399,6 +399,14 @@ public class DBHelper extends SQLiteOpenHelper {
                     "caloPerOneHundredGrams INTEGER" +
                     ")";
 
+    private static final String CREATE_POINT_LOG = "CREATE TABLE IF NOT EXISTS PointLog (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "customerId INTEGER, " +
+            "action TEXT, " +
+            "point INTEGER, " +
+            "description TEXT, " +
+            "createdAt TEXT)";
+
     private final Context ctx;
     private static final String TAG = "DBHelper";
 
@@ -475,6 +483,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_MEAL_TIME);
         db.execSQL(SQL_CREATE_MEAL_RECIPE);
         db.execSQL(SQL_CREATE_CUSTOMER_HEALTH);
+        db.execSQL(CREATE_POINT_LOG);
     }
 
     @Override

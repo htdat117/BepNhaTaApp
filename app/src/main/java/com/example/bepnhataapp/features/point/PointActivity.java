@@ -71,6 +71,16 @@ public class PointActivity extends AppCompatActivity {
             tvTotalPoint.setText("Tổng điểm có thể dùng: " + point);
         }
 
+        // Hiển thị layout động viên nếu chưa có điểm
+        View layoutNoPoint = findViewById(R.id.layoutNoPoint);
+        if (layoutNoPoint != null) {
+            if (point == 0) {
+                layoutNoPoint.setVisibility(View.VISIBLE);
+            } else {
+                layoutNoPoint.setVisibility(View.GONE);
+            }
+        }
+
         TextView tvRankName = findViewById(R.id.tvRankName);
         TextView tvRankNote = findViewById(R.id.tvRankNote);
         ProgressBar progressRank = findViewById(R.id.progressRank);

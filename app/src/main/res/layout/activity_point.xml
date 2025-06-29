@@ -70,7 +70,8 @@
                     android:id="@+id/imgRank"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:contentDescription="Rank" />
+                    android:contentDescription="Rank"
+                    android:src="@drawable/ic_point_logo" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -147,113 +148,44 @@
                 android:paddingRight="32dp"/>
 
             <!-- Lịch sử điểm -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Lịch sử"
+                android:textColor="#222222"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+            <!-- Lịch sử điểm sẽ được load động từ code, không hardcode -->
 
-            <!-- Quà tặng hấp dẫn -->
+            <!-- Nếu không có điểm, hiển thị icon cute và thông báo động viên -->
             <LinearLayout
+                android:id="@+id/layoutNoPoint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_voucher_detail_border"
                 android:orientation="vertical"
-                android:padding="12dp">
-
+                android:gravity="center"
+                android:padding="24dp"
+                android:visibility="gone">
+                <ImageView
+                    android:id="@+id/imgNoPoint"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:src="@drawable/ic_smile"
+                    android:contentDescription="Chưa có điểm"
+                    android:layout_gravity="center"/>
                 <TextView
+                    android:id="@+id/tvNoPointMsg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Lịch sử"
-                    android:textColor="#222222"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Chơi minigame"
-                        android:textColor="#222222"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+20 điểm"
-                        android:textColor="#F36B22"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Đặt món"
-                        android:textColor="#222222"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+100 điểm"
-                        android:textColor="#F36B22"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Đánh giá món"
-                        android:textColor="#222222"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+10 điểm"
-                        android:textColor="#F36B22"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Đặt món"
-                        android:textColor="#222222"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+60 điểm"
-                        android:textColor="#F36B22"
-                        android:textSize="15sp" />
-                </LinearLayout>
+                    android:text="Bạn chưa có điểm nào. Hãy tham gia các hoạt động như đặt món, đánh giá, chia sẻ... để tích lũy điểm nhé!"
+                    android:textColor="#F36B22"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_marginTop="12dp"/>
             </LinearLayout>
 
+            <!-- Quà tặng hấp dẫn dành cho bạn -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

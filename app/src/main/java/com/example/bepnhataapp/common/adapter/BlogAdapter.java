@@ -64,8 +64,26 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             vh.textViewLikes.setText(String.valueOf(blog.getLikes()));
             vh.imageViewLike.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
             vh.imageViewLike.setOnClickListener(v -> {
-                blog.setFavorite(!blog.isFavorite());
+                boolean wasFavorite = blog.isFavorite();
+                blog.setFavorite(!wasFavorite);
                 notifyItemChanged(position);
+                if (!wasFavorite) {
+                    String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(context);
+                    long customerId = 0;
+                    if (phone != null) {
+                        com.example.bepnhataapp.common.dao.CustomerDao dao = new com.example.bepnhataapp.common.dao.CustomerDao(context);
+                        com.example.bepnhataapp.common.model.Customer customer = dao.findByPhone(phone);
+                        if (customer != null) customerId = customer.getCustomerID();
+                    }
+                    com.example.bepnhataapp.common.model.PointLog log = new com.example.bepnhataapp.common.model.PointLog(
+                        customerId,
+                        "FAVORITE_BLOG",
+                        10,
+                        "Thêm blog vào yêu thích: " + blog.getTitle(),
+                        new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())
+                    );
+                    new com.example.bepnhataapp.common.dao.PointLogDao(context).insert(log);
+                }
             });
             vh.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, BlogDetailActivity.class);
@@ -82,8 +100,26 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             vh.tvCategory.setText(blog.getCategory());
             vh.imgFavorite.setImageResource(blog.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
             vh.imgFavorite.setOnClickListener(v -> {
-                blog.setFavorite(!blog.isFavorite());
+                boolean wasFavorite = blog.isFavorite();
+                blog.setFavorite(!wasFavorite);
                 notifyItemChanged(position);
+                if (!wasFavorite) {
+                    String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(context);
+                    long customerId = 0;
+                    if (phone != null) {
+                        com.example.bepnhataapp.common.dao.CustomerDao dao = new com.example.bepnhataapp.common.dao.CustomerDao(context);
+                        com.example.bepnhataapp.common.model.Customer customer = dao.findByPhone(phone);
+                        if (customer != null) customerId = customer.getCustomerID();
+                    }
+                    com.example.bepnhataapp.common.model.PointLog log = new com.example.bepnhataapp.common.model.PointLog(
+                        customerId,
+                        "FAVORITE_BLOG",
+                        10,
+                        "Thêm blog vào yêu thích: " + blog.getTitle(),
+                        new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())
+                    );
+                    new com.example.bepnhataapp.common.dao.PointLogDao(context).insert(log);
+                }
             });
             vh.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, BlogDetailActivity.class);
