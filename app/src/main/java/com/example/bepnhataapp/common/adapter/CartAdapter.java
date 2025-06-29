@@ -99,6 +99,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                     .placeholder(R.drawable.sample_img)
                     .into(holder.imgProduct);
         }
+
+        // Thêm sự kiện click để mở ProductDetailActivity
+        holder.itemView.setOnClickListener(v -> {
+            android.content.Context context = v.getContext();
+            android.content.Intent intent = new android.content.Intent(context, com.example.bepnhataapp.features.products.ProductDetailActivity.class);
+            intent.putExtra("productId", item.getProductId());
+            context.startActivity(intent);
+        });
     }
     @Override
     public int getItemCount() { return items == null ? 0 : items.size(); }
