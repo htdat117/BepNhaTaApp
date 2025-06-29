@@ -18,13 +18,28 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
     private final OnEditClickListener editListener;
     private int selectedPos = 0;
 
-    public AddressAdapter(List<AddressItem> items, OnEditClickListener listener){
+    public AddressAdapter(List<AddressItem> items, OnEditClickListener listener, long preselectedId){
         this.items = items;
         this.editListener = listener;
-        for(int i=0;i<items.size();i++){
-            if(items.get(i).isDefault()){selectedPos=i;break;}
+        if(preselectedId!=0){
+            for(int i=0;i<items.size();i++){
+                if(items.get(i).getId()==preselectedId){
+                    selectedPos=i;
+                    break;
+                }
+            }
+        }
+        if(selectedPos==0){
+            for(int i=0;i<items.size();i++){
+                if(items.get(i).isDefault()){ selectedPos=i; break; }
+            }
         }
     }
+
+    public AddressAdapter(List<AddressItem> items, OnEditClickListener listener){
+        this(items, listener, 0);
+    }
+
     @NonNull
     @Override
     public AddressViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){

@@ -129,6 +129,9 @@ public class CheckoutActivity extends AppCompatActivity {
                 if(SessionManager.isLoggedIn(CheckoutActivity.this)){
                     // đã đăng nhập: chọn địa chỉ từ danh sách
                     android.content.Intent intent = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.address.AddressSelectActivity.class);
+                    if(currentAddress!=null){
+                        intent.putExtra("selected_address_id", currentAddress.getId());
+                    }
                     startActivityForResult(intent, 201);
                 }else{
                     if(currentAddress!=null){

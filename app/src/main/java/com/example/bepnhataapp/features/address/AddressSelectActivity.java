@@ -35,11 +35,12 @@ public class AddressSelectActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<AddressItem> addrItems = loadAddresses();
+        long preselectedId = getIntent().getLongExtra("selected_address_id", 0);
         AddressAdapter adapter = new AddressAdapter(addrItems, item -> {
             android.content.Intent it = new android.content.Intent(AddressSelectActivity.this, com.example.bepnhataapp.features.checkout.ShippingInfoActivity.class);
             it.putExtra("address_id", item.getId());
             startActivityForResult(it, 101);
-        });
+        }, preselectedId);
         recyclerView.setAdapter(adapter);
 
         View layoutEmpty = findViewById(R.id.layoutEmpty);
@@ -88,7 +89,13 @@ public class AddressSelectActivity extends AppCompatActivity {
         String phone = SessionManager.getPhone(this);
         if(phone==null) return list;
 
-        long customerId = new com.example.bepnhataapp.common.dao.CustomerDao(this).findByPhone(phone).getCustomerID();
+        com.example.bepnhataapp.common.dao.CustomerDao cDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+        com.example.bepnhataapp.common.model.Customer customer = cDao.findByPhone(phone);
+        if(customer==null){
+            // trường hợp bất thường: chưa có bản ghi Customer, trả về danh sách rỗng
+            return list;
+        }
+        long customerId = customer.getCustomerID();
         AddressDao dao = new AddressDao(this);
         List<Address> addresses = dao.getByCustomer(customerId);
         for(Address a: addresses){
