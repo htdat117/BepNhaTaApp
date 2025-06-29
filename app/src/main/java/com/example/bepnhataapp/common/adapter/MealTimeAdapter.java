@@ -36,11 +36,21 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
         public final String title;
         public final int totalCalories;
         public final List<RecipeItem> recipes;
-        public MealTimeSection(String t, int total, List<RecipeItem> r) { title = t; totalCalories = total; recipes = r; }
+        public final com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot;
+        public MealTimeSection(String t, int total, List<RecipeItem> r, com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum s) {
+            title = t; totalCalories = total; recipes = r; slot = s; }
+    }
+
+    public interface OnMealSectionActionListener {
+        void onAddNew(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
+        void onDeleteSection(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
+        void onAddNote(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
+        void onBuyAll(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
     }
 
     private final List<MealTimeSection> data;
-    public MealTimeAdapter(List<MealTimeSection> d) { data = d; }
+    private final OnMealSectionActionListener listener;
+    public MealTimeAdapter(List<MealTimeSection> d, OnMealSectionActionListener l) { data = d; listener = l; }
 
     @NonNull
     @Override
@@ -85,7 +95,7 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
                 popup.setOnMenuItemClickListener(item1 -> {
                     android.widget.Toast.makeText(v1.getContext(), item1.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
                     if (item1.getItemId() == com.example.bepnhataapp.R.id.menu_buy_ingredients) {
-                        // Implement navigate to shopping list later
+                        // TODO: navigate to shopping list later
                     }
                     return true;
                 });
@@ -109,7 +119,19 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
             } catch (Exception ignored) {}
 
             popup.setOnMenuItemClickListener(item -> {
-                android.widget.Toast.makeText(v.getContext(), item.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
+                int id = item.getItemId();
+                com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot = s.slot;
+                if(id == com.example.bepnhataapp.R.id.menu_add_new){
+                    if(listener!=null) listener.onAddNew(slot);
+                } else if(id == com.example.bepnhataapp.R.id.menu_delete_meal){
+                    if(listener!=null) listener.onDeleteSection(slot);
+                } else if(id == com.example.bepnhataapp.R.id.menu_add_note){
+                    if(listener!=null) listener.onAddNote(slot);
+                } else if(id == com.example.bepnhataapp.R.id.menu_buy_all){
+                    if(listener!=null) listener.onBuyAll(slot);
+                } else {
+                    android.widget.Toast.makeText(v.getContext(), item.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
+                }
                 return true;
             });
 
@@ -130,4 +152,4 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
             btnOptions = itemView.findViewById(R.id.btnMealOptions);
         }
     }
-} 
+}

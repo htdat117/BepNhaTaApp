@@ -67,7 +67,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.itemView.setOnClickListener(v -> {
             android.content.Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, com.example.bepnhataapp.features.recipes.RecipeDetailActivity.class);
-            intent.putExtra("recipeName", recipe.getName());
+            intent.putExtra("recipeId", recipe.getId());
             context.startActivity(intent);
         });
     }

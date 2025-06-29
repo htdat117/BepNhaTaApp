@@ -75,7 +75,7 @@ public class TimelineFragment extends Fragment {
                             case DINNER: title = "Bữa tối"; break;
                             default: title = "Ăn nhẹ"; break;
                         }
-                        sections.add(new MealTimeAdapter.MealTimeSection(title, cals, recipes));
+                        sections.add(new MealTimeAdapter.MealTimeSection(title, cals, recipes, slot));
                     }
                 }
             }
@@ -83,7 +83,52 @@ public class TimelineFragment extends Fragment {
         }
 
         // Nếu không có dữ liệu, hiển thị rỗng
-        MealTimeAdapter adapter = new MealTimeAdapter(sections);
+        MealTimeAdapter adapter = new MealTimeAdapter(sections, new MealTimeAdapter.OnMealSectionActionListener() {
+            @Override
+            public void onAddNew(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot) {
+                startActivity(new android.content.Intent(getContext(), com.example.bepnhataapp.features.recipes.RecipesActivity.class));
+            }
+
+            @Override
+            public void onDeleteSection(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot) {
+                MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                java.time.LocalDate dt = ((MealPlanContentActivity) requireActivity()).getCurrentDate();
+                vm.deleteMealTime(dt, slotToString(slot));
+            }
+
+            @Override
+            public void onAddNote(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot) {
+                android.widget.EditText input = new android.widget.EditText(getContext());
+                new android.app.AlertDialog.Builder(getContext())
+                        .setTitle("Thêm ghi chú")
+                        .setView(input)
+                        .setPositiveButton("Lưu", (d, which) -> {
+                            String note = input.getText().toString().trim();
+                            MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                            java.time.LocalDate dt = ((MealPlanContentActivity) requireActivity()).getCurrentDate();
+                            vm.updateNoteForMealTime(dt, slotToString(slot), note);
+                        })
+                        .setNegativeButton("Huỷ", null)
+                        .show();
+            }
+
+            @Override
+            public void onBuyAll(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot) {
+                MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                java.time.LocalDate dt = ((MealPlanContentActivity) requireActivity()).getCurrentDate();
+                vm.addIngredientsToCart(dt, slotToString(slot), getContext());
+                android.widget.Toast.makeText(getContext(), "Đã thêm vào giỏ hàng", android.widget.Toast.LENGTH_SHORT).show();
+            }
+
+            private String slotToString(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum s){
+                switch (s){
+                    case BREAKFAST: return "Sáng";
+                    case LUNCH: return "Trưa";
+                    case DINNER: return "Tối";
+                    default: return "Snack";
+                }
+            }
+        });
         rv.setAdapter(adapter);
 
         ((TextView) view.findViewById(R.id.tvMealCount)).setText("Theo dõi 0/" + (totalSections==0? DayPlan.MealTimeEnum.values().length : totalSections) + " bữa ăn");

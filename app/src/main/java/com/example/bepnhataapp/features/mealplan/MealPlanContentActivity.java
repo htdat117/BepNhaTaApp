@@ -30,6 +30,9 @@ import com.example.bepnhataapp.common.utils.SessionManager;
 import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.model.Customer;
 import android.app.AlertDialog;
+import com.example.bepnhataapp.common.dao.MealDayDao;
+import com.example.bepnhataapp.common.dao.MealTimeDao;
+import com.example.bepnhataapp.common.dao.MealRecipeDao;
 
 public class MealPlanContentActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -56,7 +59,16 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
         // Back button
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        currentDate = LocalDate.now();
+        String dateExtraStr = getIntent().getStringExtra("SELECTED_DATE");
+        if(dateExtraStr!=null){
+            try{
+                currentDate = java.time.LocalDate.parse(dateExtraStr);
+            }catch(Exception e){
+                currentDate = LocalDate.now();
+            }
+        }else{
+            currentDate = LocalDate.now();
+        }
         tvCurrentDate = findViewById(R.id.tvCurrentDate);
 
         // Navigation arrows (move by day or by week depending on mode)
@@ -186,6 +198,7 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
                 return false; // allow RecyclerView to expand fully inside ScrollView
             }
         };
+        glm.setAutoMeasureEnabled(true);
         glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -256,11 +269,22 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
         popup.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.menu_refresh_day) {
-                Toast.makeText(this, "Làm mới ngày", Toast.LENGTH_SHORT).show();
+                if (showingWeek) {
+                    // Refresh the entire week that contains currentDate
+                    mealPlanViewModel.autoGenerateWeekFor(currentDate);
+                    Toast.makeText(this, "Đã làm mới thực đơn tuần", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Refresh only the selected day
+                    mealPlanViewModel.autoGenerateFor(currentDate);
+                    Toast.makeText(this, "Đã làm mới thực đơn ngày", Toast.LENGTH_SHORT).show();
+                }
+                // Refresh UI to display updated meals
+                refreshDayView();
             } else if (id == R.id.menu_edit_layout) {
                 Toast.makeText(this, "Chỉnh sửa bố cục", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.menu_save_template) {
-                Toast.makeText(this, "Lưu mẫu thực đơn", Toast.LENGTH_SHORT).show();
+                boolean saveWeek = showingWeek;
+                showSaveTemplateDialog(saveWeek);
             } else if (id == R.id.menu_load_template) {
                 startActivity(new android.content.Intent(this, LoadMealPlanActivity.class));
             } else if (id == R.id.menu_share_template) {
@@ -274,6 +298,7 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
                     .setPositiveButton("Xoá", (dialog, which) -> {
                         mealPlanViewModel.deletePlanForDate(currentDate);
                         Toast.makeText(this, "Đã xoá thực đơn", Toast.LENGTH_SHORT).show();
+                        loadDayFragment();
                     })
                     .setNegativeButton("Huỷ", null)
                     .show();
@@ -332,6 +357,17 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
 
     public LocalDate getCurrentDate() { return currentDate; }
 
+    /**
+     * Refresh current view after data changes (e.g., copy or delete day).
+     */
+    public void refreshDayView(){
+        if(!showingWeek){
+            loadDayFragment();
+        }else{
+            loadWeekFragment();
+        }
+    }
+
     private void ensurePersonalPlanExists() {
         if (SessionManager.isLoggedIn(this)) {
             new Thread(() -> {
@@ -352,5 +388,145 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
                 }
             }).start();
         }
+    }
+
+    /**
+     * Hiển thị dialog nhập tên mẫu thực đơn, sau đó lưu xuống DB.
+     * @param saveWeek true = lưu cả tuần, false = chỉ lưu ngày hiện tại
+     */
+    private void showSaveTemplateDialog(boolean saveWeek){
+        int paddingPx = (int)(16 * getResources().getDisplayMetrics().density);
+
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
+
+        android.widget.EditText titleInput = new android.widget.EditText(this);
+        titleInput.setHint("Tiêu đề");
+        layout.addView(titleInput);
+
+        android.widget.EditText descInput = new android.widget.EditText(this);
+        descInput.setHint("Mô tả (tuỳ chọn)");
+        descInput.setMinLines(2);
+        descInput.setMaxLines(4);
+        layout.addView(descInput);
+
+        new android.app.AlertDialog.Builder(this)
+            .setTitle("Lưu mẫu thực đơn")
+            .setView(layout)
+            .setPositiveButton("Lưu", (dlg, which)->{
+                String name = titleInput.getText().toString().trim();
+                String desc = descInput.getText().toString().trim();
+                if(name.isEmpty()){
+                    android.widget.Toast.makeText(this, "Vui lòng nhập tiêu đề", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                new Thread(() -> {
+                    saveTemplateToDatabase(name, desc, saveWeek);
+                }).start();
+            })
+            .setNegativeButton("Huỷ", null)
+            .show();
+    }
+
+    /**
+     * Sao chép thực đơn hiện tại (1 ngày hoặc cả tuần) thành MealPlan mới với type="DOWNLOADED".
+     */
+    private void saveTemplateToDatabase(String title, String description, boolean isWeek){
+        MealPlanDao mpDao = new MealPlanDao(this);
+        MealDayDao dayDao = new MealDayDao(this);
+        MealTimeDao timeDao = new MealTimeDao(this);
+        MealRecipeDao recDao = new MealRecipeDao(this);
+
+        // 1. Tạo MealPlan mới
+        com.example.bepnhataapp.common.model.MealPlan newPlan = new com.example.bepnhataapp.common.model.MealPlan();
+        newPlan.setMealCategory("Template");
+        newPlan.setTitle(title);
+        newPlan.setCreatedAt(java.time.LocalDateTime.now().toString());
+        newPlan.setType("DOWNLOADED");
+        newPlan.setNote(description);
+
+        Long cid = null;
+        if(SessionManager.isLoggedIn(this)){
+            com.example.bepnhataapp.common.dao.CustomerDao custDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+            com.example.bepnhataapp.common.model.Customer c = custDao.findByPhone(SessionManager.getPhone(this));
+            if(c!=null) cid = c.getCustomerID();
+        }
+        newPlan.setCustomerID(cid);
+
+        long newPlanId = mpDao.insert(newPlan);
+        newPlan.setMealPlanID(newPlanId);
+
+        java.util.List<java.time.LocalDate> datesToCopy = new java.util.ArrayList<>();
+        if(isWeek){
+            java.time.LocalDate monday = currentDate.with(java.time.DayOfWeek.MONDAY);
+            for(int i=0;i<7;i++){
+                datesToCopy.add(monday.plusDays(i));
+            }
+        }else{
+            datesToCopy.add(currentDate);
+        }
+
+        int daysCopied = 0;
+
+        for(java.time.LocalDate date : datesToCopy){
+            java.util.List<com.example.bepnhataapp.common.model.MealDay> srcDays = dayDao.getAllByDate(date.toString());
+            if(srcDays.isEmpty()) continue; // skip empty dates
+
+            // Chọn MealDay trùng với kế hoạch đang hiển thị (PERSONAL ưu tiên nếu đã đăng nhập)
+            com.example.bepnhataapp.common.model.MealDay src = null;
+            Long personalPlanId = null;
+            if(SessionManager.isLoggedIn(this)){
+                com.example.bepnhataapp.common.dao.CustomerDao cd = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                com.example.bepnhataapp.common.model.Customer cu = cd.findByPhone(SessionManager.getPhone(this));
+                if(cu!=null){
+                    com.example.bepnhataapp.common.dao.MealPlanDao mpd = new com.example.bepnhataapp.common.dao.MealPlanDao(this);
+                    com.example.bepnhataapp.common.model.MealPlan pers = mpd.getPersonalPlan(cu.getCustomerID());
+                    if(pers!=null) personalPlanId = pers.getMealPlanID();
+                }
+            }
+
+            Long autoPlanId = null;
+            if(personalPlanId==null){
+                java.util.List<com.example.bepnhataapp.common.model.MealPlan> autos = new com.example.bepnhataapp.common.dao.MealPlanDao(this).getAutoPlans();
+                if(!autos.isEmpty()) autoPlanId = autos.get(0).getMealPlanID();
+            }
+
+            for(com.example.bepnhataapp.common.model.MealDay d : srcDays){
+                if(personalPlanId!=null && d.getMealPlanID()==personalPlanId){ src=d; break; }
+                if(personalPlanId==null && autoPlanId!=null && d.getMealPlanID()==autoPlanId){ src=d; break; }
+            }
+
+            if(src==null) src = srcDays.get(0);
+
+            // For each src day (e.g., PERSONAL, AUTO) copy its content into newPlan (merge)
+            daysCopied++;
+            com.example.bepnhataapp.common.model.MealDay newDay = new com.example.bepnhataapp.common.model.MealDay();
+            newDay.setMealPlanID(newPlanId);
+            newDay.setDate(date.toString());
+            newDay.setNote(null);
+            long newDayId = dayDao.insert(newDay);
+
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> srcTimes = timeDao.getByMealDay(src.getMealDayID());
+
+            for(com.example.bepnhataapp.common.model.MealTime st : srcTimes){
+                com.example.bepnhataapp.common.model.MealTime nt = new com.example.bepnhataapp.common.model.MealTime();
+                nt.setMealDayID(newDayId);
+                nt.setMealType(st.getMealType());
+                nt.setNote(st.getNote());
+                long ntId = timeDao.insert(nt);
+
+                java.util.List<com.example.bepnhataapp.common.model.MealRecipe> srcRecipes = recDao.getRecipesForMealTime(st.getMealTimeID());
+                for(com.example.bepnhataapp.common.model.MealRecipe sr : srcRecipes){
+                    recDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(ntId, sr.getRecipeID()));
+                }
+            }
+        }
+
+        // Cập nhật totalDays
+        newPlan.setTotalDays(daysCopied);
+        mpDao.update(newPlan);
+
+        runOnUiThread(() -> android.widget.Toast.makeText(this, "Đã lưu mẫu thực đơn", android.widget.Toast.LENGTH_SHORT).show());
     }
 } 

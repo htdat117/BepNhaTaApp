@@ -23,6 +23,7 @@
         android:maxLines="1"
         android:text="Chicken Salad"
         android:textSize="14sp"
+        android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/ivMeal"
         app:layout_constraintTop_toTopOf="@id/ivMeal"
         app:layout_constraintBottom_toBottomOf="@id/ivMeal"

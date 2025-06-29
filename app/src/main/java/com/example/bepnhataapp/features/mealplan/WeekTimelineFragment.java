@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class WeekTimelineFragment extends Fragment {
 
@@ -34,33 +35,78 @@ public class WeekTimelineFragment extends Fragment {
         RecyclerView rv = root.findViewById(R.id.rvWeek);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        WeekAdapter adapter = new WeekAdapter(generateFakeWeek());
+        WeekAdapter adapter = new WeekAdapter(buildWeekTimelineData());
         rv.setAdapter(adapter);
         return root;
     }
 
-    private List<WeekAdapter.DayTimeline> generateFakeWeek() {
-        List<WeekAdapter.DayTimeline> list = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
-        for (int i = 0; i < 7; i++) {
-            Date date = cal.getTime();
-            List<MealTimeListAdapter.MealTimeWithMeals> mealTimes = new ArrayList<>();
+    private List<WeekAdapter.DayTimeline> buildWeekTimelineData(){
+        java.util.List<WeekAdapter.DayTimeline> week = new java.util.ArrayList<>();
 
-            if (i % 2 == 0) { // giả định ngày chẵn có dữ liệu
-                List<MealAdapter.MealRow> breakfastMeals = new ArrayList<>();
-                breakfastMeals.add(new MealAdapter.MealRow("Trứng ốp la", R.drawable.placeholder_banner_background));
-                breakfastMeals.add(new MealAdapter.MealRow("Bánh mì", R.drawable.placeholder_banner_background));
-                mealTimes.add(new MealTimeListAdapter.MealTimeWithMeals("Bữa sáng", breakfastMeals));
+        MealPlanViewModel vm = new androidx.lifecycle.ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+        MealPlanViewModel.State state = vm.getState().getValue();
+        if(state==null || state.week==null) return week;
 
-                List<MealAdapter.MealRow> lunchMeals = new ArrayList<>();
-                lunchMeals.add(new MealAdapter.MealRow("Cơm gà", R.drawable.placeholder_banner_background));
-                mealTimes.add(new MealTimeListAdapter.MealTimeWithMeals("Bữa trưa", lunchMeals));
+        // Build map date->DayPlan for quick lookup
+        java.util.Map<java.time.LocalDate, com.example.bepnhataapp.common.model.DayPlan> map = new java.util.HashMap<>();
+        for(com.example.bepnhataapp.common.model.DayPlan d : state.week.days){
+            map.put(d.date, d);
+        }
+
+        // Determine the Monday that corresponds to the date currently being viewed in the parent
+        // activity instead of relying on the startDate saved inside the WeekPlan (which may always
+        // be the week that contained the data when the ViewModel was first created).
+        java.time.LocalDate monday;
+        try {
+            MealPlanContentActivity act = (MealPlanContentActivity) requireActivity();
+            monday = act.getCurrentDate().with(java.time.DayOfWeek.MONDAY);
+        } catch (Exception e) {
+            // Fallback – current week of today if activity not yet attached or cast failed
+            monday = java.time.LocalDate.now().with(java.time.DayOfWeek.MONDAY);
+        }
+
+        for(int offset=0; offset<7; offset++){
+            java.time.LocalDate cur = monday.plusDays(offset);
+            com.example.bepnhataapp.common.model.DayPlan d = map.get(cur);
+            java.util.List<com.example.bepnhataapp.common.adapter.MealTimeListAdapter.MealTimeWithMeals> mealTimes = new java.util.ArrayList<>();
+
+            if(d != null){
+                // build mealTime slots order breakfast lunch dinner snack
+                for(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot : com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum.values()){
+                    java.util.List<com.example.bepnhataapp.common.adapter.MealAdapter.MealRow> rows = new java.util.ArrayList<>();
+                    for(android.util.Pair<com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum, com.example.bepnhataapp.common.model.Meal> p : d.meals){
+                        if(p.first == slot){
+                            com.example.bepnhataapp.common.model.Meal m = p.second;
+                            if(m.imageUrl!=null && !m.imageUrl.isEmpty()){
+                                rows.add(new com.example.bepnhataapp.common.adapter.MealAdapter.MealRow(m.title, m.imageUrl));
+                            } else {
+                                int res = m.imageResId!=0 ? m.imageResId : com.example.bepnhataapp.R.drawable.placeholder_banner_background;
+                                rows.add(new com.example.bepnhataapp.common.adapter.MealAdapter.MealRow(m.title, res));
+                            }
+                        }
+                    }
+                    if(!rows.isEmpty()){
+                        String lbl;
+                        switch(slot){
+                            case BREAKFAST: lbl = "Bữa sáng"; break;
+                            case LUNCH: lbl = "Bữa trưa"; break;
+                            case DINNER: lbl = "Bữa tối"; break;
+                            default: lbl = "Ăn nhẹ"; break;
+                        }
+                        mealTimes.add(new com.example.bepnhataapp.common.adapter.MealTimeListAdapter.MealTimeWithMeals(lbl, rows));
+                    }
+                }
             }
 
-            // nếu mealTimes rỗng => ngày trống
-            list.add(new WeekAdapter.DayTimeline(date, mealTimes));
-            cal.add(Calendar.DATE, 1);
+            java.util.Date dat;
+            try{
+                dat = java.sql.Date.valueOf(cur.toString());
+            }catch(Exception e){
+                dat = new java.util.Date();
+            }
+            week.add(new com.example.bepnhataapp.common.adapter.WeekAdapter.DayTimeline(dat, mealTimes));
         }
-        return list;
+
+        return week;
     }
 } 

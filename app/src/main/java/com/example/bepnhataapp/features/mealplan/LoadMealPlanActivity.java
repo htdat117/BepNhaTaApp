@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import com.example.bepnhataapp.common.repository.SavedPlanRepository;
+import com.example.bepnhataapp.common.repository.SavedPlanRepository.PlanInfo;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialDatePicker.Builder;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -23,6 +26,8 @@ public class LoadMealPlanActivity extends BaseActivity implements BaseActivity.O
     private TextView tvSelectedDate;
 
     private LocalDate selectedDate = LocalDate.now();
+
+    private java.util.List<SavedPlanRepository.PlanInfo> planInfos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +48,18 @@ public class LoadMealPlanActivity extends BaseActivity implements BaseActivity.O
 
         // Next button action
         findViewById(R.id.btnNext).setOnClickListener(v -> {
+            int pos = spinnerSavedPlan.getSelectedItemPosition();
             String planName = (String) spinnerSavedPlan.getSelectedItem();
             if (planName == null) {
                 Toast.makeText(this, "Vui lòng chọn thực đơn", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            long planId = planInfos.get(pos).mealPlanId;
+
             android.content.Intent intent = new android.content.Intent(this, LoadMealPlanReviewActivity.class);
             intent.putExtra("PLAN_NAME", planName);
+            intent.putExtra("PLAN_ID", planId);
             intent.putExtra("SELECTED_DATE", selectedDate.toString());
             startActivity(intent);
         });
@@ -69,21 +78,40 @@ public class LoadMealPlanActivity extends BaseActivity implements BaseActivity.O
     }
 
     private void setupSavedPlanSpinner() {
-        SavedPlanRepository repo = new SavedPlanRepository();
-        List<String> plans = repo.getPlanNames();
+        SavedPlanRepository repo = new SavedPlanRepository(this);
+        planInfos = new java.util.ArrayList<>();
+        for(String name : repo.getPlanNames()){
+            SavedPlanRepository.PlanInfo pi = repo.getPlan(name);
+            if(pi!=null) planInfos.add(pi);
+        }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, plans);
+        java.util.List<String> titles = new java.util.ArrayList<>();
+        for(SavedPlanRepository.PlanInfo pi: planInfos) titles.add(pi.title);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, titles);
         spinnerSavedPlan.setAdapter(adapter);
     }
 
     private void openDatePicker() {
-        DatePickerDialog dialog = new DatePickerDialog(this,
-                (view, year, month, dayOfMonth) -> {
-                    selectedDate = LocalDate.of(year, month + 1, dayOfMonth);
-                    updateSelectedDateLabel();
-                },
-                selectedDate.getYear(), selectedDate.getMonthValue() - 1, selectedDate.getDayOfMonth());
-        dialog.show();
+        // Use MaterialDatePicker for a more modern UX with optional text input mode
+        long preselectMillis = selectedDate
+                .atStartOfDay(java.time.ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+
+        MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Chọn ngày")
+                .setSelection(preselectMillis)
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR) // allow user to toggle to text input icon
+                .build();
+
+        picker.addOnPositiveButtonClickListener(selection -> {
+            java.time.Instant instant = java.time.Instant.ofEpochMilli(selection);
+            selectedDate = instant.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            updateSelectedDateLabel();
+        });
+
+        picker.show(getSupportFragmentManager(), "DATE_PICKER");
     }
 
     private void updateSelectedDateLabel() {

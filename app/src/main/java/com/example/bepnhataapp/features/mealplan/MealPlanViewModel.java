@@ -39,6 +39,34 @@ public class MealPlanViewModel extends ViewModel {
         refresh();
     }
 
+    /**
+     * Regenerate meals only for the days that already have a thực đơn (MealDay) inside
+     * the week that contains {@code referenceDate}.  Empty days will be kept nguyên trạng
+     * (không sinh tự động).
+     */
+    public void autoGenerateWeekFor(java.time.LocalDate referenceDate){
+        // Fetch current week plan to know which dates already exist
+        com.example.bepnhataapp.common.model.WeekPlan wp = repository.getWeekPlan();
+        if(wp == null || wp.days == null || wp.days.isEmpty()){
+            return; // nothing to refresh
+        }
+
+        java.time.LocalDate monday = referenceDate.with(java.time.DayOfWeek.MONDAY);
+        java.time.LocalDate sunday = monday.plusDays(6);
+
+        java.util.Set<java.time.LocalDate> datesToRefresh = new java.util.HashSet<>();
+        for(com.example.bepnhataapp.common.model.DayPlan d : wp.days){
+            if(!d.date.isBefore(monday) && !d.date.isAfter(sunday)){
+                datesToRefresh.add(d.date);
+            }
+        }
+
+        for(java.time.LocalDate d : datesToRefresh){
+            repository.generateWeekPlan(d);
+        }
+        refresh();
+    }
+
     public void generateEmpty() {
         repository.generateEmptyWeekPlan(LocalDate.now());
         refresh();
@@ -47,5 +75,24 @@ public class MealPlanViewModel extends ViewModel {
     public void deletePlanForDate(LocalDate date) {
         repository.deletePlanForDate(date);
         refresh();
+    }
+
+    public void copyFromPreviousDay(LocalDate date){
+        repository.copyFromPreviousDay(date);
+        refresh();
+    }
+
+    public void deleteMealTime(LocalDate date, String mealType){
+        repository.deleteMealTime(date, mealType);
+        refresh();
+    }
+
+    public void updateNoteForMealTime(LocalDate date, String mealType, String note){
+        repository.updateNoteForMealTime(date, mealType, note);
+        refresh();
+    }
+
+    public void addIngredientsToCart(LocalDate date, String mealType, android.content.Context ctx){
+        repository.addIngredientsToCart(date, mealType, ctx);
     }
 } 

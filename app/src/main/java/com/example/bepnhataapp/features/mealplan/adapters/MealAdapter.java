@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -18,7 +19,15 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealVH> {
     public static class MealRow {
         public final String name;
         public final int imageRes;
-        public MealRow(String n, int img) { name = n; imageRes = img; }
+        public final String imageUrl;
+
+        public MealRow(String n, int img) { this(n, img, null); }
+        public MealRow(String n, String url) { this(n, 0, url); }
+        private MealRow(String n, int res, String url) {
+            name = n;
+            imageRes = res;
+            imageUrl = url;
+        }
     }
 
     private final List<MealRow> meals;
@@ -35,7 +44,14 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealVH> {
     public void onBindViewHolder(@NonNull MealVH holder, int position) {
         MealRow row = meals.get(position);
         holder.tvName.setText(row.name);
-        holder.img.setImageResource(row.imageRes);
+        if(row.imageUrl != null && !row.imageUrl.isEmpty()){
+            Glide.with(holder.img.getContext())
+                    .load(row.imageUrl)
+                    .placeholder(row.imageRes == 0 ? com.example.bepnhataapp.R.drawable.placeholder_banner_background : row.imageRes)
+                    .into(holder.img);
+        }else{
+            holder.img.setImageResource(row.imageRes);
+        }
     }
 
     @Override

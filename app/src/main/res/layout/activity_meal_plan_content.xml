@@ -65,75 +65,6 @@
         android:layout_height="2dp"
         android:background="@color/orange" />
 
-    <!-- Tabs Ngày / Tuần -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="8dp">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDayTab"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Ngày"
-            style="@style/Body.Bold.Ag3"
-            android:textAllCaps="false"
-            android:background="@drawable/bg_segment_left_selector"
-            android:textColor="@color/text_segment_selector"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnWeekTab"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Tuần"
-            style="@style/Body.Bold.Ag3"
-            android:textAllCaps="false"
-            android:background="@drawable/bg_segment_right_selector"
-            android:textColor="@color/text_segment_selector"/>
-    </LinearLayout>
-
-    <!-- Navigation arrows + date -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:paddingTop="8dp">
-        <ImageButton
-            android:id="@+id/btnPrevDay"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_arrow_left"
-            android:background="@android:color/transparent"
-            android:contentDescription="Prev" />
-        <TextView
-            android:id="@+id/tvCurrentDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Body.Medium.Ag2"
-            android:layout_marginHorizontal="16dp"
-            android:text="Hôm nay, 3 tháng 6" />
-        <ImageButton
-            android:id="@+id/btnNextDay"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_arrow_right"
-            android:background="@android:color/transparent"
-            android:contentDescription="Next" />
-    </LinearLayout>
-
-    <!-- Các button hành động -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="8dp">
-    </LinearLayout>
-
-    <!-- Scrollable body -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -144,48 +75,107 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Fragment replaces KPI & timeline label -->
-            <FrameLayout
-                android:id="@+id/dayPlanContainer"
+            <!-- Tabs Ngày / Tuần -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="8dp"
+                android:layout_marginTop="16dp">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDayTab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Ngày"
+                    style="@style/Body.Bold.Ag3"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_segment_left_selector"
+                    android:textColor="@color/text_segment_selector"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnWeekTab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Tuần"
+                    style="@style/Body.Bold.Ag3"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_segment_right_selector"
+                    android:textColor="@color/text_segment_selector"/>
+            </LinearLayout>
+
+            <!-- Navigation arrows + date -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="240dp" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingTop="16dp">
+                <ImageButton
+                    android:id="@+id/btnPrevDay"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_arrow_left"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Prev" />
+                <TextView
+                    android:id="@+id/tvCurrentDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Body.Medium.Ag2"
+                    android:layout_marginHorizontal="16dp"
+                    android:text="Hôm nay, 3 tháng 6" />
+                <ImageButton
+                    android:id="@+id/btnNextDay"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Next" />
+            </LinearLayout>
 
-            <!-- Recommended section header -->
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Thực đơn dành cho bạn"
-                style="@style/Header.Ag3"
-                android:textColor="@color/orange"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <!-- Additional recommended RecyclerView placeholder -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRecommended"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp" />
+                <!-- Fragment replaces KPI & timeline label -->
+                <FrameLayout
+                    android:id="@+id/dayPlanContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="240dp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Thực đơn dành cho bạn"
+                    style="@style/Header.Ag3"
+                    android:textColor="@color/orange"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Additional recommended RecyclerView placeholder -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecommended"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:layout_marginBottom="50dp"/>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <!-- Hidden container for compatibility -->
-    <FrameLayout
-        android:id="@+id/contentContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
-
     <include layout="@layout/layout_bottom_navigation"
         android:id="@+id/bottom_navigation_container"/>
-    
 
 </LinearLayout> 

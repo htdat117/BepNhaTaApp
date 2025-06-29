@@ -218,7 +218,8 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
             final List<Recipe> recipeList = new ArrayList<>();
             if (recipeEntities != null) {
                 for (RecipeEntity entity : recipeEntities) {
-                    recipeList.add(new Recipe(
+                    recipeList.add(new com.example.bepnhataapp.common.models.Recipe(
+                            entity.getRecipeID(),
                             entity.getRecipeName(),
                             entity.getCategory(),
                             entity.getImageThumb() != null ? entity.getImageThumb().trim() : "",

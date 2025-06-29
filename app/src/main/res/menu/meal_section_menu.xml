@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_add_new" android:title="Thêm món mới" android:icon="@android:drawable/ic_input_add"/>
-    <item android:id="@+id/menu_use_saved" android:title="Dùng thực đơn đã lưu" android:icon="@android:drawable/ic_menu_my_calendar"/>
     <item android:id="@+id/menu_add_note" android:title="Thêm ghi chú" android:icon="@android:drawable/ic_menu_edit"/>
     <item android:id="@+id/menu_set_reminder" android:title="Đặt lịch nhắc nhở" android:icon="@android:drawable/ic_menu_recent_history"/>
     <item android:id="@+id/menu_buy_all" android:title="Mua tất cả nguyên liệu" android:icon="@android:drawable/ic_menu_agenda"/>

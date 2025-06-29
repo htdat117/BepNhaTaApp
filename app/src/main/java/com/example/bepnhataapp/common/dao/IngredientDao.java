@@ -79,6 +79,23 @@ public class IngredientDao {
         return list;
     }
 
+    /**
+     * Trả về danh sách nguyên liệu được sử dụng trong công thức (recipeID).
+     */
+    public List<Ingredient> getByRecipe(long recipeID){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String sql = "SELECT i.* FROM " + DBHelper.TBL_INGREDIENTS + " i " +
+                "JOIN " + DBHelper.TBL_RECIPE_INGREDIENTS + " ri ON i.ingredientID = ri.ingredientID " +
+                "WHERE ri.recipeID = ?";
+        Cursor c = db.rawQuery(sql, new String[]{String.valueOf(recipeID)});
+        List<Ingredient> list = new ArrayList<>();
+        if(c.moveToFirst()){
+            do{ list.add(cursorToIngredient(c)); } while (c.moveToNext());
+        }
+        c.close();
+        return list;
+    }
+
     private ContentValues toCV(Ingredient i, boolean includeId) {
         ContentValues cv = new ContentValues();
         if (includeId) cv.put("ingredientID", i.getIngredientID());
