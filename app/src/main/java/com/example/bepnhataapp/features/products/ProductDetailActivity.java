@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Collections;
 
 import androidx.annotation.IdRes;
+import androidx.core.content.ContextCompat;
 
 public class ProductDetailActivity extends BaseActivity {
 
@@ -45,6 +46,10 @@ public class ProductDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityProductDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Ensure product image has 16dp rounded corners
+        binding.ivProduct.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_rounded_16));
+        binding.ivProduct.setClipToOutline(true);
 
         currentProduct = null;
             

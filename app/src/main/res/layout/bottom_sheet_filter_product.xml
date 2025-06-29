@@ -31,6 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:text="Nguyên liệu"
+                    android:textColor="@color/dark1"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_marginTop="8dp"
@@ -58,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Địa phương"
+                android:textColor="@color/dark1"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp" />
@@ -73,6 +75,7 @@
             <!-- Nhóm dinh dưỡng -->
             <TextView
                 android:layout_width="wrap_content"
+                android:textColor="@color/dark1"
                 android:layout_height="wrap_content"
                 android:text="Nhóm dinh dưỡng"
                 android:textStyle="bold"
@@ -93,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:text="Lượng calo"
                 android:textStyle="bold"
+                android:textColor="@color/dark1"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp" />
 
@@ -120,6 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thời gian nấu"
+                android:textColor="@color/dark1"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp" />

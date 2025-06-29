@@ -30,7 +30,7 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
 
     private final String[] ingredientTags = {"Thịt heo", "Thịt gà", "Thịt bò", "Hải sản", "Trứng", "Đậu phụ", "Rau củ", "Nấm"};
     private final String[] regionTags = {"Miền Bắc", "Miền Trung", "Miền Nam", "Miền Tây", "Món Âu"};
-    private final String[] nutritionTags = {"Giàu chất xơ", "Nhiều canxi", "Giàu đạm", "Không cholesterol", "Giàu vitamin C", "Ít chất béo", "Giàu omega-3"};
+    private final String[] nutritionTags = {"Giàu đạm", "Giàu chất xơ", "Nhiều canxi", "Giàu vitamin C", "Ít chất béo", "Giàu omega-3", "Không cholesterol", "Ít calo"};
 
     public static class FilterCriteria {
         public Set<String> ingredients;

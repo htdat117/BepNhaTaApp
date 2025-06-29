@@ -357,6 +357,7 @@
                     android:layout_height="wrap_content"
                     android:text="Nguyên liệu"
                     android:textStyle="bold"
+                    android:textColor="@color/dark1"
                     android:textSize="18sp"
                     android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
@@ -385,6 +386,7 @@
                 android:layout_height="wrap_content"
                 android:text="Địa phương"
                 android:textStyle="bold"
+                android:textColor="@color/dark1"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"/>
 
@@ -402,6 +404,7 @@
                 android:layout_height="wrap_content"
                 android:text="Lợi ích sức khoẻ"
                 android:textStyle="bold"
+                android:textColor="@color/dark1"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"/>
 
@@ -418,6 +421,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lượng calo"
+                android:textColor="@color/dark1"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"/>
@@ -446,6 +450,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thời gian nấu"
+                android:textColor="@color/dark1"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"/>

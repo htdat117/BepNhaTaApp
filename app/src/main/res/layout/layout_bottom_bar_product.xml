@@ -107,6 +107,13 @@
             android:textSize="@dimen/header3"/>
     </LinearLayout>
 
+    <!-- Thin divider line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="@color/dark4" />
+
     <!-- Second row: buttons -->
     <LinearLayout
         android:layout_width="match_parent"

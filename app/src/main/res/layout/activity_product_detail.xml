@@ -55,7 +55,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background"
+                android:background="@drawable/bg_rounded_16"
+                android:clipToOutline="true"
+                android:src="@drawable/sample_img"
                 android:layout_marginTop="16dp"/>
 
             <!-- Product name and time -->
@@ -431,9 +433,9 @@
 
                 <ImageView
                     android:id="@+id/btnMinus"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_remove"/>
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_minus_product"/>
 
                 <TextView
                     android:id="@+id/tvQuantity"
@@ -444,9 +446,9 @@
 
                 <ImageView
                     android:id="@+id/btnPlus"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_add"/>
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_add_product"/>
             </LinearLayout>
 
             <View

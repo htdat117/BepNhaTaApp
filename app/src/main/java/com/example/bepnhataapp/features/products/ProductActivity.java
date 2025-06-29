@@ -178,26 +178,44 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
                 if(p.getSalePercent()>0) productList.add(p);
             }
         }else{
+            // Chuẩn hoá tên danh mục từ UI thành "slug" để khớp DB (loại bỏ tiền tố "Món ")
+            String key = categoryName.toLowerCase().replace("món ", "").trim();
             for(Product p: allProducts){
-                if(p.getCategory()!=null && p.getCategory().equalsIgnoreCase(categoryName)) productList.add(p);
+                if(p.getCategory()!=null && p.getCategory().equalsIgnoreCase(key)){
+                    productList.add(p);
+                }
             }
         }
         adapter.notifyDataSetChanged();
     }
 
     private void applyAdvancedFilter(FilterProductBottomSheet.FilterCriteria c){
-        // Basic implementation using kcal & time & cuisine only for demo
         productList.clear();
         ProductDetailDao detailDao = new ProductDetailDao(this);
         for(Product p: allProducts){
             boolean ok=true;
+            ProductDetail d=detailDao.getByProductId(p.getProductID());
+            // Lọc theo địa phương (cuisine)
             if(c.regions!=null && !c.regions.isEmpty()){
-                ProductDetail d=detailDao.getByProductId(p.getProductID());
-                if(d==null || !c.regions.contains(d.getCuisine())) ok=false;
-                if(d!=null){
-                    if(d.getCalo()>c.maxKcal) ok=false;
-                    if(d.getCookingTimeMinutes()>c.maxTime) ok=false;
+                if(d==null || d.getCuisine()==null || !c.regions.contains(d.getCuisine())) ok=false;
+            }
+            // Lọc theo nhóm dinh dưỡng (nutritionTag)
+            if(ok && c.nutritions!=null && !c.nutritions.isEmpty()){
+                boolean found = false;
+                if(d!=null && d.getNutritionTag()!=null){
+                    for(String tag : c.nutritions){
+                        if(d.getNutritionTag().toLowerCase().contains(tag.toLowerCase())){
+                            found = true;
+                            break;
+                        }
+                    }
                 }
+                if(!found) ok=false;
+            }
+            // Lọc kcal, time như cũ
+            if(ok && d!=null){
+                if(d.getCalo() > c.maxKcal) ok=false;
+                if(d.getCookingTimeMinutes() > c.maxTime) ok=false;
             }
             if(ok) productList.add(p);
         }

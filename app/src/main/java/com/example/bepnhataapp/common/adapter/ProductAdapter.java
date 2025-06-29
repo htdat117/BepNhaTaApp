@@ -185,6 +185,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
+            // Apply 16dp rounded corners programmatically to ensure clipping works
+            imgProduct.setBackground(androidx.core.content.ContextCompat.getDrawable(itemView.getContext(), R.drawable.bg_rounded_16));
+            imgProduct.setClipToOutline(true);
             imgFavorite = itemView.findViewById(R.id.imgFavorite);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvKcal = itemView.findViewById(R.id.tvKcal);

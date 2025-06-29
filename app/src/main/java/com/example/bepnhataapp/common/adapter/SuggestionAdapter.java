@@ -96,6 +96,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         public SuggestionViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
+            imgProduct.setBackground(androidx.core.content.ContextCompat.getDrawable(itemView.getContext(), R.drawable.bg_rounded_8));
+            imgProduct.setClipToOutline(true);
             tvName = itemView.findViewById(R.id.tvProductName);
             tvKcal = itemView.findViewById(R.id.tvKcal);
             tvNutrition = itemView.findViewById(R.id.tvNutrition);

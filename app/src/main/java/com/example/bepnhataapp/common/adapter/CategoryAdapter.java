@@ -46,8 +46,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.tvCategoryName.setText(category.name);
 
         boolean selected = (position == selectedPos);
-        holder.imgCategory.setBackgroundResource(selected ? R.drawable.bg_category_selected : R.drawable.rounded_img_8);
+        holder.imgCategory.setBackgroundResource(selected ? R.drawable.bg_category_selected : R.drawable.bg_rounded_8);
         holder.tvCategoryName.setTextColor(context.getResources().getColor(selected ? R.color.primary1 : R.color.dark1));
+
+        // đảm bảo clip bo góc luôn hoạt động
+        holder.imgCategory.setClipToOutline(true);
 
         holder.itemView.setOnClickListener(v -> {
             int prev = selectedPos;

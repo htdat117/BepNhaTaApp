@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/sample_img"
-                android:background="@drawable/rounded_img_16"
+                android:background="@drawable/bg_rounded_16"
                 android:clipToOutline="true" />
 
             <!-- Badge rating -->
