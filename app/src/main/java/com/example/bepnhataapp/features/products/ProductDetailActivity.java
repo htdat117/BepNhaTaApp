@@ -190,6 +190,38 @@ public class ProductDetailActivity extends BaseActivity {
             }
             startActivity(intent);
         });
+
+        // After setting adapter for pager (or at end of onCreate), add Buy Now button handler
+        binding.btnBuyNow.setOnClickListener(v -> {
+            if (currentProduct == null) return;
+            int servingFactor = currentServingFactor; // 1 for 2-person, 2 for 4-person
+
+            // Calculate price per 2-person pack so that CheckoutActivity total logic works
+            int originalVariantPrice = (servingFactor == 1) ? currentProduct.getProductPrice2() : currentProduct.getProductPrice4();
+            int salePercentVariant = (servingFactor == 1) ? currentProduct.getSalePercent2() : currentProduct.getSalePercent4();
+            int discountedVariantPrice = originalVariantPrice * (100 - salePercentVariant) / 100;
+
+            // Normalise to 2-person pack price because CartItem#getTotal multiplies by servingFactor
+            int pricePer2Pack = discountedVariantPrice / servingFactor;
+            int oldPricePer2Pack = originalVariantPrice / servingFactor;
+
+            com.example.bepnhataapp.common.models.CartItem ci = new com.example.bepnhataapp.common.models.CartItem(
+                    currentProduct.getProductID(),
+                    currentProduct.getProductName(),
+                    pricePer2Pack,
+                    oldPricePer2Pack,
+                    quantity,
+                    currentProduct.getProductThumb()
+            );
+            ci.setServing(servingFactor == 2 ? "4 người" : "2 người");
+
+            java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> selected = new java.util.ArrayList<>();
+            selected.add(ci);
+
+            android.content.Intent intent = new android.content.Intent(ProductDetailActivity.this, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);
+            intent.putExtra("selected_items", selected);
+            startActivity(intent);
+        });
     }
 
     @Override

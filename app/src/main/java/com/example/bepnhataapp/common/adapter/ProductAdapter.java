@@ -82,17 +82,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             refreshViews(holder, product, detail, 1);
         }
 
-        int price2 = product.getProductPrice2() * (100 - product.getSalePercent2()) / 100;
-        String priceStr = formatPrice(price2);
-        holder.tvPrice.setText(priceStr);
-        if (product.getSalePercent2() > 0) {
-            holder.tvOldPrice.setText(formatPrice(product.getProductPrice2()));
-            holder.tvOldPrice.setPaintFlags(holder.tvOldPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvOldPrice.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvOldPrice.setVisibility(View.GONE);
-        }
-
         holder.tvRating.setText(String.valueOf((float) product.getAvgRating()));
         holder.tvReviewCount.setText("(" + product.getCommentAmount() + ")");
         holder.imgFavorite.setImageResource(R.drawable.ic_favorite_unchecked);
@@ -108,6 +97,44 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             android.widget.Toast.makeText(context, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
             // Muốn mở giỏ ngay:
             // context.startActivity(new Intent(context, com.example.bepnhataapp.features.cart.CartActivity.class));
+        });
+
+        // Xử lý nút "Mua ngay"
+        holder.btnBuy.setOnClickListener(v -> {
+            // Lấy serving factor hiện tại
+            int servingFactor = 1; // default 2 người
+            if (servingGroup != null && servingGroup.getCheckedButtonId() == R.id.btnFor4) {
+                servingFactor = 2; // 4 người
+            }
+
+            // Tính giá cho serving size hiện tại
+            int originalVariantPrice = (servingFactor == 1) ? product.getProductPrice2() : product.getProductPrice4();
+            int salePercentVariant = (servingFactor == 1) ? product.getSalePercent2() : product.getSalePercent4();
+            int discountedVariantPrice = originalVariantPrice * (100 - salePercentVariant) / 100;
+
+            // Normalise to 2-person pack price because CartItem#getTotal multiplies by servingFactor
+            int pricePer2Pack = discountedVariantPrice / servingFactor;
+            int oldPricePer2Pack = originalVariantPrice / servingFactor;
+
+            // Tạo CartItem
+            com.example.bepnhataapp.common.models.CartItem cartItem = new com.example.bepnhataapp.common.models.CartItem(
+                    product.getProductID(),
+                    product.getProductName(),
+                    pricePer2Pack,
+                    oldPricePer2Pack,
+                    1, // quantity = 1
+                    product.getProductThumb()
+            );
+            cartItem.setServing(servingFactor == 2 ? "4 người" : "2 người");
+
+            // Tạo danh sách items để chuyển đến checkout
+            java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> selectedItems = new java.util.ArrayList<>();
+            selectedItems.add(cartItem);
+
+            // Chuyển đến trang thanh toán
+            Intent intent = new Intent(context, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);
+            intent.putExtra("selected_items", selectedItems);
+            context.startActivity(intent);
         });
     }
 
@@ -128,14 +155,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.tvKcal.setText((int)kcal+" Kcal");
             holder.tvTime.setText(time+" phút");
         }
-        int basePrice = factor==1 ? product.getProductPrice2()*(100-product.getSalePercent2())/100
-                                  : product.getProductPrice4()*(100-product.getSalePercent4())/100;
-        holder.tvPrice.setText(formatPrice(basePrice));
+        
+        // Tính giá cho serving size hiện tại
+        int originalPrice = factor==1 ? product.getProductPrice2() : product.getProductPrice4();
+        int salePercent = factor==1 ? product.getSalePercent2() : product.getSalePercent4();
+        int discountedPrice = originalPrice * (100 - salePercent) / 100;
+        
+        holder.tvPrice.setText(formatPrice(discountedPrice));
 
-        if((factor==1 && product.getSalePercent2()>0) || (factor==2 && product.getSalePercent4()>0)){
+        if(salePercent > 0){
             holder.tvOldPrice.setVisibility(View.VISIBLE);
-            int old = factor==1? product.getProductPrice2() : product.getProductPrice4();
-            holder.tvOldPrice.setText(formatPrice(old));
+            holder.tvOldPrice.setText(formatPrice(originalPrice));
+            holder.tvOldPrice.setPaintFlags(holder.tvOldPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             holder.tvOldPrice.setVisibility(View.GONE);
         }
@@ -150,6 +181,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         ImageView imgProduct, imgFavorite;
         TextView tvProductName, tvKcal, tvNutrition, tvTime, tvFor2, tvFor4, tvOldPrice, tvPrice, tvRating, tvReviewCount;
         ImageView btnAddCart;
+        TextView btnBuy;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
@@ -165,6 +197,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvRating = itemView.findViewById(R.id.tvRating);
             tvReviewCount = itemView.findViewById(R.id.tvReviewCount);
             btnAddCart = itemView.findViewById(R.id.btnAddCart);
+            btnBuy = itemView.findViewById(R.id.btnBuy);
         }
     }
 }
