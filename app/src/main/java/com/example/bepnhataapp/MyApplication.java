@@ -8,6 +8,7 @@ import com.example.bepnhataapp.common.databases.DBHelper;
 import com.example.bepnhataapp.common.utils.GooglePlayServicesHelper;
 import com.example.bepnhataapp.common.utils.GoogleApiManagerHelper;
 import com.google.firebase.FirebaseApp;
+import java.io.IOException;
 
 public class MyApplication extends Application {
 
@@ -53,9 +54,19 @@ public class MyApplication extends Application {
     private void initializeDatabaseAsync() {
         new Thread(() -> {
             try {
-                // Khởi tạo database
+                // Khởi tạo database: copy file từ assets nếu chưa tồn tại
                 DBHelper dbHelper = new DBHelper(MyApplication.this);
+                // Thử tạo database từ assets trước khi mở
+                try {
+                    dbHelper.createDatabase();
+                } catch (IOException ioException) {
+                    Log.e(TAG, "Error copying pre-populated database", ioException);
+                }
+
+                // Sau khi copy (hoặc nếu đã tồn tại) thì mở database để bảo đảm schema sẵn sàng
                 dbHelper.getReadableDatabase();
+                dbHelper.close();
+
                 isDbReady = true;
                 Log.d(TAG, "Database initialized successfully");
             } catch (Exception e) {

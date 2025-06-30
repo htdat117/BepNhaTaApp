@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 3; // bumped for servingFactor column in CART_DETAILS
+    private static final int DB_VERSION = 1; // bumped for servingFactor column in CART_DETAILS
     private static final String DB_NAME = "BepNhaTa.db";
     private static final String DB_PATH_SUFFIX = "/databases/";
     // Alias for teacher-style constant name
