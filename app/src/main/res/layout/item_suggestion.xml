@@ -87,10 +87,11 @@
                     android:paddingBottom="2dp">
 
                     <ImageView
+                        android:id="@+id/ivNutritionIcon"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_nutrition" />
+                        android:src="@drawable/ic_bone" />
 
                     <TextView
                         android:id="@+id/tvNutrition"
@@ -149,6 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="70.000đ"
+                    android:textStyle="bold"
                     android:textColor="@color/primary1" />
 
                 <View

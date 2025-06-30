@@ -30,7 +30,15 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
 
     private final String[] ingredientTags = {"Thịt heo", "Thịt gà", "Thịt bò", "Hải sản", "Trứng", "Đậu phụ", "Rau củ", "Nấm"};
     private final String[] regionTags = {"Miền Bắc", "Miền Trung", "Miền Nam", "Miền Tây", "Món Âu"};
-    private final String[] nutritionTags = {"Giàu đạm", "Giàu Vitamin", "Thanh đạm", "Omega-3", "Ít calo", "Carb cao", "Năng lượng cao", "Cân bằng", "Nhẹ bụng"};
+    private final String[] nutritionTags = {
+            "Ít chất béo",
+            "Không cholesterol",
+            "Giàu omega-3",
+            "Giàu vitamin",
+            "Giàu đạm",
+            "Nhiều canxi",
+            "Giàu chất xơ"
+    };
 
     public static class FilterCriteria {
         public Set<String> ingredients;
@@ -46,7 +54,15 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
 
     private OnFilterAppliedListener listener;
 
+    // Hold previously applied filter so we can preselect when reopening
+    private FilterCriteria initialCriteria;
+
     public void setOnFilterAppliedListener(OnFilterAppliedListener l) { this.listener = l; }
+
+    // Allow parent activity to pass in previously selected criteria
+    public void setInitialCriteria(FilterCriteria c){
+        this.initialCriteria = c;
+    }
 
     public FilterProductBottomSheet() {
         // Required empty public constructor
@@ -66,6 +82,23 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
         setupTagFlex(binding.flexIngredients, ingredientTags, false);
         setupTagFlex(binding.flexRegions, regionTags, false);
         setupTagFlex(binding.flexNutritions, nutritionTags, false);
+
+        // Restore previous selections if available
+        if(initialCriteria!=null){
+            preselectTags(binding.flexIngredients, initialCriteria.ingredients);
+            preselectTags(binding.flexRegions, initialCriteria.regions);
+            preselectTags(binding.flexNutritions, initialCriteria.nutritions);
+
+            // sliders restore
+            if(initialCriteria.maxKcal>0){
+                binding.sliderKcal.setValue(initialCriteria.maxKcal);
+                binding.tvKcalValue.setText(String.valueOf(initialCriteria.maxKcal));
+            }
+            if(initialCriteria.maxTime>0){
+                binding.sliderTime.setValue(initialCriteria.maxTime);
+                binding.tvTimeValue.setText(String.valueOf(initialCriteria.maxTime));
+            }
+        }
 
         // sliders setup
         binding.sliderKcal.setLabelFormatter(value -> String.valueOf((int) value));
@@ -93,6 +126,23 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
                 listener.onFilterApplied(c);
             }
             dismiss();
+        });
+
+        binding.btnClear.setOnClickListener(v -> {
+            // reset UI selections
+            resetSelections(binding.flexIngredients);
+            resetSelections(binding.flexRegions);
+            resetSelections(binding.flexNutritions);
+
+            float maxK = binding.sliderKcal.getValueTo();
+            binding.sliderKcal.setValue(maxK);
+            binding.tvKcalValue.setText(String.valueOf((int)maxK));
+
+            float maxT = binding.sliderTime.getValueTo();
+            binding.sliderTime.setValue(maxT);
+            binding.tvTimeValue.setText(String.valueOf((int)maxT));
+
+            // Do not auto-apply or dismiss; user can adjust then press Apply
         });
     }
 
@@ -180,5 +230,29 @@ public class FilterProductBottomSheet extends BottomSheetDialogFragment {
             if(mb.getTag()!=null && (boolean)mb.getTag()) return mb.getText().toString();
         }
         return null;
+    }
+
+    private void preselectTags(FlexboxLayout flex, java.util.Set<String> selected){
+        if(selected==null || selected.isEmpty()) return;
+        for(int i=0;i<flex.getChildCount();i++){
+            com.google.android.material.button.MaterialButton mb = (com.google.android.material.button.MaterialButton) flex.getChildAt(i);
+            String text = mb.getText().toString();
+            boolean sel = containsIgnoreCase(selected,text);
+            styleChip(mb, sel);
+            mb.setTag(sel);
+        }
+    }
+
+    private boolean containsIgnoreCase(java.util.Set<String> set, String value){
+        for(String s:set){ if(s.equalsIgnoreCase(value)) return true; }
+        return false;
+    }
+
+    private void resetSelections(FlexboxLayout flex){
+        for(int i=0;i<flex.getChildCount();i++){
+            MaterialButton mb=(MaterialButton) flex.getChildAt(i);
+            styleChip(mb,false);
+            mb.setTag(false);
+        }
     }
 } 

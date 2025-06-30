@@ -134,6 +134,7 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/rounded_bg_primary4">
                     <ImageView
+                        android:id="@+id/ivNutritionIcon"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:src="@drawable/ic_nutrition"

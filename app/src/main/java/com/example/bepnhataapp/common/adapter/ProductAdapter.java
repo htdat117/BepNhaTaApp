@@ -60,12 +60,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.tvKcal.setText((int)detail.getCalo()+" Kcal");
             holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
             String tag = detail.getNutritionTag();
-            if(tag!=null && !tag.isEmpty()) holder.tvNutrition.setText(capitalize(tag));
-            else holder.tvNutrition.setText("");
+            if(tag!=null && !tag.isEmpty()) {
+                holder.tvNutrition.setText(capitalize(tag));
+            } else {
+                holder.tvNutrition.setText("");
+            }
+            holder.ivNutrition.setImageResource(getNutritionIconResId(tag));
         }else{
             holder.tvKcal.setText("");
             holder.tvTime.setText("");
             holder.tvNutrition.setText("");
+            holder.ivNutrition.setImageResource(getNutritionIconResId(null));
         }
         holder.tvFor2.setText("2 người");
         holder.tvFor4.setText("4 người");
@@ -177,11 +182,38 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return s.substring(0,1).toUpperCase()+s.substring(1);
     }
 
+    /**
+     * Return drawable resource id corresponding to nutrition tag keyword.
+     * Defaults to generic nutrition icon when tag is unknown or empty.
+     */
+    private int getNutritionIconResId(String tag){
+        if(tag==null || tag.isEmpty()) return R.drawable.ic_nutrition;
+        String key = normalize(tag);
+        if(key.contains("omega")) return R.drawable.ic_omega3;
+        if(key.contains("dam") || key.contains("đam") || key.contains("protein")) return R.drawable.ic_protein_nutrition;
+        if(key.contains("vitamin")) return R.drawable.ic_vitamin;
+        if(key.contains("cholesterol")) return R.drawable.ic_cholesterol;
+        if(key.contains("itbeo") || key.contains("lowfat") || key.contains("chatbeo")) return R.drawable.ic_low_fat;
+        if(key.contains("canxi") || key.contains("calcium")) return R.drawable.ic_canxi;
+        if(key.contains("chatxo") || key.contains("fiber")) return R.drawable.ic_nutrition; // TODO replace when fiber icon available
+        return R.drawable.ic_nutrition;
+    }
+
+    // Remove diacritics & make lowercase
+    private String normalize(String s){
+        String temp = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD);
+        temp = temp.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        temp = temp.replace('đ','d').replace('Đ','D');
+        temp = temp.toLowerCase(java.util.Locale.ROOT).replace("-", "").replace(" ", "");
+        return temp;
+    }
+
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imgProduct, imgFavorite;
         TextView tvProductName, tvKcal, tvNutrition, tvTime, tvFor2, tvFor4, tvOldPrice, tvPrice, tvRating, tvReviewCount;
         ImageView btnAddCart;
         TextView btnBuy;
+        ImageView ivNutrition;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
@@ -201,6 +233,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvReviewCount = itemView.findViewById(R.id.tvReviewCount);
             btnAddCart = itemView.findViewById(R.id.btnAddCart);
             btnBuy = itemView.findViewById(R.id.btnBuy);
+            ivNutrition = itemView.findViewById(R.id.ivNutritionIcon);
         }
     }
 }

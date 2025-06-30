@@ -150,17 +150,40 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnApply"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_margin="16dp"
-        android:text="Hoàn tất"
-        android:textColor="@android:color/white"
-        android:background="@drawable/button_orange_rounded"
-        app:backgroundTint="@null"
-        android:enabled="true"
-        android:insetTop="0dp"
-        android:insetBottom="0dp" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClear"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:text="Xóa bộ lọc"
+            android:textColor="@color/primary1"
+            android:background="@drawable/rounded_bg_primary4"
+            app:backgroundTint="@color/white"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:text="Hoàn tất"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_orange_rounded"
+            app:backgroundTint="@null"
+            android:enabled="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+    </LinearLayout>
 
 </LinearLayout> 

@@ -36,6 +36,9 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
     private final List<Product> productList = new ArrayList<>();
     private ProductAdapter adapter;
 
+    // hold current filter
+    private FilterProductBottomSheet.FilterCriteria currentCriteria;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +135,7 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
     private void toFilter() {
         binding.btnFilterProduct.setOnClickListener(v -> {
             FilterProductBottomSheet bottomSheet = new FilterProductBottomSheet();
+            bottomSheet.setInitialCriteria(currentCriteria);
             bottomSheet.setOnFilterAppliedListener(this::applyAdvancedFilter);
             bottomSheet.show(getSupportFragmentManager(), "FilterProductBottomSheet");
         });
@@ -198,6 +202,9 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
     }
 
     private void applyAdvancedFilter(FilterProductBottomSheet.FilterCriteria c){
+        // save current criteria for next open
+        this.currentCriteria = c;
+
         productList.clear();
         ProductDetailDao detailDao = new ProductDetailDao(this);
         for(Product p: allProducts){

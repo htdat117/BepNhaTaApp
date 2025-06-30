@@ -60,12 +60,17 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             holder.tvKcal.setText((int)detail.getCalo()+" Kcal");
             holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
             String tag = detail.getNutritionTag();
-            if(tag!=null && !tag.isEmpty()) holder.tvNutrition.setText(capitalize(tag));
-            else holder.tvNutrition.setText("");
+            if(tag!=null && !tag.isEmpty()) {
+                holder.tvNutrition.setText(capitalize(tag));
+            } else {
+                holder.tvNutrition.setText("");
+            }
+            holder.ivNutrition.setImageResource(getNutritionIconResId(tag));
         }else{
             holder.tvKcal.setText("");
             holder.tvTime.setText("");
             holder.tvNutrition.setText("");
+            holder.ivNutrition.setImageResource(getNutritionIconResId(null));
         }
         holder.tvPrice.setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
 
@@ -93,6 +98,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         TextView tvName, tvKcal, tvNutrition, tvTime, tvPrice;
         View btnBuy;
         ImageView btnAddCart;
+        ImageView ivNutrition;
         public SuggestionViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
@@ -105,6 +111,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             tvPrice = itemView.findViewById(R.id.tvPrice);
             btnBuy = itemView.findViewById(R.id.btnBuy);
             btnAddCart = itemView.findViewById(R.id.btnAddCart);
+            ivNutrition = itemView.findViewById(R.id.ivNutritionIcon);
         }
     }
 
@@ -249,5 +256,27 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     private String capitalize(String s){
         if(s==null || s.isEmpty()) return s;
         return s.substring(0,1).toUpperCase()+s.substring(1);
+    }
+
+    // Same mapping function as in ProductAdapter
+    private int getNutritionIconResId(String tag){
+        if(tag==null || tag.isEmpty()) return R.drawable.ic_nutrition;
+        String key = normalize(tag);
+        if(key.contains("omega")) return R.drawable.ic_omega3;
+        if(key.contains("dam") || key.contains("đam") || key.contains("protein")) return R.drawable.ic_protein_nutrition;
+        if(key.contains("vitamin")) return R.drawable.ic_vitamin;
+        if(key.contains("cholesterol")) return R.drawable.ic_cholesterol;
+        if(key.contains("itbeo") || key.contains("lowfat") || key.contains("chatbeo")) return R.drawable.ic_low_fat;
+        if(key.contains("canxi") || key.contains("calcium")) return R.drawable.ic_canxi;
+        if(key.contains("chatxo") || key.contains("fiber")) return R.drawable.ic_nutrition;
+        return R.drawable.ic_nutrition;
+    }
+
+    private String normalize(String s){
+        String temp = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD);
+        temp = temp.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        temp = temp.replace('đ','d').replace('Đ','D');
+        temp = temp.toLowerCase(java.util.Locale.ROOT).replace("-", "").replace(" ", "");
+        return temp;
     }
 } 
