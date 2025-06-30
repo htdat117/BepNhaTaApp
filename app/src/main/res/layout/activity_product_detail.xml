@@ -97,11 +97,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="Mô tả món ăn"
                 android:textColor="@color/dark1"
-                android:fontFamily="@font/inter_bold"
-                android:layout_marginTop="8dp"
-                android:textSize="@dimen/body1"/>
+                style="@style/Body.Bold.Ag1"
+                android:textStyle="bold"/>
 
             <!-- Description -->
             <TextView
@@ -126,8 +126,8 @@
                     android:layout_weight="1"
                     android:textColor="@color/dark1"
                     android:text="Hướng dẫn cách nấu"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="@dimen/body1"/>
+                    style="@style/Body.Bold.Ag1"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/tvViewRecipe"
@@ -149,8 +149,8 @@
                 android:layout_weight="1"
                 android:textColor="@color/dark1"
                 android:text="Thành phần dinh dưỡng"
-                android:fontFamily="@font/inter_bold"
-                android:textSize="@dimen/body1"
+                style="@style/Body.Bold.Ag1"
+                android:textStyle="bold"
                 android:layout_marginTop="12dp"/>
             <LinearLayout
                 android:layout_width="match_parent"

@@ -79,6 +79,7 @@
             android:layout_height="wrap_content"
             android:text="Tên món ăn"
             style="@style/Header.Ag4"
+            android:textStyle="bold"
             android:textColor="@color/dark1"
             android:layout_marginTop="4dp"/>
 

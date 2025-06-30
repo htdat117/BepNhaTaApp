@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:text="Nguyên liệu cho 2 người"
             android:textColor="@color/dark1"
-            android:fontFamily="@font/inter_bold"
-            android:textSize="@dimen/body1"
+            style="@style/Body.Bold.Ag1"
+            android:textStyle="bold"
             android:layout_marginTop="8dp"/>
 
         <!-- Ingredient list -->
