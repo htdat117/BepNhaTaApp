@@ -44,6 +44,14 @@ public class FavouriteProductDao {
         return list;
     }
 
+    public boolean isFavourite(long productID, long customerID) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT 1 FROM " + DBHelper.TBL_FAVOURITE_PRODUCTS + " WHERE productID=? AND customerID=? LIMIT 1", new String[]{String.valueOf(productID), String.valueOf(customerID)});
+        boolean exists = c.moveToFirst();
+        c.close();
+        return exists;
+    }
+
     private ContentValues toCV(FavouriteProduct fp) {
         ContentValues cv = new ContentValues();
         cv.put("productID", fp.getProductID());

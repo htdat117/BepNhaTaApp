@@ -89,7 +89,39 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         holder.tvRating.setText(String.valueOf((float) product.getAvgRating()));
         holder.tvReviewCount.setText("(" + product.getCommentAmount() + ")");
-        holder.imgFavorite.setImageResource(R.drawable.ic_favorite_unchecked);
+        boolean isFav = false;
+        if (com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(context)) {
+            String phoneTmp = com.example.bepnhataapp.common.utils.SessionManager.getPhone(context);
+            com.example.bepnhataapp.common.dao.CustomerDao tmpDao = new com.example.bepnhataapp.common.dao.CustomerDao(context);
+            com.example.bepnhataapp.common.model.Customer tmpC = tmpDao.findByPhone(phoneTmp);
+            if (tmpC != null) {
+                com.example.bepnhataapp.common.dao.FavouriteProductDao tmpFavDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(context);
+                isFav = tmpFavDao.isFavourite(product.getProductID(), tmpC.getCustomerID());
+            }
+        }
+        holder.imgFavorite.setImageResource(isFav ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+
+        boolean[] favState = new boolean[]{isFav};
+        holder.imgFavorite.setOnClickListener(v -> {
+            if (!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(context)) {
+                android.widget.Toast.makeText(context, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(context);
+            com.example.bepnhataapp.common.dao.CustomerDao cusDao = new com.example.bepnhataapp.common.dao.CustomerDao(context);
+            com.example.bepnhataapp.common.model.Customer cus = cusDao.findByPhone(phone);
+            if (cus == null) return;
+
+            com.example.bepnhataapp.common.dao.FavouriteProductDao favDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(context);
+            if (favState[0]) {
+                favDao.delete(product.getProductID(), cus.getCustomerID());
+            } else {
+                favDao.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(product.getProductID(), cus.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
+            }
+            favState[0] = !favState[0];
+            holder.imgFavorite.setImageResource(favState[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+        });
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, com.example.bepnhataapp.features.products.ProductDetailActivity.class);

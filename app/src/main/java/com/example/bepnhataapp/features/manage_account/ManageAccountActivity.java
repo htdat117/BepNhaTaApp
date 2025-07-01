@@ -196,6 +196,18 @@ public class ManageAccountActivity extends BaseActivity implements BaseActivity.
 
         // Thiết lập Bottom Navigation
         setupBottomNavigationFragment(R.id.nav_home); // chọn mặc định Trang chủ
+
+        android.view.View favoriteView = findViewById(R.id.layout_favorite_dishes);
+        if (favoriteView != null) {
+            favoriteView.setOnClickListener(v -> {
+                if (isLoggedIn()) {
+                    android.content.Intent intent = new android.content.Intent(ManageAccountActivity.this, com.example.bepnhataapp.features.favorite.FavoriteActivity.class);
+                    startActivity(intent);
+                } else {
+                    showLoginPromptDialog();
+                }
+            });
+        }
     }
 
     private boolean isLoggedIn() {

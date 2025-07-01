@@ -3,6 +3,7 @@ package com.example.bepnhataapp.common.models;
 import java.io.Serializable;
 
 public class Blog implements Serializable {
+    private long blogID;
     private String title;
     private String description;
     private String category;
@@ -12,7 +13,8 @@ public class Blog implements Serializable {
     private int likes;
     private int views;
 
-    public Blog(String title, String description, String category, String imageUrl, boolean isFavorite, String date, int likes, int views) {
+    public Blog(long blogID, String title, String description, String category, String imageUrl, boolean isFavorite, String date, int likes, int views) {
+        this.blogID = blogID;
         this.title = title;
         this.description = description;
         this.category = category;
@@ -21,6 +23,11 @@ public class Blog implements Serializable {
         this.date = date;
         this.likes = likes;
         this.views = views;
+    }
+
+    // Backward-compatibility constructor (default blogID = 0)
+    public Blog(String title, String description, String category, String imageUrl, boolean isFavorite, String date, int likes, int views) {
+        this(0, title, description, category, imageUrl, isFavorite, date, likes, views);
     }
 
     public String getTitle() { return title; }
@@ -33,4 +40,7 @@ public class Blog implements Serializable {
     public int getViews() { return views; }
 
     public void setFavorite(boolean favorite) { isFavorite = favorite; }
+
+    public long getBlogID() { return blogID; }
+    public void setBlogID(long id) { this.blogID = id; }
 } 

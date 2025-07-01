@@ -57,14 +57,15 @@ public class BlogFeedFragment extends Fragment {
             if (blogEntities != null) {
                 for (com.example.bepnhataapp.common.model.BlogEntity entity : blogEntities) {
                     newBlogs.add(new com.example.bepnhataapp.common.models.Blog(
+                            entity.getBlogID(),
                             entity.getTitle(),
                             entity.getContent(),
                             entity.getTag(),
                             entity.getImageThumb(),
                             false,
                             entity.getCreatedAt(),
-                            0, // Placeholder for likes
-                            0  // Placeholder for comments
+                            0,
+                            0
                     ));
                 }
             }

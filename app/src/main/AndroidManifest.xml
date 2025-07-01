@@ -233,6 +233,9 @@
         <activity
             android:name=".features.manage_order.ManageOrderActivity"
             android:exported="false" />
+        <activity
+            android:name=".features.favorite.FavoriteActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

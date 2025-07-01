@@ -84,6 +84,43 @@ public class ProductDetailActivity extends BaseActivity {
             binding.tvProductName.setText(currentProduct.getProductName());
             binding.tvDescription.setText(currentProduct.getProductDescription());
             binding.tvTime.setText("");
+
+            // Favorite icon logic
+            android.widget.ImageView ivFavorite = findViewById(R.id.ivFavorite);
+            if (ivFavorite != null) {
+                boolean isFav = false;
+                if (com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this)) {
+                    String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+                    com.example.bepnhataapp.common.dao.CustomerDao cDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                    com.example.bepnhataapp.common.model.Customer c = cDao.findByPhone(phone);
+                    if (c != null) {
+                        com.example.bepnhataapp.common.dao.FavouriteProductDao favDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(this);
+                        isFav = favDao.isFavourite(currentProduct.getProductID(), c.getCustomerID());
+                    }
+                }
+                ivFavorite.setImageResource(isFav ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+                final boolean[] favState = new boolean[]{isFav};
+                ivFavorite.setOnClickListener(v -> {
+                    if (!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(ProductDetailActivity.this)) {
+                        android.widget.Toast.makeText(ProductDetailActivity.this, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(ProductDetailActivity.this);
+                    com.example.bepnhataapp.common.dao.CustomerDao cusDao = new com.example.bepnhataapp.common.dao.CustomerDao(ProductDetailActivity.this);
+                    com.example.bepnhataapp.common.model.Customer cus = cusDao.findByPhone(phone);
+                    if (cus == null) return;
+
+                    com.example.bepnhataapp.common.dao.FavouriteProductDao favDao2 = new com.example.bepnhataapp.common.dao.FavouriteProductDao(ProductDetailActivity.this);
+                    if (favState[0]) {
+                        favDao2.delete(currentProduct.getProductID(), cus.getCustomerID());
+                    } else {
+                        favDao2.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(currentProduct.getProductID(), cus.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
+                    }
+                    favState[0] = !favState[0];
+                    ivFavorite.setImageResource(favState[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+                });
+            }
+
             updatePriceText();
             // Additional binding like kcal, nutrition, etc. can be done here.
 

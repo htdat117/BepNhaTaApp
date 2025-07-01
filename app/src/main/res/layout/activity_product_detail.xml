@@ -50,15 +50,30 @@
             android:paddingEnd="16dp">
 
             <!-- Product image -->
-            <ImageView
-                android:id="@+id/ivProduct"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:background="@drawable/bg_rounded_16"
-                android:clipToOutline="true"
-                android:src="@drawable/sample_img"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/ivProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/bg_rounded_16"
+                    android:clipToOutline="true"
+                    android:src="@drawable/sample_img" />
+
+                <ImageView
+                    android:id="@+id/ivFavorite"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/ic_favorite_unchecked"
+                    android:background="@drawable/bg_circle_white"
+                    android:scaleType="center"
+                    android:layout_gravity="end|top" />
+            </FrameLayout>
 
             <!-- Product name and time -->
             <LinearLayout

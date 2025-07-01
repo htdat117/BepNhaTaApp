@@ -9,6 +9,7 @@
     <!-- Font Family Base Styles -->
     <style name="Font.Bold" parent="BaseTextStyle">
         <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Font.Medium" parent="BaseTextStyle">

@@ -59,11 +59,45 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeTitle.setText(recipe.getName());
         holder.recipeCategory.setText(recipe.getCategory());
 
-        holder.favoriteIcon.setImageResource(recipe.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+        boolean isFav = false;
+        if (com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(holder.itemView.getContext())) {
+            String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(holder.itemView.getContext());
+            com.example.bepnhataapp.common.dao.CustomerDao dao = new com.example.bepnhataapp.common.dao.CustomerDao(holder.itemView.getContext());
+            com.example.bepnhataapp.common.model.Customer c = dao.findByPhone(phone);
+            if (c != null) {
+                com.example.bepnhataapp.common.dao.FavouriteRecipeDao frDao = new com.example.bepnhataapp.common.dao.FavouriteRecipeDao(holder.itemView.getContext());
+                isFav = frDao.get(recipe.getId(), c.getCustomerID()) != null;
+            }
+        }
+        recipe.setFavorite(isFav);
+        holder.favoriteIcon.setImageResource(isFav ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+
         holder.favoriteIcon.setOnClickListener(v -> {
-            recipe.setFavorite(!recipe.isFavorite());
+            android.content.Context ctx = holder.itemView.getContext();
+            if (!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(ctx)) {
+                android.widget.Toast.makeText(ctx, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String phone2 = com.example.bepnhataapp.common.utils.SessionManager.getPhone(ctx);
+            com.example.bepnhataapp.common.dao.CustomerDao dao2 = new com.example.bepnhataapp.common.dao.CustomerDao(ctx);
+            com.example.bepnhataapp.common.model.Customer c2 = dao2.findByPhone(phone2);
+            if (c2 == null) return;
+
+            com.example.bepnhataapp.common.dao.FavouriteRecipeDao favDao = new com.example.bepnhataapp.common.dao.FavouriteRecipeDao(ctx);
+            boolean currentlyFav = favDao.get(recipe.getId(), c2.getCustomerID()) != null;
+            if (currentlyFav) {
+                favDao.delete(recipe.getId(), c2.getCustomerID());
+            } else {
+                favDao.insert(new com.example.bepnhataapp.common.model.FavouriteRecipe() {{
+                    setRecipeID(recipe.getId());
+                    setCustomerID(c2.getCustomerID());
+                    setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+                }});
+            }
+            recipe.setFavorite(!currentlyFav);
             notifyItemChanged(position);
         });
+
         holder.itemView.setOnClickListener(v -> {
             android.content.Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, com.example.bepnhataapp.features.recipes.RecipeDetailActivity.class);

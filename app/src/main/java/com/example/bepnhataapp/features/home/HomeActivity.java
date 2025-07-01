@@ -254,6 +254,7 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
             if (blogEntities != null) {
                 for (BlogEntity entity : blogEntities) {
                     blogList.add(new Blog(
+                            entity.getBlogID(),
                             entity.getTitle(),
                             entity.getContent(),
                             entity.getTag(),
