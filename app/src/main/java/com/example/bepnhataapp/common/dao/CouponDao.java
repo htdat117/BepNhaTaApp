@@ -36,8 +36,17 @@ public class CouponDao {
 
     public List<Coupon> getAvailableForCustomer(long customerID, int orderPrice) {
         List<Coupon> list = new ArrayList<>();
-        Cursor cur = helper.getReadableDatabase().rawQuery(
-                "SELECT * FROM " + DBHelper.TBL_COUPONS + " WHERE (isGeneral=1 OR customerID=? ) AND minPrice<=?", new String[]{String.valueOf(customerID), String.valueOf(orderPrice)});
+        String sql;
+        String[] args;
+        if (orderPrice <= 0) {
+            // Lấy tất cả coupon bất kể minPrice
+            sql = "SELECT * FROM " + DBHelper.TBL_COUPONS + " WHERE (isGeneral=1 OR customerID=? OR customerID IS NULL)";
+            args = new String[]{String.valueOf(customerID)};
+        } else {
+            sql = "SELECT * FROM " + DBHelper.TBL_COUPONS + " WHERE (isGeneral=1 OR customerID=? OR customerID IS NULL) AND minPrice<=?";
+            args = new String[]{String.valueOf(customerID), String.valueOf(orderPrice)};
+        }
+        Cursor cur = helper.getReadableDatabase().rawQuery(sql, args);
         if (cur.moveToFirst()) {
             do { list.add(fromCursor(cur)); } while (cur.moveToNext());
         }

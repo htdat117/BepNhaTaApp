@@ -67,11 +67,9 @@ public class RegistrationActivity extends AppCompatActivity {
             }
             Customer existing = customerDao.findByPhone(phone);
             if (existing != null) {
-                // Redirect to login with prefilled phone
-                android.content.Intent loginIntent = new android.content.Intent(this, LoginActivity.class);
-                loginIntent.putExtra("phone", phone);
-                startActivity(loginIntent);
-                finish();
+                // Hiển thị lỗi khi số điện thoại đã tồn tại, không chuyển sang đăng nhập
+                edtPhone.setError("Số điện thoại đã tồn tại");
+                android.widget.Toast.makeText(this, "Số điện thoại này đã được đăng ký", android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!cb.isChecked()) {

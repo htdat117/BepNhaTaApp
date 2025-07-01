@@ -35,39 +35,47 @@
     </RelativeLayout>
 
     <!-- Danh sách voucher -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvVouchers"
+    <FrameLayout
+        android:id="@+id/contentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:clipToPadding="false"
-        android:overScrollMode="never"/>
+        android:layout_weight="1">
 
-    <!-- Layout trống khi không có voucher -->
-    <LinearLayout
-        android:id="@+id/layoutEmptyVoucher"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone">
-        <ImageView
-            android:id="@+id/imgEmptyVoucher"
-            android:layout_width="360dp"
-            android:layout_height="360dp"
-            android:src="@drawable/voucher"
-            android:contentDescription="Trống"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hiện tại không có mã giảm giá nào!"
-            android:textColor="#222222"
-            android:textSize="32sp"
-          />
-    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvVouchers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"/>
+
+        <!-- Empty voucher state -->
+        <LinearLayout
+            android:id="@+id/layoutEmptyVoucher"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgEmptyVoucher"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/voucher"
+                android:contentDescription="Trống"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Hiện tại không có mã giảm giá nào!"
+                android:textColor="#222222"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+    </FrameLayout>
 
     <!-- Bottom Navigation Bar -->
     <include

@@ -54,9 +54,9 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
         bannerIndicator = findViewById(R.id.banner_indicator);
 
         List<Integer> bannerImages = new ArrayList<>();
-        bannerImages.add(R.drawable.placeholder_banner_background);
-        bannerImages.add(R.drawable.placeholder_banner_background);
-        bannerImages.add(R.drawable.placeholder_banner_background);
+        bannerImages.add(R.drawable.banner1);
+        bannerImages.add(R.drawable.banner2);
+        bannerImages.add(R.drawable.banner3);
 
         BannerAdapter bannerAdapter = new BannerAdapter(bannerImages);
         bannerViewPager.setAdapter(bannerAdapter);
