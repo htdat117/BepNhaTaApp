@@ -53,7 +53,35 @@ public class PasswordFragment extends Fragment {
 
         EditText edtPass = view.findViewById(R.id.editTextPassword);
         ImageView clearBtn = view.findViewById(R.id.clearPasswordButton);
+        ImageView eyeBtn = view.findViewById(R.id.togglePasswordVisibilityButton);
+
+        // Clear password text
         clearBtn.setOnClickListener(v -> edtPass.setText(""));
+
+        // Toggle show/hide password
+        final boolean[] pwdVisible = {false};
+        eyeBtn.setOnClickListener(v -> {
+            pwdVisible[0] = !pwdVisible[0];
+            if (pwdVisible[0]) {
+                edtPass.setTransformationMethod(null);
+            } else {
+                edtPass.setTransformationMethod(new android.text.method.PasswordTransformationMethod());
+            }
+            edtPass.setSelection(edtPass.getText().length());
+
+            // Change icon resource if available – fallback keeps same icon
+            int resId = getResources().getIdentifier(pwdVisible[0] ? "ic_eye_open" : "ic_eye", "drawable", requireContext().getPackageName());
+            if(resId!=0) eyeBtn.setImageResource(resId);
+        });
+
+        // Show/hide clear button depending on text length
+        edtPass.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s,int st,int c,int a){}
+            @Override public void onTextChanged(CharSequence s,int st,int b,int c){}
+            @Override public void afterTextChanged(android.text.Editable s){
+                clearBtn.setVisibility(s.length()>0 ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
 
         Button loginButton = view.findViewById(R.id.button_login);
         loginButton.setOnClickListener(new View.OnClickListener() {

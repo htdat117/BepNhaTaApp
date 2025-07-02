@@ -24,7 +24,10 @@ public class MealPlanActivity extends BaseActivity implements BaseActivity.OnNav
 
         // Nếu đã hoàn thành khảo sát hoặc tạo thực đơn, chuyển thẳng vào nội dung kế hoạch bữa ăn
         SharedPreferences prefs = getSharedPreferences("MealPlanPrefs", MODE_PRIVATE);
-        if (prefs.getBoolean("onboarding_completed", false)) {
+
+        // Nếu người dùng đã hoàn thành onboarding VÀ đang đăng nhập => chuyển thẳng tới nội dung kế hoạch.
+        // Ngược lại (chưa đăng nhập) vẫn hiển thị màn hình giới thiệu để họ có thể cung cấp thông tin/click tạo thủ công.
+        if (prefs.getBoolean("onboarding_completed", false) && SessionManager.isLoggedIn(this)) {
             startActivity(new Intent(this, MealPlanContentActivity.class));
             finish();
             return;
@@ -51,12 +54,12 @@ public class MealPlanActivity extends BaseActivity implements BaseActivity.OnNav
             if (!SessionManager.isLoggedIn(MealPlanActivity.this)) {
                 startActivity(new Intent(MealPlanActivity.this, com.example.bepnhataapp.features.login.LoginActivity.class));
             } else {
-                // Generate and save the week plan for today into database
+                // Tạo thực đơn tự động cho ngày hiện tại và chuyển sang màn hình nội dung
                 LocalMealPlanRepository repo = new LocalMealPlanRepository(MealPlanActivity.this);
                 repo.generateWeekPlan(LocalDate.now());
-                // Đánh dấu đã hoàn thành onboarding
+
                 prefs.edit().putBoolean("onboarding_completed", true).apply();
-                // Navigate to meal plan content
+
                 startActivity(new Intent(MealPlanActivity.this, MealPlanContentActivity.class));
             }
         });
@@ -112,7 +115,11 @@ public class MealPlanActivity extends BaseActivity implements BaseActivity.OnNav
         android.widget.TextView tvSeeAllPopular = findViewById(R.id.tvSeeAllPopular);
         if(tvSeeAllPopular!=null){
             tvSeeAllPopular.setOnClickListener(v->{
-                startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.recipes.RecipesActivity.class));
+                if(!SessionManager.isLoggedIn(MealPlanActivity.this)){
+                    startActivity(new Intent(MealPlanActivity.this, com.example.bepnhataapp.features.login.LoginActivity.class));
+                }else{
+                    startActivity(new Intent(MealPlanActivity.this, com.example.bepnhataapp.features.recipes.RecipesActivity.class));
+                }
             });
         }
     }

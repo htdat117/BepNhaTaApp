@@ -235,6 +235,12 @@ public class ProductDetailActivity extends BaseActivity {
 
         // After setting adapter for pager (or at end of onCreate), add Buy Now button handler
         binding.btnBuyNow.setOnClickListener(v -> {
+            if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(ProductDetailActivity.this)){
+                Intent intentHome = new Intent(ProductDetailActivity.this, com.example.bepnhataapp.features.home.HomeActivity.class);
+                intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intentHome);
+                return;
+            }
             if (currentProduct == null) return;
             int servingFactor = currentServingFactor; // 1 for 2-person, 2 for 4-person
 

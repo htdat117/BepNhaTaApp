@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import android.text.TextWatcher;
 import android.text.Editable;
 import android.view.View;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 public class AccountInfoActivity extends AppCompatActivity {
 
@@ -33,20 +34,20 @@ public class AccountInfoActivity extends AppCompatActivity {
         android.widget.EditText edtBirth = findViewById(R.id.editTextDateOfBirth);
         String phoneRegistered = getIntent().getStringExtra("phone");
 
-        // Calendar & date picker listener
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        android.app.DatePickerDialog.OnDateSetListener listener = (view, y, m, d) -> {
-            String dob = String.format(java.util.Locale.getDefault(), "%04d-%02d-%02d", y, m + 1, d);
-            edtBirth.setText(dob);
-        };
-
-        // Prevent keyboard, open date picker on focus/click
-        edtBirth.setInputType(android.text.InputType.TYPE_NULL);
+        // Material DatePicker similar to edit info page
         View.OnClickListener openDate = v -> {
-            new android.app.DatePickerDialog(this, listener,
-                    cal.get(java.util.Calendar.YEAR),
-                    cal.get(java.util.Calendar.MONTH),
-                    cal.get(java.util.Calendar.DAY_OF_MONTH)).show();
+            MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Chọn ngày sinh")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build();
+            picker.addOnPositiveButtonClickListener(selection -> {
+                java.util.Calendar c = java.util.Calendar.getInstance();
+                c.setTimeInMillis(selection);
+                String dateStr = String.format(java.util.Locale.getDefault(), "%02d/%02d/%04d",
+                        c.get(java.util.Calendar.DAY_OF_MONTH), c.get(java.util.Calendar.MONTH) + 1, c.get(java.util.Calendar.YEAR));
+                edtBirth.setText(dateStr);
+            });
+            picker.show(getSupportFragmentManager(), "dob_picker");
         };
         edtBirth.setOnClickListener(openDate);
         edtBirth.setOnFocusChangeListener((v, hasFocus) -> { if(hasFocus) openDate.onClick(v);} );
@@ -55,13 +56,54 @@ public class AccountInfoActivity extends AppCompatActivity {
         android.widget.EditText edtConfirm = findViewById(R.id.editTextConfirmPassword);
         android.widget.Button btnComplete = findViewById(R.id.button_complete);
 
-        // Simple date picker button icon
-        android.widget.ImageView dateBtn = findViewById(R.id.datePickerButton);
-        dateBtn.setOnClickListener(v -> {
-            new android.app.DatePickerDialog(this, listener,
-                    cal.get(java.util.Calendar.YEAR),
-                    cal.get(java.util.Calendar.MONTH),
-                    cal.get(java.util.Calendar.DAY_OF_MONTH)).show();
+        // Clear buttons & eye icons
+        android.widget.ImageView clearNameBtn = findViewById(R.id.clearFullNameButton);
+        android.widget.ImageView clearEmailBtn = findViewById(R.id.clearEmailButton);
+        android.widget.ImageView clearPasswordBtn = findViewById(R.id.clearPasswordButton);
+        android.widget.ImageView clearConfirmBtn = findViewById(R.id.clearConfirmPasswordButton);
+
+        android.widget.ImageView eyePassBtn = findViewById(R.id.togglePasswordVisibilityButton);
+        android.widget.ImageView eyeConfirmBtn = findViewById(R.id.toggleConfirmPasswordVisibilityButton);
+
+        // (buildClearWatcher helper is now a private method of the Activity)
+
+        clearNameBtn.setOnClickListener(v -> edtName.setText(""));
+        clearEmailBtn.setOnClickListener(v -> edtEmail.setText(""));
+        clearPasswordBtn.setOnClickListener(v -> edtPassword.setText(""));
+        clearConfirmBtn.setOnClickListener(v -> edtConfirm.setText(""));
+
+        // attach watchers to manage visibility initial state too
+        edtName.addTextChangedListener(buildClearWatcher(edtName, clearNameBtn));
+        edtEmail.addTextChangedListener(buildClearWatcher(edtEmail, clearEmailBtn));
+        edtPassword.addTextChangedListener(buildClearWatcher(edtPassword, clearPasswordBtn));
+        edtConfirm.addTextChangedListener(buildClearWatcher(edtConfirm, clearConfirmBtn));
+
+        // Password visibility toggles
+        final boolean[] pwdVisible = {false};
+        eyePassBtn.setOnClickListener(v -> {
+            pwdVisible[0] = !pwdVisible[0];
+            if (pwdVisible[0]) {
+                edtPassword.setTransformationMethod(null);
+            } else {
+                edtPassword.setTransformationMethod(new android.text.method.PasswordTransformationMethod());
+            }
+            edtPassword.setSelection(edtPassword.getText().length());
+            // change icon if have eye_off resource
+            int res = getResources().getIdentifier(pwdVisible[0] ? "ic_eye_off" : "ic_eye", "drawable", getPackageName());
+            if(res!=0) eyePassBtn.setImageResource(res);
+        });
+
+        final boolean[] confirmVisible = {false};
+        eyeConfirmBtn.setOnClickListener(v -> {
+            confirmVisible[0] = !confirmVisible[0];
+            if(confirmVisible[0]) {
+                edtConfirm.setTransformationMethod(null);
+            } else {
+                edtConfirm.setTransformationMethod(new android.text.method.PasswordTransformationMethod());
+            }
+            edtConfirm.setSelection(edtConfirm.getText().length());
+            int res = getResources().getIdentifier(confirmVisible[0] ? "ic_eye_off" : "ic_eye", "drawable", getPackageName());
+            if(res!=0) eyeConfirmBtn.setImageResource(res);
         });
 
         // Validation patterns
@@ -155,5 +197,19 @@ public class AccountInfoActivity extends AppCompatActivity {
             intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         });
+    }
+
+    /**
+     * Tạo TextWatcher để tự động hiển thị/ẩn nút xoá (clear) khi EditText có/không có nội dung.
+     */
+    private android.text.TextWatcher buildClearWatcher(final android.widget.EditText et,
+                                                       final android.widget.ImageView btn) {
+        return new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s,int start,int count,int after) {}
+            @Override public void onTextChanged(CharSequence s,int start,int before,int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                btn.setVisibility(s.length() > 0 ? android.view.View.VISIBLE : android.view.View.INVISIBLE);
+            }
+        };
     }
 }

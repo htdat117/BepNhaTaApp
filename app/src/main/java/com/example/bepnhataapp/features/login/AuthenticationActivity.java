@@ -9,11 +9,15 @@ import android.text.TextWatcher;
 import android.text.Editable;
 import android.view.KeyEvent;
 import com.example.bepnhataapp.common.utils.SessionManager;
+import android.os.CountDownTimer;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
     private String flow;
     private String phone;
+    private android.widget.TextView tvCountdown;
+    private android.widget.TextView tvResend;
+    private CountDownTimer resendTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +27,13 @@ public class AuthenticationActivity extends AppCompatActivity {
         flow = getIntent().getStringExtra("flow");
         phone = getIntent().getStringExtra("phone");
 
+        tvCountdown = findViewById(R.id.tvCountdown);
+        tvResend = findViewById(R.id.tvResend);
+
         // Send OTP immediately on screen open
         if (phone != null && !phone.isEmpty()) {
             OtpService.sendOtp(this, phone);
+            startResendTimer();
         }
 
         // Setup OTP focus change
@@ -79,6 +87,13 @@ public class AuthenticationActivity extends AppCompatActivity {
             }
             startActivity(next);
         });
+
+        tvResend.setOnClickListener(v -> {
+            if (resendTimer != null) resendTimer.cancel();
+            // Disable button and restart timer
+            OtpService.sendOtp(this, phone);
+            startResendTimer();
+        });
     }
 
     private void setupOtpInputs() {
@@ -113,5 +128,34 @@ public class AuthenticationActivity extends AppCompatActivity {
                 return false;
             });
         }
+    }
+
+    private void startResendTimer() {
+        // Disable resend
+        tvResend.setEnabled(false);
+        tvResend.setAlpha(0.5f);
+
+        final long totalMs = 50_000; // 50 seconds
+        resendTimer = new CountDownTimer(totalMs, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long sec = millisUntilFinished / 1000;
+                String time = String.format(java.util.Locale.getDefault(), "00:%02d", sec);
+                tvCountdown.setText(time);
+            }
+
+            @Override
+            public void onFinish() {
+                tvCountdown.setText("00:00");
+                tvResend.setEnabled(true);
+                tvResend.setAlpha(1f);
+            }
+        }.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (resendTimer != null) resendTimer.cancel();
     }
 }
