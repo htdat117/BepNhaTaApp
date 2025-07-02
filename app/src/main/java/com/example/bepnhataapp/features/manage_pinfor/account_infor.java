@@ -120,7 +120,9 @@ public class account_infor extends AppCompatActivity {
         tvBirthday.setText(currentCustomer.getBirthday());
         tvPhone.setText(currentCustomer.getPhone());
         tvEmail.setText(currentCustomer.getEmail());
-        tvGender.setText(currentCustomer.getGender());
+        String gender = currentCustomer.getGender();
+        if (gender == null || gender.trim().isEmpty()) gender = "Chưa cập nhật";
+        tvGender.setText(gender);
 
         // Hiển thị mật khẩu dạng ***** theo độ dài
         String pwd = currentCustomer.getPassword();
