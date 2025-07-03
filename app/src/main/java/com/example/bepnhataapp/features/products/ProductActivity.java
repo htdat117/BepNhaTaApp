@@ -27,6 +27,7 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.Comparator;
 import java.text.Normalizer;
+import androidx.annotation.NonNull;
 
 public class ProductActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -65,6 +66,40 @@ public class ProductActivity extends BaseActivity implements BaseActivity.OnNavi
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ProductAdapter(this, productList);
         rvProducts.setAdapter(adapter);
+
+        // Ẩn/hiện thanh danh mục khi cuộn
+        final boolean[] isCategoryVisible = {true};
+        rvProducts.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // Người dùng cuộn xuống → ẩn
+                if (dy > 10 && isCategoryVisible[0]) {
+                    isCategoryVisible[0] = false;
+                    rvCategories.animate()
+                            .translationY(-rvCategories.getHeight())
+                            .alpha(0f)
+                            .setInterpolator(new android.view.animation.AccelerateInterpolator())
+                            .setDuration(250)
+                            .withEndAction(() -> rvCategories.setVisibility(View.GONE));
+                }
+
+                // Người dùng cuộn lên → hiện
+                if (dy < -10 && !isCategoryVisible[0]) {
+                    isCategoryVisible[0] = true;
+                    rvCategories.setVisibility(View.VISIBLE);
+                    rvCategories.setAlpha(0f);
+                    rvCategories.setTranslationY(-rvCategories.getHeight());
+                    rvCategories.animate()
+                            .translationY(0)
+                            .alpha(1f)
+                            .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                            .setDuration(250)
+                            .start();
+                }
+            }
+        });
 
         // Load asynchronously để tránh block UI
         new Thread(() -> {

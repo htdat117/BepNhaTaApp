@@ -305,15 +305,13 @@ public class ProductDetailActivity extends BaseActivity {
 
         int discountedPricePerPack = originalPricePerPack * (100 - salePercent) / 100;
 
-        int totalDiscounted = discountedPricePerPack * quantity;
-        binding.tvPrice.setText(nf.format(totalDiscounted)+"đ");
+        // Hiển thị giá 1 gói (không nhân với số lượng)
+        binding.tvPrice.setText(nf.format(discountedPricePerPack)+"đ");
 
-        // Old price handling
+        // Old price handling (cũng chỉ 1 gói)
         if(salePercent > 0){
-            int totalOriginal = originalPricePerPack * quantity;
             binding.tvOldPrice.setVisibility(android.view.View.VISIBLE);
-            binding.tvOldPrice.setText(nf.format(totalOriginal)+"đ");
-            // strike through
+            binding.tvOldPrice.setText(nf.format(originalPricePerPack)+"đ");
             binding.tvOldPrice.setPaintFlags(binding.tvOldPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             binding.tvOldPrice.setVisibility(android.view.View.GONE);

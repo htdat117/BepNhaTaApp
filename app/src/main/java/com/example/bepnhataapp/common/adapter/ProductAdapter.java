@@ -61,6 +61,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
             String tag = detail.getNutritionTag();
             if(tag!=null && !tag.isEmpty()) {
+                // Đổi nhãn "Không cholesterol" thành "Ít cholesterol" khi hiển thị
+                if(normalize(tag).contains("khongcholesterol")) {
+                    tag = "Ít cholesterol";
+                }
                 holder.tvNutrition.setText(capitalize(tag));
             } else {
                 holder.tvNutrition.setText("");

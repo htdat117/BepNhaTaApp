@@ -59,19 +59,15 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         if(detail!=null){
             holder.tvKcal.setText((int)detail.getCalo()+" Kcal");
             holder.tvTime.setText(detail.getCookingTimeMinutes()+" phút");
-            String tag = detail.getNutritionTag();
-            if(tag!=null && !tag.isEmpty()) {
-                holder.tvNutrition.setText(capitalize(tag));
-            } else {
-                holder.tvNutrition.setText("");
-            }
-            holder.ivNutrition.setImageResource(getNutritionIconResId(tag));
         }else{
             holder.tvKcal.setText("");
             holder.tvTime.setText("");
-            holder.tvNutrition.setText("");
-            holder.ivNutrition.setImageResource(getNutritionIconResId(null));
         }
+
+        // Ẩn tag dinh dưỡng và icon trong mục gợi ý
+        holder.tvNutrition.setVisibility(View.GONE);
+        holder.ivNutrition.setVisibility(View.GONE);
+
         holder.tvPrice.setText(formatPrice(p.getProductPrice()*(100-p.getSalePercent())/100));
 
         // Add to cart button shows quick-add dialog
