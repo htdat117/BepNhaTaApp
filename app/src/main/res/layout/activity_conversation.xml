@@ -63,6 +63,17 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
+    <!-- Image preview (shown when user picks or captures an image) -->
+    <ImageView
+        android:id="@+id/iv_image_preview"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -48,16 +48,8 @@ public class notification_list extends BaseActivity implements BaseActivity.OnNa
             });
         }
 
-        // Danh sách thông báo
-        android.widget.ListView lvToday = findViewById(R.id.listToday);
-        android.widget.ListView lvYesterday = findViewById(R.id.listYesterday);
-
-        java.util.List<NotificationItem> listToday = new ArrayList<>();
-        java.util.List<NotificationItem> listYesterday = new ArrayList<>();
-        NotificationAdapter todayAdapter = new NotificationAdapter(this, listToday);
-        NotificationAdapter yAdapter = new NotificationAdapter(this, listYesterday);
-        if(lvToday!=null) lvToday.setAdapter(todayAdapter);
-        if(lvYesterday!=null) lvYesterday.setAdapter(yAdapter);
+        // Container LinearLayout để chứa toàn bộ danh sách thông báo (header + list động)
+        android.widget.LinearLayout ctContainer = findViewById(R.id.ctNotification);
 
         // Tải thông báo từ Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -68,9 +60,15 @@ public class notification_list extends BaseActivity implements BaseActivity.OnNa
                 .limit(50)
                 .get()
                 .addOnSuccessListener((QuerySnapshot snapshots)->{
-                    listToday.clear();
-                    listYesterday.clear();
                     Calendar now = Calendar.getInstance();
+
+                    // Gom tất cả thông báo theo key "Hôm nay", "Hôm qua" hoặc ngày cụ thể dd/MM/yyyy
+                    java.util.Map<String, java.util.List<NotificationItem>> mapByDate = new java.util.HashMap<>();
+                    java.util.Map<String, Long> mapDateToEpoch = new java.util.HashMap<>();
+
+                    Calendar calYesterday = (Calendar) now.clone();
+                    calYesterday.add(Calendar.DAY_OF_YEAR,-1);
+
                     for(DocumentSnapshot doc: snapshots.getDocuments()){
                         String id = doc.getId();
                         String title = doc.getString("title");
@@ -79,52 +77,100 @@ public class notification_list extends BaseActivity implements BaseActivity.OnNa
                         boolean read = doc.contains("read") && Boolean.TRUE.equals(doc.getBoolean("read"));
                         String status = doc.getString("status");
                         NotificationItem it = new NotificationItem(id,title,body,ts,read,status);
-                        Calendar cal = Calendar.getInstance();
+
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
                         cal.setTimeInMillis(ts);
+
                         boolean isToday = cal.get(Calendar.YEAR)==now.get(Calendar.YEAR) && cal.get(Calendar.DAY_OF_YEAR)==now.get(Calendar.DAY_OF_YEAR);
+
+                        boolean isYesterday = cal.get(Calendar.YEAR)==calYesterday.get(Calendar.YEAR) && cal.get(Calendar.DAY_OF_YEAR)==calYesterday.get(Calendar.DAY_OF_YEAR);
+
+                        String key;
                         if(isToday){
-                            listToday.add(it);
+                            key = "Hôm nay";
+                            mapDateToEpoch.put(key, now.getTimeInMillis());
+                        }else if(isYesterday){
+                            key = "Hôm qua";
+                            mapDateToEpoch.put(key, calYesterday.getTimeInMillis());
                         }else{
-                            listYesterday.add(it);
+                            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+                            key = sdf.format(new java.util.Date(ts));
+                            mapDateToEpoch.put(key, ts - (ts % (24*60*60*1000L))); // epoch at start of day
+                        }
+                        mapByDate.computeIfAbsent(key,k-> new java.util.ArrayList<>()).add(it);
+                    }
+
+                    // Xóa toàn bộ view cũ và dựng lại danh sách
+                    if(ctContainer!=null){
+                        ctContainer.removeAllViews();
+
+                        // Sắp xếp ngày giảm dần theo epoch đã lưu
+                        java.util.List<String> dates = new java.util.ArrayList<>(mapByDate.keySet());
+                        java.util.Collections.sort(dates,(a,b)-> mapDateToEpoch.get(b).compareTo(mapDateToEpoch.get(a)) );
+
+                        android.content.res.Resources res = getResources();
+
+                        for(String dateStr: dates){
+                            java.util.List<NotificationItem> groupList = mapByDate.get(dateStr);
+
+                            // Header row (title + mark all)
+                            android.widget.LinearLayout rowHeader = new android.widget.LinearLayout(notification_list.this);
+                            rowHeader.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+                            android.widget.LinearLayout.LayoutParams rowLp = new android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+                            rowLp.topMargin = (int) (12*res.getDisplayMetrics().density);
+                            rowHeader.setLayoutParams(rowLp);
+
+                            android.widget.TextView tvHeader = new android.widget.TextView(notification_list.this);
+                            tvHeader.setText(dateStr);
+                            tvHeader.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP,16);
+                            tvHeader.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+                            tvHeader.setTextColor(res.getColor(R.color.dark1));
+                            android.widget.LinearLayout.LayoutParams tvLp = new android.widget.LinearLayout.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT,1f);
+                            tvHeader.setLayoutParams(tvLp);
+
+                            android.widget.TextView tvMark = new android.widget.TextView(notification_list.this);
+                            tvMark.setText("Đánh dấu đã đọc");
+                            tvMark.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP,14);
+                            tvMark.setTextColor(res.getColor(R.color.dark1));
+                            tvMark.setGravity(android.view.Gravity.END);
+
+                            rowHeader.addView(tvHeader);
+                            rowHeader.addView(tvMark);
+
+                            ctContainer.addView(rowHeader);
+
+                            // ListView cho nhóm này
+                            android.widget.ListView lv = new android.widget.ListView(notification_list.this);
+                            android.widget.LinearLayout.LayoutParams lvLp = new android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+                            lv.setLayoutParams(lvLp);
+                            NotificationAdapter ad = new NotificationAdapter(notification_list.this, groupList);
+                            lv.setAdapter(ad);
+
+                            ctContainer.addView(lv);
+
+                            // Xử lý click => đánh dấu đã đọc item đơn
+                            lv.setOnItemClickListener((parent, view, position, id) -> {
+                                NotificationItem item = groupList.get(position);
+                                handleRead(item, ad, ad);
+                            });
+
+                            // Xử lý click => mark all
+                            tvMark.setOnClickListener(v -> {
+                                java.util.List<String> ids = new java.util.ArrayList<>();
+                                for(NotificationItem n: groupList){ if(!n.isRead()){ ids.add(n.getId()); n.setRead(true);} }
+                                if(!ids.isEmpty()){
+                                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                                    for(String id: ids){ db2.collection("notifications").document(id).update("read", true); }
+                                }
+                                ad.notifyDataSetChanged();
+                                updateBadgeCounts();
+                            });
                         }
                     }
-                    todayAdapter.notifyDataSetChanged();
-                    yAdapter.notifyDataSetChanged();
+
+                    // Gắn fragment bottom navigation và chọn tab trang chủ mặc định
+                    setupBottomNavigationFragment(R.id.nav_home);
                 });
-
-        android.widget.TextView tvMarkToday = findViewById(R.id.tvMarkReadToday);
-        android.widget.TextView tvMarkY = findViewById(R.id.tvMarkReadYesterday);
-
-        android.view.View.OnClickListener markAll = v -> {
-            java.util.List<String> ids = new java.util.ArrayList<>();
-            java.util.List<NotificationItem> target = v.getId()==R.id.tvMarkReadToday? listToday : listYesterday;
-            for(NotificationItem n: target){ if(!n.isRead()){ ids.add(n.getId()); n.setRead(true);} }
-            if(!ids.isEmpty()){
-                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                for(String id: ids){ db2.collection("notifications").document(id).update("read", true); }
-            }
-            todayAdapter.notifyDataSetChanged();
-            yAdapter.notifyDataSetChanged();
-            updateBadgeCounts();
-        };
-        if(tvMarkToday!=null) tvMarkToday.setOnClickListener(markAll);
-        if(tvMarkY!=null) tvMarkY.setOnClickListener(markAll);
-
-        // Gắn fragment bottom navigation và chọn tab trang chủ mặc định
-        setupBottomNavigationFragment(R.id.nav_home);
-
-        if(lvToday!=null){
-            lvToday.setOnItemClickListener((parent,view,position,id)->{
-                NotificationItem item=listToday.get(position);
-                handleRead(item,todayAdapter,yAdapter);
-            });
-        }
-        if(lvYesterday!=null){
-            lvYesterday.setOnItemClickListener((parent,view,position,id)->{
-                NotificationItem item=listYesterday.get(position);
-                handleRead(item,yAdapter,todayAdapter);
-            });
-        }
     }
 
     private long getCurrentUserId(){

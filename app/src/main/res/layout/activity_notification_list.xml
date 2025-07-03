@@ -24,81 +24,15 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/ctNotification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+            <!-- Dynamic notification sections will be added here at runtime -->
 
-                <TextView
-                    style="@style/Font.Medium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Hôm nay"
-                    android:textColor="@color/dark1"
-                    android:textSize="@dimen/body1" />
-
-                <TextView
-                    style="@style/Font.Medium"
-                    android:id="@+id/tvMarkReadToday"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="Đánh dấu đã đọc"
-                    android:textColor="@color/dark1"
-                    android:textSize="@dimen/body1" />
-
-            </LinearLayout>
-
-
-            <ListView
-                android:id="@+id/listToday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </ListView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/Font.Medium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Hôm qua"
-                    android:textColor="@color/dark1"
-                    android:textSize="@dimen/body1" />
-
-                <TextView
-                    style="@style/Font.Medium"
-                    android:id="@+id/tvMarkReadYesterday"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="Đánh dấu đã đọc"
-                    android:textColor="@color/dark1"
-                    android:textSize="@dimen/body1" />
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/listYesterday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </ListView>
         </LinearLayout>
     </ScrollView>
 

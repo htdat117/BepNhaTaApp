@@ -32,6 +32,14 @@ import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.model.Customer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.content.Intent;
+import android.provider.MediaStore;
+import androidx.appcompat.app.AlertDialog;
+import android.widget.Toast;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.core.app.ActivityCompat;
+import android.Manifest;
+import android.content.pm.PackageManager;
 
 public class conversation extends AppCompatActivity {
 
@@ -43,6 +51,20 @@ public class conversation extends AppCompatActivity {
 
     // Added: default welcome message shown when opening the screen
     private static final String WELCOME_MSG = "Chào mừng bạn đến với Bếp Nhà Ta. Bạn có vấn đề gì cần hỗ trợ cứ nhắn cho chúng mình nhé.";
+
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
+    private static final int REQUEST_IMAGE_PICK = 102;
+
+    private static final int PERM_CAMERA = 201;
+    private static final int PERM_READ_IMG = 202;
+    private static final int PERM_READ_MEDIA_IMG = 203; // Android 13+
+
+    // Preview image that the user just selected/captured before sending
+    private ImageView ivPreview;
+    // Holds the bitmap of the image waiting to be sent
+    private Bitmap pendingImage;
+
+    private LinearLayout llSuggestions; // to hide after first user message
 
     private void initFaq(){
         faqAnswers.put("giao nội thành", "Bếp Nhà Ta giao nội thành trong 2-3 ngày, phí ship 20k, đơn trên 300k miễn phí ship ạ!");
@@ -68,6 +90,8 @@ public class conversation extends AppCompatActivity {
         edtInput = findViewById(R.id.message_input);
         ImageView btnSend = findViewById(R.id.btn_send);
         ImageView ivBack = findViewById(R.id.iv_logo);
+        ImageView btnCamera = findViewById(R.id.btn_camera);
+        ivPreview = findViewById(R.id.iv_image_preview);
 
         initFaq();
 
@@ -78,12 +102,12 @@ public class conversation extends AppCompatActivity {
         if(txtChange!=null) txtChange.setVisibility(View.INVISIBLE);
 
         // Add some suggestion chips
-        LinearLayout llSuggestions = findViewById(R.id.llSuggestions);
+        llSuggestions = findViewById(R.id.llSuggestions);
         if(llSuggestions!=null){
             String[] suggArr = new String[]{
                     "Nguyên liệu có đảm bảo chất lượng không?",
                     "Làm sao để biết đơn hàng đã được đặt thành công?",
-                    "Nếu hàng có vấn đề tôi cần đổi trả thế nào?"};
+                    "Nếu hàng có vấn đề tôi cần  đổi trả thế nào?"};
             for(String s: suggArr){
                 android.widget.Button b = new android.widget.Button(this, null, androidx.appcompat.R.attr.buttonStyle);
                 b.setText(s);
@@ -105,7 +129,7 @@ public class conversation extends AppCompatActivity {
         // Quick action chips horizontally scrollable
         LinearLayout llQuick = findViewById(R.id.llQuickActions);
         if(llQuick!=null){
-            String[] quickArr = new String[]{"Quên mật khẩu","Cập nhật địa chỉ","Huỷ đơn hàng","Chính sách đổi trả","Phí vận chuyển","Hình thức thanh toán"};
+            String[] quickArr = new String[]{"Chat với nhân viên Bếp","Quên mật khẩu","Cập nhật địa chỉ","Huỷ đơn hàng","Chính sách đổi trả","Phí vận chuyển","Hình thức thanh toán"};
             for(String q: quickArr){
                 android.widget.Button chip = new android.widget.Button(this, null, androidx.appcompat.R.attr.buttonStyle);
                 chip.setText(q);
@@ -132,6 +156,10 @@ public class conversation extends AppCompatActivity {
             btnSend.setOnClickListener(v->sendMessage());
         }
 
+        if(btnCamera!=null){
+            btnCamera.setOnClickListener(v-> showImagePickerDialog());
+        }
+
         if(ivBack!=null){
             ivBack.setOnClickListener(v->{
                 android.content.Intent res = new android.content.Intent();
@@ -153,12 +181,30 @@ public class conversation extends AppCompatActivity {
 
     private void sendMessage(){
         String msg = edtInput!=null? edtInput.getText().toString().trim():"";
-        if(TextUtils.isEmpty(msg)) return;
-        addMessage(msg, true);
-        if(edtInput!=null) edtInput.setText("");
+        // If there is neither text nor image, do nothing
+        if(TextUtils.isEmpty(msg) && pendingImage==null) return;
 
-        String reply = getAutoReply(msg);
-        handler.postDelayed(() -> addMessage(reply, false), 600);
+        // Add user message (can be text, image or both)
+        addMessage(msg, pendingImage, true);
+
+        // Reset input
+        if(edtInput!=null) edtInput.setText("");
+        if(ivPreview!=null){
+            ivPreview.setVisibility(View.GONE);
+            ivPreview.setImageDrawable(null);
+        }
+        pendingImage = null;
+
+        // Auto-reply only when user actually typed text
+        if(!TextUtils.isEmpty(msg)){
+            String reply = getAutoReply(msg);
+            handler.postDelayed(() -> addMessage(reply, false), 600);
+
+            // Hide suggestions once user has interacted
+            if(llSuggestions!=null && llSuggestions.getVisibility()==View.VISIBLE){
+                llSuggestions.setVisibility(View.GONE);
+            }
+        }
     }
 
     private String getAutoReply(String question){
@@ -171,7 +217,15 @@ public class conversation extends AppCompatActivity {
 
     private String lastDateHeader = ""; // keep track of last shown date
 
+    // Existing helper for text-only messages (kept for compatibility)
     private void addMessage(String text, boolean isUser){
+        addMessage(text, null, isUser);
+    }
+
+    /**
+     * Add a message to the chat view. It can include text, an image or both.
+     */
+    private void addMessage(String text, Bitmap image, boolean isUser){
         if(llMessages==null) return;
 
         Date now = new Date();
@@ -229,12 +283,28 @@ public class conversation extends AppCompatActivity {
         bubble.setOrientation(LinearLayout.VERTICAL);
         bubble.setPadding(dpToPx(12), dpToPx(8), dpToPx(12), dpToPx(8));
 
-        // message text
-        TextView tvMsg = new TextView(this);
-        tvMsg.setText(text);
-        tvMsg.setTextSize(16);
-        tvMsg.setMaxWidth(getResources().getDisplayMetrics().widthPixels*3/4);
-        tvMsg.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        // message text (only add if not empty)
+        TextView tvMsg = null;
+        if(!TextUtils.isEmpty(text)){
+            tvMsg = new TextView(this);
+            tvMsg.setText(text);
+            tvMsg.setTextSize(16);
+            tvMsg.setMaxWidth(getResources().getDisplayMetrics().widthPixels*3/4);
+            tvMsg.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        }
+
+        // message image (optional)
+        ImageView imgMsg = null;
+        if(image!=null){
+            imgMsg = new ImageView(this);
+            int maxW = getResources().getDisplayMetrics().widthPixels*2/3;
+            LinearLayout.LayoutParams imgLp = new LinearLayout.LayoutParams(maxW, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imgLp.gravity = Gravity.CENTER;
+            imgMsg.setLayoutParams(imgLp);
+            imgMsg.setAdjustViewBounds(true);
+            imgMsg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imgMsg.setImageBitmap(image);
+        }
 
         // time text inside bubble
         TextView tvTime = new TextView(this);
@@ -245,15 +315,16 @@ public class conversation extends AppCompatActivity {
         timeInLp.gravity = Gravity.END;
         tvTime.setLayoutParams(timeInLp);
 
-        bubble.addView(tvMsg);
+        if(imgMsg!=null) bubble.addView(imgMsg);
+        if(tvMsg!=null) bubble.addView(tvMsg);
         bubble.addView(tvTime);
 
         // background and text colors based on sender
         if(isUser){
-            tvMsg.setTextColor(android.graphics.Color.WHITE);
+            if(tvMsg!=null) tvMsg.setTextColor(android.graphics.Color.WHITE);
             bubble.setBackgroundResource(R.drawable.bg_button_primary2);
         }else{
-            tvMsg.setTextColor(getResources().getColor(R.color.dark1));
+            if(tvMsg!=null) tvMsg.setTextColor(getResources().getColor(R.color.dark1));
             bubble.setBackgroundResource(R.drawable.button_rounded_gray);
         }
 
@@ -308,5 +379,102 @@ public class conversation extends AppCompatActivity {
         Rect rect = new Rect(0,0,size,size);
         canvas.drawBitmap(src,null,rect,paint);
         return output;
+    }
+
+    private void showImagePickerDialog(){
+        BottomSheetDialog sheet = new BottomSheetDialog(this);
+        View v = getLayoutInflater().inflate(R.layout.bottom_sheet_image_source,null);
+        sheet.setContentView(v);
+        v.findViewById(R.id.optCamera).setOnClickListener(bt->{
+            sheet.dismiss();
+            openCamera();
+        });
+        v.findViewById(R.id.optGallery).setOnClickListener(bt->{
+            sheet.dismiss();
+            openGallery();
+        });
+        sheet.show();
+    }
+
+    private void openCamera(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA}, PERM_CAMERA);
+            return;
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(intent.resolveActivity(getPackageManager())!=null){
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    private void openGallery(){
+        String perm;
+        int reqCode;
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU){
+            perm = Manifest.permission.READ_MEDIA_IMAGES;
+            reqCode = PERM_READ_MEDIA_IMG;
+        }else{
+            perm = Manifest.permission.READ_EXTERNAL_STORAGE;
+            reqCode = PERM_READ_IMG;
+        }
+
+        if(ContextCompat.checkSelfPermission(this, perm)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{perm}, reqCode);
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_IMAGE_PICK);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==PERM_CAMERA && grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            openCamera();
+        }else if((requestCode==PERM_READ_IMG || requestCode==PERM_READ_MEDIA_IMG) && grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            openGallery();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!=RESULT_OK || data==null) return;
+        if(requestCode==REQUEST_IMAGE_CAPTURE){
+            Bitmap bmp = null;
+            if(data.getExtras()!=null){
+                bmp = (Bitmap) data.getExtras().get("data"); // thumbnail
+            }
+            if(bmp!=null){
+                pendingImage = bmp;
+                if(ivPreview!=null){
+                    ivPreview.setImageBitmap(bmp);
+                    ivPreview.setVisibility(View.VISIBLE);
+                }
+            }else{
+                Toast.makeText(this,"Không lấy được ảnh",Toast.LENGTH_SHORT).show();
+            }
+        }else if(requestCode==REQUEST_IMAGE_PICK){
+            try{
+                android.net.Uri uri = data.getData();
+                if(uri!=null){
+                    java.io.InputStream is = getContentResolver().openInputStream(uri);
+                    Bitmap bmp = BitmapFactory.decodeStream(is);
+                    if(is!=null) is.close();
+                    if(bmp!=null){
+                        pendingImage = bmp;
+                        if(ivPreview!=null){
+                            ivPreview.setImageBitmap(bmp);
+                            ivPreview.setVisibility(View.VISIBLE);
+                        }
+                    }else{
+                        Toast.makeText(this,"Không đọc được ảnh",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }catch(Exception e){
+                Toast.makeText(this,"Lỗi đọc ảnh",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
