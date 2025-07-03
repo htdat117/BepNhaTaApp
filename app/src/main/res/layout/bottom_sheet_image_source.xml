@@ -5,15 +5,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chọn nguồn ảnh"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/dark1"
-        android:paddingBottom="8dp" />
-
     <LinearLayout
         android:id="@+id/optCamera"
         android:layout_width="match_parent"
