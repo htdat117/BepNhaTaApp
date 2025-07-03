@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.bepnhataapp" />
-                  <option name="mobileSdkAppId" value="1:373475102795:android:da2a21de79760ccff13dce" />
-                  <option name="projectId" value="bepnhataapp" />
-                  <option name="projectNumber" value="373475102795" />
+                  <option name="mobileSdkAppId" value="1:519650564875:android:e928ca11c1beda4257200e" />
+                  <option name="projectId" value="bepnhataapp-14b64" />
+                  <option name="projectNumber" value="519650564875" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

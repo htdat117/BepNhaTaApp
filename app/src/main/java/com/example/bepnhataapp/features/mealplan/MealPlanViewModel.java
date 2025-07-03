@@ -27,7 +27,14 @@ public class MealPlanViewModel extends ViewModel {
     public LiveData<State> getState() { return state; }
 
     public void refresh() {
-        state.setValue(new State(repository.hasPlan() ? repository.getWeekPlan() : null));
+        State newState = new State(repository.hasPlan() ? repository.getWeekPlan() : null);
+        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+            // On main thread – safe to call setValue
+            state.setValue(newState);
+        } else {
+            // Background thread – must use postValue to avoid IllegalStateException
+            state.postValue(newState);
+        }
     }
 
     public void autoGenerate() {

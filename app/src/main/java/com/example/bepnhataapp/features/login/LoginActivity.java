@@ -13,11 +13,16 @@ import com.google.android.gms.tasks.Task;
 import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.utils.SessionManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements PhoneNumberFragment.OnPhoneNumberSubmittedListener {
 
     private static final int RC_GOOGLE_SIGN_IN = 9001;
     private GoogleSignInClient googleSignInClient;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +39,22 @@ public class LoginActivity extends AppCompatActivity implements PhoneNumberFragm
             });
         }
 
-        // Configure Google Sign-In to request email only
+        /*
+         * Configure Google Sign-In. In addition to the e-mail we now also request an
+         * ID-token which is required by Google when the application is configured
+         * with an OAuth-2 client on Firebase / Google Cloud.  The generated
+         * `default_web_client_id` constant is placed automatically in
+         *   res/values/strings.xml
+         * Make sure you have registered the SHA-1 fingerprint of your keystore in
+         * the Firebase console, then download the latest google-services.json and
+         * replace the existing one in the project.
+         */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
 
         // Google login button
         android.widget.ImageView btnGoogle = findViewById(R.id.btnGoogleLogin);
@@ -89,40 +105,63 @@ public class LoginActivity extends AppCompatActivity implements PhoneNumberFragm
                 android.widget.Toast.makeText(this, "Đăng nhập Google thất bại", android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
-            String email = account.getEmail();
-            String name = account.getDisplayName();
 
-            // Save or create customer in local DB
-            CustomerDao dao = new CustomerDao(this);
-            Customer c = null;
-            java.util.List<Customer> all = dao.getAll();
-            for(Customer cc: all){
-                if(email!=null && email.equalsIgnoreCase(cc.getEmail())){ c = cc; break; }
-            }
-            if(c==null){
-                c = new Customer();
-                c.setFullName(name!=null?name:email);
-                c.setEmail(email);
-                c.setPhone(email); // dùng email làm khoá đăng nhập trong session
-                c.setCustomerType("Bạc");
-                c.setLoyaltyPoint(0);
-                c.setCreatedAt(java.time.LocalDateTime.now().toString());
-                c.setStatus("active");
-                dao.insert(c);
+            String idToken = account.getIdToken();
+            if(idToken == null){
+                android.widget.Toast.makeText(this, "Không lấy được ID Token", android.widget.Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            // Mark session as logged-in (use email)
-            SessionManager.login(this, email);
+            AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+            mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+                if(task.isSuccessful()){
+                    FirebaseUser firebaseUser = task.getResult().getUser();
+                    if(firebaseUser==null){
+                        android.widget.Toast.makeText(this, "Đăng nhập Google thất bại", android.widget.Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-            android.widget.Toast.makeText(this, "Đăng nhập Google thành công", android.widget.Toast.LENGTH_SHORT).show();
+                    String email = firebaseUser.getEmail();
+                    String name = firebaseUser.getDisplayName();
 
-            // Navigate to ManageAccountActivity giống login thường
-            Intent intent = new Intent(this, com.example.bepnhataapp.features.manage_account.ManageAccountActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+                    // Save or create customer in local DB
+                    CustomerDao dao = new CustomerDao(this);
+                    Customer c = null;
+                    java.util.List<Customer> all = dao.getAll();
+                    for(Customer cc: all){
+                        if(email!=null && email.equalsIgnoreCase(cc.getEmail())){ c = cc; break; }
+                    }
+                    if(c==null){
+                        c = new Customer();
+                        c.setFullName(name!=null?name:email);
+                        c.setEmail(email);
+                        c.setPhone(email); // dùng email làm khoá đăng nhập trong session
+                        c.setCustomerType("Bạc");
+                        c.setLoyaltyPoint(0);
+                        c.setCreatedAt(java.time.LocalDateTime.now().toString());
+                        c.setStatus("active");
+                        dao.insert(c);
+                    }
+
+                    // Mark session as logged-in (use email)
+                    SessionManager.login(this, email);
+
+                    android.widget.Toast.makeText(this, "Đăng nhập Google thành công", android.widget.Toast.LENGTH_SHORT).show();
+
+                    // Navigate to ManageAccountActivity giống login thường
+                    Intent intent = new Intent(this, com.example.bepnhataapp.features.manage_account.ManageAccountActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }else{
+                    android.util.Log.e("LoginActivity", "Firebase auth failed", task.getException());
+                    android.widget.Toast.makeText(this, "Đăng nhập Google thất bại", android.widget.Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } catch(ApiException e){
-            android.util.Log.e("LoginActivity", "Google sign in failed: "+e.getStatusCode());
-            android.widget.Toast.makeText(this, "Đăng nhập Google thất bại", android.widget.Toast.LENGTH_SHORT).show();
+            int statusCode = e.getStatusCode();
+            android.util.Log.e("LoginActivity", "Google sign in failed with status: " + statusCode, e);
+            android.widget.Toast.makeText(this, "Đăng nhập Google thất bại (mã lỗi: " + statusCode + ")", android.widget.Toast.LENGTH_LONG).show();
         }
     }
 }

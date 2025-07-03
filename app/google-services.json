@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "373475102795",
-    "project_id": "bepnhataapp",
-    "storage_bucket": "bepnhataapp.firebasestorage.app"
+    "project_number": "519650564875",
+    "project_id": "bepnhataapp-14b64",
+    "storage_bucket": "bepnhataapp-14b64.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:373475102795:android:da2a21de79760ccff13dce",
+        "mobilesdk_app_id": "1:519650564875:android:e928ca11c1beda4257200e",
         "android_client_info": {
           "package_name": "com.example.bepnhataapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "519650564875-4r05of3krecnhma9n671rnu6jiqvqeti.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bepnhataapp",
+            "certificate_hash": "e5e1b61a7ccf3eb64a11e4c866ef1197e7d80009"
+          }
+        },
+        {
+          "client_id": "519650564875-dju6sk6v1p92augnijlsgui763uarn52.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyC8Tja3JM_joqHCwdqF9xD73ZvFrD42eGM"
+          "current_key": "AIzaSyC8FwG5_CCVO3TZ7-X917MzMFA66M8xWLY"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519650564875-dju6sk6v1p92augnijlsgui763uarn52.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
