@@ -113,8 +113,10 @@ public class ProductDetailActivity extends BaseActivity {
                     com.example.bepnhataapp.common.dao.FavouriteProductDao favDao2 = new com.example.bepnhataapp.common.dao.FavouriteProductDao(ProductDetailActivity.this);
                     if (favState[0]) {
                         favDao2.delete(currentProduct.getProductID(), cus.getCustomerID());
+                        android.widget.Toast.makeText(ProductDetailActivity.this, "Đã xoá khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                     } else {
                         favDao2.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(currentProduct.getProductID(), cus.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
+                        android.widget.Toast.makeText(ProductDetailActivity.this, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                     }
                     favState[0] = !favState[0];
                     ivFavorite.setImageResource(favState[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);

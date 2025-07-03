@@ -41,13 +41,13 @@ public class UsageGuideFragment extends Fragment {
             String note = getArguments().getString(ARG_NOTE, "");
 
             if (!TextUtils.isEmpty(storage)) {
-                binding.tvStorageContent.setText(storage);
+                binding.tvStorageContent.setText(storage.replace("/n", "\n").replace("\\n", "\n"));
             }
             if (!TextUtils.isEmpty(expire)) {
-                binding.tvExpiryContent.setText(expire);
+                binding.tvExpiryContent.setText(expire.replace("/n", "\n").replace("\\n", "\n"));
             }
             if (!TextUtils.isEmpty(note)) {
-                binding.tvNoteContent.setText(note);
+                binding.tvNoteContent.setText(note.replace("/n", "\n").replace("\\n", "\n"));
             }
         }
 
