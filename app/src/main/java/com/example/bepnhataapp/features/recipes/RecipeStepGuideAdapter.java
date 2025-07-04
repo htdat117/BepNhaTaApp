@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.model.InstructionRecipe;
 import java.util.List;
+import android.util.Log;
 
 public class RecipeStepGuideAdapter extends RecyclerView.Adapter<RecipeStepGuideAdapter.StepViewHolder> {
     private List<InstructionRecipe> steps;
@@ -29,16 +30,17 @@ public class RecipeStepGuideAdapter extends RecyclerView.Adapter<RecipeStepGuide
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         InstructionRecipe step = steps.get(position);
+        Log.d("DEBUG_STEP", "Step: " + step.getTitle() + ", image: " + step.getImage());
         holder.tvStepTitle.setText(step.getTitle());
         holder.tvStepContent.setText(step.getContent());
-        if (step.getImage() != null && !step.getImage().isEmpty()) {
+        holder.ivStepImage.setVisibility(View.VISIBLE);
+        if (step.getImage() != null && !step.getImage().isEmpty() && (step.getImage().startsWith("http://") || step.getImage().startsWith("https://"))) {
             Glide.with(holder.ivStepImage.getContext())
                 .load(step.getImage())
                 .placeholder(R.drawable.food_placeholder)
                 .into(holder.ivStepImage);
-            holder.ivStepImage.setVisibility(View.VISIBLE);
         } else {
-            holder.ivStepImage.setVisibility(View.GONE);
+            holder.ivStepImage.setImageResource(R.drawable.food_placeholder);
         }
     }
 
