@@ -3,6 +3,7 @@ package com.example.bepnhataapp.common.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.example.bepnhataapp.common.databases.DBHelper;
 import com.example.bepnhataapp.common.model.RecipeIngredient;
@@ -55,7 +56,7 @@ public class RecipeIngredientDao {
     public List<RecipeIngredient> getByRecipeID(long recipeID) {
         List<RecipeIngredient> list = new ArrayList<>();
         Cursor cur = helper.getReadableDatabase().rawQuery(
-            "SELECT * FROM " + DBHelper.TBL_RECIPE_INGREDIENTS + " WHERE recipeID=?", 
+            "SELECT * FROM " + DBHelper.TBL_RECIPE_INGREDIENTS + " WHERE recipeID=?",
             new String[]{String.valueOf(recipeID)}
         );
         if (cur.moveToFirst()) {
@@ -64,6 +65,7 @@ public class RecipeIngredientDao {
             } while (cur.moveToNext());
         }
         cur.close();
+        Log.d("DEBUG_DAO", "getByRecipeID: recipeID=" + recipeID + ", count=" + list.size());
         return list;
     }
 

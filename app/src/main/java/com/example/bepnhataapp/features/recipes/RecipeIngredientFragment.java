@@ -16,15 +16,24 @@ import com.example.bepnhataapp.common.model.Ingredient;
 import com.example.bepnhataapp.common.model.RecipeIngredient;
 import java.util.List;
 import android.util.Log;
+import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.bepnhataapp.common.adapter.IngredientAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
+import com.google.android.material.button.MaterialButton;
 
 public class RecipeIngredientFragment extends Fragment {
     private static final String ARG_RECIPE_ID = "recipe_id";
     private long recipeId;
+    private int servingFactor = 1; // 1 = 2 người, 2 = 4 người
+    private IngredientAdapter adapter;
 
-    public static RecipeIngredientFragment newInstance(long recipeId) {
+    public static RecipeIngredientFragment newInstance(long recipeId, int servingFactor) {
         RecipeIngredientFragment fragment = new RecipeIngredientFragment();
         Bundle args = new Bundle();
         args.putLong(ARG_RECIPE_ID, recipeId);
+        args.putInt("serving_factor", servingFactor);
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,35 +42,98 @@ public class RecipeIngredientFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_ingredient, container, false);
-        if (getArguments() != null) recipeId = getArguments().getLong(ARG_RECIPE_ID);
-        LinearLayout layoutIngredients = view.findViewById(R.id.layoutIngredients);
+        if (getArguments() != null) {
+            recipeId = getArguments().getLong(ARG_RECIPE_ID);
+            servingFactor = getArguments().getInt("serving_factor", 1);
+        }
+
+        // Lấy dữ liệu local
         RecipeIngredientDao ingredientDao = new RecipeIngredientDao(getContext());
         List<RecipeIngredient> ingredients = ingredientDao.getByRecipeID(recipeId);
-        Log.d("RecipeIngredientFragment", "recipeId=" + recipeId + ", ingredients=" + ingredients.size());
         IngredientDao ingDao = new IngredientDao(getContext());
-        layoutIngredients.removeAllViews();
-        for (RecipeIngredient ing : ingredients) {
-            Ingredient ingEntity = ingDao.getById(ing.getIngredientID());
-            View v = inflater.inflate(R.layout.item_ingredient_grid, layoutIngredients, false);
-            android.widget.ImageView iv = v.findViewById(R.id.ivIngredient);
-            android.widget.TextView tvName = v.findViewById(R.id.tvIngredientName);
-            android.widget.TextView tvQty = v.findViewById(R.id.tvIngredientQuantity);
-            if (ingEntity != null) {
-                if (ingEntity.getImageLink() != null && !ingEntity.getImageLink().isEmpty()) {
-                    Glide.with(this).load(ingEntity.getImageLink()).placeholder(R.drawable.food_placeholder).into(iv);
-                } else if (ingEntity.getImage() != null && ingEntity.getImage().length > 0) {
-                    Glide.with(this).load(ingEntity.getImage()).placeholder(R.drawable.food_placeholder).into(iv);
+        java.util.List<Ingredient> ingredientList = new java.util.ArrayList<>();
+        if (ingredients != null && !ingredients.isEmpty()) {
+            for (RecipeIngredient ing : ingredients) {
+                Ingredient ingEntity = ingDao.getById(ing.getIngredientID());
+                double qty = ing.getQuantity() * servingFactor;
+                String qtyText = (qty == (int)qty ? String.valueOf((int)qty) : String.valueOf(qty));
+                qtyText += (ingEntity != null && ingEntity.getUnit() != null ? " " + ingEntity.getUnit() : "");
+                if (ingEntity != null) {
+                    if (ingEntity.getImageLink() != null && !ingEntity.getImageLink().isEmpty()) {
+                        ingredientList.add(new Ingredient(ingEntity.getImageLink(), ingEntity.getIngredientName(), qtyText));
+                    } else if (ingEntity.getImage() != null && ingEntity.getImage().length > 0) {
+                        ingredientList.add(new Ingredient(ingEntity.getImage(), ingEntity.getIngredientName(), qtyText));
+                    } else {
+                        ingredientList.add(new Ingredient(R.drawable.food_placeholder, ingEntity.getIngredientName(), qtyText));
+                    }
                 } else {
-                    iv.setImageResource(R.drawable.food_placeholder);
+                    ingredientList.add(new Ingredient(R.drawable.food_placeholder, "Không rõ", qtyText));
                 }
-                tvName.setText(ingEntity.getIngredientName());
-            } else {
-                iv.setImageResource(R.drawable.food_placeholder);
-                tvName.setText("Không rõ");
             }
-            tvQty.setText(String.valueOf(ing.getQuantity()));
-            layoutIngredients.addView(v);
+        } else {
+            ingredientList.add(new Ingredient(R.drawable.food_placeholder, "Không có dữ liệu", ""));
         }
+
+        // Setup RecyclerView dạng lưới 3 cột
+        RecyclerView rvIngredients = view.findViewById(R.id.rvIngredients);
+        rvIngredients.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        adapter = new IngredientAdapter(getContext(), ingredientList);
+        rvIngredients.setAdapter(adapter);
+
+        // Xử lý logic chọn số người
+        MaterialButton btnNumofPeople = view.findViewById(R.id.btnNumofPeople);
+        if (btnNumofPeople != null) {
+            btnNumofPeople.setOnClickListener(v -> {
+                android.widget.PopupMenu popup = new android.widget.PopupMenu(getContext(), btnNumofPeople);
+                popup.getMenu().add("2 người");
+                popup.getMenu().add("4 người");
+                popup.setOnMenuItemClickListener(item -> {
+                    if (item.getTitle().equals("2 người")) {
+                        servingFactor = 1;
+                        btnNumofPeople.setText("2 người");
+                    } else {
+                        servingFactor = 2;
+                        btnNumofPeople.setText("4 người");
+                    }
+                    setServingFactor(servingFactor);
+                    return true;
+                });
+                popup.show();
+            });
+        }
+
         return view;
+    }
+
+    public void setServingFactor(int factor) {
+        this.servingFactor = factor;
+        if (getArguments() != null) getArguments().putInt("serving_factor", factor);
+        // Cập nhật lại danh sách nguyên liệu
+        RecipeIngredientDao ingredientDao = new RecipeIngredientDao(getContext());
+        List<RecipeIngredient> ingredients = ingredientDao.getByRecipeID(recipeId);
+        IngredientDao ingDao = new IngredientDao(getContext());
+        java.util.List<Ingredient> ingredientList = new java.util.ArrayList<>();
+        if (ingredients != null && !ingredients.isEmpty()) {
+            for (RecipeIngredient ing : ingredients) {
+                Ingredient ingEntity = ingDao.getById(ing.getIngredientID());
+                double qty = ing.getQuantity() * servingFactor;
+                String qtyText = (qty == (int)qty ? String.valueOf((int)qty) : String.valueOf(qty));
+                qtyText += (ingEntity != null && ingEntity.getUnit() != null ? " " + ingEntity.getUnit() : "");
+                if (ingEntity != null) {
+                    if (ingEntity.getImageLink() != null && !ingEntity.getImageLink().isEmpty()) {
+                        ingredientList.add(new Ingredient(ingEntity.getImageLink(), ingEntity.getIngredientName(), qtyText));
+                    } else if (ingEntity.getImage() != null && ingEntity.getImage().length > 0) {
+                        ingredientList.add(new Ingredient(ingEntity.getImage(), ingEntity.getIngredientName(), qtyText));
+                    } else {
+                        ingredientList.add(new Ingredient(R.drawable.food_placeholder, ingEntity.getIngredientName(), qtyText));
+                    }
+                } else {
+                    ingredientList.add(new Ingredient(R.drawable.food_placeholder, "Không rõ", qtyText));
+                }
+            }
+        } else {
+            ingredientList.add(new Ingredient(R.drawable.food_placeholder, "Không có dữ liệu", ""));
+        }
+        if (adapter != null) adapter.updateData(ingredientList);
     }
 } 

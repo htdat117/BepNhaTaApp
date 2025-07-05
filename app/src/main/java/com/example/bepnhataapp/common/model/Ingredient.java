@@ -3,11 +3,14 @@ package com.example.bepnhataapp.common.model;
 import java.io.Serializable;
 
 public class Ingredient implements Serializable {
-    private long ingredientID;
-    private String ingredientName;
-    private String unit;
-    private byte[] image; // BLOB
-    private String imageLink; // URL text stored in DB
+    public long ingredientID;
+    public String ingredientName;
+    public String unit;
+    public byte[] image; // BLOB
+    public String imageLink; // URL text stored in DB
+    public int imageResId = 0; // 0 means not using resource drawable
+    public String quantity; // for UI display
+    public String imageUrl; // for UI display (link ảnh)
 
     public Ingredient() {}
 
@@ -29,5 +32,24 @@ public class Ingredient implements Serializable {
 
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
+    }
+
+    // Constructor cho UI: resource drawable
+    public Ingredient(int imageResId, String name, String quantity) {
+        this.imageResId = imageResId;
+        this.ingredientName = name;
+        this.quantity = quantity;
+    }
+    // Constructor cho UI: imageData
+    public Ingredient(byte[] imageData, String name, String quantity) {
+        this.image = imageData;
+        this.ingredientName = name;
+        this.quantity = quantity;
+    }
+    // Constructor cho UI: imageUrl
+    public Ingredient(String imageUrl, String name, String quantity) {
+        this.imageUrl = imageUrl;
+        this.ingredientName = name;
+        this.quantity = quantity;
     }
 } 

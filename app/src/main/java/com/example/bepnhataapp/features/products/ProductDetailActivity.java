@@ -28,6 +28,8 @@ import java.util.Collections;
 
 import androidx.annotation.IdRes;
 import androidx.core.content.ContextCompat;
+import android.widget.TextView;
+import android.widget.ImageView;
 
 public class ProductDetailActivity extends BaseActivity {
 
@@ -168,7 +170,22 @@ public class ProductDetailActivity extends BaseActivity {
             }
         });
 
-        binding.ivBack.setOnClickListener(v -> onBackPressed());
+        // Xử lý header tài khoản
+        TextView tvLogin = findViewById(R.id.tv_login);
+        ImageView ivLogo = findViewById(R.id.iv_logo);
+        if(tvLogin != null) {
+            if(com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this)) {
+                String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+                com.example.bepnhataapp.common.dao.CustomerDao cDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                com.example.bepnhataapp.common.model.Customer c = cDao.findByPhone(phone);
+                if(c != null) tvLogin.setText(c.getFullName());
+            } else {
+                tvLogin.setText("Đăng nhập");
+            }
+        }
+        if(ivLogo != null) {
+            ivLogo.setOnClickListener(v -> finish()); // dùng logo làm nút back
+        }
 
         // Demo reviews & suggestions data
         List<Review> reviewList = new ArrayList<>();
@@ -272,6 +289,18 @@ public class ProductDetailActivity extends BaseActivity {
             intent.putExtra("selected_items", selected);
             startActivity(intent);
         });
+
+        // Set header title đúng cho trang chi tiết sản phẩm
+        android.widget.TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        if(tvHeaderTitle != null){
+            tvHeaderTitle.setText("Chi tiết sản phẩm");
+        }
+
+        // Xử lý header phụ (back + tiêu đề)
+        TextView tvBackHeader = findViewById(R.id.txtContent);
+        ImageView btnBack = findViewById(R.id.btnBack);
+        if(tvBackHeader != null) tvBackHeader.setText("Chi tiết sản phẩm");
+        if(btnBack != null) btnBack.setOnClickListener(v -> finish());
     }
 
     @Override

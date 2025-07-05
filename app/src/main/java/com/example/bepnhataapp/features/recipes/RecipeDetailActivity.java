@@ -38,6 +38,9 @@ import java.util.Locale;
 
 public class RecipeDetailActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
+    private int servingFactor = 1; // 1 = 2 người, 2 = 4 người
+    private RecipeDetailPagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,8 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         TextView tvCategory = findViewById(R.id.tvRecipeCategory);
         TextView tvCaloTime = findViewById(R.id.tvRecipeCaloTime);
         ImageView imvDownload = findViewById(R.id.imvDowload);
+        TextView tvDescription = findViewById(R.id.tvDescription);
+        TextView tvTryProduct = findViewById(R.id.tvTryProduct);
 
         // Load recipe entity
         RecipeEntity entity = new RecipeDao(this).getAllRecipes().stream()
@@ -74,6 +79,8 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 source = resId != 0 ? resId : R.drawable.placeholder_banner_background;
             }
             Glide.with(this).load(source).placeholder(R.drawable.placeholder_banner_background).into(img);
+            // Set mô tả công thức
+            tvDescription.setText(entity.getDescription());
         }
 
         RecipeDetail detail = new RecipeDetailDao(this).get(recipeId);
@@ -118,12 +125,24 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
             }
         });
 
+        tvTryProduct.setOnClickListener(v -> {
+            com.example.bepnhataapp.common.dao.ProductDetailDao productDetailDao = new com.example.bepnhataapp.common.dao.ProductDetailDao(this);
+            com.example.bepnhataapp.common.model.ProductDetail productDetail = productDetailDao.getByRecipeId(recipeId);
+            if (productDetail != null) {
+                android.content.Intent intent = new android.content.Intent(this, com.example.bepnhataapp.features.products.ProductDetailActivity.class);
+                intent.putExtra("productId", productDetail.getProductID());
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Không tìm thấy sản phẩm liên kết!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Hiển thị nguyên liệu
         LinearLayout layoutIngredients = findViewById(R.id.layoutIngredients);
         RecyclerView rcStepGuide = findViewById(R.id.rcStepGuide);
         MaterialButtonToggleGroup toggleGroupTab = findViewById(R.id.toggleGroupTab);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
-        RecipeDetailPagerAdapter pagerAdapter = new RecipeDetailPagerAdapter(this, recipeId);
+        pagerAdapter = new RecipeDetailPagerAdapter(this, recipeId, servingFactor);
         viewPager.setAdapter(pagerAdapter);
         // Đồng bộ tab và page
         toggleGroupTab.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -145,6 +164,29 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
 
         // bottom nav
         setupBottomNavigationFragment(R.id.nav_recipes);
+
+        // Xử lý header tài khoản
+        TextView tvLogin = findViewById(R.id.tv_login);
+        ImageView ivLogo = findViewById(R.id.iv_logo);
+        if(tvLogin != null) {
+            if(com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this)) {
+                String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+                com.example.bepnhataapp.common.dao.CustomerDao cDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                com.example.bepnhataapp.common.model.Customer c = cDao.findByPhone(phone);
+                if(c != null) tvLogin.setText(c.getFullName());
+            } else {
+                tvLogin.setText("Đăng nhập");
+            }
+        }
+        if(ivLogo != null) {
+            ivLogo.setOnClickListener(v -> finish()); // dùng logo làm nút back
+        }
+
+        // Xử lý header phụ (back + tiêu đề)
+        TextView tvBackHeader = findViewById(R.id.txtContent);
+        ImageView btnBack = findViewById(R.id.btnBack);
+        if(tvBackHeader != null) tvBackHeader.setText("Chi tiết công thức");
+        if(btnBack != null) btnBack.setOnClickListener(v -> finish());
     }
 
     @Override
