@@ -83,13 +83,21 @@ public class DownloadedContentActivity extends AppCompatActivity {
             adapter = new DownloadedRecipeAdapter(list, new DownloadedRecipeAdapter.OnRecipeActionListener() {
                 @Override
                 public void onView(DownloadedRecipe recipe) {
-                    Toast.makeText(DownloadedContentActivity.this, "Xem: " + recipe.getTitle(), Toast.LENGTH_SHORT).show();
+                    // Không cần Toast nữa, đã chuyển intent trong Adapter
                 }
                 @Override
                 public void onDelete(DownloadedRecipe recipe) {
-                    list.remove(recipe);
-                    adapter.notifyDataSetChanged();
-                    refreshData();
+                    new androidx.appcompat.app.AlertDialog.Builder(DownloadedContentActivity.this)
+                        .setTitle("Xác nhận xóa")
+                        .setMessage("Bạn có chắc chắn muốn xóa công thức này khỏi danh sách offline?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            list.remove(recipe);
+                            adapter.notifyDataSetChanged();
+                            refreshData();
+                            Toast.makeText(DownloadedContentActivity.this, "Đã xóa công thức offline thành công!", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
                 }
             });
             recyclerView.setAdapter(adapter);

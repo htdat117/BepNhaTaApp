@@ -131,11 +131,11 @@ public class ProductDetailActivity extends BaseActivity {
             refreshMacroAndTime();
 
             // Setup ViewPager with two fragments
-            pagerAdapter = new ProductDetailPagerAdapter(this, detail, currentProduct.getProductID(), currentServingFactor);
+            pagerAdapter = new ProductDetailPagerAdapter(this, detail, currentProduct, currentProduct.getProductID(), currentServingFactor);
             binding.viewPager.setAdapter(pagerAdapter);
         } else {
             // still create adapter with null detail to avoid crash
-            pagerAdapter = new ProductDetailPagerAdapter(this, null, -1, currentServingFactor);
+            pagerAdapter = new ProductDetailPagerAdapter(this, null, null, -1, currentServingFactor);
             binding.viewPager.setAdapter(pagerAdapter);
         }
 
