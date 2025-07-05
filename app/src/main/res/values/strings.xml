@@ -6,5 +6,5 @@
     <string name="star_icon">Biểu tượng ngôi sao</string>
     <!-- Generated automatically by the Google Services Gradle plugin when you download a proper google-services.json from Firebase.
          Replace the placeholder value with the actual client ID after you re-download the json. -->
-    <string name="default_web_client_id">REPLACE_WITH_REAL_CLIENT_ID.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">519650564875-4r05of3krecnhma9n671rnu6jiqvqeti.apps.googleusercontent.com</string>
 </resources>

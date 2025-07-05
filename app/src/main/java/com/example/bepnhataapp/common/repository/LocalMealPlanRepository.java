@@ -287,51 +287,124 @@ public class LocalMealPlanRepository implements MealPlanRepository {
     }
 
     @Override
-    public void copyFromPreviousDay(LocalDate date) {
+    public boolean copyFromPreviousDay(LocalDate date) {
         LocalDate prev = date.minusDays(1);
 
         MealDayDao dayDao = new MealDayDao(ctx);
         MealTimeDao timeDao = new MealTimeDao(ctx);
         MealRecipeDao recDao = new MealRecipeDao(ctx);
+        MealPlanDao mpDao = new MealPlanDao(ctx);
 
-        // Xoá ngày hiện tại (nếu đã có) để tránh trùng
-        MealDay existingDay = dayDao.getByDate(date.toString());
-        if (existingDay != null) {
-            java.util.List<com.example.bepnhataapp.common.model.MealTime> curTimes = timeDao.getByMealDay(existingDay.getMealDayID());
+        // ---------------------------
+        // 1. Xác định kế hoạch ĐÍCH (targetPlan)
+        //    – Nếu đã đăng nhập ➜ PERSONAL
+        //    – Ngược lại ➜ AUTO
+        //    – Tạo mới nếu chưa tồn tại
+        // ---------------------------
+        MealPlan targetPlan = null;
+        if (SessionManager.isLoggedIn(ctx)) {
+            com.example.bepnhataapp.common.model.Customer cust = new com.example.bepnhataapp.common.dao.CustomerDao(ctx)
+                    .findByPhone(SessionManager.getPhone(ctx));
+            if (cust != null) {
+                targetPlan = mpDao.getPersonalPlan(cust.getCustomerID());
+                if (targetPlan == null) {
+                    targetPlan = new MealPlan();
+                    targetPlan.setCustomerID(cust.getCustomerID());
+                    targetPlan.setType("PERSONAL");
+                    targetPlan.setTitle("Kế hoạch của tôi");
+                    targetPlan.setCreatedAt(java.time.LocalDateTime.now().toString());
+                    long id = mpDao.insert(targetPlan);
+                    targetPlan.setMealPlanID(id);
+                }
+            }
+        }
+        if (targetPlan == null) {
+            java.util.List<MealPlan> autos = mpDao.getAutoPlans();
+            if (autos.isEmpty()) {
+                targetPlan = new MealPlan();
+                targetPlan.setType("AUTO");
+                targetPlan.setTitle("Kế hoạch tự động");
+                targetPlan.setCreatedAt(java.time.LocalDateTime.now().toString());
+                long id = mpDao.insert(targetPlan);
+                targetPlan.setMealPlanID(id);
+            } else {
+                targetPlan = autos.get(0);
+            }
+        }
+
+        long targetPlanId = targetPlan.getMealPlanID();
+
+        // ---------------------------
+        // 2. Tìm ngày NGUỒN (prevDay)
+        //    – Ưu tiên PERSONAL của ngày hôm qua (nếu tồn tại)
+        //    – Sau đó tới AUTO
+        // ---------------------------
+        MealDay prevDay = null;
+        if (SessionManager.isLoggedIn(ctx)) {
+            // Tìm trong PERSONAL trước
+            MealDay p = dayDao.getByDate(prev.toString());
+            if (p != null) {
+                // đảm bảo p thuộc plan cá nhân
+                MealPlan pp = null;
+                // Simple lookup: fetch plan by ID from cached list to avoid new DAO method
+                java.util.List<MealPlan> _allPlans = mpDao.getAll();
+                for(MealPlan _pl : _allPlans){
+                    if(_pl.getMealPlanID() == p.getMealPlanID()){ pp = _pl; break; }
+                }
+                if (pp != null && "PERSONAL".equalsIgnoreCase(String.valueOf(pp.getType()))) {
+                    prevDay = p;
+                }
+            }
+        }
+        if (prevDay == null) {
+            // Tìm trong AUTO
+            prevDay = dayDao.getByDate(prev.toString());
+        }
+
+        // Nếu không tìm thấy ngày nguồn ➜ chỉ tạo ngày trống cho targetPlan
+        if (prevDay == null) {
+            // Xoá bản ghi cũ (nếu có) của targetPlan cho ngày hiện tại
+            MealDay existTargetDay = null;
+            java.util.List<MealDay> allCur = dayDao.getAllByDate(date.toString());
+            for (MealDay d : allCur) {
+                if (d.getMealPlanID() == targetPlanId) { existTargetDay = d; break; }
+            }
+            if (existTargetDay != null) {
+                java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(existTargetDay.getMealDayID());
+                for (com.example.bepnhataapp.common.model.MealTime t : times) {
+                    recDao.deleteByMealTime(t.getMealTimeID());
+                    timeDao.delete(t.getMealTimeID());
+                }
+                dayDao.delete(existTargetDay.getMealDayID());
+            }
+
+            // Tạo ngày trống
+            MealDay emptyDay = new MealDay(targetPlanId, date.toString(), null);
+            dayDao.insert(emptyDay);
+            return false;
+        }
+
+        // ---------------------------
+        // 3. Xoá ngày hiện tại (nếu đã tồn tại) trong targetPlan để tránh trùng lặp
+        // ---------------------------
+        MealDay existingTarget = null;
+        java.util.List<MealDay> curList = dayDao.getAllByDate(date.toString());
+        for (MealDay d : curList) {
+            if (d.getMealPlanID() == targetPlanId) { existingTarget = d; break; }
+        }
+        if (existingTarget != null) {
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> curTimes = timeDao.getByMealDay(existingTarget.getMealDayID());
             for (com.example.bepnhataapp.common.model.MealTime t : curTimes) {
                 recDao.deleteByMealTime(t.getMealTimeID());
                 timeDao.delete(t.getMealTimeID());
             }
-            dayDao.delete(existingDay.getMealDayID());
+            dayDao.delete(existingTarget.getMealDayID());
         }
 
-        MealDay prevDay = dayDao.getByDate(prev.toString());
-
-        if (prevDay == null) {
-            // Ngày trước không có – thêm ngày trống theo plan auto/personal hiện có
-            MealPlanDao mpDao = new MealPlanDao(ctx);
-            Long planId = null;
-            if (SessionManager.isLoggedIn(ctx)) {
-                com.example.bepnhataapp.common.model.Customer cust = new com.example.bepnhataapp.common.dao.CustomerDao(ctx)
-                        .findByPhone(SessionManager.getPhone(ctx));
-                if (cust != null) {
-                    MealPlan personal = mpDao.getPersonalPlan(cust.getCustomerID());
-                    if (personal != null) planId = personal.getMealPlanID();
-                }
-            }
-            if (planId == null) {
-                java.util.List<MealPlan> autoPlans = mpDao.getAutoPlans();
-                if (!autoPlans.isEmpty()) planId = autoPlans.get(0).getMealPlanID();
-            }
-            if (planId == null) return; // No plan available
-
-            MealDay emptyDay = new MealDay(planId, date.toString(), null);
-            dayDao.insert(emptyDay);
-            return;
-        }
-
-        // Sao chép
-        MealDay newDay = new MealDay(prevDay.getMealPlanID(), date.toString(), prevDay.getNote());
+        // ---------------------------
+        // 4. Sao chép dữ liệu từ prevDay → targetPlan cho ngày hiện tại
+        // ---------------------------
+        MealDay newDay = new MealDay(targetPlanId, date.toString(), prevDay.getNote());
         long newDayId = dayDao.insert(newDay);
 
         java.util.List<com.example.bepnhataapp.common.model.MealTime> prevTimes = timeDao.getByMealDay(prevDay.getMealDayID());
@@ -344,6 +417,12 @@ public class LocalMealPlanRepository implements MealPlanRepository {
                 recDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(newTId, pr.getRecipeID()));
             }
         }
+
+        // Cập nhật totalDays cho plan đích
+        targetPlan.setTotalDays(dayDao.getByMealPlan(targetPlanId).size());
+        mpDao.update(targetPlan);
+
+        return true;
     }
 
     @Override

@@ -60,6 +60,18 @@ public class LoginActivity extends AppCompatActivity implements PhoneNumberFragm
         android.widget.ImageView btnGoogle = findViewById(R.id.btnGoogleLogin);
         if(btnGoogle!=null){
             btnGoogle.setOnClickListener(v -> {
+                // Kiểm tra Google Play Services & kết nối mạng trước khi mở Sign-In
+                if(!com.example.bepnhataapp.common.utils.GooglePlayServicesHelper.isGooglePlayServicesAvailable(this)){
+                    android.widget.Toast.makeText(this, "Thiếu Google Play Services hoặc chưa cập nhật", android.widget.Toast.LENGTH_LONG).show();
+                    return;
+                }
+                android.net.ConnectivityManager cm = (android.net.ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                android.net.NetworkInfo ni = cm!=null? cm.getActiveNetworkInfo():null;
+                if(ni==null || !ni.isConnected()){
+                    android.widget.Toast.makeText(this, "Thiết bị không có kết nối Internet", android.widget.Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
             });
