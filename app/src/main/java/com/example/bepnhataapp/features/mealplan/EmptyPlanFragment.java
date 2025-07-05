@@ -50,17 +50,26 @@ public class EmptyPlanFragment extends Fragment {
         new Thread(() -> {
             try {
                 action.run();
-                // Notify UI thread when done
-                requireActivity().runOnUiThread(() -> {
+
+                androidx.fragment.app.FragmentActivity act = getActivity();
+                if (act == null) return; // fragment detached, nothing to update
+
+                act.runOnUiThread(() -> {
+                    if(!isAdded()) return; // safeguard
                     setButtonsEnabled(true);
-                    if (requireActivity() instanceof com.example.bepnhataapp.features.mealplan.MealPlanContentActivity) {
-                        ((com.example.bepnhataapp.features.mealplan.MealPlanContentActivity) requireActivity()).refreshDayView();
+                    if(viewModel != null) viewModel.refresh();
+
+                    if (getActivity() instanceof com.example.bepnhataapp.features.mealplan.MealPlanContentActivity) {
+                        ((com.example.bepnhataapp.features.mealplan.MealPlanContentActivity) getActivity()).refreshDayView();
                     }
+
                     android.widget.Toast.makeText(requireContext(), successMsg, android.widget.Toast.LENGTH_SHORT).show();
                 });
             } catch (Exception e) {
-                // Basic error handling – re-enable buttons and inform the user
-                requireActivity().runOnUiThread(() -> {
+                androidx.fragment.app.FragmentActivity act = getActivity();
+                if (act == null) return;
+                act.runOnUiThread(() -> {
+                    if(!isAdded()) return;
                     setButtonsEnabled(true);
                     android.widget.Toast.makeText(requireContext(), "Đã xảy ra lỗi, vui lòng thử lại", android.widget.Toast.LENGTH_SHORT).show();
                 });
@@ -86,10 +95,32 @@ public class EmptyPlanFragment extends Fragment {
             viewModel.autoGenerateFor(getTargetDate());
         }, "Đã tạo thực đơn tự động"));
 
-        // 2. Sao chép ngày trước đó
-        btnCopy.setOnClickListener(v -> runBackgroundTask(() -> {
-            viewModel.copyFromPreviousDay(getTargetDate());
-        }, "Đã sao chép thực đơn ngày trước"));
+        // 2. Sao chép ngày trước đó – cần kiểm tra xem có dữ liệu để sao chép hay không
+        btnCopy.setOnClickListener(v -> {
+            setButtonsEnabled(false);
+            new Thread(() -> {
+                // Thực thi copy và nhận kết quả
+                boolean copied = viewModel.copyFromPreviousDay(getTargetDate());
+
+                // Chờ 1 chút cho DB hoàn tất (nhanh nên không cần delay lớn)
+                try { Thread.sleep(50); } catch (InterruptedException ignored) {}
+
+                // Cập nhật UI
+                androidx.fragment.app.FragmentActivity act = getActivity();
+                if(act==null) return;
+                act.runOnUiThread(() -> {
+                    if(!isAdded()) return;
+                    if(viewModel != null) viewModel.refresh();
+                    setButtonsEnabled(true);
+                    if (getActivity() instanceof com.example.bepnhataapp.features.mealplan.MealPlanContentActivity) {
+                        ((com.example.bepnhataapp.features.mealplan.MealPlanContentActivity) getActivity()).refreshDayView();
+                    }
+
+                    String msg = copied ? "Đã sao chép thực đơn ngày trước" : "Không có thực đơn của ngày trước để sao chép";
+                    android.widget.Toast.makeText(requireContext(), msg, android.widget.Toast.LENGTH_SHORT).show();
+                });
+            }).start();
+        });
 
         // 3. Tạo thực đơn trống (chỉ hiển thị UI, không thao tác DB nặng)
         btnLoadBlank.setOnClickListener(v -> {

@@ -84,9 +84,14 @@ public class MealPlanViewModel extends ViewModel {
         refresh();
     }
 
-    public void copyFromPreviousDay(LocalDate date){
-        repository.copyFromPreviousDay(date);
+    /**
+     * Sao chép thực đơn ngày trước đó sang ngày <code>date</code>.
+     * @return {@code true} nếu có dữ liệu được sao chép, {@code false} nếu không sao chép được.
+     */
+    public boolean copyFromPreviousDay(LocalDate date){
+        boolean copied = repository.copyFromPreviousDay(date);
         refresh();
+        return copied;
     }
 
     public void deleteMealTime(LocalDate date, String mealType){

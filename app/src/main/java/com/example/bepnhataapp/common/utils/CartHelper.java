@@ -90,7 +90,8 @@ public final class CartHelper {
             int price = pr.getProductPrice() * (100 - pr.getSalePercent()) / 100;
             CartItem ci = new CartItem(pr.getProductID(), pr.getProductName(), price, pr.getProductPrice(), cd.getQuantity(), pr.getProductThumb());
             ci.setServing(cd.getServingFactor()==2?"4 người":"2 người");
-            list.add(ci);
+            // Thêm vào đầu danh sách để sản phẩm mới nhất hiển thị trước
+            list.add(0, ci);
         }
         return list;
     }

@@ -66,8 +66,11 @@ public class VoucherActivity extends AppCompatActivity {
             for (Coupon c : coupons) {
                 voucherList.add(new VoucherItem(
                     c.getCouponTitle(),
-                    "Giảm " + c.getCouponValue() + "% tối đa " + (c.getMaxDiscount() != null ? c.getMaxDiscount() + "K" : "") + ", đơn tối thiểu " + c.getMinPrice() + "K",
-                    c.getExpireDate()
+                    (c.getCouponValue()<=100? ("Giảm "+c.getCouponValue()+"%") : ("Giảm "+java.text.NumberFormat.getInstance().format(c.getCouponValue())+"đ")) +
+                            (c.getMaxDiscount()!=null? (" tối đa "+java.text.NumberFormat.getInstance().format(c.getMaxDiscount())+"đ") : "") +
+                            ", đơn tối thiểu "+java.text.NumberFormat.getInstance().format(c.getMinPrice())+"đ",
+                    c.getExpireDate(),
+                    true
                 ));
             }
             VoucherDisplayAdapter adapter = new VoucherDisplayAdapter(voucherList, this);

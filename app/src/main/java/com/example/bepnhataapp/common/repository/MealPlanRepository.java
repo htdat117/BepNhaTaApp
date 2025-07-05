@@ -10,10 +10,13 @@ public interface MealPlanRepository {
     WeekPlan generateEmptyWeekPlan(LocalDate start);
     void deletePlanForDate(LocalDate date);
     /**
-     * Sao chép thực đơn của ngày trước đó sang ngày <code>date</code>.
-     * Nếu không có thực đơn của ngày trước, tạo bản ghi ngày trống.
+     * Sao chép thực đơn của ngày <code>date.minusDays(1)</code> sang ngày hiện tại.
+     *
+     * @param date Ngày đích cần sao chép thực đơn.
+     * @return <code>true</code> nếu có thực đơn của ngày trước đó và thao tác sao chép đã được thực hiện,
+     *         <code>false</code> nếu không tìm thấy dữ liệu để sao chép (trong trường hợp này có thể chỉ tạo ngày trống hoặc không làm gì).
      */
-    void copyFromPreviousDay(LocalDate date);
+    boolean copyFromPreviousDay(LocalDate date);
     void clear();
 
     /**

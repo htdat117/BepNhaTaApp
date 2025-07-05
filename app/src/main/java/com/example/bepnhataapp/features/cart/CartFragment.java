@@ -56,6 +56,116 @@ public class CartFragment extends Fragment {
         adapter.setCartListener(this::recalculateBottom);
         recyclerView.setAdapter(adapter);
 
+        // Thêm hỗ trợ vuốt trái / phải để Xoá hoặc Lưu vào mục yêu thích
+        androidx.recyclerview.widget.ItemTouchHelper swipeHelper = new androidx.recyclerview.widget.ItemTouchHelper(new androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback(0,
+                androidx.recyclerview.widget.ItemTouchHelper.LEFT | androidx.recyclerview.widget.ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull androidx.recyclerview.widget.RecyclerView rv,
+                                   @NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder vh,
+                                   @NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder target) {
+                return false; // không hỗ trợ kéo
+            }
+
+            @Override
+            public void onSwiped(@NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder viewHolder, int direction) {
+                int pos = viewHolder.getAdapterPosition();
+                if (pos == androidx.recyclerview.widget.RecyclerView.NO_POSITION) {
+                    return;
+                }
+
+                com.example.bepnhataapp.common.models.CartItem item = adapter.getItems().get(pos);
+                android.content.Context ctx = requireContext();
+
+                if (direction == androidx.recyclerview.widget.ItemTouchHelper.LEFT) {
+                    // Vuốt trái – hiển thị dialog xác nhận xoá
+                    new androidx.appcompat.app.AlertDialog.Builder(ctx)
+                            .setTitle("Xác nhận xoá")
+                            .setMessage("Bạn có chắc muốn xoá sản phẩm này khỏi giỏ hàng?")
+                            .setPositiveButton("Xoá", (dialog, which) -> {
+                                com.example.bepnhataapp.common.utils.CartHelper.removeProduct(ctx, item.getProductId(), item.getServing().startsWith("4") ? 2 : 1);
+                                adapter.getItems().remove(pos);
+                                adapter.notifyItemRemoved(pos);
+                                recalculateBottom();
+                                android.widget.Toast.makeText(ctx, "Đã xoá sản phẩm khỏi giỏ", android.widget.Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton("Huỷ", (dialog, which) -> {
+                                adapter.notifyItemChanged(pos); // khôi phục item nếu huỷ
+                            })
+                            .setOnCancelListener(dialog -> adapter.notifyItemChanged(pos))
+                            .show();
+                } else if (direction == androidx.recyclerview.widget.ItemTouchHelper.RIGHT) {
+                    // Vuốt phải – lưu vào mục yêu thích
+                    if (!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(ctx)) {
+                        android.widget.Toast.makeText(ctx, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                    } else {
+                        String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(ctx);
+                        com.example.bepnhataapp.common.dao.CustomerDao cusDao = new com.example.bepnhataapp.common.dao.CustomerDao(ctx);
+                        com.example.bepnhataapp.common.model.Customer cus = cusDao.findByPhone(phone);
+                        if (cus != null) {
+                            com.example.bepnhataapp.common.dao.FavouriteProductDao favDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(ctx);
+                            boolean exists = favDao.isFavourite(item.getProductId(), cus.getCustomerID());
+                            if (exists) {
+                                android.widget.Toast.makeText(ctx, "Sản phẩm đã có trong mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                            } else {
+                                favDao.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(
+                                        item.getProductId(),
+                                        cus.getCustomerID(),
+                                        new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date())
+                                ));
+                                android.widget.Toast.makeText(ctx, "Đã lưu sản phẩm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    // Khôi phục item để tiếp tục hiển thị trong danh sách
+                    adapter.notifyItemChanged(pos);
+                }
+            }
+
+            @Override
+            public void onChildDraw(@NonNull android.graphics.Canvas c,
+                                     @NonNull androidx.recyclerview.widget.RecyclerView recyclerView,
+                                     @NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder viewHolder,
+                                     float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                // Vẽ nền màu và text cho thao tác vuốt
+                android.view.View itemView = viewHolder.itemView;
+                android.graphics.Paint paint = new android.graphics.Paint();
+                int height = itemView.getBottom() - itemView.getTop();
+                int width = 200; // chiều rộng khung hành động
+
+                if (dX < 0) { // vuốt trái – xoá
+                    paint.setColor(androidx.core.content.ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark));
+                    android.graphics.RectF background = new android.graphics.RectF(
+                            itemView.getRight() + dX, itemView.getTop(),
+                            itemView.getRight(), itemView.getBottom());
+                    c.drawRect(background, paint);
+
+                    paint.setColor(android.graphics.Color.WHITE);
+                    paint.setTextSize(40);
+                    paint.setTextAlign(android.graphics.Paint.Align.CENTER);
+                    float textX = itemView.getRight() - width / 2f;
+                    float textY = itemView.getTop() + height / 2f - ((paint.descent() + paint.ascent()) / 2);
+                    c.drawText("Xoá", textX, textY, paint);
+
+                } else if (dX > 0) { // vuốt phải – lưu
+                    paint.setColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.primary1));
+                    android.graphics.RectF background = new android.graphics.RectF(
+                            itemView.getLeft(), itemView.getTop(),
+                            itemView.getLeft() + dX, itemView.getBottom());
+                    c.drawRect(background, paint);
+
+                    paint.setColor(android.graphics.Color.WHITE);
+                    paint.setTextSize(40);
+                    paint.setTextAlign(android.graphics.Paint.Align.CENTER);
+                    float textX = itemView.getLeft() + width / 2f;
+                    float textY = itemView.getTop() + height / 2f - ((paint.descent() + paint.ascent()) / 2);
+                    c.drawText("Lưu", textX, textY, paint);
+                }
+            }
+        });
+        swipeHelper.attachToRecyclerView(recyclerView);
+
         // Button "Xem sản phẩm" trong layout_empty_cart
         View btnViewProducts = emptyView.findViewById(R.id.btnViewProducts);
         if(btnViewProducts!=null){
