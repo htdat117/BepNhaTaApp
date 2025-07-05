@@ -136,9 +136,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         });
 
         holder.btnAddCart.setOnClickListener(v -> {
-            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product);
+            // Xác định khẩu phần hiện tại
+            int servingFactor = 1; // mặc định 2 người
+            if(servingGroup != null && servingGroup.getCheckedButtonId() == R.id.btnFor4){
+                servingFactor = 2; // 4 người
+            }
+
+            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product, servingFactor);
             android.widget.Toast.makeText(context, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
-            // Muốn mở giỏ ngay:
+            // Nếu muốn mở giỏ ngay thì uncomment dòng dưới
             // context.startActivity(new Intent(context, com.example.bepnhataapp.features.cart.CartActivity.class));
         });
 

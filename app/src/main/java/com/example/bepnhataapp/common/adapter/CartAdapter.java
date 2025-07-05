@@ -59,9 +59,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.btnPlus.setOnClickListener(v->{
             int q=item.getQuantity()+1;
             item.setQuantity(q);
+            int servingFactor = item.getServing().startsWith("4") ? 2 : 1;
             CartHelper.addProduct(v.getContext(), new com.example.bepnhataapp.common.model.Product(){
                 {setProductID(item.getProductId());}
-            }); // quick: reuse addProduct increments 1
+            }, servingFactor);
             notifyItemChanged(position);
             if(listener!=null) listener.onCartChanged();
         });

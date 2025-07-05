@@ -80,6 +80,22 @@ public class AddressSelectActivity extends AppCompatActivity {
                 finish();
             });
         }
+
+        findViewById(R.id.btnUseCurrentLocation).setOnClickListener(v -> {
+            android.app.Dialog dialog = new android.app.Dialog(this);
+            dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_location_permission);
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            android.widget.Button btnAllow = dialog.findViewById(R.id.btnAllow);
+            android.widget.Button btnSkip = dialog.findViewById(R.id.btnSkip);
+            btnAllow.setOnClickListener(v2 -> {
+                dialog.dismiss();
+                android.widget.Toast.makeText(this, "Chọn địa chỉ thành công", android.widget.Toast.LENGTH_SHORT).show();
+            });
+            btnSkip.setOnClickListener(v2 -> dialog.dismiss());
+            dialog.show();
+        });
     }
 
     private List<AddressItem> loadAddresses(){

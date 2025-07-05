@@ -36,6 +36,9 @@ public class CheckoutActivity extends AppCompatActivity {
     private com.example.bepnhataapp.common.models.AddressItem currentAddress;
     private String currentShipNote="";
     private int selectedPaymentIdx = -1; // 0 COD,1 VCB
+    private static final int REQUEST_VOUCHER = 301;
+    private com.example.bepnhataapp.common.model.Coupon selectedCoupon = null;
+    private int voucherDiscount = 0;
     private int goodsTotalOld=0, shippingFee=0, discount=0, grandTotal=0;
 
     @Override
@@ -78,7 +81,8 @@ public class CheckoutActivity extends AppCompatActivity {
         }
         goodsTotalOld = totalGoods + save;
         shippingFee = 20000;
-        discount = save;
+        voucherDiscount = 0;
+        discount = save + voucherDiscount;
         grandTotal = goodsTotalOld + shippingFee - discount;
         java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
 
@@ -88,7 +92,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         if(tvGoodsTotal!=null) tvGoodsTotal.setText(nf.format(goodsTotalOld)+"đ");
         if(tvShippingFee!=null) tvShippingFee.setText(nf.format(shippingFee)+"đ");
-        if(tvVoucherDiscount!=null) tvVoucherDiscount.setText("-"+nf.format(discount)+"đ");
+        if(tvVoucherDiscount!=null) tvVoucherDiscount.setText("-"+nf.format(voucherDiscount)+"đ");
 
         if(tvGrandTotal!=null) tvGrandTotal.setText(nf.format(grandTotal)+"đ");
         if(tvBottomTotal!=null) tvBottomTotal.setText(nf.format(grandTotal)+"đ");
@@ -164,7 +168,10 @@ public class CheckoutActivity extends AppCompatActivity {
         if(tvVoucherLink!=null){
             tvVoucherLink.setOnClickListener(v->{
                 android.content.Intent it=new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.voucher.VoucherSelectActivity.class);
-                startActivity(it);
+                int orderSubtotal=0; for(CartItem ci:orderItems){ orderSubtotal+=ci.getTotal(); }
+                it.putExtra("order_subtotal", orderSubtotal);
+                if(selectedCoupon!=null){ it.putExtra("selected_coupon_id", selectedCoupon.getCouponID()); }
+                startActivityForResult(it, REQUEST_VOUCHER);
             });
         }
 
@@ -261,6 +268,41 @@ public class CheckoutActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable android.content.Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_VOUCHER && resultCode==RESULT_OK && data!=null){
+            com.example.bepnhataapp.common.model.Coupon cp = (com.example.bepnhataapp.common.model.Coupon) data.getSerializableExtra("selected_coupon");
+            if(cp!=null){
+                selectedCoupon = cp;
+                android.widget.Toast.makeText(this,"Đã áp dụng voucher thành công",android.widget.Toast.LENGTH_SHORT).show();
+                // Tính tổng giá trị đơn sau khuyến mãi sản phẩm
+                int orderSubtotal = 0;
+                for(CartItem itm : orderItems){ orderSubtotal += itm.getTotal(); }
+
+                // Kiểm tra điều kiện tối thiểu
+                if(orderSubtotal < cp.getMinPrice()){
+                    android.widget.Toast.makeText(this, "Đơn hàng chưa đạt giá trị tối thiểu để dùng voucher", android.widget.Toast.LENGTH_SHORT).show();
+                    selectedCoupon = null; voucherDiscount = 0;
+                }else{
+                    int disc;
+                    if(cp.getCouponValue() <= 100){ // phần trăm
+                        disc = orderSubtotal * cp.getCouponValue() / 100;
+                        if(cp.getMaxDiscount()!=null) disc = Math.min(disc, cp.getMaxDiscount());
+                    }else{ // mã giảm giá cố định theo đồng
+                        disc = cp.getCouponValue();
+                        if(cp.getMaxDiscount()!=null) disc = Math.min(disc, cp.getMaxDiscount());
+                    }
+                    // không để giảm quá tổng tiền
+                    disc = Math.min(disc, orderSubtotal);
+                    voucherDiscount = disc;
+                }
+                // cập nhật text voucher code hiển thị cho link
+                TextView tvCode = findViewById(R.id.tvVoucher);
+                if(tvCode!=null && selectedCoupon!=null){
+                    tvCode.setText(cp.getCouponTitle());
+                }
+                // Cập nhật totals
+                recalcTotals();
+            }
+        }
         if(requestCode==201 && resultCode==RESULT_OK && data!=null){
             com.example.bepnhataapp.common.models.AddressItem addr = (com.example.bepnhataapp.common.models.AddressItem) data.getSerializableExtra("selected_address");
             if(addr!=null){
@@ -322,5 +364,21 @@ public class CheckoutActivity extends AppCompatActivity {
         com.example.bepnhataapp.common.dao.CustomerDao dao=new com.example.bepnhataapp.common.dao.CustomerDao(this);
         com.example.bepnhataapp.common.model.Customer c=dao.findByPhone(phone);
         return c!=null?c.getCustomerID():0;
+    }
+
+    private void recalcTotals(){
+        java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
+        int save=0; // recalculate save from order items
+        for(CartItem ci: orderItems){save+=ci.getTotalSave();}
+        int newDiscount = save + voucherDiscount;
+        int newGrandTotal = goodsTotalOld + shippingFee - newDiscount;
+        // update fields
+        discount = newDiscount; grandTotal = newGrandTotal;
+
+        TextView tvVoucherDiscount = findViewById(R.id.tvVoucherDiscount);
+        if(tvVoucherDiscount!=null) tvVoucherDiscount.setText("-"+nf.format(voucherDiscount)+"đ");
+        if(tvGrandTotal!=null) tvGrandTotal.setText(nf.format(newGrandTotal)+"đ");
+        if(tvBottomTotal!=null) tvBottomTotal.setText(nf.format(newGrandTotal)+"đ");
+        if(tvBottomSave!=null) tvBottomSave.setText("-"+nf.format(newDiscount)+"đ");
     }
 } 
