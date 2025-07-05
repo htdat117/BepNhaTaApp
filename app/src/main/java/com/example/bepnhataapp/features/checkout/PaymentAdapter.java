@@ -17,7 +17,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.VH>{
         public Method(int icon,String name){this.iconRes=icon;this.name=name;}
     }
     private final List<Method> methods;
-    private int selected=0;
+    private int selected = -1;
     private final OnMethodSelected listener;
     public PaymentAdapter(List<Method> m,OnMethodSelected l){this.methods=m;this.listener=l;}
 
@@ -30,11 +30,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.VH>{
         Method m=methods.get(pos);
         h.icon.setImageResource(m.iconRes);
         h.name.setText(m.name);
-        h.tick.setVisibility(pos==selected?View.VISIBLE:View.INVISIBLE);
+        h.tick.setVisibility(pos == selected ? View.VISIBLE : View.INVISIBLE);
         h.itemView.setOnClickListener(v->{
-            int old=selected;
-            selected=pos;
-            notifyItemChanged(old);
+            int old = selected;
+            selected = pos;
+            if (old >= 0) notifyItemChanged(old);
             notifyItemChanged(selected);
             if(listener!=null) listener.onSelected(selected);
         });

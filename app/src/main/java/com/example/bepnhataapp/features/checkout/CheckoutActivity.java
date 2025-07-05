@@ -179,7 +179,9 @@ public class CheckoutActivity extends AppCompatActivity {
             // Validate address
             boolean hasAddress;
             if(SessionManager.isLoggedIn(this)){
-                hasAddress = (new com.example.bepnhataapp.common.dao.AddressDao(this).getDefault( getCurrentCustomerId() )!=null);
+                // Đã đăng nhập: chỉ cần người dùng đã chọn địa chỉ giao hàng (currentAddress)
+                // thay vì buộc phải là địa chỉ mặc định trong CSDL
+                hasAddress = currentAddress != null;
             }else{
                 hasAddress = currentAddress!=null;
             }
