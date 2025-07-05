@@ -97,6 +97,7 @@ public class CheckoutActivity extends AppCompatActivity {
         cardShipping = findViewById(R.id.cardShipping);
         tvShipName = findViewById(R.id.tvShippingName);
         tvShipPhone = findViewById(R.id.tvShippingPhone);
+        tvShipLabel = findViewById(R.id.tvShippingLabel);
         layoutNamePhone = findViewById(R.id.layoutNamePhone);
 
         // initial state
@@ -106,6 +107,18 @@ public class CheckoutActivity extends AppCompatActivity {
             if(def!=null){
                 currentAddress = new com.example.bepnhataapp.common.models.AddressItem(def.getAddressID(),def.getReceiverName(),def.getPhone(),def.getAddressLine()+", "+def.getDistrict()+", "+def.getProvince(),def.isDefault());
                 currentShipNote = def.getNote();
+            }
+        } else {
+            // Guest checkout: try to load the most recent address (customerID = 0)
+            com.example.bepnhataapp.common.dao.AddressDao dao = new com.example.bepnhataapp.common.dao.AddressDao(this);
+            com.example.bepnhataapp.common.model.Address defGuest = dao.getDefault(0);
+            if(defGuest == null){
+                java.util.List<com.example.bepnhataapp.common.model.Address> guestList = dao.getByCustomer(0);
+                if(!guestList.isEmpty()) defGuest = guestList.get(0);
+            }
+            if(defGuest != null){
+                currentAddress = new com.example.bepnhataapp.common.models.AddressItem(defGuest.getAddressID(), defGuest.getReceiverName(), defGuest.getPhone(), defGuest.getAddressLine()+", "+defGuest.getDistrict()+", "+defGuest.getProvince(), defGuest.isDefault());
+                currentShipNote = defGuest.getNote();
             }
         }
 
