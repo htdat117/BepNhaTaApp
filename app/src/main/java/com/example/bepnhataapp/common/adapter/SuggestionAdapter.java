@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -218,6 +219,58 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], 1);
                 updateMacroViews(sheet, detail, servingFactor[0]);
             }
+        });
+
+        // -----------------------
+        // ACTION BUTTONS
+        // -----------------------
+        ImageView btnAddCart = sheet.findViewById(R.id.btnDialogAddCart);
+        Button btnBuyNow = sheet.findViewById(R.id.btnDialogBuyNow);
+
+        btnAddCart.setOnClickListener(v -> {
+            // Thêm sản phẩm vào giỏ theo số lượng & khẩu phần đã chọn
+            for(int i=0;i<quantity[0];i++){
+                com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, p, servingFactor[0]);
+            }
+            android.widget.Toast.makeText(context, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        btnBuyNow.setOnClickListener(v -> {
+            // Nếu chưa đăng nhập thì điều hướng về Home (giống logic ProductAdapter)
+            if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(context)){
+                android.content.Intent intentHome = new android.content.Intent(context, com.example.bepnhataapp.features.home.HomeActivity.class);
+                intentHome.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(intentHome);
+                return;
+            }
+
+            int serving = servingFactor[0];
+            int originalVariantPrice = (serving == 1) ? p.getProductPrice2() : p.getProductPrice4();
+            int salePercentVariant = (serving == 1) ? p.getSalePercent2() : p.getSalePercent4();
+            int discountedVariantPrice = originalVariantPrice * (100 - salePercentVariant) / 100;
+
+            // Normalise về giá cho gói 2 người để CartItem#getTotal nhân đúng
+            int pricePer2Pack = discountedVariantPrice / serving;
+            int oldPricePer2Pack = originalVariantPrice / serving;
+
+            com.example.bepnhataapp.common.models.CartItem cartItem = new com.example.bepnhataapp.common.models.CartItem(
+                    p.getProductID(),
+                    p.getProductName(),
+                    pricePer2Pack,
+                    oldPricePer2Pack,
+                    quantity[0],
+                    p.getProductThumb()
+            );
+            cartItem.setServing(serving == 2 ? "4 người" : "2 người");
+
+            java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> selectedItems = new java.util.ArrayList<>();
+            selectedItems.add(cartItem);
+
+            android.content.Intent intent = new android.content.Intent(context, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);
+            intent.putExtra("selected_items", selectedItems);
+            context.startActivity(intent);
+            dialog.dismiss();
         });
 
         dialog.setContentView(sheet);

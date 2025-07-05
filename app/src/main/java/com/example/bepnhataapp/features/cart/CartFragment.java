@@ -269,6 +269,51 @@ public class CartFragment extends Fragment {
             });
         }
 
+        // Xử lý nút "Lưu vào yêu thích" trong footer chỉnh sửa
+        if (btnFavorite != null) {
+            btnFavorite.setOnClickListener(v -> {
+                java.util.List<CartItem> sel = new java.util.ArrayList<>();
+                for (CartItem ci : adapter.getItems()) {
+                    if (ci.isSelected()) sel.add(ci);
+                }
+                if(sel.isEmpty()){
+                    android.widget.Toast.makeText(requireContext(), "Vui lòng chọn sản phẩm để lưu", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Kiểm tra đăng nhập
+                if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(requireContext())){
+                    android.widget.Toast.makeText(requireContext(), "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(requireContext());
+                com.example.bepnhataapp.common.dao.CustomerDao cusDao = new com.example.bepnhataapp.common.dao.CustomerDao(requireContext());
+                com.example.bepnhataapp.common.model.Customer cus = cusDao.findByPhone(phone);
+                if(cus==null){
+                    android.widget.Toast.makeText(requireContext(), "Không tìm thấy thông tin người dùng", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                com.example.bepnhataapp.common.dao.FavouriteProductDao favDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(requireContext());
+                int added = 0;
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                String now = sdf.format(new java.util.Date());
+                for(CartItem ci: sel){
+                    if(!favDao.isFavourite(ci.getProductId(), cus.getCustomerID())){
+                        favDao.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(ci.getProductId(), cus.getCustomerID(), now));
+                        added++;
+                    }
+                }
+
+                if(added>0){
+                    android.widget.Toast.makeText(requireContext(), "Đã lưu " + added + " sản phẩm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                } else {
+                    android.widget.Toast.makeText(requireContext(), "Tất cả sản phẩm đã có trong mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         return view;
     }
 
