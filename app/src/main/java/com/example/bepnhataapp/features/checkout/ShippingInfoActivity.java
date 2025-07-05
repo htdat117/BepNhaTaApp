@@ -56,42 +56,6 @@ public class ShippingInfoActivity extends AppCompatActivity {
 
         if(!SessionManager.isLoggedIn(this) && cbDefault!=null) cbDefault.setVisibility(View.GONE);
 
-        // Prefill data for NEW address (no addressId) based on customer profile or last address
-        if (addressId <= 0 && editingAddr == null) {
-            // 1. Prefill name & phone from logged-in customer profile (if any)
-            if (SessionManager.isLoggedIn(this)) {
-                String loginPhone = SessionManager.getPhone(this);
-                if (loginPhone != null) {
-                    com.example.bepnhataapp.common.model.Customer prof = new CustomerDao(this).findByPhone(loginPhone);
-                    if (prof != null) {
-                        ((EditText) findViewById(R.id.edtName)).setText(prof.getFullName());
-                        ((EditText) findViewById(R.id.edtPhone)).setText(loginPhone);
-                    }
-                }
-            }
-
-            // 2. Prefill address fields using last used address (default or latest) of this customer (or guest)
-            long custId = 0;
-            if (SessionManager.isLoggedIn(this)) {
-                String ph = SessionManager.getPhone(this);
-                if (ph != null) {
-                    com.example.bepnhataapp.common.model.Customer c = new CustomerDao(this).findByPhone(ph);
-                    if (c != null) custId = c.getCustomerID();
-                }
-            }
-            Address last = dao.getDefault(custId);
-            if (last == null) {
-                java.util.List<Address> list = dao.getByCustomer(custId);
-                if (!list.isEmpty()) last = list.get(0); // newest first
-            }
-            if (last != null) {
-                ((EditText) findViewById(R.id.edtCity)).setText(last.getProvince());
-                ((EditText) findViewById(R.id.edtDistrict)).setText(last.getDistrict());
-                ((EditText) findViewById(R.id.edtAddress)).setText(last.getAddressLine());
-                ((EditText) findViewById(R.id.edtNote)).setText(last.getNote() != null ? last.getNote() : "");
-            }
-        }
-
         Address finalEditingAddr = editingAddr; // need effectively final for lambda
 
         findViewById(R.id.btnSubmit).setOnClickListener(v -> {

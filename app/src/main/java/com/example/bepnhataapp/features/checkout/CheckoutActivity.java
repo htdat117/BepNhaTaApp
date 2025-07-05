@@ -89,14 +89,19 @@ public class CheckoutActivity extends AppCompatActivity {
         TextView tvGoodsTotal = findViewById(R.id.tvGoodsTotal);
         TextView tvShippingFee = findViewById(R.id.tvShippingFee);
         TextView tvVoucherDiscount = findViewById(R.id.tvVoucherDiscount);
+        TextView tvSaveDiscount = findViewById(R.id.tvSaveDiscount);
 
         if(tvGoodsTotal!=null) tvGoodsTotal.setText(nf.format(goodsTotalOld)+"đ");
         if(tvShippingFee!=null) tvShippingFee.setText(nf.format(shippingFee)+"đ");
         if(tvVoucherDiscount!=null) tvVoucherDiscount.setText("-"+nf.format(voucherDiscount)+"đ");
+        if(tvSaveDiscount!=null) tvSaveDiscount.setText("-"+nf.format(save)+"đ");
 
         if(tvGrandTotal!=null) tvGrandTotal.setText(nf.format(grandTotal)+"đ");
         if(tvBottomTotal!=null) tvBottomTotal.setText(nf.format(grandTotal)+"đ");
         if(tvBottomSave!=null) tvBottomSave.setText("-"+nf.format(discount)+"đ");
+
+        // Ẩn dòng Voucher ngay từ đầu nếu chưa có mã
+        updateVoucherRowVisibility();
 
         cardShipping = findViewById(R.id.cardShipping);
         tvShipName = findViewById(R.id.tvShippingName);
@@ -230,6 +235,10 @@ public class CheckoutActivity extends AppCompatActivity {
                 it.putExtra("goods_total_old", goodsTotalOld);
                 it.putExtra("shipping_fee", shippingFee);
                 it.putExtra("discount", discount);
+                // gửi chi tiết giảm giá riêng lẻ
+                int prodSave = 0; for(CartItem ci: orderItems){ prodSave += ci.getTotalSave(); }
+                it.putExtra("save_discount", prodSave);
+                it.putExtra("voucher_discount", voucherDiscount);
                 it.putExtra("grand_total", grandTotal);
                 // selected items
                 it.putExtra("selected_items", purchased);
@@ -378,9 +387,22 @@ public class CheckoutActivity extends AppCompatActivity {
         discount = newDiscount; grandTotal = newGrandTotal;
 
         TextView tvVoucherDiscount = findViewById(R.id.tvVoucherDiscount);
+        TextView tvSaveDiscount = findViewById(R.id.tvSaveDiscount);
         if(tvVoucherDiscount!=null) tvVoucherDiscount.setText("-"+nf.format(voucherDiscount)+"đ");
+        if(tvSaveDiscount!=null) tvSaveDiscount.setText("-"+nf.format(save)+"đ");
         if(tvGrandTotal!=null) tvGrandTotal.setText(nf.format(newGrandTotal)+"đ");
         if(tvBottomTotal!=null) tvBottomTotal.setText(nf.format(newGrandTotal)+"đ");
         if(tvBottomSave!=null) tvBottomSave.setText("-"+nf.format(newDiscount)+"đ");
+
+        updateVoucherRowVisibility();
+    }
+
+    private void updateVoucherRowVisibility(){
+        TextView tvVoucherDiscount = findViewById(R.id.tvVoucherDiscount);
+        if(tvVoucherDiscount==null) return;
+        View row = (View) tvVoucherDiscount.getParent();
+        if(row!=null){
+            row.setVisibility(voucherDiscount==0? View.GONE : View.VISIBLE);
+        }
     }
 } 

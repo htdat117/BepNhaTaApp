@@ -29,6 +29,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         final int goodsOld = src.getIntExtra("goods_total_old",0);
         final int shipFee = src.getIntExtra("shipping_fee",0);
         final int discount = src.getIntExtra("discount",0);
+        final int saveDiscount = src.getIntExtra("save_discount", 0);
+        final int voucherDiscount = src.getIntExtra("voucher_discount", 0);
         final int grand = src.getIntExtra("grand_total",0);
         final String paymentMethod = src.getStringExtra("payment_method");
         final String note = src.getStringExtra("note");
@@ -69,11 +71,17 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
         TextView tvGoods = findViewById(R.id.tvGoodsTotal);
         TextView tvShip = findViewById(R.id.tvShippingFee);
-        TextView tvDis = findViewById(R.id.tvVoucherDiscount);
+        TextView tvSave = findViewById(R.id.tvSaveDiscount);
+        TextView tvVoucher = findViewById(R.id.tvVoucherDiscount);
         TextView tvGrand = findViewById(R.id.tvGrandTotal);
         if(tvGoods!=null) tvGoods.setText(nf.format(goodsOld)+"đ");
         if(tvShip!=null) tvShip.setText(nf.format(shipFee)+"đ");
-        if(tvDis!=null) tvDis.setText("-"+nf.format(discount)+"đ");
+        if(tvSave!=null) tvSave.setText("-"+nf.format(saveDiscount)+"đ");
+        if(tvVoucher!=null) tvVoucher.setText("-"+nf.format(voucherDiscount)+"đ");
+        if(tvVoucher!=null){
+            View row = (View) tvVoucher.getParent();
+            if(row!=null) row.setVisibility(voucherDiscount==0? View.GONE : View.VISIBLE);
+        }
         if(tvGrand!=null) tvGrand.setText(nf.format(grand)+"đ");
 
         java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> prods = (java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem>) src.getSerializableExtra("selected_items");

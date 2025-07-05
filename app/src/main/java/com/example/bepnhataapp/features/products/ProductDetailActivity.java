@@ -70,8 +70,13 @@ public class ProductDetailActivity extends BaseActivity {
 
             final Product finalProduct = currentProduct;
             findViewById(R.id.btnAddToCart).setOnClickListener(v -> {
-                com.example.bepnhataapp.common.utils.CartHelper.addProduct(ProductDetailActivity.this, finalProduct, currentServingFactor);
-                android.widget.Toast.makeText(ProductDetailActivity.this, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
+                com.example.bepnhataapp.common.utils.CartHelper.addProduct(
+                        ProductDetailActivity.this,
+                        finalProduct,
+                        currentServingFactor,
+                        quantity
+                );
+                android.widget.Toast.makeText(ProductDetailActivity.this, "Đã thêm "+quantity+" sản phẩm vào giỏ hàng", android.widget.Toast.LENGTH_SHORT).show();
             });
         }
         if (currentProduct != null) {
@@ -237,12 +242,6 @@ public class ProductDetailActivity extends BaseActivity {
 
         // After setting adapter for pager (or at end of onCreate), add Buy Now button handler
         binding.btnBuyNow.setOnClickListener(v -> {
-            if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(ProductDetailActivity.this)){
-                Intent intentHome = new Intent(ProductDetailActivity.this, com.example.bepnhataapp.features.home.HomeActivity.class);
-                intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intentHome);
-                return;
-            }
             if (currentProduct == null) return;
             int servingFactor = currentServingFactor; // 1 for 2-person, 2 for 4-person
 
@@ -270,6 +269,7 @@ public class ProductDetailActivity extends BaseActivity {
 
             android.content.Intent intent = new android.content.Intent(ProductDetailActivity.this, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);
             intent.putExtra("selected_items", selected);
+            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
     }

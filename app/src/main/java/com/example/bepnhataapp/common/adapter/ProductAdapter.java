@@ -150,12 +150,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         // Xử lý nút "Mua ngay"
         holder.btnBuy.setOnClickListener(v -> {
-            if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(context)){
-                Intent it = new Intent(context, com.example.bepnhataapp.features.home.HomeActivity.class);
-                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                context.startActivity(it);
-                return;
-            }
             // Lấy serving factor hiện tại
             int servingFactor = 1; // default 2 người
             if (servingGroup != null && servingGroup.getCheckedButtonId() == R.id.btnFor4) {
@@ -189,6 +183,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             // Chuyển đến trang thanh toán
             Intent intent = new Intent(context, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);
             intent.putExtra("selected_items", selectedItems);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         });
     }

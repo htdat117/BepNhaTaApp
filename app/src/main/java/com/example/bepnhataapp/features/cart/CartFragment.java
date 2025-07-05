@@ -105,14 +105,14 @@ public class CartFragment extends Fragment {
                             com.example.bepnhataapp.common.dao.FavouriteProductDao favDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(ctx);
                             boolean exists = favDao.isFavourite(item.getProductId(), cus.getCustomerID());
                             if (exists) {
-                                android.widget.Toast.makeText(ctx, "Sản phẩm đã có trong mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                                android.widget.Toast.makeText(ctx, "Sản phẩm đã có trong Yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                             } else {
                                 favDao.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(
                                         item.getProductId(),
                                         cus.getCustomerID(),
                                         new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date())
                                 ));
-                                android.widget.Toast.makeText(ctx, "Đã lưu sản phẩm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                                android.widget.Toast.makeText(ctx, "Đã lưu sản phẩm vào Yêu thích ", android.widget.Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -307,9 +307,9 @@ public class CartFragment extends Fragment {
                 }
 
                 if(added>0){
-                    android.widget.Toast.makeText(requireContext(), "Đã lưu " + added + " sản phẩm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                    android.widget.Toast.makeText(requireContext(), "Đã lưu " + added + " sản phẩm vào Yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                 } else {
-                    android.widget.Toast.makeText(requireContext(), "Tất cả sản phẩm đã có trong mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                    android.widget.Toast.makeText(requireContext(), "Sản phẩm đã có trong Yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                 }
             });
         }

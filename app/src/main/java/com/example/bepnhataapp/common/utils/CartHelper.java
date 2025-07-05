@@ -30,9 +30,12 @@ public final class CartHelper {
         addProduct(ctx,p,1);
     }
 
-    /** Thêm sản phẩm với khẩu phần (1=2 người, 2=4 người). Nếu cùng product & servingFactor đã có thì +1 quantity, ngược lại tạo dòng mới */
-    public static void addProduct(Context ctx, Product p, int servingFactor){
-        if(p==null) return;
+    /**
+     * Thêm sản phẩm với khẩu phần (1=2 người, 2=4 người).
+     * @param quantity Số lượng muốn thêm (>=1)
+     */
+    public static void addProduct(Context ctx, Product p, int servingFactor, int quantity){
+        if(p==null || quantity<=0) return;
 
         long customerId = getCurrentCustomerId(ctx);
         CartDao cartDao = new CartDao(ctx);
@@ -59,17 +62,21 @@ public final class CartHelper {
             // Re-open DAO to make sure SQLite re-parses the just-altered schema
             detailDao = new CartDetailDao(ctx);
             try{
-            detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, 1));
+                detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, quantity));
             }catch(Exception inner){
-                // If it still fails, bubble up so that we can notice & fix
                 throw inner;
             }
         }else{
-            existing.setQuantity(existing.getQuantity()+1);
+            existing.setQuantity(existing.getQuantity()+quantity);
             detailDao.update(existing);
         }
 
         ctx.sendBroadcast(new android.content.Intent("com.bepnhata.CART_CHANGED"));
+    }
+
+    /** Giữ lại hàm cũ để tương thích - thêm 1 sản phẩm cùng servingFactor */
+    public static void addProduct(Context ctx, Product p, int servingFactor){
+        addProduct(ctx, p, servingFactor, 1);
     }
 
     /** Trả về danh sách CartItem để hiển thị UI. */
@@ -128,5 +135,56 @@ public final class CartHelper {
 
     private static com.example.bepnhataapp.common.databases.DBHelper helper(Context ctx){
         return new com.example.bepnhataapp.common.databases.DBHelper(ctx);
+    }
+
+    /** Cập nhật số lượng cụ thể cho một sản phẩm + variant trong giỏ hàng. */
+    public static void setQuantity(Context ctx, long productId, int servingFactor, int quantity){
+        if(quantity<=0){
+            removeProduct(ctx, productId, servingFactor);
+            return;
+        }
+
+        long customerId = getCurrentCustomerId(ctx);
+        CartDao cartDao = new CartDao(ctx);
+        Cart cart = cartDao.getByCustomer(customerId).stream().findFirst().orElse(null);
+        if(cart==null){
+            // Nếu chưa có cart thì tạo mới và insert chi tiết
+            cart = new Cart();
+            cart.setCustomerID(customerId);
+            cart.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
+            cart.setCartID(cartDao.insert(cart));
+        }
+
+        CartDetailDao detailDao = new CartDetailDao(ctx);
+        CartDetail target = null;
+        for(CartDetail cd: detailDao.getByCart(cart.getCartID())){
+            if(cd.getProductID()==productId && cd.getServingFactor()==servingFactor){
+                target = cd;
+                break;
+            }
+        }
+
+        if(target==null){
+            // Chưa tồn tại -> insert mới
+            try{
+                helper(ctx).getWritableDatabase().execSQL("ALTER TABLE "+ com.example.bepnhataapp.common.databases.DBHelper.TBL_CART_DETAILS +" ADD COLUMN servingFactor INTEGER DEFAULT 1");
+            }catch(Exception ignored){}
+            detailDao = new CartDetailDao(ctx);
+            detailDao.insert(new CartDetail(cart.getCartID(), productId, servingFactor, quantity));
+        }else{
+            target.setQuantity(quantity);
+            detailDao.update(target);
+        }
+
+        ctx.sendBroadcast(new android.content.Intent("com.bepnhata.CART_CHANGED"));
+    }
+
+    /** Thay đổi khẩu phần (servingFactor) của 1 sản phẩm variant, giữ nguyên quantity */
+    public static void changeServing(Context ctx, long productId, int oldServingFactor, int newServingFactor, int quantity){
+        if(oldServingFactor == newServingFactor) return;
+        // Xoá variant cũ
+        removeProduct(ctx, productId, oldServingFactor);
+        // Thêm variant mới với số lượng hiện tại
+        setQuantity(ctx, productId, newServingFactor, quantity);
     }
 } 

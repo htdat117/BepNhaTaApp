@@ -57,21 +57,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         });
 
         holder.btnPlus.setOnClickListener(v->{
-            int q=item.getQuantity()+1;
+            int q = item.getQuantity() + 1;
             item.setQuantity(q);
             int servingFactor = item.getServing().startsWith("4") ? 2 : 1;
-            CartHelper.addProduct(v.getContext(), new com.example.bepnhataapp.common.model.Product(){
-                {setProductID(item.getProductId());}
-            }, servingFactor);
+            CartHelper.setQuantity(v.getContext(), item.getProductId(), servingFactor, q);
             notifyItemChanged(position);
             if(listener!=null) listener.onCartChanged();
         });
 
         holder.btnMinus.setOnClickListener(v->{
             if(item.getQuantity()>1){
-                item.setQuantity(item.getQuantity()-1);
-                // decrease in DB
-                // CartHelper.setQuantity()
+                int q = item.getQuantity() - 1;
+                item.setQuantity(q);
+                int servingFactor = item.getServing().startsWith("4") ? 2 : 1;
+                CartHelper.setQuantity(v.getContext(), item.getProductId(), servingFactor, q);
                 notifyItemChanged(position);
                 if(listener!=null) listener.onCartChanged();
             }
@@ -83,7 +82,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             popup.getMenu().add("2 người");
             popup.getMenu().add("4 người");
             popup.setOnMenuItemClickListener(mi->{
-                String selected=mi.getTitle().toString();
+                String selected = mi.getTitle().toString();
+                int oldFactor = item.getServing().startsWith("4") ? 2 : 1;
+                int newFactor = selected.startsWith("4") ? 2 : 1;
+
+                if(oldFactor != newFactor){
+                    // cập nhật DB giữ nguyên quantity hiện tại
+                    CartHelper.changeServing(v.getContext(), item.getProductId(), oldFactor, newFactor, item.getQuantity());
+                }
+
                 item.setServing(selected);
                 holder.btnServing.setText(selected);
                 notifyItemChanged(pos);

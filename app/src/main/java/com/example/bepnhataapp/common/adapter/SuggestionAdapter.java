@@ -237,20 +237,11 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         });
 
         btnBuyNow.setOnClickListener(v -> {
-            // Nếu chưa đăng nhập thì điều hướng về Home (giống logic ProductAdapter)
-            if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(context)){
-                android.content.Intent intentHome = new android.content.Intent(context, com.example.bepnhataapp.features.home.HomeActivity.class);
-                intentHome.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                context.startActivity(intentHome);
-                return;
-            }
-
             int serving = servingFactor[0];
             int originalVariantPrice = (serving == 1) ? p.getProductPrice2() : p.getProductPrice4();
             int salePercentVariant = (serving == 1) ? p.getSalePercent2() : p.getSalePercent4();
             int discountedVariantPrice = originalVariantPrice * (100 - salePercentVariant) / 100;
 
-            // Normalise về giá cho gói 2 người để CartItem#getTotal nhân đúng
             int pricePer2Pack = discountedVariantPrice / serving;
             int oldPricePer2Pack = originalVariantPrice / serving;
 
@@ -269,6 +260,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
             android.content.Intent intent = new android.content.Intent(context, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);
             intent.putExtra("selected_items", selectedItems);
+            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             dialog.dismiss();
         });
