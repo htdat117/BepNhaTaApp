@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
-    android:background="#FFF">
+    android:background="@color/primary1"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/header_container"
@@ -14,9 +15,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/header_container"
-        android:layout_above="@id/bottom_navigation_container">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -488,6 +489,7 @@
                         android:text="Hotline:"
                         android:textColor="@color/dark1"
                         android:textSize="@dimen/body2" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -497,6 +499,7 @@
                         android:textColor="@color/primary1"
                         android:textSize="@dimen/body2" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -510,6 +513,7 @@
                         android:text="Email: "
                         android:textColor="@color/dark1"
                         android:textSize="@dimen/body2" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -564,4 +568,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
-</RelativeLayout>
+</LinearLayout>

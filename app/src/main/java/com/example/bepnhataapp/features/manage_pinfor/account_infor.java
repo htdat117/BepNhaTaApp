@@ -18,6 +18,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview;
+import androidx.appcompat.app.AlertDialog;
+import android.Manifest;
+import androidx.core.content.ContextCompat;
+import android.content.pm.PackageManager;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.utils.SessionManager;
@@ -34,15 +41,20 @@ public class account_infor extends AppCompatActivity {
     private Customer currentCustomer;
     private CustomerDao customerDao;
     private ActivityResultLauncher<String> pickImageLauncher;
+    private ActivityResultLauncher<Void> takePhotoLauncher;
+    private ActivityResultLauncher<String> requestCameraPermissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_account_infor);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary1));
+        WindowInsetsControllerCompat ic = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if(ic!=null) ic.setAppearanceLightStatusBars(false);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
 
@@ -64,7 +76,7 @@ public class account_infor extends AppCompatActivity {
         customerDao = new CustomerDao(this);
         loadCustomerInfo();
 
-        // Register image picker launcher
+        // Register launchers
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             if (uri != null) {
                 try {
@@ -86,7 +98,44 @@ public class account_infor extends AppCompatActivity {
             }
         });
 
-        btnCamera.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
+        takePhotoLauncher = registerForActivityResult(new TakePicturePreview(), bitmap -> {
+            if(bitmap!=null){
+                imgAvatar.setImageBitmap(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] avatarBytes = baos.toByteArray();
+                if(currentCustomer!=null){
+                    currentCustomer.setAvatar(avatarBytes);
+                    customerDao.update(currentCustomer);
+                }
+            }
+        });
+
+        requestCameraPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if(isGranted){
+                takePhotoLauncher.launch(null);
+            } else {
+                android.widget.Toast.makeText(this, "Không thể mở camera khi chưa cấp quyền", android.widget.Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnCamera.setOnClickListener(v -> {
+            CharSequence[] options = {"Chụp ảnh", "Chọn từ thư viện"};
+            new AlertDialog.Builder(account_infor.this)
+                    .setTitle("Cập nhật ảnh đại diện")
+                    .setItems(options, (dialog, which) -> {
+                        if(which==0){
+                            if(ContextCompat.checkSelfPermission(account_infor.this, Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED){
+                                takePhotoLauncher.launch(null);
+                            } else {
+                                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+                            }
+                        } else {
+                            pickImageLauncher.launch("image/*");
+                        }
+                    })
+                    .show();
+        });
 
         if (btnEdit != null) {
             btnEdit.setOnClickListener(v -> {
@@ -136,6 +185,16 @@ public class account_infor extends AppCompatActivity {
         if (avatar != null && avatar.length > 0) {
             Bitmap bmp = BitmapFactory.decodeByteArray(avatar, 0, avatar.length);
             imgAvatar.setImageBitmap(bmp);
+        } else {
+            if (gender == null || gender.trim().isEmpty() || gender.equalsIgnoreCase("Chưa cập nhật")) {
+                imgAvatar.setImageResource(R.drawable.ic_avatar); // generic user
+            } else if (gender.equalsIgnoreCase("Nam")) {
+                imgAvatar.setImageResource(R.drawable.boy);
+            } else if (gender.equalsIgnoreCase("Nữ")) {
+                imgAvatar.setImageResource(R.drawable.woman);
+            } else {
+                imgAvatar.setImageResource(R.drawable.ic_avatar);
+            }
         }
     }
 }

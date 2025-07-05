@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.dao.CustomerDao;
@@ -39,9 +42,14 @@ public class change_infor extends AppCompatActivity {
         setContentView(R.layout.activity_change_infor);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
+
+        // Điều chỉnh status bar màu cam & icon trắng
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary1));
+        WindowInsetsControllerCompat ic = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if(ic!=null) ic.setAppearanceLightStatusBars(false);
 
         // init
         edtName = findViewById(R.id.edt_name);
@@ -50,6 +58,9 @@ public class change_infor extends AppCompatActivity {
         edtBirthday = findViewById(R.id.edt_birthday);
         edtGender = findViewById(R.id.edt_gender);
         ImageButton btnBack = findViewById(R.id.btn_back);
+        ImageButton btnClearName = findViewById(R.id.btn_clear_name);
+        ImageButton btnClearPhone = findViewById(R.id.btn_clear_phone);
+        ImageButton btnClearEmail = findViewById(R.id.btn_clear_email);
         Button btnSave = findViewById(R.id.btn_save);
         ImageButton btnPickBirthday = findViewById(R.id.btn_pick_birthday);
         ImageButton btnPickGender = findViewById(R.id.btn_pick_gender);
@@ -86,6 +97,10 @@ public class change_infor extends AppCompatActivity {
         btnPickGender.setOnClickListener(v -> showGenderDialog());
 
         btnSave.setOnClickListener(v -> saveInfo());
+
+        btnClearName.setOnClickListener(v -> edtName.setText(""));
+        btnClearPhone.setOnClickListener(v -> edtPhone.setText(""));
+        btnClearEmail.setOnClickListener(v -> edtEmail.setText(""));
 
         tvErrPhone.setVisibility(android.view.View.GONE);
         tvErrEmail.setVisibility(android.view.View.GONE);

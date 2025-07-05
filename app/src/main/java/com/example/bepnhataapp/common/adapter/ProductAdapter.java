@@ -120,10 +120,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             com.example.bepnhataapp.common.dao.FavouriteProductDao favDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(context);
             if (favState[0]) {
                 favDao.delete(product.getProductID(), cus.getCustomerID());
-                android.widget.Toast.makeText(context, "Đã xoá khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
             } else {
                 favDao.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(product.getProductID(), cus.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
-                android.widget.Toast.makeText(context, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
             }
             favState[0] = !favState[0];
             holder.imgFavorite.setImageResource(favState[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
@@ -136,15 +134,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         });
 
         holder.btnAddCart.setOnClickListener(v -> {
-            // Xác định khẩu phần hiện tại
-            int servingFactor = 1; // mặc định 2 người
-            if(servingGroup != null && servingGroup.getCheckedButtonId() == R.id.btnFor4){
-                servingFactor = 2; // 4 người
-            }
-
-            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product, servingFactor);
+            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product);
             android.widget.Toast.makeText(context, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
-            // Nếu muốn mở giỏ ngay thì uncomment dòng dưới
+            // Muốn mở giỏ ngay:
             // context.startActivity(new Intent(context, com.example.bepnhataapp.features.cart.CartActivity.class));
         });
 

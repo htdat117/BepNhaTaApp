@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@color/primary1">
 
     <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/orange"
+        android:background="@color/primary1"
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
@@ -39,7 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="400dp"
@@ -115,7 +116,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/orange"/>
+                    android:background="@color/primary1"/>
 
                 <!-- Ngày sinh -->
                 <LinearLayout
@@ -144,7 +145,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/orange"/>
+                    android:background="@color/primary1"/>
 
                 <!-- Số điện thoại -->
                 <LinearLayout
@@ -173,7 +174,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/orange"/>
+                    android:background="@color/primary1"/>
 
                 <!-- Email -->
                 <LinearLayout
@@ -202,7 +203,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/orange"/>
+                    android:background="@color/primary1"/>
 
                 <!-- Giới tính -->
                 <LinearLayout
@@ -231,7 +232,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/orange"/>
+                    android:background="@color/primary1"/>
 
                 <!-- Mật khẩu -->
                 <LinearLayout
@@ -280,7 +281,7 @@
                 android:text="Đổi mật khẩu"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:backgroundTint="@color/orange"
+                android:backgroundTint="@color/primary1"
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="16dp"/>
         </LinearLayout>
