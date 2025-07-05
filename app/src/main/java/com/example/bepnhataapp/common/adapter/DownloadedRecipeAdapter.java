@@ -67,7 +67,6 @@ public class DownloadedRecipeAdapter extends RecyclerView.Adapter<DownloadedReci
                 intent.putExtra("recipeId", recipe.getRecipeId());
                 v.getContext().startActivity(intent);
             }
-            if (listener != null) listener.onView(recipe);
         });
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(recipe));
     }
