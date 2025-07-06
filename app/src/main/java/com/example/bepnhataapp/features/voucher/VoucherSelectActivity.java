@@ -3,8 +3,11 @@ package com.example.bepnhataapp.features.voucher;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +40,7 @@ public class VoucherSelectActivity extends AppCompatActivity {
             Customer customer = customerDao.findByPhone(phone);
             if (customer != null) customerId = customer.getCustomerID();
         }
+        final long currentCustomerId = customerId; // make effectively final for lambdas
         CouponDao couponDao = new CouponDao(this);
         final List<Coupon> coupons = couponDao.getAvailableForCustomer(customerId, 0);
         for (Coupon c : coupons) {
@@ -130,6 +134,55 @@ public class VoucherSelectActivity extends AppCompatActivity {
             if(summaryRow!=null && summaryRow.getVisibility()!=View.VISIBLE) summaryRow.setVisibility(View.VISIBLE);
         });
 
+        //==== New controls for manual voucher input ====
+        EditText edtVoucher = findViewById(R.id.edtVoucher);
+        Button btnApply  = findViewById(R.id.btnApply);
+        // Keep references final so we can use inside lambda
+        final List<Coupon> couponsMutable = coupons; // alias to emphasise we may mutate
+        final List<VoucherItem> voucherItemsMutable = voucherList;
+        if(btnApply!=null && edtVoucher!=null){
+            btnApply.setOnClickListener(v->{
+                String codeInput = edtVoucher.getText().toString().trim().toUpperCase();
+                if(codeInput.isEmpty()){
+                    Toast.makeText(this,"Vui lòng nhập mã voucher",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Avoid duplicate insert
+                for(Coupon cTmp: couponsMutable){
+                    if(cTmp.getCouponTitle().equalsIgnoreCase(codeInput)){
+                        Toast.makeText(this,"Voucher đã tồn tại",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                Coupon newCp = createSampleCoupon(codeInput, currentCustomerId);
+                if(newCp==null){
+                    Toast.makeText(this,"Mã voucher không hợp lệ",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                long idIns = couponDao.insert(newCp);
+                if(idIns<=0){
+                    Toast.makeText(this,"Thêm voucher thất bại",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                newCp.setCouponID(idIns);
+                couponsMutable.add(newCp);
+                boolean enabled = orderSubtotalIntent >= newCp.getMinPrice();
+                voucherItemsMutable.add(new VoucherItem(
+                        newCp.getCouponTitle(),
+                        (newCp.getCouponValue()<=100? ("Giảm "+newCp.getCouponValue()+"%") : ("Giảm "+java.text.NumberFormat.getInstance().format(newCp.getCouponValue())+"đ")) +
+                                (newCp.getMaxDiscount()!=null? (" tối đa "+java.text.NumberFormat.getInstance().format(newCp.getMaxDiscount())+"đ") : "") +
+                                ", đơn tối thiểu "+java.text.NumberFormat.getInstance().format(newCp.getMinPrice())+"đ",
+                        newCp.getExpireDate(),
+                        enabled
+                ));
+                adapter.notifyItemInserted(voucherItemsMutable.size()-1);
+                Toast.makeText(this,"Đã thêm voucher thành công",Toast.LENGTH_SHORT).show();
+                edtVoucher.setText("");
+            });
+        }
+        //==== End new controls ====
+
         findViewById(R.id.btnAgree).setOnClickListener(v->{
             int idx = adapter.getSelectedIndex();
             if(idx<0){
@@ -142,5 +195,49 @@ public class VoucherSelectActivity extends AppCompatActivity {
             setResult(RESULT_OK, result);
             finish();
         });
+    }
+
+    // Helper to create sample coupon objects based on code
+    private Coupon createSampleCoupon(String code, long customerId){
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        String today = sdf.format(cal.getTime());
+        cal.add(java.util.Calendar.DAY_OF_YEAR, 30);
+        String expire = sdf.format(cal.getTime());
+
+        Coupon c = new Coupon();
+        // Associate to customer if logged in, otherwise general
+        if(customerId>0) c.setCustomerID(customerId); else c.setCustomerID(null);
+        c.setCouponTitle(code);
+        c.setValidDate(today);
+        c.setExpireDate(expire);
+        c.setIsGeneral(customerId>0?0:1);
+        c.setExchangePoints(null);
+
+        switch(code){
+            case "GIAM10": // 10% off, no cap
+                c.setCouponValue(10);
+                c.setMinPrice(0);
+                c.setMaxDiscount(null);
+                break;
+            case "GIAM20K": // 20k VND off for orders >= 100k
+                c.setCouponValue(20000);
+                c.setMinPrice(100000);
+                c.setMaxDiscount(null);
+                break;
+            case "GIAM50K": // 50k off, cap 50k, min 300k
+                c.setCouponValue(50000);
+                c.setMinPrice(300000);
+                c.setMaxDiscount(50000);
+                break;
+            case "BEPNHATA": // 100k off, cap 100k, min 0
+                c.setCouponValue(20);
+                c.setMinPrice(200000);
+                c.setMaxDiscount(100000);
+                break;
+            default:
+                return null; // unrecognised code
+        }
+        return c;
     }
 } 

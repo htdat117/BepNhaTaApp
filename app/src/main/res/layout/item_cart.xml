@@ -111,8 +111,9 @@
                     android:layout_height="wrap_content"
                     android:text="90.000đ"
                     android:textColor="@color/primary1"
+                    android:textStyle="bold"
                     android:fontFamily="@font/inter_bold"
-                    android:textSize="@dimen/body1"
+                    android:textSize="@dimen/header4"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
         </LinearLayout>
