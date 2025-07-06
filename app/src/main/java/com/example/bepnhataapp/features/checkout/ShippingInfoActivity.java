@@ -23,7 +23,7 @@ public class ShippingInfoActivity extends AppCompatActivity {
         // header setup
         ((android.widget.TextView) findViewById(R.id.txtContent)).setText("Thông tin giao hàng");
         findViewById(R.id.txtChange).setVisibility(View.GONE);
-        findViewById(R.id.iv_logo).setOnClickListener(v -> finish());
+        // findViewById(R.id.iv_logo).setOnClickListener(v -> finish());
 
         attachClear(R.id.edtName);
         attachClear(R.id.edtPhone);

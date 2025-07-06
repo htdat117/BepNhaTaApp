@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.features.calocal.FoodItem;
 
@@ -37,7 +38,18 @@ public class FoodItemAdapter extends ArrayAdapter<FoodItem> {
         TextView textViewWeight = convertView.findViewById(R.id.textViewWeight);
         TextView textViewCalories = convertView.findViewById(R.id.textViewCalories);
 
-        imageViewFood.setImageResource(foodItem.getImageResId());
+        if (foodItem.getImageUrl() != null && !foodItem.getImageUrl().isEmpty()) {
+            Glide.with(context)
+                .load(foodItem.getImageUrl())
+                .placeholder(R.drawable.food_placeholder)
+                .error(R.drawable.food_placeholder)
+                .into(imageViewFood);
+        } else if (foodItem.getImageResId() != 0) {
+            imageViewFood.setImageResource(foodItem.getImageResId());
+        } else {
+            imageViewFood.setImageResource(R.drawable.food_placeholder);
+        }
+
         textViewFoodName.setText(foodItem.getName());
         textViewWeight.setText(String.format("Khối lượng: %.1fg", foodItem.getWeight()));
         textViewCalories.setText(String.format("Calo: %.1f kcal", foodItem.getCalories()));
