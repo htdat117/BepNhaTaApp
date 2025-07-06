@@ -53,8 +53,8 @@ public class CartFragment extends Fragment {
         tvDiscount = view.findViewById(R.id.tvDiscount);
         
         // Xử lý nút back
-        ImageView btnBack = view.findViewById(R.id.btnBack);
-        if (btnBack != null) btnBack.setOnClickListener(v -> requireActivity().finish());
+//        ImageView btnBack = view.findViewById(R.id.btnBack);
+//        if (btnBack != null) btnBack.setOnClickListener(v -> requireActivity().finish());
         
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CartAdapter(new ArrayList<>());
