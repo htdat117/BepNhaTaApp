@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="8dp">
+        android:padding="2dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvRecipe"
@@ -35,7 +35,7 @@
             android:text="Cua biển tươi"
             android:textSize="@dimen/body2"
             android:textColor="@color/dark1"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="2dp"/>
 
         <TextView
             android:id="@+id/txtQuantity"
@@ -44,7 +44,7 @@
             android:text="200 gram"
             android:textSize="@dimen/body2"
             android:textColor="@color/dark1"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="2dp"/>
 
     </LinearLayout>
 

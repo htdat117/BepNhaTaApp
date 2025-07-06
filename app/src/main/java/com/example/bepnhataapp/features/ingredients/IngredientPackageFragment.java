@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.databinding.FragmentIngredientPackageBinding;
 import com.example.bepnhataapp.common.adapter.IngredientAdapter;
-import com.example.bepnhataapp.common.models.Ingredient;
+import com.example.bepnhataapp.common.model.Ingredient;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class IngredientPackageFragment extends Fragment {
             java.util.List<com.example.bepnhataapp.common.model.ProductIngredient> piList = piDao.getIngredientsOfProduct(productId);
             com.example.bepnhataapp.common.dao.IngredientDao ingDao = new com.example.bepnhataapp.common.dao.IngredientDao(requireContext());
             for (com.example.bepnhataapp.common.model.ProductIngredient pi : piList) {
-                com.example.bepnhataapp.common.model.Ingredient ingEntity = ingDao.getById(pi.getIngredientID());
+                Ingredient ingEntity = ingDao.getById(pi.getIngredientID());
                 if (ingEntity != null) {
                     double qty = pi.getQuantity() * servingFactor;
                     String qtyStr = (qty == (int)qty ? String.valueOf((int)qty) : String.valueOf(qty));
@@ -74,12 +74,10 @@ public class IngredientPackageFragment extends Fragment {
             ingredientList.add(new Ingredient(R.drawable.food_placeholder, "Không có dữ liệu", ""));
         }
 
-        ingredientAdapter = new com.example.bepnhataapp.common.adapter.IngredientAdapter(getContext(), ingredientList);
+        ingredientAdapter = new com.example.bepnhataapp.common.adapter.IngredientAdapter(getContext(), ingredientList, R.layout.item_ingredient_row);
         binding.rvIngredients.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvIngredients.setAdapter(ingredientAdapter);
-
         // Header text
-        binding.getRoot().findViewById(android.R.id.content);
         android.widget.TextView tvHeader = binding.getRoot().findViewById(R.id.tvServingHeader);
         if(tvHeader!=null){
             tvHeader.setText("Nguyên liệu cho " + (servingFactor==1?2:4) + " người");
@@ -95,29 +93,33 @@ public class IngredientPackageFragment extends Fragment {
         // re-fetch and update list quickly
         long productId = getArguments()!=null ? getArguments().getLong(ARG_PRODUCT_ID,-1):-1;
         if(productId==-1) return;
-        java.util.List< com.example.bepnhataapp.common.models.Ingredient> newList = new java.util.ArrayList<>();
+        java.util.List<Ingredient> newList = new java.util.ArrayList<>();
         com.example.bepnhataapp.common.dao.ProductIngredientDao piDao = new com.example.bepnhataapp.common.dao.ProductIngredientDao(requireContext());
         java.util.List<com.example.bepnhataapp.common.model.ProductIngredient> piList = piDao.getIngredientsOfProduct(productId);
         com.example.bepnhataapp.common.dao.IngredientDao ingDao = new com.example.bepnhataapp.common.dao.IngredientDao(requireContext());
         for(com.example.bepnhataapp.common.model.ProductIngredient pi : piList){
-            com.example.bepnhataapp.common.model.Ingredient ingEntity = ingDao.getById(pi.getIngredientID());
+            Ingredient ingEntity = ingDao.getById(pi.getIngredientID());
             if(ingEntity!=null){
                 double qty = pi.getQuantity()*servingFactor;
                 String qtyStr = (qty==(int)qty?String.valueOf((int)qty):String.valueOf(qty));
                 String qtyText = qtyStr + " " + (ingEntity.getUnit()!=null? ingEntity.getUnit():"");
                 if(ingEntity.getImageLink()!=null && !ingEntity.getImageLink().isEmpty()){
-                    newList.add(new com.example.bepnhataapp.common.models.Ingredient(ingEntity.getImageLink(), ingEntity.getIngredientName(), qtyText));
+                    newList.add(new Ingredient(ingEntity.getImageLink(), ingEntity.getIngredientName(), qtyText));
                 } else {
                     byte[] imgData = ingEntity.getImage();
                     if(imgData!=null && imgData.length>0){
-                        newList.add(new com.example.bepnhataapp.common.models.Ingredient(imgData, ingEntity.getIngredientName(), qtyText));
+                        newList.add(new Ingredient(imgData, ingEntity.getIngredientName(), qtyText));
                     } else {
-                        newList.add(new com.example.bepnhataapp.common.models.Ingredient(R.drawable.food_placeholder, ingEntity.getIngredientName(), qtyText));
+                        newList.add(new Ingredient(R.drawable.food_placeholder, ingEntity.getIngredientName(), qtyText));
                     }
                 }
             }
         }
         if(ingredientAdapter!=null) ingredientAdapter.updateData(newList);
+        else {
+            ingredientAdapter = new com.example.bepnhataapp.common.adapter.IngredientAdapter(getContext(), newList, R.layout.item_ingredient_row);
+            if(binding!=null) binding.rvIngredients.setAdapter(ingredientAdapter);
+        }
 
         // update header text
         if(getView()!=null){

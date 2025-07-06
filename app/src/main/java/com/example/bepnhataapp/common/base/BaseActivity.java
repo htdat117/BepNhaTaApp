@@ -172,7 +172,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                     try {
                         Bitmap bmp = BitmapFactory.decodeByteArray(customer.getAvatar(), 0, customer.getAvatar().length);
                         if (bmp != null) {
-                            // Bảo đảm bitmap được cắt tròn (cho API <21 hoặc phòng hờ)
                             Bitmap circleBmp = getCircularBitmap(bmp);
                             ivLogo.setImageBitmap(circleBmp);
                             avatarSet = true;
@@ -180,7 +179,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                     } catch (Exception ignored) { }
                 }
                 if (!avatarSet) {
-                    ivLogo.setImageResource(R.drawable.ic_avatar);
+                    String gender = customer != null ? customer.getGender() : null;
+                    if (gender == null || gender.trim().isEmpty() || gender.equalsIgnoreCase("Chưa cập nhật")) {
+                        ivLogo.setImageResource(R.drawable.ic_avatar);
+                    } else if (gender.equalsIgnoreCase("Nam")) {
+                        ivLogo.setImageResource(R.drawable.boy);
+                    } else if (gender.equalsIgnoreCase("Nữ")) {
+                        ivLogo.setImageResource(R.drawable.woman);
+                    } else {
+                        ivLogo.setImageResource(R.drawable.ic_avatar);
+                    }
                 }
             }
         } else {

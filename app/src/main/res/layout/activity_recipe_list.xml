@@ -245,7 +245,7 @@
             android:textSize="@dimen/body2"/>
 
         <TextView
-            android:id="@+id/txtFilter"
+            android:id="@+id/txtSortOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A - Z"
@@ -266,9 +266,11 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_filter" />
+            android:id="@+id/btnFilterRecipe"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_filter"
+            android:contentDescription="Lọc công thức"/>
 
     </LinearLayout>
 

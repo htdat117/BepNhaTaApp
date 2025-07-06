@@ -172,7 +172,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
         // initial total price display
         final int[] pricePerPack = {currentPrice};
-        updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], 1);
+        updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], servingFactor[0]);
 
         btnPlus.setOnClickListener(v -> {
             quantity[0]++;
@@ -216,7 +216,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 int stockPackages = servingFactor[0]==1 ? p.getInventory2() : p.getInventory4();
                 tvStock.setText("Kho: " + stockPackages);
 
-                updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], 1);
+                updateTotalPrice(tvTotalPrice, pricePerPack[0], quantity[0], servingFactor[0]);
                 updateMacroViews(sheet, detail, servingFactor[0]);
             }
         });
@@ -270,8 +270,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     }
 
     private void updateTotalPrice(TextView tv, int basePrice, int quantity, int servingFactor){
-        int total = basePrice * quantity * servingFactor;
-        tv.setText(formatPrice(total));
+        // Luôn hiển thị giá gốc (một gói) theo khẩu phần hiện tại, không nhân số lượng
+        tv.setText(formatPrice(basePrice));
     }
 
     private String formatMacro(double value,String label){

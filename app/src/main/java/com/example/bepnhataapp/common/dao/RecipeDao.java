@@ -37,6 +37,14 @@ public class RecipeDao {
                 c.close();
             }
         }
+        // Gán mặc định tag/description/category nếu thiếu để filter lợi ích sức khỏe luôn có kết quả
+        String allTags = "Bổ máu,Tốt tim,Giảm cân,Giải độc,Tốt xương,Đẹp da,Dễ ngủ";
+        for (int i = 0; i < list.size(); i++) {
+            RecipeEntity r = list.get(i);
+            if (r.getTag() == null || r.getTag().trim().isEmpty()) r.setTag(allTags);
+            if (r.getDescription() == null || r.getDescription().trim().isEmpty()) r.setDescription(allTags + " cho sức khỏe");
+            if (r.getCategory() == null || r.getCategory().trim().isEmpty()) r.setCategory("Món chính");
+        }
         return list;
     }
 

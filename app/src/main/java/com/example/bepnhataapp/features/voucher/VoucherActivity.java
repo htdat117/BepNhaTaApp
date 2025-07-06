@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +25,8 @@ import com.example.bepnhataapp.common.utils.SessionManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+
 public class VoucherActivity extends AppCompatActivity {
 
     @Override
@@ -32,7 +36,7 @@ public class VoucherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voucher);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
 
@@ -80,5 +84,10 @@ public class VoucherActivity extends AppCompatActivity {
             }
             rvVouchers.setVisibility(voucherList.isEmpty() ? View.GONE : View.VISIBLE);
         }
+
+        // Màu status bar + icon trắng
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary1));
+        WindowInsetsControllerCompat ic = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if(ic!=null) ic.setAppearanceLightStatusBars(false);
     }
 }

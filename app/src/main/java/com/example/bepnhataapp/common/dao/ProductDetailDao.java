@@ -73,6 +73,17 @@ public class ProductDetailDao {
         return null;
     }
 
+    public ProductDetail getByRecipeId(long recipeId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c = db.query(DBHelper.TBL_PRODUCT_DETAILS, null, "recipeID=?", new String[]{String.valueOf(recipeId)}, null, null, null);
+        if (c != null && c.moveToFirst()) {
+            ProductDetail d = cursorToDetail(c);
+            c.close();
+            return d;
+        }
+        return null;
+    }
+
     public long insert(ProductDetail d) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = toCV(d);
