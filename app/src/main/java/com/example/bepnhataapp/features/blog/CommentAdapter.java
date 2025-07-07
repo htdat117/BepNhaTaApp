@@ -12,14 +12,18 @@ import java.util.List;
 import java.util.Locale;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.model.BlogComment;
+import com.example.bepnhataapp.common.dao.CustomerDao;
+import com.example.bepnhataapp.common.model.Customer;
+import android.graphics.BitmapFactory;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
-    private final List<Comment> commentList;
+    private List<BlogComment> commentList;
 
-    public CommentAdapter(List<Comment> commentList) {
+    public CommentAdapter(List<BlogComment> commentList) {
         this.commentList = commentList;
     }
 
@@ -32,29 +36,40 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        Comment comment = commentList.get(position);
-        holder.textViewUserName.setText(comment.getUserName());
-        holder.textViewTime.setText(comment.getTime());
-        holder.textViewCommentText.setText(comment.getCommentText());
-        holder.textViewLikes.setText(String.format(Locale.getDefault(), "Hữu ích (%d)", comment.getLikes()));
-
-        // Set profile image (using placeholder for now)
-        holder.imageViewProfile.setImageResource(R.drawable.profile_placeholder);
-
-        // Set like icon (using outline for now)
+        BlogComment comment = commentList.get(position);
+        // Lấy thông tin user
+        CustomerDao customerDao = new CustomerDao(holder.itemView.getContext());
+        Customer customer = customerDao.findById(comment.getCustomerID());
+        if (customer != null) {
+            holder.textViewUserName.setText(customer.getFullName());
+            byte[] avatar = customer.getAvatar();
+            if (avatar != null && avatar.length > 0) {
+                holder.imageViewProfile.setImageBitmap(BitmapFactory.decodeByteArray(avatar, 0, avatar.length));
+            } else {
+                holder.imageViewProfile.setImageResource(R.drawable.profile_placeholder);
+            }
+        } else {
+            holder.textViewUserName.setText("Ẩn danh");
+            holder.imageViewProfile.setImageResource(R.drawable.profile_placeholder);
+        }
+        holder.textViewTime.setText(comment.getCreatedAt());
+        holder.textViewCommentText.setText(comment.getContent());
+        holder.textViewLikes.setText(String.format(Locale.getDefault(), "Hữu ích (%d)", comment.getUsefulness()));
         holder.imageViewLike.setImageResource(R.drawable.ic_like_outline);
-
-        // Handle like button click
         holder.imageViewLike.setOnClickListener(v -> {
-            // TODO: Implement like logic here (e.g., update comment.likes and notifyDataSetChanged)
-            // For now, just a placeholder action
-            Toast.makeText(holder.itemView.getContext(), "Thích bình luận", Toast.LENGTH_SHORT).show();
+            // TODO: Xử lý like bình luận
         });
     }
 
     @Override
     public int getItemCount() {
         return commentList.size();
+    }
+
+    public void updateData(List<BlogComment> newList) {
+        this.commentList.clear();
+        this.commentList.addAll(newList);
+        notifyDataSetChanged();
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {

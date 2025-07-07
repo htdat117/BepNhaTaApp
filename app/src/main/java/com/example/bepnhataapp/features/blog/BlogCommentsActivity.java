@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.dao.BlogCommentDao;
+import com.example.bepnhataapp.common.model.BlogComment;
 
 public class BlogCommentsActivity extends AppCompatActivity {
 
@@ -32,16 +34,11 @@ public class BlogCommentsActivity extends AppCompatActivity {
         recyclerViewComments = findViewById(R.id.recyclerViewComments);
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
 
-        commentList = new ArrayList<>();
-        // Thêm dữ liệu mẫu
-        commentList.add(new Comment("Kiên Đoàn", "2 ngày trước", "Bài viết rất hữu ích! Cảm ơn Bếp Nhà Ta đã chia sẻ", 2));
-        commentList.add(new Comment("Bếp Nhà Ta", "2 ngày trước", "Cảm ơn bạn đã chia sẻ. Bếp Nhà Ta sẽ tiếp tục chia sẻ những bài viết bổ ích trong thời gian sắp tới!", 0));
-        commentList.add(new Comment("Đức Mạnh", "2 giờ trước", "Tôi đã áp dụng và thành công. Món ăn rất ngon, hợp với khẩu vị của gia đình. Con trai tôi ăn 3 chén cơm liền, cháu tôi Hưng Trần ăn rất ngon miệng, ăn xong vẫn thèm. Cảm ơn chia sẻ của Bếp Nhà Ta rất nhiều!!", 2));
-        commentList.add(new Comment("Bếp Nhà Ta", "2 giờ trước", "Cảm ơn bạn đã chia sẻ. Bếp Nhà Ta sẽ tiếp tục chia sẻ những bài viết bổ ích trong thời gian sắp tới!", 0));
-        commentList.add(new Comment("Đức Mạnh", "2 giờ trước", "Tôi đã áp dụng và thành công. Món ăn rất ngon, hợp với khẩu vị của gia đình. Con trai tôi ăn 3 chén cơm liền, cháu tôi Hưng Trần ăn rất ngon miệng, ăn xong vẫn thèm. Cảm ơn chia sẻ của Bếp Nhà Ta rất nhiều!!", 0));
-        commentList.add(new Comment("Bếp Nhà Ta", "2 giờ trước", "Cảm ơn bạn đã chia sẻ. Bếp Nhà Ta sẽ tiếp tục chia sẻ những bài viết bổ ích trong thời gian sắp tới!", 0));
-
-        commentAdapter = new CommentAdapter(commentList);
+        // Lấy blogID từ intent hoặc bundle
+        long blogID = getIntent().getLongExtra("blogID", -1);
+        BlogCommentDao dao = new BlogCommentDao(this);
+        List<BlogComment> commentList = dao.getByBlog(blogID);
+        CommentAdapter commentAdapter = new CommentAdapter(commentList);
         recyclerViewComments.setAdapter(commentAdapter);
     }
 

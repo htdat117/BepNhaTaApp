@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.PopupMenu;
+import android.view.MenuItem;
 
 import com.example.bepnhataapp.R;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import com.example.bepnhataapp.common.dao.RecipeDao;
 import com.example.bepnhataapp.common.model.RecipeEntity;
+import com.example.bepnhataapp.common.adapter.CategoryAdapter;
+import com.example.bepnhataapp.common.models.Category;
 
 public class RecipeListFragment extends Fragment {
 
@@ -62,8 +66,9 @@ public class RecipeListFragment extends Fragment {
                 imgData,
                 entity.getRecipeName(),
                 "", // calories
-                entity.getCategory() != null ? entity.getCategory() : "",
-                "" // time
+                "", // protein
+                "", // time
+                entity.getCategory() != null ? entity.getCategory() : ""
             ));
         }
 
@@ -115,6 +120,37 @@ public class RecipeListFragment extends Fragment {
             }
             adapter.notifyDataSetChanged();
         });
+
+        // Khởi tạo RecyclerView danh mục dùng lại adapter của trang nguyên liệu
+        RecyclerView rvCategories = view.findViewById(R.id.rvCategories);
+        if (rvCategories != null) {
+            rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            java.util.List<Category> categories = new java.util.ArrayList<>();
+            categories.add(new Category(R.drawable.cate_product_all, "Tất cả"));
+            categories.add(new Category(R.drawable.cate_product_grill, "Món nướng"));
+            categories.add(new Category(R.drawable.cate_product_kho, "Món kho"));
+            categories.add(new Category(R.drawable.cate_product_stir, "Món xào"));
+            categories.add(new Category(R.drawable.cate_product_noodle, "Món nước"));
+            categories.add(new Category(R.drawable.cate_product_vegetarian, "Món chay"));
+            CategoryAdapter categoryAdapter = new CategoryAdapter(getContext(), categories);
+            rvCategories.setAdapter(categoryAdapter);
+            categoryAdapter.setOnCategoryClickListener(categoryName -> {
+                // Lọc công thức theo danh mục
+                java.util.List<RecipeItem> filtered = new java.util.ArrayList<>();
+                if (categoryName.equals("Tất cả")) {
+                    filtered.addAll(recipeItems);
+                } else {
+                    for (RecipeItem item : recipeItems) {
+                        if (item.getCategory() != null && item.getCategory().equals(categoryName)) {
+                            filtered.add(item);
+                        }
+                    }
+                }
+                recipeItems.clear();
+                recipeItems.addAll(filtered);
+                adapter.notifyDataSetChanged();
+            });
+        }
 
         return view;
     }
@@ -204,8 +240,9 @@ public class RecipeListFragment extends Fragment {
                     imgData,
                     entity.getRecipeName(),
                     "", // calories
-                    entity.getCategory() != null ? entity.getCategory() : "",
-                    "" // time
+                    "", // protein
+                    "", // time
+                    entity.getCategory() != null ? entity.getCategory() : ""
                 ));
             }
         }

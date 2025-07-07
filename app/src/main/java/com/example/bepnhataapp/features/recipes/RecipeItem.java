@@ -8,6 +8,7 @@ public class RecipeItem {
     private String calories;
     private String protein;
     private String time;
+    private String category;
 
     public RecipeItem(int imageResId, String name, String calories, String protein, String time) {
         this.imageResId = imageResId;
@@ -19,7 +20,7 @@ public class RecipeItem {
         this.imageData = null;
     }
 
-    public RecipeItem(int imageResId, String imageUrl, byte[] imageData, String name, String calories, String protein, String time) {
+    public RecipeItem(int imageResId, String imageUrl, byte[] imageData, String name, String calories, String protein, String time, String category) {
         this.imageResId = imageResId;
         this.imageUrl = imageUrl;
         this.imageData = imageData;
@@ -27,6 +28,7 @@ public class RecipeItem {
         this.calories = calories;
         this.protein = protein;
         this.time = time;
+        this.category = category;
     }
 
     // Getters
@@ -56,5 +58,9 @@ public class RecipeItem {
 
     public byte[] getImageData() {
         return imageData;
+    }
+
+    public String getCategory() {
+        return category;
     }
 } 

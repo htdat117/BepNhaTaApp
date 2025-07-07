@@ -122,7 +122,8 @@
 
             <!-- Bình luận -->
             <TextView
-                android:text="Bình luận (20)"
+                android:id="@+id/tvCommentCount"
+                android:text="Bình luận (0)"
                 android:textStyle="bold"
                 android:textColor="@color/dark1"
                 android:textSize="16sp"
@@ -140,17 +141,40 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"/>
             <!-- Nhập bình luận mới -->
-            <EditText
-                android:id="@+id/edtComment"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Chia sẻ cảm nhận của bạn"
-                android:background="@drawable/bg_edittext_thin_outline"
+                android:orientation="horizontal"
+                android:background="#F6F6F6"
+                android:padding="8dp"
                 android:layout_marginTop="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:layout_alignParentBottom="true">
+
+                <EditText
+                    android:id="@+id/edtComment"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_comment_input"
+                    android:hint="Chia sẻ cảm nhận của bạn"
+                    android:textColorHint="#B0B0B0"
+                    android:textColor="#222"
+                    android:padding="10dp"
+                    android:textSize="14sp"
+                    android:singleLine="true"/>
+
+                <ImageButton
+                    android:id="@+id/btnSendComment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_send"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Gửi bình luận"
+                    android:tint="#EA5C2B"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
 
             <!-- Divider after comments -->
             <View

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.bepnhataapp.R;
+import com.example.bepnhataapp.common.model.BlogEntity;
 import com.example.bepnhataapp.common.models.Blog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,12 @@ import com.example.bepnhataapp.common.adapter.BlogAdapter;
 import com.example.bepnhataapp.features.blog.Comment;
 import com.example.bepnhataapp.features.blog.CommentAdapter;
 import com.bumptech.glide.Glide;
+import com.example.bepnhataapp.common.dao.BlogCommentDao;
+import com.example.bepnhataapp.common.model.BlogComment;
+import com.example.bepnhataapp.common.dao.BlogDao;
+import java.util.Collections;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class BlogDetailActivity extends AppCompatActivity {
 
@@ -73,21 +80,66 @@ public class BlogDetailActivity extends AppCompatActivity {
     private void setupCommentSection() {
         RecyclerView rvComments = findViewById(R.id.rvComments);
         rvComments.setLayoutManager(new LinearLayoutManager(this));
-        List<Comment> commentList = new ArrayList<>();
-        commentList.add(new Comment("Kiên Đoàn", "2 ngày trước", "Bài viết rất hữu ích! Cảm ơn Bếp Nhà Ta đã chia sẻ", 2));
-        commentList.add(new Comment("Bếp Nhà Ta", "2 ngày trước", "Cảm ơn bạn đã chia sẻ. Bếp Nhà Ta sẽ tiếp tục chia sẻ những bài viết bổ ích trong thời gian sắp tới!", 0));
-        commentList.add(new Comment("Đức Mạnh", "2 giờ trước", "Tôi đã áp dụng và thành công. Món ăn rất ngon, hợp với khẩu vị của gia đình. Con trai tôi ăn 3 chén cơm liền, cháu tôi Hưng Trần ăn rất ngon miệng, ăn xong vẫn thèm. Cảm ơn chia sẻ của Bếp Nhà Ta rất nhiều!!", 2));
+        long blogID = getIntent().getLongExtra("blogID", -1);
+        BlogCommentDao dao = new BlogCommentDao(this);
+        List<BlogComment> commentList = dao.getByBlog(blogID);
         CommentAdapter commentAdapter = new CommentAdapter(commentList);
         rvComments.setAdapter(commentAdapter);
+
+        // Hiển thị số lượng bình luận thực
+        TextView tvCommentCount = findViewById(R.id.tvCommentCount);
+        if (tvCommentCount != null) {
+            tvCommentCount.setText("Bình luận (" + commentList.size() + ")");
+        }
+
+        // Xử lý gửi bình luận
+        EditText edtComment = findViewById(R.id.edtComment);
+        ImageButton btnSend = findViewById(R.id.btnSendComment);
+        btnSend.setOnClickListener(v -> {
+            String content = edtComment.getText().toString().trim();
+            if (!content.isEmpty()) {
+                // Lấy user hiện tại (ví dụ: customerID = 1, cần thay bằng user thực tế)
+                long customerID = 1;
+                BlogComment newComment = new BlogComment();
+                newComment.setBlogID(blogID);
+                newComment.setCustomerID(customerID);
+                newComment.setContent(content);
+                newComment.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(new java.util.Date()));
+                newComment.setUsefulness(0);
+                dao.insert(newComment);
+                // Reload lại danh sách bình luận
+                List<BlogComment> updatedList = dao.getByBlog(blogID);
+                commentAdapter.updateData(updatedList);
+                if (tvCommentCount != null) {
+                    tvCommentCount.setText("Bình luận (" + updatedList.size() + ")");
+                }
+                edtComment.setText("");
+            }
+        });
     }
 
     private void setupSuggestionSection() {
         RecyclerView rvSuggest = findViewById(R.id.rvSuggest);
         rvSuggest.setLayoutManager(new LinearLayoutManager(this));
-        List<com.example.bepnhataapp.common.models.Blog> suggestBlogList = new ArrayList<>();
-        suggestBlogList.add(new com.example.bepnhataapp.common.models.Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "", "Mẹo hay - Nấu chuẩn", "", false, "31/3/2025", 20, 15));
-        suggestBlogList.add(new com.example.bepnhataapp.common.models.Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "", "Mẹo hay - Nấu chuẩn", "", false, "31/3/2025", 20, 15));
-        suggestBlogList.add(new com.example.bepnhataapp.common.models.Blog("Thực đơn 3 món ngon cho bữa tối mùa đông se lạnh", "", "Mẹo hay - Nấu chuẩn", "", false, "31/3/2025", 20, 15));
+        BlogDao blogDao = new BlogDao(this);
+        List<BlogEntity> allBlogEntities = blogDao.getAll();
+        List<Blog> allBlogs = new ArrayList<>();
+        for (BlogEntity entity : allBlogEntities) {
+            allBlogs.add(new Blog(
+                entity.getBlogID(),
+                entity.getTitle(),
+                entity.getContent(), // description
+                entity.getTag(),     // category
+                entity.getImageThumb(),
+                false, // isFavorite (chưa có trường này trong entity)
+                entity.getCreatedAt(),
+                0, // likes (chưa có trường này trong entity)
+                0  // views (chưa có trường này trong entity)
+            ));
+        }
+        Collections.shuffle(allBlogs);
+        int maxSuggest = 5;
+        List<Blog> suggestBlogList = allBlogs.size() > maxSuggest ? allBlogs.subList(0, maxSuggest) : allBlogs;
         com.example.bepnhataapp.common.adapter.BlogAdapter suggestBlogAdapter = new com.example.bepnhataapp.common.adapter.BlogAdapter(suggestBlogList);
         rvSuggest.setAdapter(suggestBlogAdapter);
     }

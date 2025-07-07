@@ -1,286 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".features.recipes.RecipeList">
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary4"
-        android:fillViewport="false"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:scrollbars="none">
-
-        <!-- LinearLayout phải là wrap_content để cuộn được -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp">
-
-            <!-- Mục 1 -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardTatCa"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@android:color/transparent"
-                    app:strokeWidth="2dp">
-
-                    <ImageView
-                        android:id="@+id/imvTatCa"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/cate_product_all" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/txtTatCa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Tất cả"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/body3"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:layout_marginStart="32dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardGrill"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@android:color/transparent"
-                    app:strokeWidth="2dp">
-
-                    <ImageView
-                        android:id="@+id/imvGrill"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/cate_product_grill" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/txtGrill"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Món nướng"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/body3"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:layout_marginStart="32dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardKho"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@android:color/transparent"
-                    app:strokeWidth="2dp">
-
-                    <ImageView
-                        android:id="@+id/imvKho"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/cate_product_kho" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/txtKho"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Món kho"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/body3"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:layout_marginStart="32dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardStir"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@android:color/transparent"
-                    app:strokeWidth="2dp">
-
-                    <ImageView
-                        android:id="@+id/imvStir"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/cate_product_stir" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/txtStir"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Món xào"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/body3"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:layout_marginStart="32dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardNoodle"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@android:color/transparent"
-                    app:strokeWidth="2dp">
-
-                    <ImageView
-                        android:id="@+id/imvNoodle"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/cate_product_noodle" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/txtNoodle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Món nước"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/body3"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:layout_marginStart="32dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardVegetarian"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@android:color/transparent"
-                    app:strokeWidth="2dp">
-
-                    <ImageView
-                        android:id="@+id/imvVegetarian"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/cate_product_vegetarian" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/txtVegetarian"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Món chay"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/body3"/>
-            </LinearLayout>
-        </LinearLayout>
-    </HorizontalScrollView>
+    android:fitsSystemWindows="false">
 
     <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        tools:context=".features.recipes.RecipeList">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Danh mục công thức dạng RecyclerView giống nguyên liệu -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sắp xếp theo:"
-            android:textColor="@color/dark1"
-            android:textSize="@dimen/body2"/>
+            android:nestedScrollingEnabled="false"
+            android:layout_marginTop="8dp"/>
 
-        <TextView
-            android:id="@+id/txtSortOption"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="A - Z"
-            android:layout_marginStart="8sp"
-            android:textColor="@color/primary1"
-            android:textSize="@dimen/body2"/>
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:src="@drawable/ic_arrow_down"
-            android:layout_marginStart="8dp"
-            android:layout_gravity="center_vertical"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sắp xếp theo:"
+                android:textColor="@color/dark1"
+                android:textSize="@dimen/body2"/>
 
-        <View
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/txtSortOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A - Z"
+                android:layout_marginStart="8sp"
+                android:textColor="@color/primary1"
+                android:textSize="@dimen/body2"/>
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_arrow_down"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center_vertical"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/btnFilterRecipe"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_filter"
+                android:contentDescription="Lọc công thức"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecipe"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingVertical="4dp">
 
-        <ImageView
-            android:id="@+id/btnFilterRecipe"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_filter"
-            android:contentDescription="Lọc công thức"/>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRecipe"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingVertical="4dp">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>
