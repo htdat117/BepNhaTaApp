@@ -10,7 +10,8 @@
     <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
+        android:paddingHorizontal="16dp"
         android:background="@color/primary1"
         android:gravity="center_vertical"
         android:orientation="horizontal">

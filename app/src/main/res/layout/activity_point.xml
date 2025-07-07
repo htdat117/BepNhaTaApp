@@ -10,12 +10,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#F36B22">
+        android:background="@color/primary1">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="12dp"
@@ -125,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="#F36B22"
+                android:textColor="@color/primary1"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:gravity="center"
@@ -139,7 +139,7 @@
                 android:text="Đổi điểm quà tặng"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
-                android:backgroundTint="#F36B22"
+                android:backgroundTint="@color/primary1"
                 android:background="@drawable/bg_button_rounded_orange"
                 android:textSize="17sp"
                 android:layout_gravity="center"
@@ -179,7 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bạn chưa có điểm nào. Hãy tham gia các hoạt động như đặt món, đánh giá, chia sẻ... để tích lũy điểm nhé!"
-                    android:textColor="#F36B22"
+                    android:textColor="@color/primary1"
                     android:textSize="16sp"
                     android:gravity="center"
                     android:layout_marginTop="12dp"/>

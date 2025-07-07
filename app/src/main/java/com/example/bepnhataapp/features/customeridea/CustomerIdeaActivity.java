@@ -196,7 +196,7 @@ public class CustomerIdeaActivity extends AppCompatActivity {
         setupClearButtonWithAction(edtContent);
 
         // Back button
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
 
         // Ẩn icon cảnh báo mặc định của TextInputLayout (chỉ hiển thị mỗi dòng chữ đỏ bên dưới)
         tilName.setErrorIconDrawable(null);
