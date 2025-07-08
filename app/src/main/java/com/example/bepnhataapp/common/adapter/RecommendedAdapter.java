@@ -16,7 +16,6 @@ import java.util.List;
 
 public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    // ******************** Data model ********************
     public static class RecoItem {
         public final int imageRes; // 0 if using URL
         public final String imageUrl; // may be null

@@ -19,7 +19,6 @@ import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.repository.LocalMealPlanRepository;
 import com.example.bepnhataapp.common.adapter.RecommendedAdapter;
 import com.example.bepnhataapp.common.adapter.GridSpacingItemDecoration;
-import com.example.bepnhataapp.features.mealplan.WeekTimelineFragment;
 import java.time.LocalDate;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import androidx.annotation.NonNull;
@@ -52,12 +51,12 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
             @NonNull
             @Override
             public <T extends androidx.lifecycle.ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new MealPlanViewModel(new LocalMealPlanRepository(MealPlanContentActivity.this));
+                return (T) new MealPlanViewModel(new LocalMealPlanRepository(getApplicationContext()));
             }
         }).get(MealPlanViewModel.class);
         
         // Back button
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        findViewById(R.id.btnBack).setOnClickListener(v -> MealPlanContentActivity.this.finish());
 
         String dateExtraStr = getIntent().getStringExtra("SELECTED_DATE");
         if(dateExtraStr!=null){
