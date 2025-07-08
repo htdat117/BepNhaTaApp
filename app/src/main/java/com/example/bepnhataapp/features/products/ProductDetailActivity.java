@@ -188,8 +188,9 @@ public class ProductDetailActivity extends BaseActivity {
                 tvLogin.setText("Đăng nhập");
             }
         }
+        // Back action handled later in header section; keep ivLogo fallback if needed
         if(ivLogo != null) {
-            ivLogo.setOnClickListener(v -> finish()); // dùng logo làm nút back
+            ivLogo.setOnClickListener(v -> finish()); // fallback if back header not present yet
         }
 
         // Demo reviews & suggestions data
@@ -298,8 +299,8 @@ public class ProductDetailActivity extends BaseActivity {
 
         // Xử lý header phụ (back + tiêu đề)
         TextView tvBackHeader = findViewById(R.id.txtContent);
-        ImageView btnBack = findViewById(R.id.btnBack);
         if(tvBackHeader != null) tvBackHeader.setText("Chi tiết sản phẩm");
+        ImageView btnBack = findViewById(R.id.btnBack);
         if(btnBack != null) btnBack.setOnClickListener(v -> finish());
     }
 

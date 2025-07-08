@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".features.recipes.RecipeDetail">
 
-    <include layout="@layout/layout_custom_header"
+    <include layout="@layout/layout_custom_header_no_search"
         android:id="@+id/custom_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

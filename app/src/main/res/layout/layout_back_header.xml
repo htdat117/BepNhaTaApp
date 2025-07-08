@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/iv_logo"
+            android:id="@+id/btnBack"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/ic_back_arrow"/>
@@ -41,5 +41,6 @@
             android:textSize="@dimen/body2"
             android:fontFamily="@font/inter_medium"
             android:layout_marginStart="8dp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:visibility="gone"/>
 </LinearLayout>

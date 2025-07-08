@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="Sắp xếp theo: "
                 android:textColor="@color/dark1"
-                android:textSize="@dimen/body3"/>
+                android:textSize="@dimen/body2"/>
             <TextView
                 android:id="@+id/tvSortOption"
                 android:layout_width="wrap_content"
@@ -51,10 +51,10 @@
                 android:text="Cao nhất - Thấp nhất"
                 android:textColor="@color/primary1"
                 android:textStyle="bold"
-                android:textSize="@dimen/body3"/>
+                android:textSize="@dimen/body2"/>
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="5dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:src="@drawable/ic_arrow_down"
                 android:layout_marginLeft="8dp"/>
         </LinearLayout>

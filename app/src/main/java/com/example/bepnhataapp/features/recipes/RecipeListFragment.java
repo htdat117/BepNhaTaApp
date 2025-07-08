@@ -24,6 +24,7 @@ import com.example.bepnhataapp.common.dao.RecipeDao;
 import com.example.bepnhataapp.common.model.RecipeEntity;
 import com.example.bepnhataapp.common.adapter.CategoryAdapter;
 import com.example.bepnhataapp.common.models.Category;
+import androidx.annotation.NonNull;
 
 public class RecipeListFragment extends Fragment {
 
@@ -36,9 +37,10 @@ public class RecipeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_recipe_list, container, false);
+        // Remove automatic top inset padding to keep category bar flush with header
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom); // ignore top inset
             return insets;
         });
         // Khởi tạo RecyclerView và setAdapter
@@ -123,6 +125,7 @@ public class RecipeListFragment extends Fragment {
 
         // Khởi tạo RecyclerView danh mục dùng lại adapter của trang nguyên liệu
         RecyclerView rvCategories = view.findViewById(R.id.rvCategories);
+        View categoryContainer = view.findViewById(R.id.layoutCategoriesContainer);
         if (rvCategories != null) {
             rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             java.util.List<Category> categories = new java.util.ArrayList<>();
@@ -151,6 +154,41 @@ public class RecipeListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             });
         }
+
+        // Ẩn/hiện thanh danh mục khi cuộn (tương tự ProductActivity)
+        final boolean[] isCategoryVisible = {true};
+        rvRecipe.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (categoryContainer == null) return;
+
+                // Cuộn xuống: ẩn
+                if (dy > 10 && isCategoryVisible[0]) {
+                    isCategoryVisible[0] = false;
+                    categoryContainer.animate()
+                            .translationY(-categoryContainer.getHeight())
+                            .alpha(0f)
+                            .setInterpolator(new android.view.animation.AccelerateInterpolator())
+                            .setDuration(250)
+                            .withEndAction(() -> categoryContainer.setVisibility(View.GONE));
+                }
+
+                // Cuộn lên: hiện
+                if (dy < -10 && !isCategoryVisible[0]) {
+                    isCategoryVisible[0] = true;
+                    categoryContainer.setVisibility(View.VISIBLE);
+                    categoryContainer.setAlpha(0f);
+                    categoryContainer.setTranslationY(-categoryContainer.getHeight());
+                    categoryContainer.animate()
+                            .translationY(0)
+                            .alpha(1f)
+                            .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                            .setDuration(250)
+                            .start();
+                }
+            }
+        });
 
         return view;
     }
