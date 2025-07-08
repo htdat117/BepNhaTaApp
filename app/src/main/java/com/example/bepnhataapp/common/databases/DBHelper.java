@@ -10,7 +10,7 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
     // Bump version to trigger schema upgrade that recreates CART_DETAILS with servingFactor in PK
-    private static final int DB_VERSION = 3; // was 1
+    private static final int DB_VERSION = 4; // tăng version để trigger onUpgrade
     private static final String DB_NAME = "BepNhaTa.db";
     private static final String DB_PATH_SUFFIX = "/databases/";
     // Alias for teacher-style constant name
@@ -490,9 +490,15 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
         if(oldV < 3){
-            // Recreate CART_DETAILS with servingFactor column
-            db.execSQL("DROP TABLE IF EXISTS " + TBL_CART_DETAILS);
-            db.execSQL(SQL_CREATE_CART_DETAIL);
+            // Cũ: Xóa bảng, tạo lại (mất dữ liệu)
+            // db.execSQL("DROP TABLE IF EXISTS " + TBL_CART_DETAILS);
+            // db.execSQL(SQL_CREATE_CART_DETAIL);
+            // Mới: Thêm cột servingFactor nếu chưa có (không mất dữ liệu)
+            try {
+                db.execSQL("ALTER TABLE " + TBL_CART_DETAILS + " ADD COLUMN servingFactor INTEGER DEFAULT 1");
+            } catch (Exception e) {
+                // Nếu cột đã tồn tại thì bỏ qua lỗi
+            }
         }
     }
 
