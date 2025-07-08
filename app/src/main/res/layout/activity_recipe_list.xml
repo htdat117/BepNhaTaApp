@@ -16,12 +16,20 @@
         tools:context=".features.recipes.RecipeList">
 
         <!-- Danh mục công thức dạng RecyclerView giống nguyên liệu -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCategories"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            android:layout_marginTop="8dp"/>
+            android:background="@drawable/rounded_bg_primary4_for_product_recipes"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="0dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
