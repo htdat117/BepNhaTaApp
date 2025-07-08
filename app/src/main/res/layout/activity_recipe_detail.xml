@@ -239,6 +239,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mô tả món ăn"
+                android:textColor="@color/dark1"
                 android:textSize="@dimen/header4"
                 android:textStyle="bold"
                 android:paddingVertical="8dp"/>
@@ -260,6 +261,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dark1"
                     android:text="Trải nghiệm món ăn"
                     android:textSize="@dimen/header4"
                     android:textStyle="bold"
@@ -294,6 +296,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/dark1"
                 android:text="Thành phần dinh dưỡng"
                 android:textSize="@dimen/header4"
                 android:textStyle="bold"
@@ -353,6 +356,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dark1"
                     android:text="Bình luận"
                     android:textSize="@dimen/header4"
                     android:textStyle="bold"

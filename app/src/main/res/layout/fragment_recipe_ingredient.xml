@@ -23,7 +23,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Khẩu phần cho"
-                style="@style/Body.Bold.Ag1"
+                android:textColor="@color/dark1"
+                android:textSize="@dimen/header4"
                 android:textStyle="bold"
                 android:paddingVertical="8dp"/>
 
@@ -41,14 +42,15 @@
                 app:icon="@drawable/ic_arrow_down"
                 app:iconGravity="textEnd"
                 app:iconTint="@color/white"
-                app:iconSize="10dp"/>
+                app:iconSize="0dp"/>
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nguyên liệu cần chuẩn bị"
-            style="@style/Body.Bold.Ag1"
+            android:textColor="@color/dark1"
+            android:textSize="@dimen/header4"
             android:textStyle="bold"
             android:paddingVertical="8dp"/>
         <!-- Danh sách nguyên liệu -->
