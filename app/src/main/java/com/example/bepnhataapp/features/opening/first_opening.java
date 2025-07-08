@@ -16,6 +16,11 @@ public class first_opening extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_first_opening);
 
+        findViewById(R.id.btn_start).setOnClickListener(v -> {
+            startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.opening.second_opening.class));
+            finish();
+        });
     }
 }

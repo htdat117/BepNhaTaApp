@@ -2,6 +2,8 @@ package com.example.bepnhataapp.features.opening;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,23 @@ public class fourth_opening extends AppCompatActivity {
 
         // Xử lý nút back
         ImageButton btnBack = findViewById(R.id.btn_back);
-        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
+        if (btnBack != null) btnBack.setOnClickListener(v -> {
+            startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.opening.third_opening.class));
+            finish();
+        });
+
+        // Xử lý nút btn_next
+        Button btnNext = findViewById(R.id.btn_next);
+        if (btnNext != null) btnNext.setOnClickListener(v -> {
+            startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.home.HomeActivity.class));
+            finish();
+        });
+
+        // Xử lý nút skip
+        TextView btnSkip = findViewById(R.id.btn_skip);
+        if (btnSkip != null) btnSkip.setOnClickListener(v -> {
+            startActivity(new android.content.Intent(this, com.example.bepnhataapp.features.home.HomeActivity.class));
+            finish();
+        });
     }
 }

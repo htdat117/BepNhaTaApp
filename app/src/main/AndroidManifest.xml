@@ -81,19 +81,30 @@
             android:exported="false" />
         <activity
             android:name=".features.manage_pinfor.shipping_address"
-            android:exported="false" /> <!-- Activity khởi động chính -->
+            android:exported="false" />
         <activity
-            android:name=".features.home.HomeActivity"
+            android:name=".features.opening.first_opening"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Các activity công cụ -->
+        </activity>
+        <activity
+            android:name=".features.opening.second_opening"
+            android:exported="false" />
+        <activity
+            android:name=".features.opening.third_opening"
+            android:exported="false" />
+        <activity
+            android:name=".features.opening.fourth_opening"
+            android:exported="false" />
+        <activity
+            android:name=".features.home.HomeActivity"
+            android:exported="true" />
         <activity
             android:name=".features.tools.ToolsActivity"
-            android:exported="true" /> <!-- Các activity khác -->
+            android:exported="true" />
         <activity
             android:name=".features.blog.BlogCommentsActivity"
             android:exported="true" />
@@ -130,13 +141,13 @@
             android:exported="false" />
         <activity
             android:name=".features.policy.PolicyActivity"
-            android:exported="false" /> <!-- Meal Plan new screens -->
+            android:exported="false" />
         <activity
             android:name=".features.mealplan.MealPlanContentActivity"
             android:exported="false" />
         <activity
             android:name=".features.mealplan.MealPlanWizardActivity"
-            android:exported="false" /> <!-- Voucher additional screens -->
+            android:exported="false" />
         <activity
             android:name=".features.voucher.VoucherSelectActivity"
             android:exported="false" />
@@ -145,7 +156,7 @@
             android:exported="false" />
         <activity
             android:name=".features.voucher.VoucherDetailActivity"
-            android:exported="false" /> <!-- Checkout flow -->
+            android:exported="false" />
         <activity
             android:name=".features.checkout.CheckoutActivity"
             android:exported="false" />
@@ -157,34 +168,22 @@
             android:exported="false" />
         <activity
             android:name=".features.checkout.PaymentSuccessActivity"
-            android:exported="false" /> <!-- Point system -->
+            android:exported="false" />
         <activity
             android:name=".features.point.PointActivity"
             android:exported="false" />
         <activity
             android:name=".features.point.PointHistoryActivity"
-            android:exported="false" /> <!-- Product detail / reviews -->
+            android:exported="false" />
         <activity
             android:name=".features.products.ProductDetailActivity"
             android:exported="false" />
         <activity
             android:name=".features.products.AllReviewsActivity"
-            android:exported="false" /> <!-- Address selection -->
+            android:exported="false" />
         <activity
             android:name=".features.address.AddressSelectActivity"
-            android:exported="false" /> <!-- Opening / onboarding sequence -->
-        <activity
-            android:name=".features.opening.first_opening"
             android:exported="false" />
-        <activity
-            android:name=".features.opening.second_opening"
-            android:exported="false" />
-        <activity
-            android:name=".features.opening.third_opening"
-            android:exported="false" />
-        <activity
-            android:name=".features.opening.fourth_opening"
-            android:exported="false" /> <!-- Offline mode screens -->
         <activity
             android:name=".features.offline.OfflineActivity"
             android:exported="false" />
@@ -193,16 +192,16 @@
             android:exported="false" />
         <activity
             android:name=".features.offline.RecipeDetailOfflineActivity"
-            android:exported="false" /> <!-- Messaging -->
+            android:exported="false" />
         <activity
             android:name=".features.message.notification_list"
             android:exported="false" />
         <activity
             android:name=".features.message.conversation"
-            android:exported="false" /> <!-- FAQ -->
+            android:exported="false" />
         <activity
             android:name=".features.faq.FAQActivity"
-            android:exported="false" /> <!-- Product management (admin) -->
+            android:exported="false" />
         <activity
             android:name=".features.manage_r_p_b.manage_recipe"
             android:exported="false" />
@@ -211,13 +210,13 @@
             android:exported="false" />
         <activity
             android:name=".features.manage_r_p_b.manage_blog"
-            android:exported="false" /> <!-- Blog detail -->
+            android:exported="false" />
         <activity
             android:name=".features.blog.BlogActivity"
             android:exported="false" />
         <activity
             android:name=".features.blog.BlogDetailActivity"
-            android:exported="false" /> <!-- Authentication / Registration -->
+            android:exported="false" />
         <activity
             android:name=".features.login.RegistrationActivity"
             android:exported="false" />
