@@ -91,16 +91,20 @@ public class EmptyPlanFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
 
         // 1. Tạo tự động
-        btnAuto.setOnClickListener(v -> runBackgroundTask(() -> {
-            viewModel.autoGenerateFor(getTargetDate());
-        }, "Đã tạo thực đơn tự động"));
+        btnAuto.setOnClickListener(v -> {
+            java.time.LocalDate targetDate = getTargetDate();
+            runBackgroundTask(() -> {
+                viewModel.autoGenerateFor(targetDate);
+            }, "Đã tạo thực đơn tự động");
+        });
 
         // 2. Sao chép ngày trước đó – cần kiểm tra xem có dữ liệu để sao chép hay không
         btnCopy.setOnClickListener(v -> {
             setButtonsEnabled(false);
+            java.time.LocalDate targetDate = getTargetDate();
             new Thread(() -> {
                 // Thực thi copy và nhận kết quả
-                boolean copied = viewModel.copyFromPreviousDay(getTargetDate());
+                boolean copied = viewModel.copyFromPreviousDay(targetDate);
 
                 // Chờ 1 chút cho DB hoàn tất (nhanh nên không cần delay lớn)
                 try { Thread.sleep(50); } catch (InterruptedException ignored) {}

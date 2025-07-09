@@ -9,8 +9,8 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    // Bump version to trigger schema upgrade that recreates CART_DETAILS with servingFactor in PK
-    private static final int DB_VERSION = 3; // was 1
+    // Bump version to trigger comprehensive schema upgrade that ensures all tables exist
+    private static final int DB_VERSION = 4; // was 3
     private static final String DB_NAME = "BepNhaTa.db";
     private static final String DB_PATH_SUFFIX = "/databases/";
     // Alias for teacher-style constant name
@@ -479,21 +479,49 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_CUSTOMER);
         db.execSQL(SQL_CREATE_MEAL_PLAN);
         db.execSQL(SQL_CREATE_MEAL_DAY);
         db.execSQL(SQL_CREATE_MEAL_TIME);
         db.execSQL(SQL_CREATE_MEAL_RECIPE);
         db.execSQL(SQL_CREATE_CUSTOMER_HEALTH);
+        db.execSQL(SQL_CREATE_RECIPE);
+        db.execSQL(SQL_CREATE_RECIPE_DETAIL);
+        db.execSQL(SQL_CREATE_INSTRUCTION_RECIPE);
+        db.execSQL(SQL_CREATE_RECIPE_INGREDIENT);
+        db.execSQL(SQL_CREATE_RECIPE_DOWNLOAD);
+        db.execSQL(SQL_CREATE_FAVOURITE_RECIPE);
+        db.execSQL(SQL_CREATE_CART);
+        db.execSQL(SQL_CREATE_CART_DETAIL);
+        db.execSQL(SQL_CREATE_ADDRESS);
+        db.execSQL(SQL_CREATE_ORDER);
+        db.execSQL(SQL_CREATE_ORDER_LINE);
+        db.execSQL(SQL_CREATE_PRODUCT_FEEDBACK);
+        db.execSQL(SQL_CREATE_BLOG);
+        db.execSQL(SQL_CREATE_FAVOURITE_BLOG);
+        db.execSQL(SQL_CREATE_BLOG_COMMENT);
+        db.execSQL(SQL_CREATE_RECIPE_COMMENT);
+        db.execSQL(SQL_CREATE_COUPON);
+        db.execSQL(SQL_CREATE_PRODUCT);
+        db.execSQL(SQL_CREATE_PRODUCT_DETAIL);
+        db.execSQL(SQL_CREATE_INGREDIENT);
+        db.execSQL(SQL_CREATE_PRODUCT_INGREDIENT);
+        db.execSQL(SQL_CREATE_FAVOURITE_PRODUCT);
+        db.execSQL(SQL_CREATE_FOOD_CALO);
         db.execSQL(CREATE_POINT_LOG);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        if(oldV < 3){
-            // Recreate CART_DETAILS with servingFactor column
+        // If upgrading from a version prior to 3, recreate CART_DETAILS to include servingFactor in PK
+        if (oldV < 3) {
             db.execSQL("DROP TABLE IF EXISTS " + TBL_CART_DETAILS);
             db.execSQL(SQL_CREATE_CART_DETAIL);
         }
+
+        // For any upgrade, ensure every table defined in onCreate exists.
+        // Because all CREATE statements use "IF NOT EXISTS", this is idempotent and safe.
+        onCreate(db);
     }
 
     @Override
