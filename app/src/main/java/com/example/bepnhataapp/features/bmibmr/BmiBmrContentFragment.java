@@ -115,33 +115,40 @@ public class BmiBmrContentFragment extends Fragment {
     }
 
     private boolean validateInputs() {
-        if (editTextAge.getText().toString().isEmpty() ||
-            editTextHeight.getText().toString().isEmpty() ||
-            editTextWeight.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        // Kiểm tra thiếu từng trường và thông báo riêng
+        if (editTextAge.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập tuổi", Toast.LENGTH_SHORT).show();
             return false;
         }
-
+        if (editTextHeight.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập chiều cao", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (editTextWeight.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập cân nặng", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if (!radioMale.isChecked() && !radioFemale.isChecked()) {
             Toast.makeText(getContext(), "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
             return false;
         }
 
+        // Kiểm tra giá trị hợp lệ từng trường
         try {
             int age = Integer.parseInt(editTextAge.getText().toString());
             double height = Double.parseDouble(editTextHeight.getText().toString());
             double weight = Double.parseDouble(editTextWeight.getText().toString());
 
-            if (age <= 0 || age > 120) {
-                Toast.makeText(getContext(), "Tuổi không hợp lệ", Toast.LENGTH_SHORT).show();
+            if (age < 0 || age > 120) {
+                Toast.makeText(getContext(), "Tuổi không hợp lệ (phải từ 0 đến 120)", Toast.LENGTH_SHORT).show();
                 return false;
             }
-            if (height <= 0 || height > 300) {
-                Toast.makeText(getContext(), "Chiều cao không hợp lệ", Toast.LENGTH_SHORT).show();
+            if (height < 30 || height > 300) {
+                Toast.makeText(getContext(), "Chiều cao không hợp lệ (phải từ 30cm đến 300cm)", Toast.LENGTH_SHORT).show();
                 return false;
             }
-            if (weight <= 0 || weight > 500) {
-                Toast.makeText(getContext(), "Cân nặng không hợp lệ", Toast.LENGTH_SHORT).show();
+            if (weight < 1 || weight > 500) {
+                Toast.makeText(getContext(), "Cân nặng không hợp lệ (phải từ 1kg đến 500kg)", Toast.LENGTH_SHORT).show();
                 return false;
             }
         } catch (NumberFormatException e) {
@@ -158,17 +165,18 @@ public class BmiBmrContentFragment extends Fragment {
         double weight = Double.parseDouble(editTextWeight.getText().toString());
         double heightM = heightCm / 100;
         
-        double bmi = calculateBMI(heightM, weight);
-        String bmiCategory = getBMICategory(bmi);
-        double bmr = calculateBMR(age, heightCm, weight, radioMale.isChecked());
-        String advice = getAdvice(bmi);
-        
-        showResult(bmi, bmiCategory, bmr, advice);
-        
-        // Hiển thị thông báo tương ứng
-        Toast.makeText(getContext(), 
-            isBmiCalculation ? "Đã tính xong chỉ số BMI" : "Đã tính xong chỉ số BMR", 
-            Toast.LENGTH_SHORT).show();
+        if (isBmiCalculation) {
+            double bmi = calculateBMI(heightM, weight);
+            String bmiCategory = getBMICategory(bmi);
+            String advice = getAdvice(bmi);
+            showResultBMI(bmi, bmiCategory, advice);
+            Toast.makeText(getContext(), "Đã tính xong chỉ số BMI", Toast.LENGTH_SHORT).show();
+        } else {
+            double bmr = calculateBMR(age, heightCm, weight, radioMale.isChecked());
+            double bmrWithActivity = bmr * 1.55; // mức vận động vừa
+            showResultBMR(bmrWithActivity);
+            Toast.makeText(getContext(), "Đã tính xong chỉ số BMR", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private double calculateBMI(double height, double weight) {
@@ -190,7 +198,7 @@ public class BmiBmrContentFragment extends Fragment {
         }
     }
 
-    private void showResult(double bmi, String bmiCategory, double bmr, String advice) {
+    private void showResultBMI(double bmi, String bmiCategory, String advice) {
         resultCardView.setAlpha(0f);
         resultCardView.setVisibility(View.VISIBLE);
         resultCardView.animate()
@@ -198,22 +206,31 @@ public class BmiBmrContentFragment extends Fragment {
                 .setDuration(500)
                 .start();
 
-        textViewResultTitle.setText("Kết quả tính toán");
+        textViewResultTitle.setText("Kết quả BMI");
         textViewBmiResult.setText(String.format("BMI của bạn là: %.1f", bmi));
+        textViewBmiResult.setVisibility(View.VISIBLE);
         textViewBmiCategory.setText(String.format("Phân loại: %s", bmiCategory));
-        textViewBmrResult.setText(String.format("BMR của bạn là: %.0f kcal/ngày", bmr));
-        
-        String bmrDetail = String.format(
-            "BMR (Basal Metabolic Rate) là lượng calo cơ thể đốt cháy khi nghỉ ngơi.\n\n" +
-            "Dựa vào BMR, bạn có thể:\n" +
-            "- Nhân với 1.2: Ít vận động\n" +
-            "- Nhân với 1.375: Vận động nhẹ (1-3 lần/tuần)\n" +
-            "- Nhân với 1.55: Vận động vừa (3-5 lần/tuần)\n" +
-            "- Nhân với 1.725: Vận động nhiều (6-7 lần/tuần)\n" +
-            "- Nhân với 1.9: Vận động rất nhiều (2 lần/ngày)\n\n" +
-            "Kết quả sẽ cho biết tổng lượng calo bạn cần mỗi ngày."
-        );
-        textViewAdvice.setText(String.format("Lời khuyên: %s\n\n%s", advice, bmrDetail));
+        textViewBmiCategory.setVisibility(View.VISIBLE);
+        textViewBmrResult.setVisibility(View.GONE);
+        textViewAdvice.setText(String.format("Lời khuyên: %s", advice));
+        textViewAdvice.setVisibility(View.VISIBLE);
+    }
+
+    private void showResultBMR(double bmrWithActivity) {
+        resultCardView.setAlpha(0f);
+        resultCardView.setVisibility(View.VISIBLE);
+        resultCardView.animate()
+                .alpha(1f)
+                .setDuration(500)
+                .start();
+
+        textViewResultTitle.setText("Kết quả BMR (vận động vừa)");
+        textViewBmiResult.setVisibility(View.GONE);
+        textViewBmiCategory.setVisibility(View.GONE);
+        textViewBmrResult.setText(String.format("BMR của bạn (vận động vừa): %.0f kcal/ngày", bmrWithActivity));
+        textViewBmrResult.setVisibility(View.VISIBLE);
+        textViewAdvice.setText("BMR (Basal Metabolic Rate) là lượng calo cơ thể đốt cháy khi nghỉ ngơi.\n\nKết quả trên đã nhân với hệ số vận động vừa (1.55).\n\nBạn có thể điều chỉnh hệ số nếu mức vận động khác.");
+        textViewAdvice.setVisibility(View.VISIBLE);
     }
 
     private String getAdvice(double bmi) {
