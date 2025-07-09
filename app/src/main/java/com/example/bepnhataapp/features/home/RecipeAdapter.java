@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.models.Recipe;
 
-import java.text.Normalizer;
 import java.util.List;
 
 /**
@@ -105,34 +104,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             intent.putExtra("recipeId", recipe.getId());
             context.startActivity(intent);
         });
-
-        // Benefit icon mapping (if view exists in layout)
-        if(holder.itemView.findViewById(R.id.imvUse)!=null && holder.itemView.findViewById(R.id.txtBenefit)!=null){
-            ImageView icon = (ImageView)holder.itemView.findViewById(R.id.imvUse);
-            TextView tvBenefit = (TextView)holder.itemView.findViewById(R.id.txtBenefit);
-            String benefit = tvBenefit.getText().toString();
-            if(benefit!=null && !benefit.isEmpty()){
-                String slug = slugify(benefit);
-                int resId = holder.itemView.getResources().getIdentifier("ic_"+slug,"drawable",holder.itemView.getContext().getPackageName());
-                if(resId==0){
-                    if(slug.contains("ngu")) slug="sleepy";
-                    else if(slug.contains("skin")||slug.contains("da")) slug="skin";
-                    else if(slug.contains("xuong")) slug="bone";
-                    else if(slug.contains("bo_mau")|| (slug.contains("mau")&&!slug.contains("bo_mau"))) slug="blood";
-                    else if(slug.contains("giai_doc")||slug.contains("detox")||slug.contains("doc")) slug="detox";
-                    else if(slug.contains("giam_can")||slug.contains("weight")) slug="weight";
-                    else if(slug.contains("tim")||slug.contains("heart")) slug="tim";
-                    resId = holder.itemView.getResources().getIdentifier("ic_"+slug,"drawable",holder.itemView.getContext().getPackageName());
-                    if(resId==0) resId= R.drawable.ic_bone;
-                }
-                icon.setImageResource(resId);
-                if(slug.equals("skin")){
-                    android.view.ViewGroup.LayoutParams lp = icon.getLayoutParams();
-                    lp.width = lp.height = (int) (20*holder.itemView.getResources().getDisplayMetrics().density);
-                    icon.setLayoutParams(lp);
-                }
-            }
-        }
     }
 
     @Override
@@ -145,7 +116,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         TextView recipeTitle;
         TextView recipeCategory;
         ImageView favoriteIcon;
-        ImageView imvUse; // benefit icon
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -153,16 +123,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipeTitle = itemView.findViewById(R.id.recipe_title);
             recipeCategory = itemView.findViewById(R.id.recipe_category);
             favoriteIcon = itemView.findViewById(R.id.favorite_icon);
-            imvUse = itemView.findViewById(R.id.imvUse);
         }
-    }
-
-    private String slugify(String input){
-        if(input==null) return "";
-        String temp = Normalizer.normalize(input, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
-        temp = temp.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9]+","_");
-        if(temp.startsWith("_")) temp=temp.substring(1);
-        if(temp.endsWith("_")) temp=temp.substring(0,temp.length()-1);
-        return temp;
     }
 }

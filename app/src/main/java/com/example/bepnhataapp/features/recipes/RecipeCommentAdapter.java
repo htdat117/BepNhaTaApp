@@ -1,6 +1,7 @@
 package com.example.bepnhataapp.features.recipes;
 
 import android.graphics.BitmapFactory;
+import com.bumptech.glide.Glide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecipeCommentAdapter extends RecyclerView.Adapter<RecipeCommentAdapter.CommentViewHolder> {
 
     private List<RecipeComment> commentList;
+    private java.util.Set<Long> likedSet = new java.util.HashSet<>();
 
     public RecipeCommentAdapter(List<RecipeComment> commentList) {
         this.commentList = commentList;
@@ -45,7 +47,10 @@ public class RecipeCommentAdapter extends RecyclerView.Adapter<RecipeCommentAdap
             holder.textViewUserName.setText(customer.getFullName());
             byte[] avatar = customer.getAvatar();
             if (avatar != null && avatar.length > 0) {
-                holder.imageViewProfile.setImageBitmap(BitmapFactory.decodeByteArray(avatar, 0, avatar.length));
+                Glide.with(holder.itemView.getContext())
+                        .load(avatar)
+                        .placeholder(R.drawable.profile_placeholder)
+                        .into(holder.imageViewProfile);
             } else {
                 holder.imageViewProfile.setImageResource(R.drawable.profile_placeholder);
             }
@@ -56,8 +61,29 @@ public class RecipeCommentAdapter extends RecyclerView.Adapter<RecipeCommentAdap
         holder.textViewTime.setText(comment.getCreatedAt());
         holder.textViewCommentText.setText(comment.getContent());
         holder.textViewLikes.setText(String.format(Locale.getDefault(), "Hữu ích (%d)", comment.getUsefulness()));
-        holder.imageViewLike.setImageResource(R.drawable.ic_like_outline);
-        // TODO: like click if needed
+        boolean isLiked = likedSet.contains(comment.getRecipeCommentID());
+        holder.imageViewLike.setImageResource(isLiked ? R.drawable.ic_heart_filled : R.drawable.ic_like_outline);
+
+        View.OnClickListener likeListener = v -> {
+            android.content.Context ctx = holder.itemView.getContext();
+            if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(ctx)){
+                android.widget.Toast.makeText(ctx, "Vui lòng đăng nhập để đánh giá hữu ích", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            boolean curLiked = likedSet.contains(comment.getRecipeCommentID());
+            if(curLiked){
+                if(comment.getUsefulness()>0) comment.setUsefulness(comment.getUsefulness()-1);
+                likedSet.remove(comment.getRecipeCommentID());
+            }else{
+                comment.setUsefulness(comment.getUsefulness()+1);
+                likedSet.add(comment.getRecipeCommentID());
+            }
+            new com.example.bepnhataapp.common.dao.RecipeCommentDao(ctx).update(comment);
+            holder.textViewLikes.setText(String.format(Locale.getDefault(), "Hữu ích (%d)", comment.getUsefulness()));
+            holder.imageViewLike.setImageResource(likedSet.contains(comment.getRecipeCommentID()) ? R.drawable.ic_heart_filled : R.drawable.ic_like_outline);
+        };
+        holder.textViewLikes.setOnClickListener(likeListener);
+        holder.imageViewLike.setOnClickListener(likeListener);
     }
 
     @Override

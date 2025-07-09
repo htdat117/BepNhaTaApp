@@ -12,6 +12,13 @@ import com.example.bepnhataapp.R;
 
 import java.text.Normalizer;
 import java.util.List;
+import com.example.bepnhataapp.common.dao.CustomerDao;
+import com.example.bepnhataapp.common.dao.FavouriteRecipeDao;
+import com.example.bepnhataapp.common.dao.RecipeDao;
+import com.example.bepnhataapp.common.model.Customer;
+import com.example.bepnhataapp.common.model.FavouriteRecipe;
+import com.example.bepnhataapp.common.model.RecipeEntity;
+import com.example.bepnhataapp.common.utils.SessionManager;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -98,6 +105,57 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 listener.onView(currentItem);
             }
         });
+
+        // Determine favourite state
+        ImageView ivFav = holder.ivFavorite;
+        if(ivFav!=null){
+            android.content.Context ctx = ivFav.getContext();
+            boolean[] isFavArr = new boolean[]{false};
+            long recipeIdTemp = -1;
+            // find recipe id by name (best effort)
+            java.util.List<RecipeEntity> all = new RecipeDao(ctx).getAllRecipes();
+            for(RecipeEntity e: all){ if(e.getRecipeName().equals(currentItem.getName())){ recipeIdTemp = e.getRecipeID(); break; } }
+            final long recipeId = recipeIdTemp;
+            if(SessionManager.isLoggedIn(ctx) && recipeId!=-1){
+                String phone = SessionManager.getPhone(ctx);
+                CustomerDao cDao = new CustomerDao(ctx);
+                Customer c = cDao.findByPhone(phone);
+                if(c!=null){
+                    FavouriteRecipeDao fDao = new FavouriteRecipeDao(ctx);
+                    isFavArr[0] = fDao.get(recipeId, c.getCustomerID())!=null;
+                }
+            }
+            ivFav.setImageResource(isFavArr[0]? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+            ivFav.setOnClickListener(v->{
+                if(!SessionManager.isLoggedIn(ctx)){
+                    android.widget.Toast.makeText(ctx, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(recipeId==-1){
+                    android.widget.Toast.makeText(ctx, "Không tìm thấy công thức", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String phone = SessionManager.getPhone(ctx);
+                CustomerDao cusDao = new CustomerDao(ctx);
+                Customer cus = cusDao.findByPhone(phone);
+                if(cus==null) return;
+                FavouriteRecipeDao favDao = new FavouriteRecipeDao(ctx);
+                boolean currentlyFav = favDao.get(recipeId, cus.getCustomerID())!=null;
+                if(currentlyFav){
+                    favDao.delete(recipeId, cus.getCustomerID());
+                    android.widget.Toast.makeText(ctx, "Đã xoá khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                }else{
+                    FavouriteRecipe fr = new FavouriteRecipe();
+                    fr.setRecipeID(recipeId);
+                    fr.setCustomerID(cus.getCustomerID());
+                    fr.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date()));
+                    favDao.insert(fr);
+                    android.widget.Toast.makeText(ctx, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                }
+                isFavArr[0] = !currentlyFav;
+                ivFav.setImageResource(isFavArr[0]? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+            });
+        }
     }
 
     @Override
@@ -108,6 +166,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private String slugify(String input){
         if(input==null) return "";
         String temp = Normalizer.normalize(input, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+        temp = temp.replaceAll("đ", "d").replaceAll("Đ", "d");
         temp = temp.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9]+","_");
         if(temp.startsWith("_")) temp = temp.substring(1);
         if(temp.endsWith("_")) temp = temp.substring(0, temp.length()-1);
@@ -116,10 +175,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     public static class RecipeViewHolder extends RecyclerView.ViewHolder {
         public ImageView imvRecipe;
+        public ImageView ivFavorite; // new field
         public TextView txtName, txtTime, txtLevel, txtBenefit, txtLove, txtComment;
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             imvRecipe = itemView.findViewById(R.id.imvRecipe);
+            ivFavorite = itemView.findViewById(R.id.iconOverlay);
             txtName = itemView.findViewById(R.id.txtName);
             txtTime = itemView.findViewById(R.id.txtTime);
             txtLevel = itemView.findViewById(R.id.txtLevel);

@@ -17,16 +17,16 @@
             android:layout_width="match_parent"
             android:layout_height="120dp">
 
+            <!-- Badge rating -->
             <ImageView
                 android:id="@+id/imgProduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/sample_img"
                 android:background="@drawable/bg_rounded_16"
-                android:clipToOutline="true" />
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/sample_img" />
 
-            <!-- Badge rating -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="8dp"
                 android:src="@drawable/ic_favorite_checked"/>
         </RelativeLayout>
 

@@ -83,7 +83,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 }
             }
             // Set initial icon according to state
-            ivFavorite.setImageResource(isFavourite[0] ? R.drawable.ic_love_orange : R.drawable.ic_love_orange_border);
+            ivFavorite.setImageResource(isFavourite[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
 
             ivFavorite.setOnClickListener(v -> {
                 if (!SessionManager.isLoggedIn(this)) {
@@ -98,15 +98,17 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 boolean currentlyFav = favDaoToggle.get(recipeId, cToggle.getCustomerID()) != null;
                 if (currentlyFav) {
                     favDaoToggle.delete(recipeId, cToggle.getCustomerID());
+                    Toast.makeText(this, "Đã xoá khỏi mục yêu thích", Toast.LENGTH_SHORT).show();
                 } else {
                     FavouriteRecipe fr = new FavouriteRecipe();
                     fr.setRecipeID(recipeId);
                     fr.setCustomerID(cToggle.getCustomerID());
                     fr.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date()));
                     favDaoToggle.insert(fr);
+                    Toast.makeText(this, "Đã thêm vào mục yêu thích", Toast.LENGTH_SHORT).show();
                 }
                 isFavourite[0] = !currentlyFav;
-                ivFavorite.setImageResource(isFavourite[0] ? R.drawable.ic_love_orange : R.drawable.ic_love_orange_border);
+                ivFavorite.setImageResource(isFavourite[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
             });
         }
         TextView tvDescription = findViewById(R.id.tvDescription);
@@ -471,6 +473,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
     private String slugify(String input) {
         if(input == null) return "";
         String temp = Normalizer.normalize(input, Normalizer.Form.NFD);
+        temp = temp.replaceAll("đ", "d").replaceAll("Đ", "d");
         temp = temp.replaceAll("\\p{M}", ""); // remove diacritics
         temp = temp.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9]+", "_");
         if(temp.startsWith("_")) temp = temp.substring(1);

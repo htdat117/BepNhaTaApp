@@ -102,6 +102,7 @@ public class RecommendedRecipeAdapter extends RecyclerView.Adapter<RecommendedRe
     private String slugify(String input){
         if(input==null) return "";
         String temp = Normalizer.normalize(input, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+        temp = temp.replaceAll("đ", "d").replaceAll("Đ", "d");
         temp = temp.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9]+","_");
         if(temp.startsWith("_")) temp = temp.substring(1);
         if(temp.endsWith("_")) temp = temp.substring(0,temp.length()-1);
