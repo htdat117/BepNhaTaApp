@@ -69,7 +69,12 @@ public class DownloadedRecipesFragment extends Fragment implements RecipeAdapter
         // Dữ liệu mẫu như trong hình ảnh bạn cung cấp
         downloadedRecipeList.add(new RecipeItem(R.drawable.food_placeholder, "Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút"));
         downloadedRecipeList.add(new RecipeItem(R.drawable.food_placeholder, "Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút"));
-        downloadedRecipeList.add(new RecipeItem(R.drawable.food_placeholder, "Sườn non kho tiêu", "700 cal", "Giàu đạm", "50 phút"));
+
+        // Gán lượt thích và bình luận giả lập cho mẫu
+        for (RecipeItem item : downloadedRecipeList) {
+            item.setLikeCount(150);
+            item.setCommentCount(110);
+        }
     }
 
     private void updateDisplayState() {

@@ -31,7 +31,9 @@ public class RecipeStepGuideAdapter extends RecyclerView.Adapter<RecipeStepGuide
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         InstructionRecipe step = steps.get(position);
         Log.d("DEBUG_STEP", "Step: " + step.getTitle() + ", image: " + step.getImage());
-        holder.tvStepTitle.setText(step.getTitle());
+        String title = step.getTitle()!=null? step.getTitle() : "";
+        String displayTitle = "Bước " + step.getNumberSection() + ": " + title;
+        holder.tvStepTitle.setText(displayTitle);
         holder.tvStepContent.setText(step.getContent());
         holder.ivStepImage.setVisibility(View.VISIBLE);
         if (step.getImage() != null && !step.getImage().isEmpty() && (step.getImage().startsWith("http://") || step.getImage().startsWith("https://"))) {

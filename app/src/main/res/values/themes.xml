@@ -7,4 +7,9 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
     <style name="Theme.BepNhaTaApp" parent="Base.Theme.BepNhaTaApp" />
+
+    <!-- Theme without window preview to tránh flash trắng khi mở Activity -->
+    <style name="Theme.BepNhaTaApp.NoPreview" parent="Theme.BepNhaTaApp">
+        <item name="android:windowDisablePreview">true</item>
+    </style>
 </resources>

@@ -56,9 +56,28 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         TextView tvName = findViewById(R.id.txtName);
         TextView tvCategory = findViewById(R.id.tvRecipeCategory);
         TextView tvCaloTime = findViewById(R.id.tvRecipeCaloTime);
+
+        // Ẩn hai label màu xám theo yêu cầu
+        if(tvCategory!=null) tvCategory.setVisibility(View.GONE);
+        if(tvCaloTime!=null) tvCaloTime.setVisibility(View.GONE);
         ImageView imvDownload = findViewById(R.id.imvDowload);
         TextView tvDescription = findViewById(R.id.tvDescription);
         TextView tvTryProduct = findViewById(R.id.tvTryProduct);
+        // Additional UI for metrics
+        TextView txtLevel = findViewById(R.id.txtLevel);
+        TextView txtTaste = findViewById(R.id.txtTaste);
+        TextView txtUses = findViewById(R.id.txtUses);
+        TextView txtTime = findViewById(R.id.txtTime);
+
+        // Nutrition section TextViews
+        TextView tvCarbs = findViewById(R.id.tvCarbs);
+        TextView tvProteinVal = findViewById(R.id.tvProtein);
+        TextView tvCaloVal = findViewById(R.id.tvCalo);
+        TextView tvFatVal = findViewById(R.id.tvFat);
+
+        // Recommend section
+        androidx.recyclerview.widget.RecyclerView rvRecommend = findViewById(R.id.rvRecommend);
+        java.util.List<RecipeItem> recommendItems = new java.util.ArrayList<>();
 
         // Load recipe entity
         RecipeEntity entity = new RecipeDao(this).getAllRecipes().stream()
@@ -87,6 +106,84 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         if (detail != null) {
             String str = String.format("%d Kcal • %d Min", (int) detail.getCalo(), detail.getCookingTimeMinutes());
             tvCaloTime.setText(str);
+            if(txtTime!=null) txtTime.setText(detail.getCookingTimeMinutes()+" phút");
+            if(txtLevel!=null && detail.getLevel()!=null) txtLevel.setText(detail.getLevel());
+            if(txtTaste!=null && detail.getFlavor()!=null) txtTaste.setText(detail.getFlavor());
+            if(txtUses!=null && detail.getBenefit()!=null) txtUses.setText(detail.getBenefit());
+
+            // Populate nutrition values (rounded to int for display)
+            if(tvCarbs!=null) tvCarbs.setText((int) detail.getCarbs() + "g carbs");
+            if(tvProteinVal!=null) tvProteinVal.setText((int) detail.getProtein() + "g proteins");
+            if(tvCaloVal!=null) tvCaloVal.setText((int) detail.getCalo() + " Kcal");
+            if(tvFatVal!=null) tvFatVal.setText((int) detail.getFat() + "g fat");
+        }
+
+        if(entity!=null){
+            java.util.List<RecipeEntity> allRecipes = new RecipeDao(this).getAllRecipes();
+
+            // 1. lấy các công thức cùng danh mục (khác công thức hiện tại)
+            java.util.List<RecipeEntity> candidate = new java.util.ArrayList<>();
+            for(RecipeEntity r: allRecipes){
+                if(r.getRecipeID()==entity.getRecipeID()) continue;
+                if(entity.getCategory()!=null && entity.getCategory().equals(r.getCategory())) candidate.add(r);
+            }
+
+            // 2. nếu chưa đủ 3 thì lấy ngẫu nhiên các công thức khác
+            if(candidate.size()<3){
+                java.util.List<RecipeEntity> others = new java.util.ArrayList<>();
+                for(RecipeEntity r: allRecipes){
+                    if(r.getRecipeID()==entity.getRecipeID()) continue;
+                    if(!candidate.contains(r)) others.add(r);
+                }
+                java.util.Collections.shuffle(others);
+                int need = 3 - candidate.size();
+                for(int i=0;i<need && i<others.size();i++) candidate.add(others.get(i));
+            }
+
+            // 3. xáo trộn danh sách và chỉ lấy 3
+            java.util.Collections.shuffle(candidate);
+            if(candidate.size()>3) candidate = candidate.subList(0,3);
+
+            final java.util.List<RecipeEntity> recommendList = new java.util.ArrayList<>(candidate);
+            RecipeDetailDao dDao = new RecipeDetailDao(this);
+            for(RecipeEntity e : recommendList){
+                if(e.getRecipeID()==entity.getRecipeID()) continue; // skip current
+
+                String imgStr = e.getImageThumb()!=null?e.getImageThumb().trim():"";
+                byte[] imgData=null;
+                try{ java.lang.reflect.Method m=e.getClass().getMethod("getImage"); imgData=(byte[])m.invoke(e);}catch(Exception ex){ }
+                int resId = R.drawable.placeholder_banner_background;
+                if(!imgStr.isEmpty()){ int r=getResources().getIdentifier(imgStr,"drawable",getPackageName()); if(r!=0) resId=r; }
+
+                RecipeDetail det = dDao.get(e.getRecipeID());
+                String timeStr = det!=null? det.getCookingTimeMinutes()+" phút" : "";
+                String benefit = det!=null? det.getBenefit():"";
+                String level = det!=null? det.getLevel():"";
+
+                RecipeItem item = new RecipeItem(resId,imgStr,imgData,e.getRecipeName(),"",level,timeStr,e.getCategory()!=null?e.getCategory():"");
+                item.setBenefit(benefit);
+                item.setLevel(level);
+                item.setTime(timeStr);
+                item.setLikeCount(e.getLikeAmount());
+                item.setCommentCount(e.getCommentAmount());
+                recommendItems.add(item);
+            }
+            RecommendedRecipeAdapter recAdapter = new RecommendedRecipeAdapter(recommendItems, new RecipeAdapter.OnRecipeActionListener() {
+                @Override
+                public void onView(RecipeItem recipe) {
+                    // open detail again with new id
+                    RecipeEntity found=null;
+                    for(RecipeEntity r: recommendList){ if(r.getRecipeName().equals(recipe.getName())) {found=r; break;} }
+                    if(found!=null){
+                        android.content.Intent intent = new android.content.Intent(RecipeDetailActivity.this, RecipeDetailActivity.class);
+                        intent.putExtra("recipeId", (long)found.getRecipeID());
+                        startActivity(intent);
+                    }
+                }
+                @Override public void onDelete(RecipeItem recipe){ /*not used*/ }
+            });
+            rvRecommend.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+            rvRecommend.setAdapter(recAdapter);
         }
 
         imvDownload.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +237,8 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         // Hiển thị nguyên liệu
         LinearLayout layoutIngredients = findViewById(R.id.layoutIngredients);
         RecyclerView rcStepGuide = findViewById(R.id.rcStepGuide);
+        RecyclerView rcComment = findViewById(R.id.rcComment);
+        TextView txtCommentCount = findViewById(R.id.txtCommentCount);
         MaterialButtonToggleGroup toggleGroupTab = findViewById(R.id.toggleGroupTab);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         pagerAdapter = new RecipeDetailPagerAdapter(this, recipeId, servingFactor);
@@ -161,6 +260,13 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 else toggleGroupTab.check(R.id.btnTabGuide);
             }
         });
+
+        // Load comments for recipe
+        java.util.List<com.example.bepnhataapp.common.model.RecipeComment> commentList = new com.example.bepnhataapp.common.dao.RecipeCommentDao(this).getByRecipe(recipeId);
+        if(txtCommentCount!=null) txtCommentCount.setText("("+commentList.size()+")");
+        RecipeCommentAdapter cmtAdapter = new RecipeCommentAdapter(commentList);
+        rcComment.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+        rcComment.setAdapter(cmtAdapter);
 
         // bottom nav
         setupBottomNavigationFragment(R.id.nav_recipes);

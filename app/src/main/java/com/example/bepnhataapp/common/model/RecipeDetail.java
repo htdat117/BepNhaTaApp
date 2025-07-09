@@ -11,10 +11,11 @@ public class RecipeDetail {
     private int cookingTimeMinutes;
     private String flavor;
     private String benefit;
+    private String level;
 
     public RecipeDetail() {}
 
-    public RecipeDetail(long recipeID, double calo, double protein, double carbs, double fat, String foodTag, String cuisine, int cookingTimeMinutes, String flavor, String benefit) {
+    public RecipeDetail(long recipeID, double calo, double protein, double carbs, double fat, String foodTag, String cuisine, int cookingTimeMinutes, String flavor, String benefit, String level) {
         this.recipeID = recipeID;
         this.calo = calo;
         this.protein = protein;
@@ -25,6 +26,7 @@ public class RecipeDetail {
         this.cookingTimeMinutes = cookingTimeMinutes;
         this.flavor = flavor;
         this.benefit = benefit;
+        this.level = level;
     }
 
     public long getRecipeID() { return recipeID; }
@@ -56,4 +58,7 @@ public class RecipeDetail {
 
     public String getBenefit() { return benefit; }
     public void setBenefit(String benefit) { this.benefit = benefit; }
+
+    public String getLevel() { return level; }
+    public void setLevel(String level) { this.level = level; }
 } 

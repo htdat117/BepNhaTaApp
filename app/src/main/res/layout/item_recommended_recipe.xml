@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp">
+        android:paddingBottom="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,12 +38,14 @@
                 android:layout_marginStart="8dp">
 
                 <TextView
+                    android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sườn non kho tiêu"
                     android:textSize="@dimen/body1"
                     android:textStyle="bold"
-                    android:paddingVertical="4dp"/>
+                    android:paddingVertical="4dp"
+                    android:textColor="@color/black"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,6 +91,7 @@
                             android:layout_height="18dp"
                             android:src="@drawable/ic_blood" />
                         <TextView
+                            android:id="@+id/txtBenefit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Bổ máu"
@@ -175,7 +177,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:background="@color/dark5"
             android:layout_marginTop="8dp"/>
 

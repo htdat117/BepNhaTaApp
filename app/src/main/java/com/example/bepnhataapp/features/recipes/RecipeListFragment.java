@@ -50,6 +50,8 @@ public class RecipeListFragment extends Fragment {
         // Lấy danh sách công thức từ database
         allRecipeEntities = new RecipeDao(getContext()).getAllRecipes();
         recipeItems = new java.util.ArrayList<>();
+        com.example.bepnhataapp.common.dao.RecipeDetailDao detailDao = new com.example.bepnhataapp.common.dao.RecipeDetailDao(getContext());
+
         for (RecipeEntity entity : allRecipeEntities) {
             String imgStr = entity.getImageThumb() != null ? entity.getImageThumb().trim() : "";
             byte[] imgData = null;
@@ -57,21 +59,35 @@ public class RecipeListFragment extends Fragment {
                 java.lang.reflect.Method m = entity.getClass().getMethod("getImage");
                 imgData = (byte[]) m.invoke(entity);
             } catch (Exception e) { /* ignore nếu không có */ }
+
             int imageResId = R.drawable.placeholder_banner_background;
             if (!imgStr.isEmpty()) {
                 int resId = getResources().getIdentifier(imgStr, "drawable", getContext().getPackageName());
                 if (resId != 0) imageResId = resId;
             }
-            recipeItems.add(new RecipeItem(
+
+            // Lấy dữ liệu chi tiết để hiển thị thời gian, lợi ích và độ khó
+            com.example.bepnhataapp.common.model.RecipeDetail detail = detailDao.get(entity.getRecipeID());
+            String timeStr = detail != null ? detail.getCookingTimeMinutes() + " phút" : "";
+            String benefitStr = detail != null ? detail.getBenefit() : "";
+            String levelStr = detail != null ? detail.getLevel() : "";
+
+            RecipeItem item = new RecipeItem(
                 imageResId,
                 imgStr,
                 imgData,
                 entity.getRecipeName(),
-                "", // calories
-                "", // protein
-                "", // time
+                "", // calories (not used)
+                levelStr, // we temporarily store level in protein field for compatibility
+                timeStr,
                 entity.getCategory() != null ? entity.getCategory() : ""
-            ));
+            );
+            item.setBenefit(benefitStr);
+            item.setLevel(levelStr);
+            item.setTime(timeStr);
+            item.setLikeCount(entity.getLikeAmount());
+            item.setCommentCount(entity.getCommentAmount());
+            recipeItems.add(item);
         }
 
         adapter = new RecipeAdapter(recipeItems, new RecipeAdapter.OnRecipeActionListener() {
@@ -272,16 +288,27 @@ public class RecipeListFragment extends Fragment {
                     int resId = getResources().getIdentifier(imgStr, "drawable", getContext().getPackageName());
                     if (resId != 0) imageResId = resId;
                 }
-                recipeItems.add(new RecipeItem(
+                com.example.bepnhataapp.common.model.RecipeDetail detail = new com.example.bepnhataapp.common.dao.RecipeDetailDao(getContext()).get(entity.getRecipeID());
+                String timeStr = detail != null ? detail.getCookingTimeMinutes() + " phút" : "";
+                String benefitStr = detail != null ? detail.getBenefit() : "";
+                String levelStr = detail != null ? detail.getLevel() : "";
+
+                RecipeItem item = new RecipeItem(
                     imageResId,
                     imgStr,
                     imgData,
                     entity.getRecipeName(),
-                    "", // calories
-                    "", // protein
-                    "", // time
+                    "", // calories (not used)
+                    levelStr, // we temporarily store level in protein field for compatibility
+                    timeStr,
                     entity.getCategory() != null ? entity.getCategory() : ""
-                ));
+                );
+                item.setBenefit(benefitStr);
+                item.setLevel(levelStr);
+                item.setTime(timeStr);
+                item.setLikeCount(entity.getLikeAmount());
+                item.setCommentCount(entity.getCommentAmount());
+                recipeItems.add(item);
             }
         }
         adapter.notifyDataSetChanged();

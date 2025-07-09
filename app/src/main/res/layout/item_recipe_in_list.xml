@@ -110,6 +110,7 @@
                             android:layout_height="18dp"
                             android:src="@drawable/ic_blood" />
                         <TextView
+                            android:id="@+id/txtBenefit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Bổ máu"

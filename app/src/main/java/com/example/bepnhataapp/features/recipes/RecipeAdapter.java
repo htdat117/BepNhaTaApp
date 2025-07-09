@@ -62,12 +62,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.txtName.setText(currentItem.getName());
         // Thời gian nấu
         holder.txtTime.setText(currentItem.getTime());
-        // Độ khó (giả lập)
-        holder.txtLevel.setText(currentItem.getProtein()); // Tạm dùng trường protein làm độ khó
+        // Độ khó
+        holder.txtLevel.setText(currentItem.getLevel());
+        // Lợi ích sức khỏe / dinh dưỡng
+        if (holder.txtBenefit != null) {
+            holder.txtBenefit.setText(currentItem.getBenefit());
+        }
         // Số lượt thích
-        holder.txtLove.setText("150"); // Nếu có trường like thì truyền vào
+        holder.txtLove.setText(String.valueOf(currentItem.getLikeCount()));
         // Số bình luận
-        holder.txtComment.setText("110"); // Nếu có trường comment thì truyền vào
+        holder.txtComment.setText(String.valueOf(currentItem.getCommentCount()));
         // Gán sự kiện click vào toàn bộ item
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -83,13 +87,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     public static class RecipeViewHolder extends RecyclerView.ViewHolder {
         public ImageView imvRecipe;
-        public TextView txtName, txtTime, txtLevel, txtLove, txtComment;
+        public TextView txtName, txtTime, txtLevel, txtBenefit, txtLove, txtComment;
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             imvRecipe = itemView.findViewById(R.id.imvRecipe);
             txtName = itemView.findViewById(R.id.txtName);
             txtTime = itemView.findViewById(R.id.txtTime);
             txtLevel = itemView.findViewById(R.id.txtLevel);
+            txtBenefit = itemView.findViewById(R.id.txtBenefit);
             txtLove = itemView.findViewById(R.id.txtLove);
             txtComment = itemView.findViewById(R.id.txtComment);
         }

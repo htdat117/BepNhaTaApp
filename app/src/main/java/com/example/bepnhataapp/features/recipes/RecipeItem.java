@@ -10,6 +10,14 @@ public class RecipeItem {
     private String time;
     private String category;
 
+    // New fields for displaying benefit (nutrition tag) and difficulty level
+    private String benefit;
+    private String level;
+
+    // Fields for like and comment counts
+    private int likeCount;
+    private int commentCount;
+
     public RecipeItem(int imageResId, String name, String calories, String protein, String time) {
         this.imageResId = imageResId;
         this.name = name;
@@ -52,6 +60,15 @@ public class RecipeItem {
         return time;
     }
 
+    public String getBenefit() {
+        return benefit;
+    }
+
+    public String getLevel() {
+        // Fallback to the old protein field if level has not been set yet for backward compatibility
+        return level != null ? level : protein;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -63,4 +80,19 @@ public class RecipeItem {
     public String getCategory() {
         return category;
     }
+
+    public int getLikeCount() { return likeCount; }
+
+    public int getCommentCount() { return commentCount; }
+
+    public void setLikeCount(int likeCount) { this.likeCount = likeCount; }
+
+    public void setCommentCount(int commentCount) { this.commentCount = commentCount; }
+
+    // Setters for the new fields (optional usage)
+    public void setBenefit(String benefit) { this.benefit = benefit; }
+
+    public void setLevel(String level) { this.level = level; }
+
+    public void setTime(String time) { this.time = time; }
 } 

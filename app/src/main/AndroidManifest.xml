@@ -129,7 +129,8 @@
             android:exported="false" />
         <activity
             android:name=".features.products.ProductActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.BepNhaTaApp.NoPreview" />
         <activity
             android:name=".features.voucher.VoucherActivity"
             android:exported="false" />
