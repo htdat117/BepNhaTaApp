@@ -527,6 +527,14 @@
                     android:background="@drawable/bg_dark4"
                     android:padding="10dp"
                     android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/btnSendComment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_send"/>
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 
+import java.text.Normalizer;
 import java.util.List;
 
 public class RecommendedRecipeAdapter extends RecyclerView.Adapter<RecommendedRecipeAdapter.RecommendViewHolder> {
@@ -34,6 +35,8 @@ public class RecommendedRecipeAdapter extends RecyclerView.Adapter<RecommendedRe
     @Override
     public void onBindViewHolder(@NonNull RecommendViewHolder h, int pos) {
         RecipeItem item = list.get(pos);
+        // dynamic benefit icon selection
+        ImageView imvUse = h.itemView.findViewById(R.id.imvUse);
         // image
         if (item.getImageData()!=null && item.getImageData().length>0) {
             Glide.with(h.imv.getContext()).load(item.getImageData()).placeholder(R.drawable.placeholder_banner_background).into(h.imv);
@@ -52,6 +55,24 @@ public class RecommendedRecipeAdapter extends RecyclerView.Adapter<RecommendedRe
         h.tvTime.setText(item.getTime());
         h.tvLevel.setText(item.getLevel());
         if(h.tvBenefit!=null) h.tvBenefit.setText(item.getBenefit());
+
+        // set icon for benefit
+        if(imvUse != null && item.getBenefit()!=null){
+            String slug = slugify(item.getBenefit());
+            int res = h.itemView.getResources().getIdentifier("ic_"+slug, "drawable", h.itemView.getContext().getPackageName());
+            if(res==0){
+                if(slug.contains("ngu")) slug="sleepy";
+                else if(slug.contains("skin")||slug.contains("da")) slug="skin";
+                else if(slug.contains("xuong")) slug="bone";
+                else if(slug.contains("bo_mau")|| (slug.contains("mau")&&!slug.contains("bo_mau"))) slug="blood";
+                else if(slug.contains("giai_doc")||slug.contains("detox")||slug.contains("doc")) slug="detox";
+                else if(slug.contains("giam_can")||slug.contains("weight")) slug="weight";
+                else if(slug.contains("tim")||slug.contains("heart")) slug="tim";
+                res = h.itemView.getResources().getIdentifier("ic_"+slug, "drawable", h.itemView.getContext().getPackageName());
+                if(res==0) res = R.drawable.ic_bone; // fallback
+            }
+            imvUse.setImageResource(res);
+        }
         h.tvLove.setText(String.valueOf(item.getLikeCount()));
         h.tvCmt.setText(String.valueOf(item.getCommentCount()));
 
@@ -76,5 +97,14 @@ public class RecommendedRecipeAdapter extends RecyclerView.Adapter<RecommendedRe
             tvLove = v.findViewById(R.id.txtLove);
             tvCmt = v.findViewById(R.id.txtComment);
         }
+    }
+
+    private String slugify(String input){
+        if(input==null) return "";
+        String temp = Normalizer.normalize(input, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+        temp = temp.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9]+","_");
+        if(temp.startsWith("_")) temp = temp.substring(1);
+        if(temp.endsWith("_")) temp = temp.substring(0,temp.length()-1);
+        return temp;
     }
 } 

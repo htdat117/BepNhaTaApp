@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,8 @@ import com.example.bepnhataapp.common.dao.RecipeDownloadDao;
 import com.example.bepnhataapp.common.dao.RecipeIngredientDao;
 import com.example.bepnhataapp.common.dao.IngredientDao;
 import com.example.bepnhataapp.common.dao.InstructionRecipeDao;
+import com.example.bepnhataapp.common.dao.FavouriteRecipeDao;
+import com.example.bepnhataapp.common.dao.RecipeCommentDao;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.RecipeDetail;
 import com.example.bepnhataapp.common.model.RecipeEntity;
@@ -29,12 +33,15 @@ import com.example.bepnhataapp.common.model.RecipeDownload;
 import com.example.bepnhataapp.common.model.RecipeIngredient;
 import com.example.bepnhataapp.common.model.Ingredient;
 import com.example.bepnhataapp.common.model.InstructionRecipe;
+import com.example.bepnhataapp.common.model.FavouriteRecipe;
+import com.example.bepnhataapp.common.model.RecipeComment;
 import com.example.bepnhataapp.common.utils.SessionManager;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.text.Normalizer;
 
 public class RecipeDetailActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
@@ -61,6 +68,47 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         if(tvCategory!=null) tvCategory.setVisibility(View.GONE);
         if(tvCaloTime!=null) tvCaloTime.setVisibility(View.GONE);
         ImageView imvDownload = findViewById(R.id.imvDowload);
+        ImageView ivFavorite = findViewById(R.id.iconOverlay);
+        // Handle favorite state for this recipe
+        final boolean[] isFavourite = {false};
+        if (ivFavorite != null) {
+            // Determine initial favourite state if user logged in
+            if (SessionManager.isLoggedIn(this)) {
+                String phoneFav = SessionManager.getPhone(this);
+                CustomerDao cDaoFav = new CustomerDao(this);
+                Customer cFav = cDaoFav.findByPhone(phoneFav);
+                if (cFav != null) {
+                    FavouriteRecipeDao favDao = new FavouriteRecipeDao(this);
+                    isFavourite[0] = favDao.get(recipeId, cFav.getCustomerID()) != null;
+                }
+            }
+            // Set initial icon according to state
+            ivFavorite.setImageResource(isFavourite[0] ? R.drawable.ic_love_orange : R.drawable.ic_love_orange_border);
+
+            ivFavorite.setOnClickListener(v -> {
+                if (!SessionManager.isLoggedIn(this)) {
+                    Toast.makeText(this, "Vui lòng đăng nhập để sử dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String phoneToggle = SessionManager.getPhone(this);
+                CustomerDao cDaoToggle = new CustomerDao(this);
+                Customer cToggle = cDaoToggle.findByPhone(phoneToggle);
+                if (cToggle == null) return;
+                FavouriteRecipeDao favDaoToggle = new FavouriteRecipeDao(this);
+                boolean currentlyFav = favDaoToggle.get(recipeId, cToggle.getCustomerID()) != null;
+                if (currentlyFav) {
+                    favDaoToggle.delete(recipeId, cToggle.getCustomerID());
+                } else {
+                    FavouriteRecipe fr = new FavouriteRecipe();
+                    fr.setRecipeID(recipeId);
+                    fr.setCustomerID(cToggle.getCustomerID());
+                    fr.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date()));
+                    favDaoToggle.insert(fr);
+                }
+                isFavourite[0] = !currentlyFav;
+                ivFavorite.setImageResource(isFavourite[0] ? R.drawable.ic_love_orange : R.drawable.ic_love_orange_border);
+            });
+        }
         TextView tvDescription = findViewById(R.id.tvDescription);
         TextView tvTryProduct = findViewById(R.id.tvTryProduct);
         // Additional UI for metrics
@@ -68,6 +116,8 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         TextView txtTaste = findViewById(R.id.txtTaste);
         TextView txtUses = findViewById(R.id.txtUses);
         TextView txtTime = findViewById(R.id.txtTime);
+        ImageView imvTaste = findViewById(R.id.imvTaste);
+        ImageView imvUses = findViewById(R.id.imvUses);
 
         // Nutrition section TextViews
         TextView tvCarbs = findViewById(R.id.tvCarbs);
@@ -108,8 +158,42 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
             tvCaloTime.setText(str);
             if(txtTime!=null) txtTime.setText(detail.getCookingTimeMinutes()+" phút");
             if(txtLevel!=null && detail.getLevel()!=null) txtLevel.setText(detail.getLevel());
-            if(txtTaste!=null && detail.getFlavor()!=null) txtTaste.setText(detail.getFlavor());
-            if(txtUses!=null && detail.getBenefit()!=null) txtUses.setText(detail.getBenefit());
+            String flavorTxt = detail.getFlavor();
+            if(flavorTxt != null && flavorTxt.trim().equalsIgnoreCase("Thanh thanh")) {
+                flavorTxt = "Thanh nhẹ"; // đổi tên theo yêu cầu
+            }
+            if(txtTaste!=null && flavorTxt!=null) txtTaste.setText(flavorTxt);
+
+            // Handle benefit text
+            String benefitTxt = detail.getBenefit();
+            if(txtUses!=null && benefitTxt!=null) txtUses.setText(benefitTxt);
+
+            // Set icon for taste and benefit dynamically using slug
+            if(imvTaste != null && flavorTxt != null) {
+                String slug = slugify(flavorTxt);
+                if(slug.contains("thanh_nhe") || slug.equals("thanh")) slug = "thanh";
+                int res = getResources().getIdentifier("ic_"+slug, "drawable", getPackageName());
+                if(res == 0) res = R.drawable.ic_taste;
+                imvTaste.setImageResource(res);
+            }
+            if(imvUses != null && benefitTxt!= null) {
+                String slug = slugify(benefitTxt);
+                int res = getResources().getIdentifier("ic_"+slug, "drawable", getPackageName());
+                if(res == 0) {
+                    // Synonym mapping for benefit icons
+                    if(slug.contains("ngu")) slug = "sleepy";      // Giấc ngủ ngon
+                    else if(slug.contains("skin") || slug.contains("da")) slug = "skin";
+                    else if(slug.contains("xuong")) slug = "bone"; // Bổ xương
+                    else if(slug.contains("bo_mau") || (slug.contains("mau") && !slug.contains("bo_mau"))) slug = "blood"; // Bổ máu
+                    else if(slug.contains("giai_doc") || slug.contains("detox") || slug.contains("doc")) slug = "detox"; // Giải độc
+                    else if(slug.contains("giam_can") || slug.contains("weight")) slug = "weight"; // Giảm cân
+                    else if(slug.contains("tim") || slug.contains("heart")) slug = "tim"; // Tốt tim (icon ic_tim)
+
+                    res = getResources().getIdentifier("ic_"+slug, "drawable", getPackageName());
+                    if(res == 0) res = R.drawable.ic_bone; // fallback cuối cùng
+                }
+                imvUses.setImageResource(res);
+            }
 
             // Populate nutrition values (rounded to int for display)
             if(tvCarbs!=null) tvCarbs.setText((int) detail.getCarbs() + "g carbs");
@@ -264,9 +348,66 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         // Load comments for recipe
         java.util.List<com.example.bepnhataapp.common.model.RecipeComment> commentList = new com.example.bepnhataapp.common.dao.RecipeCommentDao(this).getByRecipe(recipeId);
         if(txtCommentCount!=null) txtCommentCount.setText("("+commentList.size()+")");
-        RecipeCommentAdapter cmtAdapter = new RecipeCommentAdapter(commentList);
+        final RecipeCommentAdapter cmtAdapter = new RecipeCommentAdapter(commentList);
         rcComment.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
         rcComment.setAdapter(cmtAdapter);
+
+        // Comment input bar elements
+        ImageView imvAvatarCmt = findViewById(R.id.imvAvatarCmt);
+        EditText edtComment = findViewById(R.id.edtComment);
+        ImageButton btnSendComment = findViewById(R.id.btnSendComment);
+        if (!SessionManager.isLoggedIn(this)) {
+            // Hide entire comment bar if user not logged in
+            if (imvAvatarCmt != null) imvAvatarCmt.setVisibility(View.GONE);
+            if (edtComment != null) {
+                edtComment.setVisibility(View.GONE);
+                View parentBar = (View) edtComment.getParent();
+                if (parentBar != null) parentBar.setVisibility(View.GONE);
+            }
+            if(btnSendComment != null) btnSendComment.setVisibility(View.GONE);
+        } else {
+            // If logged in, show avatar (if available)
+            if (imvAvatarCmt != null) {
+                String phoneUser = SessionManager.getPhone(this);
+                CustomerDao customerDao = new CustomerDao(this);
+                Customer loggedCustomer = customerDao.findByPhone(phoneUser);
+                if (loggedCustomer != null && loggedCustomer.getAvatar() != null && loggedCustomer.getAvatar().length > 0) {
+                    Glide.with(this).load(loggedCustomer.getAvatar()).placeholder(R.drawable.bg_avatar).into(imvAvatarCmt);
+                }
+            }
+        }
+
+        if(btnSendComment != null) {
+            btnSendComment.setOnClickListener(v -> {
+                if(!SessionManager.isLoggedIn(this)) {
+                    Toast.makeText(this, "Vui lòng đăng nhập để bình luận", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String content = edtComment != null ? edtComment.getText().toString().trim() : "";
+                if(content.isEmpty()) {
+                    Toast.makeText(this, "Nội dung không được để trống", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String phoneCmt = SessionManager.getPhone(this);
+                CustomerDao customerDao1 = new CustomerDao(this);
+                Customer cus = customerDao1.findByPhone(phoneCmt);
+                if(cus == null) return;
+
+                RecipeComment rc = new RecipeComment();
+                rc.setRecipeID(recipeId);
+                rc.setCustomerID(cus.getCustomerID());
+                rc.setContent(content);
+                rc.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date()));
+                rc.setUsefulness(0);
+                new RecipeCommentDao(this).insert(rc);
+
+                // Reload list
+                java.util.List<com.example.bepnhataapp.common.model.RecipeComment> updated = new RecipeCommentDao(this).getByRecipe(recipeId);
+                cmtAdapter.updateData(updated);
+                if(txtCommentCount != null) txtCommentCount.setText("("+updated.size()+")");
+                if(edtComment != null) edtComment.setText("");
+            });
+        }
 
         // bottom nav
         setupBottomNavigationFragment(R.id.nav_recipes);
@@ -325,5 +466,15 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         }
         tvQty.setText(String.valueOf(quantity));
         parent.addView(v);
+    }
+
+    private String slugify(String input) {
+        if(input == null) return "";
+        String temp = Normalizer.normalize(input, Normalizer.Form.NFD);
+        temp = temp.replaceAll("\\p{M}", ""); // remove diacritics
+        temp = temp.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9]+", "_");
+        if(temp.startsWith("_")) temp = temp.substring(1);
+        if(temp.endsWith("_")) temp = temp.substring(0, temp.length()-1);
+        return temp;
     }
 } 
