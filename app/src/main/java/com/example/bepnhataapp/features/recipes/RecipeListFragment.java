@@ -229,6 +229,9 @@ public class RecipeListFragment extends Fragment {
             String tag = entity.getTag() != null ? entity.getTag() : "";
             String desc = entity.getDescription() != null ? entity.getDescription() : "";
             String cat = entity.getCategory() != null ? entity.getCategory() : "";
+            com.example.bepnhataapp.common.model.RecipeDetail detail = new com.example.bepnhataapp.common.dao.RecipeDetailDao(getContext()).get(entity.getRecipeID());
+            String flavorStr = detail != null ? detail.getFlavor() : "";
+            String benefitStr = detail != null ? detail.getBenefit() : "";
             // Lọc theo Nguyên liệu
             if (c.ingredients != null && !c.ingredients.isEmpty()) {
                 boolean found = false;
@@ -255,24 +258,25 @@ public class RecipeListFragment extends Fragment {
                 }
                 if (!found) ok = false;
             }
-            // Lọc theo Hương vị
+            // Lọc theo Hương vị (so sánh trực tiếp flavor)
             if (ok && c.flavors != null && !c.flavors.isEmpty()) {
                 boolean found = false;
                 for (String flavor : c.flavors) {
-                    if (tag.toLowerCase().contains(flavor.toLowerCase()) ||
-                        desc.toLowerCase().contains(flavor.toLowerCase()) ||
-                        cat.toLowerCase().contains(flavor.toLowerCase())) {
+                    if (flavorStr != null && flavorStr.toLowerCase().contains(flavor.toLowerCase())) {
                         found = true;
                         break;
                     }
                 }
                 if (!found) ok = false;
             }
-            // Lọc theo Lợi ích sức khỏe (so khớp từng từ)
+            // Lọc theo Lợi ích sức khỏe (so sánh trực tiếp benefit)
             if (ok && c.healths != null && !c.healths.isEmpty()) {
                 boolean found = false;
-                if (matchHealth(tag, c.healths) || matchHealth(desc, c.healths) || matchHealth(cat, c.healths)) {
-                    found = true;
+                for (String health : c.healths) {
+                    if (benefitStr != null && benefitStr.toLowerCase().contains(health.toLowerCase())) {
+                        found = true;
+                        break;
+                    }
                 }
                 if (!found) ok = false;
             }
@@ -288,9 +292,7 @@ public class RecipeListFragment extends Fragment {
                     int resId = getResources().getIdentifier(imgStr, "drawable", getContext().getPackageName());
                     if (resId != 0) imageResId = resId;
                 }
-                com.example.bepnhataapp.common.model.RecipeDetail detail = new com.example.bepnhataapp.common.dao.RecipeDetailDao(getContext()).get(entity.getRecipeID());
                 String timeStr = detail != null ? detail.getCookingTimeMinutes() + " phút" : "";
-                String benefitStr = detail != null ? detail.getBenefit() : "";
                 String levelStr = detail != null ? detail.getLevel() : "";
 
                 RecipeItem item = new RecipeItem(

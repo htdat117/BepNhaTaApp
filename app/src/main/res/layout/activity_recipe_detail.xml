@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".features.recipes.RecipeDetail">
 
     <include layout="@layout/layout_custom_header_no_search"
@@ -486,6 +487,7 @@
                     android:gravity="end">
 
                     <TextView
+                        android:id="@+id/tvSeeAllComments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tất cả"
