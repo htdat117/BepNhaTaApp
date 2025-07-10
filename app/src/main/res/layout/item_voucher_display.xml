@@ -71,6 +71,23 @@
                     android:textColor="#222222"
                     android:textSize="14sp"/>
             </LinearLayout>
+            <!-- Thêm nút Đổi điểm -->
+            <TextView
+                android:id="@+id/tvRedeem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đổi điểm"
+                android:textColor="#F36B22"
+                android:textStyle="bold"
+                android:background="@drawable/bg_button_outline_orange"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView> 

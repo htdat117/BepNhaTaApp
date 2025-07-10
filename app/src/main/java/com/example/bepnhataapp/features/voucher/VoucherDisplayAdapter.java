@@ -14,10 +14,12 @@ import java.util.List;
 public class VoucherDisplayAdapter extends RecyclerView.Adapter<VoucherDisplayAdapter.VoucherDisplayViewHolder> {
     private final List<VoucherItem> items;
     private final Context context;
+    private final int userPoint;
 
-    public VoucherDisplayAdapter(List<VoucherItem> list, Context context) {
+    public VoucherDisplayAdapter(List<VoucherItem> list, Context context, int userPoint) {
         this.items = list;
         this.context = context;
+        this.userPoint = userPoint;
     }
 
     @NonNull
@@ -33,14 +35,29 @@ public class VoucherDisplayAdapter extends RecyclerView.Adapter<VoucherDisplayAd
         holder.tvCode.setText(item.code);
         holder.tvDesc.setText(item.desc);
         holder.tvExpire.setText("HSD: " + item.expire);
+        holder.tvCondition.setText("Đổi: " + item.point + " điểm");
+        // Thêm nút Đổi điểm (TextView làm nút)
+        holder.tvRedeem.setVisibility(View.VISIBLE);
+        holder.tvRedeem.setText("Đổi điểm");
+        if (userPoint < item.point) {
+            holder.tvRedeem.setEnabled(false);
+            holder.tvRedeem.setAlpha(0.5f);
+            holder.tvRedeem.setText("Không đủ điểm");
+        } else {
+            holder.tvRedeem.setEnabled(true);
+            holder.tvRedeem.setAlpha(1f);
+            holder.tvRedeem.setText("Đổi điểm");
+        }
+        holder.tvRedeem.setOnClickListener(v -> {
+            if (userPoint < item.point) return;
+            // TODO: Xử lý đổi điểm ở đây
+        });
         // Thêm xử lý sự kiện nhấp vào mục
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, VoucherDetailActivity.class);
-            // Truyền dữ liệu voucher sang trang chi tiết (nếu có)
             intent.putExtra("code", item.code);
             intent.putExtra("desc", item.desc);
             intent.putExtra("expire", item.expire);
-            // Các trường khác như 'point', 'time', 'benefit', 'product', 'payment', 'shipping', 'device', 'condition' có thể cần được thêm vào VoucherItem và truyền đi nếu VoucherDetailActivity yêu cầu.
             context.startActivity(intent);
         });
     }
@@ -51,7 +68,7 @@ public class VoucherDisplayAdapter extends RecyclerView.Adapter<VoucherDisplayAd
     }
 
     static class VoucherDisplayViewHolder extends RecyclerView.ViewHolder {
-        TextView tvCode, tvDesc, tvExpire, tvCondition;
+        TextView tvCode, tvDesc, tvExpire, tvCondition, tvRedeem;
 
         VoucherDisplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,6 +76,7 @@ public class VoucherDisplayAdapter extends RecyclerView.Adapter<VoucherDisplayAd
             tvDesc = itemView.findViewById(R.id.tvDesc);
             tvExpire = itemView.findViewById(R.id.tvExpire);
             tvCondition = itemView.findViewById(R.id.tvCondition);
+            tvRedeem = itemView.findViewById(R.id.tvRedeem);
         }
     }
 } 

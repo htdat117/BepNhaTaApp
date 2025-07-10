@@ -58,11 +58,13 @@ public class VoucherActivity extends AppCompatActivity {
             // Lấy voucher từ database
             String phone = SessionManager.getPhone(this);
             long customerId = -1;
+            int userPoint = 0;
             if (phone != null) {
                 CustomerDao customerDao = new CustomerDao(this);
                 Customer customer = customerDao.findByPhone(phone);
                 if (customer != null) {
                     customerId = customer.getCustomerID();
+                    userPoint = customer.getLoyaltyPoint(); // Lấy điểm user
                 }
             }
             CouponDao couponDao = new CouponDao(this);
@@ -74,10 +76,11 @@ public class VoucherActivity extends AppCompatActivity {
                             (c.getMaxDiscount()!=null? (" tối đa "+java.text.NumberFormat.getInstance().format(c.getMaxDiscount())+"đ") : "") +
                             ", đơn tối thiểu "+java.text.NumberFormat.getInstance().format(c.getMinPrice())+"đ",
                     c.getExpireDate(),
-                    true
+                    true,
+                    36 // điểm cần để đổi voucher, bạn có thể sửa lại cho phù hợp
                 ));
             }
-            VoucherDisplayAdapter adapter = new VoucherDisplayAdapter(voucherList, this);
+            VoucherDisplayAdapter adapter = new VoucherDisplayAdapter(voucherList, this, userPoint);
             rvVouchers.setAdapter(adapter);
             if (emptyView != null) {
                 emptyView.setVisibility(voucherList.isEmpty() ? View.VISIBLE : View.GONE);

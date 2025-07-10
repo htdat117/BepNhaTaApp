@@ -26,7 +26,7 @@ public class FilterRecipeBottomSheet extends BottomSheetDialogFragment {
 
     private final String[] ingredientTags = {"Thịt heo", "Thịt gà", "Thịt bò", "Hải sản", "Trứng", "Đậu phụ", "Rau củ", "Nấm"};
     private final String[] regionTags = {"Miền Bắc", "Miền Trung", "Miền Nam", "Miền Tây", "Món Âu"};
-    private final String[] flavorTags = {"Mặn", "Ngọt", "Chua", "Cay", "Thanh", "Béo", "Đậm đà"};
+    private final String[] flavorTags = {"Ngọt", "Cay", "Béo ngậy", "Đậm đà", "Chua", "Thanh thanh"};
     private final String[] healthTags = {"Bổ máu", "Tốt tim", "Giảm cân", "Giải độc", "Tốt xương", "Đẹp da", "Dễ ngủ"};
 
     public static class FilterCriteria {
