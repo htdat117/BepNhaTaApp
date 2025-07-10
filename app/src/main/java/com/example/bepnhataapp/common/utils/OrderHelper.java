@@ -81,6 +81,20 @@ public final class OrderHelper {
         // Push notification lên Firebase và hiển thị local
         OrderStatus status = "COD".equalsIgnoreCase(paymentMethod)?OrderStatus.WAIT_CONFIRM:OrderStatus.WAIT_PICKUP;
         NotificationHelper.pushOrderStatus(ctx, orderId, totalPrice, status);
+
+        // Cộng điểm cho khách hàng và gửi thông báo
+        if (customerId > 0) {
+            CustomerDao customerDao = new CustomerDao(ctx);
+            Customer customer = customerDao.findById(customerId);
+            if (customer != null) {
+                int earnPoint = (int) (totalPrice / 10000); // Ví dụ: 10.000đ = 1 điểm
+                if (earnPoint > 0) {
+                    customer.setLoyaltyPoint(customer.getLoyaltyPoint() + earnPoint);
+                    customerDao.update(customer);
+                    NotificationHelper.pushEarnPoint(ctx, earnPoint, "Đặt hàng", "Bạn đã nhận được " + earnPoint + " điểm khi đặt hàng thành công!");
+                }
+            }
+        }
         return orderId;
     }
 

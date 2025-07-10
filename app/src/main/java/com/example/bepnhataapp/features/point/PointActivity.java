@@ -8,10 +8,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.utils.SessionManager;
+import com.example.bepnhataapp.features.voucher.VoucherDisplayAdapter;
+import com.example.bepnhataapp.features.voucher.VoucherItem;
+import com.example.bepnhataapp.common.dao.CouponDao;
+import com.example.bepnhataapp.common.model.Coupon;
 
 public class PointActivity extends AppCompatActivity {
 
@@ -113,5 +119,39 @@ public class PointActivity extends AppCompatActivity {
         if (tvRankNote != null) tvRankNote.setText(rankNote);
         if (tvRankPoint != null) tvRankPoint.setText(point + "/" + maxPoint);
         if (progressRank != null) progressRank.setProgress(progress);
+
+        // Hiển thị quà tặng hấp dẫn (voucher)
+        RecyclerView rvGifts = findViewById(R.id.rvGifts);
+        if (rvGifts != null) {
+            rvGifts.setLayoutManager(new LinearLayoutManager(this));
+            java.util.List<VoucherItem> voucherList = new java.util.ArrayList<>();
+            String phoneGift = SessionManager.getPhone(this);
+            long customerIdGift = -1;
+            int userPointGift = 0;
+            if (phoneGift != null) {
+                CustomerDao customerDao = new CustomerDao(this);
+                Customer customer = customerDao.findByPhone(phoneGift);
+                if (customer != null) {
+                    customerIdGift = customer.getCustomerID();
+                    userPointGift = customer.getLoyaltyPoint();
+                }
+            }
+            CouponDao couponDao = new CouponDao(this);
+            java.util.List<Coupon> coupons = couponDao.getAvailableForCustomer(customerIdGift, 0);
+            for (Coupon c : coupons) {
+                voucherList.add(new VoucherItem(
+                    c.getCouponTitle(),
+                    (c.getCouponValue()<=100? ("Giảm "+c.getCouponValue()+"%") : ("Giảm "+java.text.NumberFormat.getInstance().format(c.getCouponValue())+"đ")) +
+                            (c.getMaxDiscount()!=null? (" tối đa "+java.text.NumberFormat.getInstance().format(c.getMaxDiscount())+"đ") : "") +
+                            ", đơn tối thiểu "+java.text.NumberFormat.getInstance().format(c.getMinPrice())+"đ",
+                    c.getExpireDate(),
+                    true,
+                    36 // điểm cần để đổi voucher, bạn có thể sửa lại cho phù hợp
+                ));
+            }
+            VoucherDisplayAdapter adapter = new VoucherDisplayAdapter(voucherList, this, userPointGift);
+            rvGifts.setAdapter(adapter);
+            rvGifts.setVisibility(voucherList.isEmpty() ? View.GONE : View.VISIBLE);
+        }
     }
 } 

@@ -76,6 +76,24 @@ public final class NotificationHelper {
         showLocalNotification(ctx, title, body);
     }
 
+    public static void pushEarnPoint(Context ctx, int point, String action, String description) {
+        String title = (point > 0 ? "Bạn vừa nhận được " + point + " điểm tích lũy!" : "Bạn vừa sử dụng " + (-point) + " điểm tích lũy!");
+        String body = (description != null && !description.isEmpty()) ? description : ("Hoạt động: " + action);
+        try {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String,Object> data = new HashMap<>();
+            long userId = SessionManager.isLoggedIn(ctx) ? getCurrentCustomerId(ctx) : 0;
+            data.put("userId", userId);
+            data.put("title", title);
+            data.put("body", body);
+            data.put("status", "EARN_POINT");
+            data.put("timestamp", System.currentTimeMillis());
+            data.put("read", false);
+            db.collection("notifications").add(data);
+        } catch(Exception ignore) { }
+        showLocalNotification(ctx, title, body);
+    }
+
     /** Hiển thị Notification native */
     public static void showLocalNotification(Context ctx, String title, String body){
         createChannelIfNeeded(ctx);

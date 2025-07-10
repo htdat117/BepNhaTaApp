@@ -51,6 +51,8 @@ public class VoucherDisplayAdapter extends RecyclerView.Adapter<VoucherDisplayAd
         holder.tvRedeem.setOnClickListener(v -> {
             if (userPoint < item.point) return;
             // TODO: Xử lý đổi điểm ở đây
+            // Sau khi trừ điểm thành công:
+            com.example.bepnhataapp.common.utils.NotificationHelper.pushEarnPoint(context, -item.point, "Đổi voucher", "Bạn đã sử dụng " + item.point + " điểm để đổi voucher.");
         });
         // Thêm xử lý sự kiện nhấp vào mục
         holder.itemView.setOnClickListener(v -> {
