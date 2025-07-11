@@ -17,6 +17,8 @@ import com.example.bepnhataapp.common.model.RecipeEntity;
 import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.utils.SessionManager;
+import com.example.bepnhataapp.common.dao.RecipeDetailDao;
+import com.example.bepnhataapp.common.model.RecipeDetail;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -61,21 +63,27 @@ public class DownloadedContentActivity extends AppCompatActivity {
         long customerId = customer.getCustomerID();
         RecipeDownloadDao downloadDao = new RecipeDownloadDao(this);
         RecipeDao recipeDao = new RecipeDao(this);
+        RecipeDetailDao detailDao = new RecipeDetailDao(this);
         for (RecipeDownload rd : downloadDao.getByCustomerID(customerId)) {
             RecipeEntity entity = recipeDao.getAllRecipes().stream()
                 .filter(r -> r.getRecipeID() == rd.getRecipeID())
                 .findFirst().orElse(null);
+            RecipeDetail detail = detailDao.get(rd.getRecipeID());
             if (entity != null) {
-                String cal = "700 cal";
-                String time = "50 phút";
+                String cal = (detail != null && detail.getCalo() > 0) ? ((int)detail.getCalo()) + " cal" : "700 cal";
+                String time = (detail != null && detail.getCookingTimeMinutes() > 0) ? detail.getCookingTimeMinutes() + " phút" : "20 phút";
+                String benefit = (detail != null && detail.getBenefit() != null && !detail.getBenefit().isEmpty()) ? detail.getBenefit() : "Bổ máu";
+                String level = (detail != null && detail.getLevel() != null && !detail.getLevel().isEmpty()) ? detail.getLevel() : "Trung bình";
                 list.add(new DownloadedRecipe(
                     entity.getRecipeID(),
                     entity.getRecipeName(),
                     cal,
-                    "Giàu đạm",
+                    benefit,
                     time,
                     R.drawable.food_placeholder,
-                    entity.getImageThumb()
+                    entity.getImageThumb(),
+                    benefit,
+                    level
                 ));
             }
         }

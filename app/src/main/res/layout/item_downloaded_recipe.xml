@@ -3,119 +3,145 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:background="@android:color/white">
 
+        <!-- Ảnh món ăn lớn bo góc trên -->
         <ImageView
             android:id="@+id/imageViewRecipe"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/food_placeholder" />
+            android:src="@drawable/food_placeholder"
+            android:background="@drawable/rounded_img_16" />
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <!-- Tên món ăn -->
+        <TextView
+            android:id="@+id/textViewRecipeName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp">
+            android:text="Tên món ăn"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#222"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="0dp"/>
 
-            <TextView
-                android:id="@+id/textViewRecipeName"
+        <!-- Hàng tag + nút xóa -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="16dp">
+
+            <!-- Tag thời gian -->
+            <LinearLayout
+                android:id="@+id/layoutTagTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sườn non kho tiêu"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#333333"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="28dp"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp"
-                android:gravity="center_vertical">
-
+                android:background="@drawable/bg_item_radius8"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="4dp"
+                android:layout_marginEnd="8dp">
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_fire" />
+                    android:id="@+id/imgTagTime"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_time" />
                 <TextView
-                    android:id="@+id/textViewCalories"
+                    android:id="@+id/tvTagTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="700 cal"
-                    android:textSize="12sp"
-                    android:textColor="#666666"
-                    android:layout_marginStart="4dp"/>
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_arrow_down"
-                    android:layout_marginStart="12dp"/>
-                <TextView
-                    android:id="@+id/textViewProtein"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Giàu đạm"
-                    android:textSize="12sp"
-                    android:textColor="#666666"
-                    android:layout_marginStart="4dp"/>
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_time"
-                    android:layout_marginStart="12dp"/>
-                <TextView
-                    android:id="@+id/textViewTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="50 phút"
-                    android:textSize="12sp"
-                    android:textColor="#666666"
-                    android:layout_marginStart="4dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
-
-                <Button
-                    android:id="@+id/btnDeleteRecipe"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Xóa"
-                    android:textSize="12sp"
+                    android:text="20 phút"
                     android:textColor="#E7642F"
-                    android:background="@drawable/bg_button_outline_orange"
-                    android:layout_marginEnd="8dp"
-                    android:minHeight="36dp"/>
-
-                <Button
-                    android:id="@+id/btnViewRecipe"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Xem"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/bg_button_rounded_orange"
-                    android:minHeight="36dp"/>
+                    android:textSize="13sp"
+                    android:layout_marginStart="3dp"/>
             </LinearLayout>
 
+            <!-- Tag benefit -->
+            <LinearLayout
+                android:id="@+id/layoutTagBenefit"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_item_radius8"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="4dp"
+                android:layout_marginEnd="8dp">
+                <ImageView
+                    android:id="@+id/imgTagBenefit"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_bone" />
+                <TextView
+                    android:id="@+id/tvTagBenefit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bổ máu"
+                    android:textColor="#E7642F"
+                    android:textSize="13sp"
+                    android:layout_marginStart="3dp"/>
+            </LinearLayout>
+
+            <!-- Tag level -->
+            <LinearLayout
+                android:id="@+id/layoutTagLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_item_radius8"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="4dp"
+                android:layout_marginEnd="8dp">
+                <ImageView
+                    android:id="@+id/imgTagLevel"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_medium_time" />
+                <TextView
+                    android:id="@+id/tvTagLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trung bình"
+                    android:textColor="#E7642F"
+                    android:textSize="13sp"
+                    android:layout_marginStart="3dp"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Nút xóa bo tròn nền xám đậm -->
+            <Button
+                android:id="@+id/btnDeleteRecipe"
+                android:layout_width="88dp"
+                android:layout_height="40dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="Xóa"
+                android:textSize="14sp"
+                android:textColor="#fff"
+                android:background="@drawable/bg_button_gray_round"
+                android:layout_gravity="end"/>
         </LinearLayout>
 
     </LinearLayout>

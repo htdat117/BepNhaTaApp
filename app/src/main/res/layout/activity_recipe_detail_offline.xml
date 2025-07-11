@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <!-- Header -->
     <LinearLayout
@@ -11,27 +12,26 @@
         android:layout_height="wrap_content"
         android:background="@color/primary1"
         android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
         android:gravity="center_vertical">
 
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_back_left"
             android:contentDescription="Back" />
 
         <TextView
             android:id="@+id/tvHeaderTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Chi tiết công thức (offline)"
+            android:layout_weight="1"
+            android:text="Chi tiết Công thức"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_marginStart="16dp"/>
+            android:gravity="center"/>
     </LinearLayout>
 
     <ScrollView
@@ -50,11 +50,10 @@
             <!-- Ảnh công thức -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="200dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeColor="@android:color/transparent">
-
                 <ImageView
                     android:id="@+id/imvRecipe"
                     android:layout_width="match_parent"
@@ -63,54 +62,33 @@
                     android:src="@drawable/food_placeholder" />
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Tên, danh mục, calo, thời gian -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- Tên món ăn -->
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="12dp">
+                android:text="Tên công thức"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="12dp"/>
 
-                <TextView
-                    android:id="@+id/txtName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tên công thức"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/black"/>
-
-                <TextView
-                    android:id="@+id/tvRecipeCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Danh mục"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"/>
-
-                <TextView
-                    android:id="@+id/tvRecipeCaloTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 Kcal • 0 Min"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"/>
-            </LinearLayout>
-
-            <!-- Mô tả -->
+            <!-- Mô tả món ăn -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mô tả món ăn"
-                android:textSize="16sp"
                 android:textStyle="bold"
-                android:paddingTop="16dp"/>
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"/>
             <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mô tả chi tiết"
                 android:textSize="15sp"
-                android:textColor="@color/dark1"/>
+                android:textColor="@color/dark1"
+                android:layout_marginBottom="8dp"/>
 
             <!-- Thành phần dinh dưỡng -->
             <TextView
@@ -119,43 +97,100 @@
                 android:text="Thành phần dinh dưỡng"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="8dp"/>
             <LinearLayout
                 android:id="@+id/layoutNutrition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp">
+                <include layout="@layout/item_nutrition" />
+                <!-- Lặp lại include này cho từng thành phần: carbs, protein, calo, fat -->
+            </LinearLayout>
 
-            <!-- Nguyên liệu -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Tab chuyển đổi Nguyên liệu / Các bước thực hiện -->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleGroupTab"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nguyên liệu"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                app:singleSelection="true"
+                app:checkedButton="@id/btnTabIngredient">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabIngredient"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Nguyên liệu"
+                    android:textSize="14sp"
+                    app:cornerRadius="24dp"
+                    app:iconGravity="textStart"
+                    app:checkedIcon="@null"
+                    android:backgroundTint="@color/segmented_bg"
+                    android:textColor="@color/segmented_text"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabGuide"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Các bước thực hiện"
+                    android:textSize="14sp"
+                    app:cornerRadius="24dp"
+                    app:iconGravity="textStart"
+                    app:checkedIcon="@null"
+                    android:backgroundTint="@color/segmented_bg"
+                    android:textColor="@color/segmented_text"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!-- Chọn khẩu phần -->
             <LinearLayout
-                android:id="@+id/layoutIngredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp"/>
+                android:gravity="center_vertical"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Khẩu phần cho"
+                    android:textStyle="bold"
+                    android:textSize="15sp"/>
+                <Spinner
+                    android:id="@+id/spinnerServing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"/>
+            </LinearLayout>
 
-            <!-- Hướng dẫn nấu -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Các bước thực hiện"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
-            <LinearLayout
-                android:id="@+id/layoutInstructions"
+            <!-- Tab nội dung -->
+            <FrameLayout
+                android:id="@+id/tabContentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp">
+                <!-- RecyclerView nguyên liệu và các bước thực hiện sẽ được show/hide bằng code -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvIngredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvInstructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+            </FrameLayout>
         </LinearLayout>
     </ScrollView>
+
+    <include layout="@layout/layout_bottom_navigation"
+        android:id="@+id/bottom_navigation_container"/>
+
 </LinearLayout> 

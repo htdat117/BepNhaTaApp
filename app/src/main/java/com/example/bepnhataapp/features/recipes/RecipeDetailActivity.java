@@ -321,7 +321,6 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         });
 
         // Hiển thị nguyên liệu
-        LinearLayout layoutIngredients = findViewById(R.id.layoutIngredients);
         RecyclerView rcStepGuide = findViewById(R.id.rcStepGuide);
         RecyclerView rcComment = findViewById(R.id.rcComment);
         TextView txtCommentCount = findViewById(R.id.txtCommentCount);
@@ -510,7 +509,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         TextView tvAllComments = findViewById(R.id.tvSeeAllComments);
         if (tvAllComments != null) {
             tvAllComments.setOnClickListener(v -> {
-                android.content.Intent intent = new android.content.Intent(this, com.example.bepnhataapp.features.recipes.RecipeComment.class);
+                android.content.Intent intent = new android.content.Intent(this, com.example.bepnhataapp.features.recipes.RecipeCommentActivity.class);
                 intent.putExtra("recipeId", recipeId);
                 startActivity(intent);
             });
