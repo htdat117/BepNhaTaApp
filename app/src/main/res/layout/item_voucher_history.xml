@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:orientation="horizontal"
-    android:background="@drawable/bg_voucher_history_border"
-    android:padding="12dp"
-    android:layout_marginBottom="12dp">
+    android:gravity="center_vertical"
+    android:background="@android:color/transparent">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvVoucherTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:text="Đặt món"
+        android:textSize="15sp"
+        android:textColor="#222222"
+        android:gravity="start" />
 
-        <TextView
-            android:id="@+id/tvVoucherTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GIAM20K"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="#222222" />
-
-        <TextView
-            android:id="@+id/tvVoucherDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Giảm 20.000đ cho đơn từ 149.000đ\nHSD: 31/05/2025\nĐổi bằng: 200 điểm"
-            android:textSize="14sp"
-            android:textColor="#222222"
-            android:layout_marginTop="2dp" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imgVoucher"
-        android:layout_width="192dp"
-        android:layout_height="108dp"
-        android:src="@drawable/ticket_his"
-        android:layout_gravity="center_vertical"
-        android:contentDescription="Voucher" />
+    <TextView
+        android:id="@+id/tvPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+100 điểm"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="#F36B22"
+        android:gravity="end" />
 </LinearLayout> 

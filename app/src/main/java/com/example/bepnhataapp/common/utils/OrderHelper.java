@@ -91,6 +91,16 @@ public final class OrderHelper {
                 if (earnPoint > 0) {
                     customer.setLoyaltyPoint(customer.getLoyaltyPoint() + earnPoint);
                     customerDao.update(customer);
+                    // Ghi nhận lịch sử cộng điểm
+                    com.example.bepnhataapp.common.dao.PointLogDao logDao = new com.example.bepnhataapp.common.dao.PointLogDao(ctx);
+                    com.example.bepnhataapp.common.model.PointLog log = new com.example.bepnhataapp.common.model.PointLog(
+                        customer.getCustomerID(),
+                        "Cộng điểm",
+                        earnPoint,
+                        "Nhận điểm khi đặt hàng thành công",
+                        new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date())
+                    );
+                    logDao.insert(log);
                     NotificationHelper.pushEarnPoint(ctx, earnPoint, "Đặt hàng", "Bạn đã nhận được " + earnPoint + " điểm khi đặt hàng thành công!");
                 }
             }

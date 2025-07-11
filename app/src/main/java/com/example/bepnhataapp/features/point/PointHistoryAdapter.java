@@ -28,8 +28,10 @@ public class PointHistoryAdapter extends RecyclerView.Adapter<PointHistoryAdapte
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         PointHistoryItem item = items.get(position);
         holder.tvVoucherTitle.setText(item.getTitle());
-        holder.tvVoucherDesc.setText(item.getDesc());
-        holder.imgVoucher.setImageResource(item.getImageResId());
+        int point = item.getPoint();
+        String pointText = (point > 0 ? "+" : "") + point + " điểm";
+        holder.tvPoint.setText(pointText);
+        holder.tvPoint.setTextColor(point > 0 ? 0xFFF36B22 : 0xFFE53935); // Cam cho cộng, đỏ cho trừ
     }
 
     @Override
@@ -38,13 +40,11 @@ public class PointHistoryAdapter extends RecyclerView.Adapter<PointHistoryAdapte
     }
 
     public static class HistoryViewHolder extends RecyclerView.ViewHolder {
-        TextView tvVoucherTitle, tvVoucherDesc;
-        ImageView imgVoucher;
+        TextView tvVoucherTitle, tvPoint;
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
             tvVoucherTitle = itemView.findViewById(R.id.tvVoucherTitle);
-            tvVoucherDesc = itemView.findViewById(R.id.tvVoucherDesc);
-            imgVoucher = itemView.findViewById(R.id.imgVoucher);
+            tvPoint = itemView.findViewById(R.id.tvPoint);
         }
     }
 
@@ -52,14 +52,14 @@ public class PointHistoryAdapter extends RecyclerView.Adapter<PointHistoryAdapte
     public static class PointHistoryItem {
         private final String title;
         private final String desc;
-        private final int imageResId;
-        public PointHistoryItem(String title, String desc, int imageResId) {
+        private final int point;
+        public PointHistoryItem(String title, String desc, int point) {
             this.title = title;
             this.desc = desc;
-            this.imageResId = imageResId;
+            this.point = point;
         }
         public String getTitle() { return title; }
         public String getDesc() { return desc; }
-        public int getImageResId() { return imageResId; }
+        public int getPoint() { return point; }
     }
 } 

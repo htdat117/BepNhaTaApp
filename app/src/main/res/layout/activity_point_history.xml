@@ -31,17 +31,7 @@
             android:textSize="20sp"
             android:textColor="#FFFFFF" />
 
-        <TextView
-            android:id="@+id/tvHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="20dp"
-            android:text="Lịch sử"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+
     </RelativeLayout>
 
     <ScrollView

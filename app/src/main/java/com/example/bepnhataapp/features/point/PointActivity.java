@@ -18,6 +18,10 @@ import com.example.bepnhataapp.features.voucher.VoucherDisplayAdapter;
 import com.example.bepnhataapp.features.voucher.VoucherItem;
 import com.example.bepnhataapp.common.dao.CouponDao;
 import com.example.bepnhataapp.common.model.Coupon;
+import com.example.bepnhataapp.common.dao.PointLogDao;
+import com.example.bepnhataapp.common.model.PointLog;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PointActivity extends AppCompatActivity {
 
@@ -90,35 +94,42 @@ public class PointActivity extends AppCompatActivity {
         TextView tvRankName = findViewById(R.id.tvRankName);
         TextView tvRankNote = findViewById(R.id.tvRankNote);
         ProgressBar progressRank = findViewById(R.id.progressRank);
+        ImageView imgRank = findViewById(R.id.imgRank); // Thêm dòng này để lấy ImageView icon bậc
         int maxPoint = 499;
         String rankName = "Tân thủ";
         String rankNote = "Cần tích lũy thêm " + (500 - point) + " điểm nữa để nâng lên Thực tập bếp";
         int progress = (int) ((point * 100.0f) / 499);
+        int iconRes = R.drawable.ic_rank_newbie; // Mặc định icon bậc Tân thủ
         if (point >= 500 && point < 1500) {
             rankName = "Thực tập bếp";
             maxPoint = 1499;
             rankNote = "Cần tích lũy thêm " + (1500 - point) + " điểm nữa để nâng lên Đầu Bếp Nhà";
             progress = (int) (((point - 500) * 100.0f) / (1499 - 500));
+            iconRes = R.drawable.ic_rank_trainee;
         } else if (point >= 1500 && point < 7501) {
             rankName = "Đầu Bếp Nhà";
             maxPoint = 7500;
             rankNote = "Cần tích lũy thêm " + (7501 - point) + " điểm nữa để nâng lên Bếp Trưởng";
             progress = (int) (((point - 1500) * 100.0f) / (7500 - 1500));
+            iconRes = R.drawable.ic_rank_chef;
         } else if (point >= 7501 && point < 14000) {
             rankName = "Bếp Trưởng";
             maxPoint = 13999;
             rankNote = "Cần tích lũy thêm " + (14000 - point) + " điểm nữa để nâng lên Đại Sứ Bếp Nhà Ta";
             progress = (int) (((point - 7501) * 100.0f) / (13999 - 7501));
+            iconRes = R.drawable.ic_rank_masterchef;
         } else if (point >= 14000) {
             rankName = "Đại Sứ Bếp Nhà Ta";
             maxPoint = point; // Đã max cấp, thanh luôn đầy
             rankNote = "Bạn đã đạt cấp bậc cao nhất!";
             progress = 100;
+            iconRes = R.drawable.ic_rank_ambassador;
         }
         if (tvRankName != null) tvRankName.setText(rankName);
         if (tvRankNote != null) tvRankNote.setText(rankNote);
         if (tvRankPoint != null) tvRankPoint.setText(point + "/" + maxPoint);
         if (progressRank != null) progressRank.setProgress(progress);
+        if (imgRank != null) imgRank.setImageResource(iconRes);
 
         // Hiển thị quà tặng hấp dẫn (voucher)
         RecyclerView rvGifts = findViewById(R.id.rvGifts);
@@ -152,6 +163,34 @@ public class PointActivity extends AppCompatActivity {
             VoucherDisplayAdapter adapter = new VoucherDisplayAdapter(voucherList, this, userPointGift);
             rvGifts.setAdapter(adapter);
             rvGifts.setVisibility(voucherList.isEmpty() ? View.GONE : View.VISIBLE);
+        }
+
+        // Hiển thị lịch sử điểm
+        RecyclerView rvPointHistory = findViewById(R.id.rvPointHistory);
+        if (rvPointHistory != null) {
+            rvPointHistory.setLayoutManager(new LinearLayoutManager(this));
+            List<PointLog> logs = new ArrayList<>();
+            long customerId = -1;
+            if (phone != null) {
+                CustomerDao dao = new CustomerDao(this);
+                Customer customer = dao.findByPhone(phone);
+                if (customer != null) {
+                    customerId = customer.getCustomerID();
+                }
+            }
+            if (customerId > 0) {
+                PointLogDao logDao = new PointLogDao(this);
+                logs = logDao.getByCustomer(customerId);
+            }
+            List<PointHistoryAdapter.PointHistoryItem> items = new ArrayList<>();
+            for (PointLog log : logs) {
+                String title = log.getAction();
+                String desc = log.getDescription();
+                int logPoint = log.getPoint();
+                items.add(new PointHistoryAdapter.PointHistoryItem(title, desc, logPoint));
+            }
+            PointHistoryAdapter adapter = new PointHistoryAdapter(items);
+            rvPointHistory.setAdapter(adapter);
         }
     }
 } 
