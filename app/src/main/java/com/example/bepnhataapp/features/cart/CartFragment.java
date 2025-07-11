@@ -53,8 +53,8 @@ public class CartFragment extends Fragment {
         tvDiscount = view.findViewById(R.id.tvDiscount);
         
         // Xử lý nút back
-//        ImageView btnBack = view.findViewById(R.id.btnBack);
-//        if (btnBack != null) btnBack.setOnClickListener(v -> requireActivity().finish());
+        ImageView btnBack = view.findViewById(R.id.btnBack);
+        if (btnBack != null) btnBack.setOnClickListener(v -> requireActivity().finish());
         
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CartAdapter(new ArrayList<>());
@@ -228,8 +228,6 @@ public class CartFragment extends Fragment {
         // Header controls
         TextView tvTitle = view.findViewById(R.id.txtContent);
         if(tvTitle!=null) tvTitle.setText("Giỏ hàng");
-        ImageView ivBack = view.findViewById(R.id.iv_logo); // back arrow icon in header
-        if(ivBack!=null) ivBack.setOnClickListener(v -> requireActivity().finish());
 
         java.util.function.Consumer<Boolean> applySelectAll = checked -> {
             for(CartItem ci:adapter.getItems()) ci.setSelected(checked);

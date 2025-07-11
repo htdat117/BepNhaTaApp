@@ -89,7 +89,7 @@ public class conversation extends AppCompatActivity {
         llMessages = findViewById(R.id.llMessages);
         edtInput = findViewById(R.id.message_input);
         ImageView btnSend = findViewById(R.id.btn_send);
-        ImageView ivBack = findViewById(R.id.iv_logo);
+        ImageView ivBack = findViewById(R.id.btnBack);
         ImageView btnCamera = findViewById(R.id.btn_camera);
         ivPreview = findViewById(R.id.iv_image_preview);
 
