@@ -20,6 +20,12 @@ import com.example.bepnhataapp.common.model.RecipeIngredient;
 import com.example.bepnhataapp.common.model.InstructionRecipe;
 import com.example.bepnhataapp.common.model.Ingredient;
 import java.util.List;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.bepnhataapp.common.adapter.IngredientAdapter;
+import com.example.bepnhataapp.features.recipes.RecipeStepGuideAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import java.util.ArrayList;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 public class RecipeDetailOfflineActivity extends AppCompatActivity {
     @Override
@@ -38,12 +44,23 @@ public class RecipeDetailOfflineActivity extends AppCompatActivity {
 
         ImageView imvRecipe = findViewById(R.id.imvRecipe);
         TextView txtName = findViewById(R.id.txtName);
-        TextView tvCategory = findViewById(R.id.tvRecipeCategory);
-        TextView tvCaloTime = findViewById(R.id.tvRecipeCaloTime);
         TextView tvDescription = findViewById(R.id.tvDescription);
         LinearLayout layoutNutrition = findViewById(R.id.layoutNutrition);
-        LinearLayout layoutIngredients = findViewById(R.id.layoutIngredients);
-        LinearLayout layoutInstructions = findViewById(R.id.layoutInstructions);
+        RecyclerView rvIngredients = findViewById(R.id.rvIngredients);
+        RecyclerView rvInstructions = findViewById(R.id.rvInstructions);
+
+        MaterialButtonToggleGroup toggleGroupTab = findViewById(R.id.toggleGroupTab);
+        toggleGroupTab.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == R.id.btnTabIngredient) {
+                    rvIngredients.setVisibility(View.VISIBLE);
+                    rvInstructions.setVisibility(View.GONE);
+                } else if (checkedId == R.id.btnTabGuide) {
+                    rvIngredients.setVisibility(View.GONE);
+                    rvInstructions.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         // Lấy dữ liệu công thức
         RecipeDao recipeDao = new RecipeDao(this);
@@ -52,7 +69,6 @@ public class RecipeDetailOfflineActivity extends AppCompatActivity {
                 .findFirst().orElse(null);
         if (entity != null) {
             txtName.setText(entity.getRecipeName());
-            tvCategory.setText(entity.getCategory());
             tvDescription.setText(entity.getDescription());
             String imgStr = entity.getImageThumb() != null ? entity.getImageThumb().trim() : "";
             if (imgStr.isEmpty()) {
@@ -69,31 +85,40 @@ public class RecipeDetailOfflineActivity extends AppCompatActivity {
         RecipeDetailDao detailDao = new RecipeDetailDao(this);
         RecipeDetail detail = detailDao.get(recipeId);
         if (detail != null) {
-            tvCaloTime.setText((int)detail.getCalo() + " Kcal • " + detail.getCookingTimeMinutes() + " Min");
             layoutNutrition.removeAllViews();
+            addNutrition(layoutNutrition, "Carbs", (int)detail.getCarbs() + "g carbs", R.drawable.ic_carb);
+            addNutrition(layoutNutrition, "Protein", (int)detail.getProtein() + "g proteins", R.drawable.ic_protein);
             addNutrition(layoutNutrition, "Calo", (int)detail.getCalo() + " Kcal", R.drawable.ic_calo);
-            addNutrition(layoutNutrition, "Protein", (int)detail.getProtein() + "g", R.drawable.ic_protein);
-            addNutrition(layoutNutrition, "Carbs", (int)detail.getCarbs() + "g", R.drawable.ic_carb);
-            addNutrition(layoutNutrition, "Fat", (int)detail.getFat() + "g", R.drawable.ic_fat);
+            addNutrition(layoutNutrition, "Fat", (int)detail.getFat() + "g fat", R.drawable.ic_fat);
         }
 
         // Nguyên liệu
         RecipeIngredientDao ingredientDao = new RecipeIngredientDao(this);
         List<RecipeIngredient> ingredients = ingredientDao.getByRecipeID(recipeId);
         IngredientDao ingDao = new IngredientDao(this);
-        layoutIngredients.removeAllViews();
+        rvIngredients.removeAllViews();
+        // Chuẩn bị dữ liệu nguyên liệu
+        List<Ingredient> ingredientEntities = new ArrayList<>();
         for (RecipeIngredient ing : ingredients) {
             Ingredient ingEntity = ingDao.getById(ing.getIngredientID());
-            addIngredient(layoutIngredients, ingEntity, ing.getQuantity());
+            if (ingEntity != null) {
+                // Gán số lượng vào thuộc tính quantity để adapter hiển thị
+                ingEntity.quantity = ing.getQuantity() + "";
+                ingredientEntities.add(ingEntity);
+            }
         }
+        IngredientAdapter ingredientAdapter = new IngredientAdapter(this, ingredientEntities, R.layout.item_ingredient);
+        rvIngredients.setLayoutManager(new LinearLayoutManager(this));
+        rvIngredients.setAdapter(ingredientAdapter);
 
         // Hướng dẫn
         InstructionRecipeDao instructionDao = new InstructionRecipeDao(this);
         List<InstructionRecipe> instructions = instructionDao.getByRecipe(recipeId);
-        layoutInstructions.removeAllViews();
-        for (InstructionRecipe ins : instructions) {
-            addInstruction(layoutInstructions, ins.getNumberSection(), ins.getTitle(), ins.getContent());
-        }
+        rvInstructions.removeAllViews();
+        // Chuẩn bị dữ liệu các bước thực hiện
+        RecipeStepGuideAdapter stepAdapter = new RecipeStepGuideAdapter(instructions);
+        rvInstructions.setLayoutManager(new LinearLayoutManager(this));
+        rvInstructions.setAdapter(stepAdapter);
     }
 
     private void addNutrition(LinearLayout parent, String name, String value, int iconRes) {
@@ -105,35 +130,5 @@ public class RecipeDetailOfflineActivity extends AppCompatActivity {
         tvName.setText(name);
         tvValue.setText(value);
         parent.addView(v);
-    }
-
-    private void addIngredient(LinearLayout parent, Ingredient ingEntity, double quantity) {
-        View v = getLayoutInflater().inflate(R.layout.item_ingredient_grid, parent, false);
-        ImageView iv = v.findViewById(R.id.ivIngredient);
-        TextView tvName = v.findViewById(R.id.tvIngredientName);
-        TextView tvQty = v.findViewById(R.id.tvIngredientQuantity);
-        if (ingEntity != null) {
-            if (ingEntity.getImageLink() != null && !ingEntity.getImageLink().isEmpty()) {
-                Glide.with(this).load(ingEntity.getImageLink()).placeholder(R.drawable.food_placeholder).into(iv);
-            } else if (ingEntity.getImage() != null && ingEntity.getImage().length > 0) {
-                Glide.with(this).load(ingEntity.getImage()).placeholder(R.drawable.food_placeholder).into(iv);
-            } else {
-                iv.setImageResource(R.drawable.food_placeholder);
-            }
-            tvName.setText(ingEntity.getIngredientName());
-        } else {
-            iv.setImageResource(R.drawable.food_placeholder);
-            tvName.setText("Không rõ");
-        }
-        tvQty.setText(String.valueOf(quantity));
-        parent.addView(v);
-    }
-
-    private void addInstruction(LinearLayout parent, int step, String title, String content) {
-        TextView tv = new TextView(this);
-        tv.setText("Bước " + step + ": " + title + "\n" + content);
-        tv.setTextSize(15);
-        tv.setPadding(0, 8, 0, 8);
-        parent.addView(tv);
     }
 } 

@@ -8,8 +8,10 @@ public class DownloadedRecipe {
     private int imageResId;
     private String imageThumb;
     private int recipeId;
+    private String benefit;
+    private String level;
 
-    public DownloadedRecipe(int recipeId, String title, String cal, String type, String time, int imageResId, String imageThumb) {
+    public DownloadedRecipe(int recipeId, String title, String cal, String type, String time, int imageResId, String imageThumb, String benefit, String level) {
         this.recipeId = recipeId;
         this.title = title;
         this.cal = cal;
@@ -17,6 +19,8 @@ public class DownloadedRecipe {
         this.time = time;
         this.imageResId = imageResId;
         this.imageThumb = imageThumb;
+        this.benefit = benefit;
+        this.level = level;
     }
 
     public String getTitle() { return title; }
@@ -26,4 +30,6 @@ public class DownloadedRecipe {
     public int getImageResId() { return imageResId; }
     public String getImageThumb() { return imageThumb; }
     public int getRecipeId() { return recipeId; }
+    public String getBenefit() { return benefit; }
+    public String getLevel() { return level; }
 } 
