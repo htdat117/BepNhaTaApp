@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import android.graphics.BitmapFactory;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import com.example.bepnhataapp.common.dao.CustomerDao;
@@ -46,6 +47,7 @@ import java.text.Normalizer;
 public class RecipeDetailActivity extends BaseActivity implements BaseActivity.OnNavigationItemReselectedListener {
 
     private int servingFactor = 1; // 1 = 2 người, 2 = 4 người
+    private long currentRecipeId; // expose for update methods
     private RecipeDetailPagerAdapter pagerAdapter;
 
     @Override
@@ -53,8 +55,8 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        long recipeId = getIntent().hasExtra("recipeId") ? getIntent().getLongExtra("recipeId", -1) : getIntent().getIntExtra("recipeId", -1);
-        if (recipeId == -1) {
+        currentRecipeId = getIntent().hasExtra("recipeId") ? getIntent().getLongExtra("recipeId", -1) : getIntent().getIntExtra("recipeId", -1);
+        if (currentRecipeId == -1) {
             finish();
             return;
         }
@@ -79,7 +81,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 Customer cFav = cDaoFav.findByPhone(phoneFav);
                 if (cFav != null) {
                     FavouriteRecipeDao favDao = new FavouriteRecipeDao(this);
-                    isFavourite[0] = favDao.get(recipeId, cFav.getCustomerID()) != null;
+                    isFavourite[0] = favDao.get(currentRecipeId, cFav.getCustomerID()) != null;
                 }
             }
             // Set initial icon according to state
@@ -95,13 +97,13 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 Customer cToggle = cDaoToggle.findByPhone(phoneToggle);
                 if (cToggle == null) return;
                 FavouriteRecipeDao favDaoToggle = new FavouriteRecipeDao(this);
-                boolean currentlyFav = favDaoToggle.get(recipeId, cToggle.getCustomerID()) != null;
+                boolean currentlyFav = favDaoToggle.get(currentRecipeId, cToggle.getCustomerID()) != null;
                 if (currentlyFav) {
-                    favDaoToggle.delete(recipeId, cToggle.getCustomerID());
+                    favDaoToggle.delete(currentRecipeId, cToggle.getCustomerID());
                     Toast.makeText(this, "Đã xoá khỏi mục yêu thích", Toast.LENGTH_SHORT).show();
                 } else {
                     FavouriteRecipe fr = new FavouriteRecipe();
-                    fr.setRecipeID(recipeId);
+                    fr.setRecipeID(currentRecipeId);
                     fr.setCustomerID(cToggle.getCustomerID());
                     fr.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date()));
                     favDaoToggle.insert(fr);
@@ -133,7 +135,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
 
         // Load recipe entity
         RecipeEntity entity = new RecipeDao(this).getAllRecipes().stream()
-                .filter(r -> r.getRecipeID() == recipeId)
+                .filter(r -> r.getRecipeID() == currentRecipeId)
                 .findFirst()
                 .orElse(null);
         if (entity != null) {
@@ -154,7 +156,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
             tvDescription.setText(entity.getDescription());
         }
 
-        RecipeDetail detail = new RecipeDetailDao(this).get(recipeId);
+        RecipeDetail detail = new RecipeDetailDao(this).get(currentRecipeId);
         if (detail != null) {
             String str = String.format("%d Kcal • %d Min", (int) detail.getCalo(), detail.getCookingTimeMinutes());
             tvCaloTime.setText(str);
@@ -290,13 +292,13 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 long customerId = customer.getCustomerID();
                 RecipeDownloadDao dao = new RecipeDownloadDao(RecipeDetailActivity.this);
                 // Kiểm tra đã tải chưa
-                if (dao.get(customerId, recipeId) != null) {
+                if (dao.get(customerId, currentRecipeId) != null) {
                     Toast.makeText(RecipeDetailActivity.this, "Công thức đã được tải về trước đó!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 RecipeDownload rd = new RecipeDownload();
                 rd.setCustomerID(customerId);
-                rd.setRecipeID(recipeId);
+                rd.setRecipeID(currentRecipeId);
                 String now = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date());
                 rd.setDownloadedAt(now);
                 long result = dao.insert(rd);
@@ -310,7 +312,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
 
         tvTryProduct.setOnClickListener(v -> {
             com.example.bepnhataapp.common.dao.ProductDetailDao productDetailDao = new com.example.bepnhataapp.common.dao.ProductDetailDao(this);
-            com.example.bepnhataapp.common.model.ProductDetail productDetail = productDetailDao.getByRecipeId(recipeId);
+            com.example.bepnhataapp.common.model.ProductDetail productDetail = productDetailDao.getByRecipeId(currentRecipeId);
             if (productDetail != null) {
                 android.content.Intent intent = new android.content.Intent(this, com.example.bepnhataapp.features.products.ProductDetailActivity.class);
                 intent.putExtra("productId", productDetail.getProductID());
@@ -326,7 +328,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         TextView txtCommentCount = findViewById(R.id.txtCommentCount);
         MaterialButtonToggleGroup toggleGroupTab = findViewById(R.id.toggleGroupTab);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
-        pagerAdapter = new RecipeDetailPagerAdapter(this, recipeId, servingFactor);
+        pagerAdapter = new RecipeDetailPagerAdapter(this, currentRecipeId, servingFactor);
         viewPager.setAdapter(pagerAdapter);
         // Đồng bộ tab và page
         toggleGroupTab.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -347,7 +349,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         });
 
         // Load comments for recipe
-        java.util.List<com.example.bepnhataapp.common.model.RecipeComment> commentList = new com.example.bepnhataapp.common.dao.RecipeCommentDao(this).getByRecipe(recipeId);
+        java.util.List<com.example.bepnhataapp.common.model.RecipeComment> commentList = new com.example.bepnhataapp.common.dao.RecipeCommentDao(this).getByRecipe(currentRecipeId);
         if(txtCommentCount!=null) txtCommentCount.setText("("+commentList.size()+")");
         final RecipeCommentAdapter cmtAdapter = new RecipeCommentAdapter(commentList);
         rcComment.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
@@ -373,7 +375,17 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 CustomerDao customerDao = new CustomerDao(this);
                 Customer loggedCustomer = customerDao.findByPhone(phoneUser);
                 if (loggedCustomer != null && loggedCustomer.getAvatar() != null && loggedCustomer.getAvatar().length > 0) {
-                    Glide.with(this).load(loggedCustomer.getAvatar()).placeholder(R.drawable.bg_avatar).into(imvAvatarCmt);
+                    android.graphics.Bitmap bmp = BitmapFactory.decodeByteArray(
+                            loggedCustomer.getAvatar(),
+                            0,
+                            loggedCustomer.getAvatar().length);
+                    if(bmp!=null){
+                        imvAvatarCmt.setImageBitmap(bmp);
+                    }else{
+                        imvAvatarCmt.setImageResource(R.drawable.ic_avatar);
+                    }
+                } else {
+                    imvAvatarCmt.setImageResource(R.drawable.ic_avatar);
                 }
             }
         }
@@ -395,7 +407,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 if(cus == null) return;
 
                 RecipeComment rc = new RecipeComment();
-                rc.setRecipeID(recipeId);
+                rc.setRecipeID(currentRecipeId);
                 rc.setCustomerID(cus.getCustomerID());
                 rc.setContent(content);
                 rc.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date()));
@@ -403,7 +415,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 new RecipeCommentDao(this).insert(rc);
 
                 // Reload list
-                java.util.List<com.example.bepnhataapp.common.model.RecipeComment> updated = new RecipeCommentDao(this).getByRecipe(recipeId);
+                java.util.List<com.example.bepnhataapp.common.model.RecipeComment> updated = new RecipeCommentDao(this).getByRecipe(currentRecipeId);
                 cmtAdapter.updateData(updated);
                 if(txtCommentCount != null) txtCommentCount.setText("("+updated.size()+")");
                 if(edtComment != null) edtComment.setText("");
@@ -474,7 +486,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 }
                 // Thêm công thức vào meal time
                 com.example.bepnhataapp.common.dao.MealRecipeDao mealRecipeDao = new com.example.bepnhataapp.common.dao.MealRecipeDao(this);
-                mealRecipeDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(mealTime.getMealTimeID(), recipeId));
+                mealRecipeDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(mealTime.getMealTimeID(), currentRecipeId));
                 Toast.makeText(this, "Đã thêm công thức vào thực đơn trưa hôm nay!", Toast.LENGTH_SHORT).show();
             });
         }
@@ -510,7 +522,7 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         if (tvAllComments != null) {
             tvAllComments.setOnClickListener(v -> {
                 android.content.Intent intent = new android.content.Intent(this, com.example.bepnhataapp.features.recipes.RecipeCommentActivity.class);
-                intent.putExtra("recipeId", recipeId);
+                intent.putExtra("recipeId", currentRecipeId);
                 startActivity(intent);
             });
         }
@@ -557,5 +569,27 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         if(temp.startsWith("_")) temp = temp.substring(1);
         if(temp.endsWith("_")) temp = temp.substring(0, temp.length()-1);
         return temp;
+    }
+
+    /**
+     * Update nutrition TextViews when serving factor changes
+     * @param factor 1 = 2 người, 2 = 4 người
+     */
+    public void updateNutritionDisplay(int factor){
+        this.servingFactor = factor;
+        RecipeDetail detail = new RecipeDetailDao(this).get(currentRecipeId);
+        if(detail==null) return;
+        double carbs = detail.getCarbs() * factor;
+        double protein = detail.getProtein() * factor;
+        double calo = detail.getCalo() * factor;
+        double fat = detail.getFat() * factor;
+        TextView tvCarbs = findViewById(R.id.tvCarbs);
+        TextView tvProteinVal = findViewById(R.id.tvProtein);
+        TextView tvCaloVal = findViewById(R.id.tvCalo);
+        TextView tvFatVal = findViewById(R.id.tvFat);
+        if(tvCarbs!=null) tvCarbs.setText((int)carbs + "g carbs");
+        if(tvProteinVal!=null) tvProteinVal.setText((int)protein + "g proteins");
+        if(tvCaloVal!=null) tvCaloVal.setText((int)calo + " Kcal");
+        if(tvFatVal!=null) tvFatVal.setText((int)fat + "g fat");
     }
 } 

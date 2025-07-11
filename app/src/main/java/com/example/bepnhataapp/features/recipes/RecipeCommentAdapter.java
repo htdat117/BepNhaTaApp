@@ -47,16 +47,32 @@ public class RecipeCommentAdapter extends RecyclerView.Adapter<RecipeCommentAdap
             holder.textViewUserName.setText(customer.getFullName());
             byte[] avatar = customer.getAvatar();
             if (avatar != null && avatar.length > 0) {
+                android.graphics.Bitmap bmp = BitmapFactory.decodeByteArray(avatar,0,avatar.length);
+                if(bmp!=null){
+                    holder.imageViewProfile.setImageBitmap(bmp);
+                }else{
+                    holder.imageViewProfile.setImageResource(R.drawable.ic_avatar);
+                }
+            } else if(customer instanceof com.example.bepnhataapp.common.model.Customer && ((com.example.bepnhataapp.common.model.Customer)customer).getAvatarLink()!=null){
+                String link = ((com.example.bepnhataapp.common.model.Customer)customer).getAvatarLink();
+                Object src = link;
+                if(!link.startsWith("http")){
+                    String resName = link;
+                    int dot = resName.lastIndexOf('.');
+                    if(dot>0) resName = resName.substring(0,dot);
+                    int resId = holder.itemView.getContext().getResources().getIdentifier(resName, "drawable", holder.itemView.getContext().getPackageName());
+                    if(resId!=0) src = resId;
+                }
                 Glide.with(holder.itemView.getContext())
-                        .load(avatar)
-                        .placeholder(R.drawable.profile_placeholder)
+                        .load(src)
+                        .placeholder(R.drawable.ic_avatar)
                         .into(holder.imageViewProfile);
             } else {
-                holder.imageViewProfile.setImageResource(R.drawable.profile_placeholder);
+                holder.imageViewProfile.setImageResource(R.drawable.ic_avatar);
             }
         } else {
             holder.textViewUserName.setText("Ẩn danh");
-            holder.imageViewProfile.setImageResource(R.drawable.profile_placeholder);
+            holder.imageViewProfile.setImageResource(R.drawable.ic_avatar);
         }
         holder.textViewTime.setText(comment.getCreatedAt());
         holder.textViewCommentText.setText(comment.getContent());

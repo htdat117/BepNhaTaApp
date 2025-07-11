@@ -85,7 +85,13 @@ public class CustomerDao {
         v.put("email", c.getEmail());
         v.put("password", c.getPassword());
         v.put("phone", c.getPhone());
-        v.put("avatar", c.getAvatar());
+        if(c.getAvatar()!=null && c.getAvatar().length>0){
+            v.put("avatar", c.getAvatar());
+        } else if(c.getAvatarLink()!=null){
+            v.put("avatar", c.getAvatarLink());
+        } else {
+            v.putNull("avatar");
+        }
         v.put("customerType", c.getCustomerType());
         v.put("loyaltyPoint", c.getLoyaltyPoint());
         v.put("createdAt", c.getCreatedAt());
@@ -102,7 +108,23 @@ public class CustomerDao {
         c.setEmail(cur.getString(cur.getColumnIndexOrThrow("email")));
         c.setPassword(cur.getString(cur.getColumnIndexOrThrow("password")));
         c.setPhone(cur.getString(cur.getColumnIndexOrThrow("phone")));
-        c.setAvatar(cur.getBlob(cur.getColumnIndexOrThrow("avatar")));
+        int colIdx = cur.getColumnIndexOrThrow("avatar");
+        int type = cur.getType(colIdx);
+        if(type == android.database.Cursor.FIELD_TYPE_BLOB){
+            byte[] blob = cur.getBlob(colIdx);
+            if(blob!=null && blob.length>0) c.setAvatar(blob);
+        } else if(type == android.database.Cursor.FIELD_TYPE_STRING){
+            String avStr = cur.getString(colIdx);
+            if(avStr!=null && !avStr.isEmpty()) c.setAvatarLink(avStr);
+        } else {
+            // fallback attempt: try blob then string
+            byte[] blob = cur.getBlob(colIdx);
+            if(blob!=null && blob.length>0) c.setAvatar(blob);
+            else {
+                String avStr = cur.getString(colIdx);
+                if(avStr!=null && !avStr.isEmpty()) c.setAvatarLink(avStr);
+            }
+        }
         c.setCustomerType(cur.getString(cur.getColumnIndexOrThrow("customerType")));
         c.setLoyaltyPoint(cur.getInt(cur.getColumnIndexOrThrow("loyaltyPoint")));
         c.setCreatedAt(cur.getString(cur.getColumnIndexOrThrow("createdAt")));

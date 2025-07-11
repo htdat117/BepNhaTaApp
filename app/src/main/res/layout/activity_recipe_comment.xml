@@ -9,45 +9,32 @@
     android:fitsSystemWindows="true"
     tools:context=".features.recipes.RecipeComment">
 
-    <include layout="@layout/layout_custom_header_no_search"
-        android:id="@+id/custom_header"
+    <!-- Removed account header for clean look -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Bình luận"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:background="@color/primary1"
-        android:paddingBottom="8dp"/>
+        android:layout_height="56dp"
+        android:background="@color/primary1">
 
-    <!-- Tiêu đề Bình luận + back -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_back_arrow"
+            android:contentDescription="Quay lại" />
+
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bình luận"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:layout_centerInParent="true"
+            android:text="Tất cả bình luận"
             android:textStyle="bold"
-            android:gravity="center" />
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_back_left"
-            android:contentDescription="Back"
-            android:layout_gravity="start|center_vertical" />
-    </FrameLayout>
+            android:textSize="20sp"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
 
     <!-- Thanh nhập bình luận -->
     <LinearLayout
@@ -58,9 +45,9 @@
         android:padding="16dp">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imvAvatarCmt"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/profile_placeholder" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_avatar" />
         <EditText
             android:id="@+id/edtComment"
             android:layout_width="0dp"
@@ -70,10 +57,18 @@
             android:layout_marginStart="12dp"
             android:background="@drawable/bg_comment_input"
             android:padding="10dp"/>
+        <ImageButton
+            android:id="@+id/btnSendComment"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_send"/>
     </LinearLayout>
 
     <!-- Dropdown sắp xếp -->
     <LinearLayout
+        android:id="@+id/layoutSortRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -98,8 +93,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:src="@drawable/ic_arrow_down"
-
-            android:layout_marginStart="2dp"/>
+            android:layout_marginStart="6dp"/>
     </LinearLayout>
 
     <!-- Danh sách bình luận -->
@@ -159,7 +153,6 @@
             android:padding="6dp"/>
     </LinearLayout>
 
-    <include layout="@layout/layout_bottom_navigation"
-        android:id="@+id/bottom_navigation_container"/>
+    <!-- Removed bottom navigation for this dedicated page -->
 
 </LinearLayout>

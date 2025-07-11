@@ -96,10 +96,18 @@ public class RecipeIngredientFragment extends Fragment {
                         btnNumofPeople.setText("4 người");
                     }
                     setServingFactor(servingFactor);
+                    if(getActivity() instanceof RecipeDetailActivity){
+                        ((RecipeDetailActivity)getActivity()).updateNutritionDisplay(servingFactor);
+                    }
                     return true;
                 });
                 popup.show();
             });
+        }
+
+        // Ensure nutrition shown correctly on first load based on servingFactor
+        if(getActivity() instanceof RecipeDetailActivity){
+            ((RecipeDetailActivity)getActivity()).updateNutritionDisplay(servingFactor);
         }
 
         return view;

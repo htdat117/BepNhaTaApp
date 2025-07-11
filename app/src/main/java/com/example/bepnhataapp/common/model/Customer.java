@@ -9,6 +9,7 @@ public class Customer {
     private String password;
     private String phone;
     private byte[] avatar;
+    private String avatarLink; // URL or resource name for avatar when not stored as byte[]
     private String customerType;
     private int loyaltyPoint;
     private String createdAt;
@@ -49,6 +50,8 @@ public class Customer {
     public void setPhone(String phone) { this.phone = phone; }
     public byte[] getAvatar() { return avatar; }
     public void setAvatar(byte[] avatar) { this.avatar = avatar; }
+    public String getAvatarLink(){ return avatarLink; }
+    public void setAvatarLink(String link){ this.avatarLink = link; }
     public String getCustomerType() { return customerType; }
     public void setCustomerType(String customerType) { this.customerType = customerType; }
     public int getLoyaltyPoint() { return loyaltyPoint; }
