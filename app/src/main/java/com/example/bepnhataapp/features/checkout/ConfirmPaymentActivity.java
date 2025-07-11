@@ -14,7 +14,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_payment);
 
-        ImageView back = findViewById(R.id.iv_logo);
+        ImageView back = findViewById(R.id.btnBack);
         TextView title = findViewById(R.id.txtContent);
         TextView change = findViewById(R.id.txtChange);
         if(title!=null) title.setText("Xác nhận thanh toán");

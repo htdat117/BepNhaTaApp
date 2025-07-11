@@ -47,7 +47,7 @@ public class CheckoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_checkout);
 
         // header controls
-        ImageView ivBack = findViewById(R.id.iv_logo); // back arrow in header layout_back_header
+        ImageView ivBack = findViewById(R.id.btnBack); // back arrow in header layout_back_header
         TextView tvTitle = findViewById(R.id.txtContent);
         TextView tvChange = findViewById(R.id.txtChange);
         if (tvTitle != null) tvTitle.setText("Thanh toán");

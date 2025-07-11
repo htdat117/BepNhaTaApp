@@ -25,9 +25,9 @@ public class ShippingInfoActivity extends AppCompatActivity {
         findViewById(R.id.txtChange).setVisibility(View.GONE);
         View header = findViewById(R.id.header);
         if (header != null) {
-            View ivLogo = header.findViewById(R.id.iv_logo);
-            if (ivLogo != null) {
-                ivLogo.setOnClickListener(v -> finish());
+            View btnBack = header.findViewById(R.id.btnBack);
+            if (btnBack != null) {
+                btnBack.setOnClickListener(v -> finish());
             }
         }
 

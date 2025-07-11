@@ -23,7 +23,7 @@ import java.util.List;
 
 public class VoucherSelectActivity extends AppCompatActivity {
     @Override protected void onCreate(@Nullable Bundle saved){super.onCreate(saved);setContentView(R.layout.activity_select_voucher);
-        ImageView back=findViewById(R.id.iv_logo);TextView title=findViewById(R.id.txtContent);TextView change=findViewById(R.id.txtChange);
+        ImageView back=findViewById(R.id.btnBack);TextView title=findViewById(R.id.txtContent);TextView change=findViewById(R.id.txtChange);
         if(title!=null)title.setText("Chọn Voucher");if(change!=null)change.setVisibility(View.GONE);if(back!=null)back.setOnClickListener(v->finish());
 
         RecyclerView rv=findViewById(R.id.recyclerVoucher);

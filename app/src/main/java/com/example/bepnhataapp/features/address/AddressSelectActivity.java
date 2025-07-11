@@ -24,7 +24,7 @@ public class AddressSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_address);
 
         // header setup
-        ImageView ivBack = findViewById(R.id.iv_logo);
+        ImageView ivBack = findViewById(R.id.btnBack);
         TextView tvTitle = findViewById(R.id.txtContent);
         TextView tvChange = findViewById(R.id.txtChange);
         if(tvTitle!=null) tvTitle.setText("Chọn địa chỉ giao hàng");
