@@ -23,6 +23,7 @@ import com.example.bepnhataapp.common.dao.BlogDao;
 import java.util.Collections;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import com.example.bepnhataapp.features.blog.BlogCommentsActivity;
 
 public class BlogDetailActivity extends AppCompatActivity {
 
@@ -71,6 +72,16 @@ public class BlogDetailActivity extends AppCompatActivity {
         tvComment.setText(String.valueOf(blog.getViews()));
         tvContent.setText(blog.getDescription());
 
+        // Thêm sự kiện click cho nút 'Tất cả' bình luận
+        TextView tvSeeAllComments = findViewById(R.id.tvSeeAllComments);
+        if (tvSeeAllComments != null) {
+            tvSeeAllComments.setOnClickListener(v -> {
+                Intent intentSeeAll = new Intent(this, BlogCommentsActivity.class);
+                intentSeeAll.putExtra("blogID", blog.getBlogID());
+                startActivity(intentSeeAll);
+            });
+        }
+
         // The comment and suggestion sections are still using hardcoded data.
         // This can be changed later to fetch real data based on the blog ID.
         setupCommentSection();
@@ -80,7 +91,8 @@ public class BlogDetailActivity extends AppCompatActivity {
     private void setupCommentSection() {
         RecyclerView rvComments = findViewById(R.id.rvComments);
         rvComments.setLayoutManager(new LinearLayoutManager(this));
-        long blogID = getIntent().getLongExtra("blogID", -1);
+        Blog blog = (Blog) getIntent().getSerializableExtra(EXTRA_BLOG);
+        long blogID = blog != null ? blog.getBlogID() : -1;
         BlogCommentDao dao = new BlogCommentDao(this);
         List<BlogComment> commentList = dao.getByBlog(blogID);
         CommentAdapter commentAdapter = new CommentAdapter(commentList);
@@ -98,11 +110,17 @@ public class BlogDetailActivity extends AppCompatActivity {
         btnSend.setOnClickListener(v -> {
             String content = edtComment.getText().toString().trim();
             if (!content.isEmpty()) {
-                // Lấy user hiện tại (ví dụ: customerID = 1, cần thay bằng user thực tế)
-                long customerID = 1;
+                // Lấy user hiện tại từ session
+                String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+                com.example.bepnhataapp.common.dao.CustomerDao customerDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                com.example.bepnhataapp.common.model.Customer user = phone != null ? customerDao.findByPhone(phone) : null;
+                if (user == null) {
+                    android.widget.Toast.makeText(this, "Vui lòng đăng nhập để bình luận", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 BlogComment newComment = new BlogComment();
                 newComment.setBlogID(blogID);
-                newComment.setCustomerID(customerID);
+                newComment.setCustomerID(user.getCustomerID());
                 newComment.setContent(content);
                 newComment.setCreatedAt(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(new java.util.Date()));
                 newComment.setUsefulness(0);

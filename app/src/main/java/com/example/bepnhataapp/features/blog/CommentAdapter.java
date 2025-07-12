@@ -22,6 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
     private List<BlogComment> commentList;
+    private java.util.Set<Long> likedSet = new java.util.HashSet<>();
 
     public CommentAdapter(List<BlogComment> commentList) {
         this.commentList = commentList;
@@ -55,10 +56,29 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.textViewTime.setText(comment.getCreatedAt());
         holder.textViewCommentText.setText(comment.getContent());
         holder.textViewLikes.setText(String.format(Locale.getDefault(), "Hữu ích (%d)", comment.getUsefulness()));
-        holder.imageViewLike.setImageResource(R.drawable.ic_like_outline);
-        holder.imageViewLike.setOnClickListener(v -> {
-            // TODO: Xử lý like bình luận
-        });
+        boolean isLiked = likedSet.contains(comment.getBlogCommentID());
+        holder.imageViewLike.setImageResource(isLiked ? R.drawable.ic_heart_filled : R.drawable.ic_like_outline);
+
+        View.OnClickListener likeListener = v -> {
+            android.content.Context ctx = holder.itemView.getContext();
+            if(!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(ctx)){
+                android.widget.Toast.makeText(ctx, "Vui lòng đăng nhập để đánh giá hữu ích", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            boolean curLiked = likedSet.contains(comment.getBlogCommentID());
+            if(curLiked){
+                if(comment.getUsefulness()>0) comment.setUsefulness(comment.getUsefulness()-1);
+                likedSet.remove(comment.getBlogCommentID());
+            }else{
+                comment.setUsefulness(comment.getUsefulness()+1);
+                likedSet.add(comment.getBlogCommentID());
+            }
+            new com.example.bepnhataapp.common.dao.BlogCommentDao(ctx).update(comment);
+            holder.textViewLikes.setText(String.format(Locale.getDefault(), "Hữu ích (%d)", comment.getUsefulness()));
+            holder.imageViewLike.setImageResource(likedSet.contains(comment.getBlogCommentID()) ? R.drawable.ic_heart_filled : R.drawable.ic_like_outline);
+        };
+        holder.textViewLikes.setOnClickListener(likeListener);
+        holder.imageViewLike.setOnClickListener(likeListener);
     }
 
     @Override

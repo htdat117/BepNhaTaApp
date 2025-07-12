@@ -1,152 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".features.blog.BlogCommentsActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#E7642F"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_back_arrow" />
+        android:layout_height="56dp"
+        android:background="@color/primary1">
 
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_back_arrow"
+            android:contentDescription="Quay lại" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Tất cả bình luận"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+
+    <!-- Thanh nhập bình luận -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="16dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imvAvatarCmt"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_avatar" />
+        <EditText
+            android:id="@+id/edtComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Chia sẻ cảm nhận của bạn"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_comment_input"
+            android:padding="10dp"/>
+        <ImageButton
+            android:id="@+id/btnSendComment"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_send"/>
+    </LinearLayout>
 
+    <!-- Dropdown sắp xếp -->
+    <LinearLayout
+        android:id="@+id/layoutSortRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:gravity="center_vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chia sẻ cảm nhận của bạn"
-            android:textSize="16sp"
-            android:textColor="@color/dark1"
+            android:text="Sắp xếp theo: "
+            android:textColor="#888"
+            android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/tvSort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hữu ích nhất"
+            android:textColor="#EA5C2B"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
-
-        <!-- Phần nhập bình luận -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageViewCurrentUserProfile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/profile_placeholder" /> <!-- Sẽ cần placeholder hoặc ảnh người dùng thực -->
-
-            <EditText
-                android:id="@+id/editTextComment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Viết bình luận của bạn..."
-                android:background="@drawable/bg_edittext_outline_gray"
-                android:padding="12dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"/>
-
-            <ImageView
-                android:id="@+id/imageViewSendComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_send" /> <!-- Sẽ cần icon gửi -->
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sắp xếp theo: Hữu ích nhất \u2304"
             android:textSize="14sp"
-            android:textColor="#E7642F"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
+            android:paddingStart="4dp"/>
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_arrow_down"
+            android:layout_marginStart="6dp"/>
+    </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewComments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <!-- Danh sách bình luận -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcComment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
 
-        <!-- Phần phân trang -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+    <!-- Phân trang mới -->
+    <LinearLayout
+        android:id="@+id/layoutPagination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+        <ImageView
+            android:id="@+id/btnPrevPage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_left"
+            android:background="@drawable/bg_page_selector"
+            android:padding="6dp"/>
+        <!-- Các số trang sẽ được add động từ code -->
+        <TextView
+            android:id="@+id/tvPage1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:padding="8dp">
-
-            <ImageView
-                android:id="@+id/imageViewPrevPage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_left" /> <!-- Cần icon mũi tên trái -->
-
-            <TextView
-                android:id="@+id/textViewPage1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:text="1"
-                android:gravity="center"
-                android:background="@drawable/bg_pagination_selected"
-                android:textColor="@android:color/white"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/textViewPage2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:text="2"
-                android:gravity="center"
-                android:background="@drawable/bg_pagination_unselected"
-                android:textColor="#E7642F"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/textViewPage3"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:text="3"
-                android:gravity="center"
-                android:background="@drawable/bg_pagination_unselected"
-                android:textColor="#E7642F"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/textViewPage4"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:text="4"
-                android:gravity="center"
-                android:background="@drawable/bg_pagination_unselected"
-                android:textColor="#E7642F"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/textViewPage5"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:text="5"
-                android:gravity="center"
-                android:background="@drawable/bg_pagination_unselected"
-                android:textColor="#E7642F"
-                android:layout_marginEnd="8dp"/>
-
-            <ImageView
-                android:id="@+id/imageViewNextPage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right" /> <!-- Cần icon mũi tên phải -->
-        </LinearLayout>
-
+            android:text="1"
+            android:textSize="16sp"
+            android:textColor="#F36B22"
+            android:background="@drawable/bg_page_selector"
+            android:layout_marginHorizontal="2dp"/>
+        <TextView
+            android:id="@+id/tvPage2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="2"
+            android:textSize="16sp"
+            android:textColor="#F36B22"
+            android:background="@drawable/bg_page_selector"
+            android:layout_marginHorizontal="2dp"/>
+        <!-- ... Thêm các số trang khác động từ code ... -->
+        <ImageView
+            android:id="@+id/btnNextPage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_right"
+            android:background="@drawable/bg_page_selector"
+            android:padding="6dp"/>
     </LinearLayout>
 
 </LinearLayout> 

@@ -120,18 +120,46 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"/>
 
-            <!-- Bình luận -->
-            <TextView
-                android:id="@+id/tvCommentCount"
-                android:text="Bình luận (0)"
-                android:textStyle="bold"
-                android:textColor="@color/dark1"
-                android:textSize="16sp"
-                android:layout_marginTop="24dp"
-                android:layout_width="wrap_content"
+            <!-- Tiêu đề bình luận với nút Tất cả -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCommentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bình luận (0)"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingVertical="8dp"
+                    android:layout_marginStart="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/tvSeeAllComments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tất cả"
+                        android:textSize="14sp"
+                        android:textColor="@color/dark2"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_right_arrow_gray"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+            </LinearLayout>
             <!-- Danh sách bình luận -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvComments"
