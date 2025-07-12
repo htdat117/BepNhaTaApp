@@ -10,7 +10,7 @@ import com.example.bepnhataapp.common.model.Cart;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.Order;
 import com.example.bepnhataapp.common.model.OrderLine;
-import com.example.bepnhataapp.common.models.CartItem;
+import com.example.bepnhataapp.common.model.CartItem;
 import com.example.bepnhataapp.common.utils.NotificationHelper;
 import com.example.bepnhataapp.common.model.OrderStatus;
 

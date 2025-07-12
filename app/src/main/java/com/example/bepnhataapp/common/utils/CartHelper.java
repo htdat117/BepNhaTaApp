@@ -10,7 +10,7 @@ import com.example.bepnhataapp.common.model.Cart;
 import com.example.bepnhataapp.common.model.CartDetail;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.Product;
-import com.example.bepnhataapp.common.models.CartItem;
+import com.example.bepnhataapp.common.model.CartItem;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;

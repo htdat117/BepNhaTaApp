@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.CartItem;
+import com.example.bepnhataapp.common.model.CartItem;
 import com.example.bepnhataapp.common.utils.CartHelper;
 import com.example.bepnhataapp.common.utils.SessionManager;
 import com.example.bepnhataapp.common.utils.OrderHelper;
@@ -33,7 +33,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private View cardShipping;
     private TextView tvShipName, tvShipPhone, tvShipLabel;
     private View layoutNamePhone;
-    private com.example.bepnhataapp.common.models.AddressItem currentAddress;
+    private com.example.bepnhataapp.common.model.AddressItem currentAddress;
     private String currentShipNote="";
     private int selectedPaymentIdx = -1; // 0 COD,1 VCB
     private static final int REQUEST_VOUCHER = 301;
@@ -114,7 +114,7 @@ public class CheckoutActivity extends AppCompatActivity {
             // load default address for current customer
             com.example.bepnhataapp.common.model.Address def = new com.example.bepnhataapp.common.dao.AddressDao(this).getDefault(getCurrentCustomerId());
             if(def!=null){
-                currentAddress = new com.example.bepnhataapp.common.models.AddressItem(def.getAddressID(),def.getReceiverName(),def.getPhone(),def.getAddressLine()+", "+def.getDistrict()+", "+def.getProvince(),def.isDefault());
+                currentAddress = new com.example.bepnhataapp.common.model.AddressItem(def.getAddressID(),def.getReceiverName(),def.getPhone(),def.getAddressLine()+", "+def.getDistrict()+", "+def.getProvince(),def.isDefault());
                 currentShipNote = def.getNote();
             }
         } else {
@@ -126,7 +126,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 if(!guestList.isEmpty()) defGuest = guestList.get(0);
             }
             if(defGuest != null){
-                currentAddress = new com.example.bepnhataapp.common.models.AddressItem(defGuest.getAddressID(), defGuest.getReceiverName(), defGuest.getPhone(), defGuest.getAddressLine()+", "+defGuest.getDistrict()+", "+defGuest.getProvince(), defGuest.isDefault());
+                currentAddress = new com.example.bepnhataapp.common.model.AddressItem(defGuest.getAddressID(), defGuest.getReceiverName(), defGuest.getPhone(), defGuest.getAddressLine()+", "+defGuest.getDistrict()+", "+defGuest.getProvince(), defGuest.isDefault());
                 currentShipNote = defGuest.getNote();
             }
         }
@@ -315,7 +315,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         }
         if(requestCode==201 && resultCode==RESULT_OK && data!=null){
-            com.example.bepnhataapp.common.models.AddressItem addr = (com.example.bepnhataapp.common.models.AddressItem) data.getSerializableExtra("selected_address");
+            com.example.bepnhataapp.common.model.AddressItem addr = (com.example.bepnhataapp.common.model.AddressItem) data.getSerializableExtra("selected_address");
             if(addr!=null){
                 currentAddress = addr;
                 String tmpNote = data.getStringExtra("selected_note");

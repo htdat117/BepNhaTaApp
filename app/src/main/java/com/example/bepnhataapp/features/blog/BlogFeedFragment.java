@@ -18,7 +18,7 @@ public class BlogFeedFragment extends Fragment {
 
     private RecyclerView recyclerViewBlog;
     private com.example.bepnhataapp.common.adapter.BlogAdapter blogAdapter;
-    private List<com.example.bepnhataapp.common.models.Blog> blogList;
+    private List<com.example.bepnhataapp.common.model.Blog> blogList;
 
     @Nullable
     @Override
@@ -53,10 +53,10 @@ public class BlogFeedFragment extends Fragment {
             // Query data from DAO
             com.example.bepnhataapp.common.dao.BlogDao blogDao = new com.example.bepnhataapp.common.dao.BlogDao(getContext());
             List<com.example.bepnhataapp.common.model.BlogEntity> blogEntities = blogDao.getAll();
-            final List<com.example.bepnhataapp.common.models.Blog> newBlogs = new ArrayList<>();
+            final List<com.example.bepnhataapp.common.model.Blog> newBlogs = new ArrayList<>();
             if (blogEntities != null) {
                 for (com.example.bepnhataapp.common.model.BlogEntity entity : blogEntities) {
-                    newBlogs.add(new com.example.bepnhataapp.common.models.Blog(
+                    newBlogs.add(new com.example.bepnhataapp.common.model.Blog(
                             entity.getBlogID(),
                             entity.getTitle(),
                             entity.getContent(),

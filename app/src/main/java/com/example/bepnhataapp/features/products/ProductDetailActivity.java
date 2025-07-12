@@ -12,7 +12,7 @@ import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.ProductDetailPagerAdapter;
 import com.example.bepnhataapp.databinding.ActivityProductDetailBinding;
 import com.example.bepnhataapp.common.model.Product;
-import com.example.bepnhataapp.common.models.Review;
+import com.example.bepnhataapp.common.model.Review;
 import com.example.bepnhataapp.common.adapter.ReviewAdapter;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.bumptech.glide.Glide;
@@ -272,7 +272,7 @@ public class ProductDetailActivity extends BaseActivity {
             int pricePer2Pack = discountedVariantPrice / servingFactor;
             int oldPricePer2Pack = originalVariantPrice / servingFactor;
 
-            com.example.bepnhataapp.common.models.CartItem ci = new com.example.bepnhataapp.common.models.CartItem(
+            com.example.bepnhataapp.common.model.CartItem ci = new com.example.bepnhataapp.common.model.CartItem(
                     currentProduct.getProductID(),
                     currentProduct.getProductName(),
                     pricePer2Pack,
@@ -282,7 +282,7 @@ public class ProductDetailActivity extends BaseActivity {
             );
             ci.setServing(servingFactor == 2 ? "4 người" : "2 người");
 
-            java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> selected = new java.util.ArrayList<>();
+            java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> selected = new java.util.ArrayList<>();
             selected.add(ci);
 
             android.content.Intent intent = new android.content.Intent(ProductDetailActivity.this, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);

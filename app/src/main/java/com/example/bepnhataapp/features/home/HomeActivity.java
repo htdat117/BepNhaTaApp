@@ -13,12 +13,12 @@ import android.widget.TextView;
 import android.view.View;
 import com.example.bepnhataapp.common.adapter.BlogAdapter;
 import com.example.bepnhataapp.common.dao.BlogDao;
-import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.common.model.Blog;
 import com.example.bepnhataapp.common.model.BlogEntity;
 import com.example.bepnhataapp.MyApplication;
 import com.example.bepnhataapp.common.model.RecipeEntity;
 import com.example.bepnhataapp.common.dao.RecipeDao;
-import com.example.bepnhataapp.common.models.Recipe;
+import com.example.bepnhataapp.common.model.Recipe;
 import com.example.bepnhataapp.features.home.CookingTipAdapter;
 import com.example.bepnhataapp.features.home.RecipeAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -218,7 +218,7 @@ public class HomeActivity extends BaseActivity implements BaseActivity.OnNavigat
             final List<Recipe> recipeList = new ArrayList<>();
             if (recipeEntities != null) {
                 for (RecipeEntity entity : recipeEntities) {
-                    recipeList.add(new com.example.bepnhataapp.common.models.Recipe(
+                    recipeList.add(new com.example.bepnhataapp.common.model.Recipe(
                             entity.getRecipeID(),
                             entity.getRecipeName(),
                             entity.getCategory(),

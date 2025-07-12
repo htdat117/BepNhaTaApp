@@ -9,7 +9,7 @@ import android.widget.PopupMenu;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.CartItem;
+import com.example.bepnhataapp.common.model.CartItem;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import com.example.bepnhataapp.common.utils.CartHelper;

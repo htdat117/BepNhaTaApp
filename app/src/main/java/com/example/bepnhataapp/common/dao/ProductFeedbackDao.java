@@ -64,8 +64,8 @@ public class ProductFeedbackDao {
         return list;
     }
 
-    public List<com.example.bepnhataapp.common.models.Review> getReviewsByProductId(long productID){
-        List<com.example.bepnhataapp.common.models.Review> reviews = new ArrayList<>();
+    public List<com.example.bepnhataapp.common.model.Review> getReviewsByProductId(long productID){
+        List<com.example.bepnhataapp.common.model.Review> reviews = new ArrayList<>();
         String sql = "SELECT pf.content, pf.rating, pf.createdAt, pf.image, c.fullName, c.avatar " +
                 "FROM " + DBHelper.TBL_PRODUCT_FEEDBACK + " pf " +
                 "JOIN " + DBHelper.TBL_ORDER_LINES + " ol ON pf.orderLineID = ol.orderLineID " +
@@ -92,7 +92,7 @@ public class ProductFeedbackDao {
                     }
                 }
 
-                reviews.add(new com.example.bepnhataapp.common.models.Review(avatar, fullName, rating, createdAt, content, imgUrls, true));
+                reviews.add(new com.example.bepnhataapp.common.model.Review(avatar, fullName, rating, createdAt, content, imgUrls, true));
             }while(cur.moveToNext());
         }
         cur.close();

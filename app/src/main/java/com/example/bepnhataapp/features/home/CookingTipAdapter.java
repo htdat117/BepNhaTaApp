@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.common.model.Blog;
 import com.example.bepnhataapp.features.blog.BlogDetailActivity;
 
 import java.util.List;

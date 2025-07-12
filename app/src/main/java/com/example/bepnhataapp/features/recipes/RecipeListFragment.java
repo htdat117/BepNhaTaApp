@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import com.example.bepnhataapp.common.dao.RecipeDao;
 import com.example.bepnhataapp.common.model.RecipeEntity;
 import com.example.bepnhataapp.common.adapter.CategoryAdapter;
-import com.example.bepnhataapp.common.models.Category;
+import com.example.bepnhataapp.common.model.Category;
 import androidx.annotation.NonNull;
 
 public class RecipeListFragment extends Fragment {

@@ -19,7 +19,7 @@ import com.example.bepnhataapp.common.dao.FavouriteBlogDao;
 import com.example.bepnhataapp.common.model.BlogEntity;
 import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.FavouriteBlog;
-import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.common.model.Blog;
 import com.example.bepnhataapp.common.utils.SessionManager;
 
 import java.util.ArrayList;

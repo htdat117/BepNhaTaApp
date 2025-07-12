@@ -56,6 +56,13 @@ public class HotIngredientAdapter extends RecyclerView.Adapter<HotIngredientAdap
         holder.itemTitle.setText(product.getProductName());
         holder.itemPrice.setText(String.format("%,dđ", product.getProductPrice()).replace(',', '.'));
 
+        // Add click listener for "Mua ngay" button
+        holder.itemBuyButton.setOnClickListener(v -> {
+            Context ctx = v.getContext();
+            com.example.bepnhataapp.common.utils.CartHelper.addProduct(ctx, product);
+            android.widget.Toast.makeText(ctx, "Đã thêm vào giỏ hàng", android.widget.Toast.LENGTH_SHORT).show();
+        });
+
         holder.itemView.setOnClickListener(v -> {
             Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, com.example.bepnhataapp.features.products.ProductDetailActivity.class);

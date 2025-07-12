@@ -158,7 +158,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             int oldPricePer2Pack = originalVariantPrice / servingFactor;
 
             // Tạo CartItem
-            com.example.bepnhataapp.common.models.CartItem cartItem = new com.example.bepnhataapp.common.models.CartItem(
+            com.example.bepnhataapp.common.model.CartItem cartItem = new com.example.bepnhataapp.common.model.CartItem(
                     product.getProductID(),
                     product.getProductName(),
                     pricePer2Pack,
@@ -169,7 +169,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             cartItem.setServing(servingFactor == 2 ? "4 người" : "2 người");
 
             // Tạo danh sách items để chuyển đến checkout
-            java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> selectedItems = new java.util.ArrayList<>();
+            java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> selectedItems = new java.util.ArrayList<>();
             selectedItems.add(cartItem);
 
             // Chuyển đến trang thanh toán

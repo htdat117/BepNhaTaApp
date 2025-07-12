@@ -15,7 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.example.bepnhataapp.common.models.NotificationItem;
+import com.example.bepnhataapp.common.model.NotificationItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 import com.example.bepnhataapp.common.base.BaseActivity;

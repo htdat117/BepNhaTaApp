@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.dao.AddressDao;
 import com.example.bepnhataapp.common.model.Address;
-import com.example.bepnhataapp.common.models.AddressItem;
+import com.example.bepnhataapp.common.model.AddressItem;
 import com.example.bepnhataapp.common.utils.SessionManager;
 import com.example.bepnhataapp.features.address.AddressAdapter;
 

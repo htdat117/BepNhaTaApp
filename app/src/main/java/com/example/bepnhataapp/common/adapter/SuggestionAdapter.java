@@ -245,7 +245,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             int pricePer2Pack = discountedVariantPrice / serving;
             int oldPricePer2Pack = originalVariantPrice / serving;
 
-            com.example.bepnhataapp.common.models.CartItem cartItem = new com.example.bepnhataapp.common.models.CartItem(
+            com.example.bepnhataapp.common.model.CartItem cartItem = new com.example.bepnhataapp.common.model.CartItem(
                     p.getProductID(),
                     p.getProductName(),
                     pricePer2Pack,
@@ -255,7 +255,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             );
             cartItem.setServing(serving == 2 ? "4 người" : "2 người");
 
-            java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> selectedItems = new java.util.ArrayList<>();
+            java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> selectedItems = new java.util.ArrayList<>();
             selectedItems.add(cartItem);
 
             android.content.Intent intent = new android.content.Intent(context, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);

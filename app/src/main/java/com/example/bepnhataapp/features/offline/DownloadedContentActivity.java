@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.DownloadedRecipeAdapter;
-import com.example.bepnhataapp.common.models.DownloadedRecipe;
+import com.example.bepnhataapp.common.model.DownloadedRecipe;
 import com.example.bepnhataapp.common.dao.RecipeDownloadDao;
 import com.example.bepnhataapp.common.dao.RecipeDao;
 import com.example.bepnhataapp.common.model.RecipeDownload;

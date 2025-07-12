@@ -132,7 +132,7 @@ public class ShippingInfoActivity extends AppCompatActivity {
             }
 
             // trả về để CheckoutActivity hiển thị
-            com.example.bepnhataapp.common.models.AddressItem ai = new com.example.bepnhataapp.common.models.AddressItem(
+            com.example.bepnhataapp.common.model.AddressItem ai = new com.example.bepnhataapp.common.model.AddressItem(
                     addr.getAddressID(),
                     addr.getReceiverName(),
                     addr.getPhone(),

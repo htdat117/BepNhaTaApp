@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.CartAdapter;
-import com.example.bepnhataapp.common.models.CartItem;
+import com.example.bepnhataapp.common.model.CartItem;
 import androidx.core.content.ContextCompat;
 import android.widget.TextView;
 import android.widget.ImageView;
@@ -78,7 +78,7 @@ public class CartFragment extends Fragment {
                     return;
                 }
 
-                com.example.bepnhataapp.common.models.CartItem item = adapter.getItems().get(pos);
+                com.example.bepnhataapp.common.model.CartItem item = adapter.getItems().get(pos);
                 android.content.Context ctx = requireContext();
 
                 if (direction == androidx.recyclerview.widget.ItemTouchHelper.LEFT) {
@@ -188,8 +188,8 @@ public class CartFragment extends Fragment {
 
         if (btnBuyNow != null) {
             btnBuyNow.setOnClickListener(v -> {
-                java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> selected = new java.util.ArrayList<>();
-                for (com.example.bepnhataapp.common.models.CartItem ci : adapter.getItems()) {
+                java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> selected = new java.util.ArrayList<>();
+                for (com.example.bepnhataapp.common.model.CartItem ci : adapter.getItems()) {
                     if (ci.isSelected()) selected.add(ci);
                 }
                 if (selected.isEmpty()) {
@@ -328,7 +328,7 @@ public class CartFragment extends Fragment {
 
     private void recalculateBottom(){
         int totalNew=0, save=0;
-        for(com.example.bepnhataapp.common.models.CartItem it: adapter.getItems()){
+        for(com.example.bepnhataapp.common.model.CartItem it: adapter.getItems()){
             if(it.isSelected()){
                 totalNew+=it.getTotal();
                 save+=it.getTotalSave();

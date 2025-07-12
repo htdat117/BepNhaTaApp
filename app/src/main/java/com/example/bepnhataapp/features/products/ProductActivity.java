@@ -10,7 +10,7 @@ import com.example.bepnhataapp.common.adapter.ProductAdapter;
 import com.example.bepnhataapp.databinding.ActivityProductBinding;
 import com.example.bepnhataapp.common.model.Product;
 import com.example.bepnhataapp.common.adapter.CategoryAdapter;
-import com.example.bepnhataapp.common.models.Category;
+import com.example.bepnhataapp.common.model.Category;
 import com.example.bepnhataapp.common.base.BaseActivity;
 import com.example.bepnhataapp.common.dao.ProductDao;
 import com.example.bepnhataapp.MyApplication;

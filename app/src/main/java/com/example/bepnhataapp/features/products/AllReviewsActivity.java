@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.adapter.ReviewAdapter;
-import com.example.bepnhataapp.common.models.Review;
+import com.example.bepnhataapp.common.model.Review;
 import com.example.bepnhataapp.databinding.ActivityAllReviewsBinding;
 
 import java.util.ArrayList;

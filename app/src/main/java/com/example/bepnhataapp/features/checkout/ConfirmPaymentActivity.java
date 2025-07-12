@@ -23,8 +23,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
         android.content.Intent src = getIntent();
         @SuppressWarnings("unchecked")
-        final java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> purchasedItems =
-                (java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem>) src.getSerializableExtra("selected_items");
+        final java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> purchasedItems =
+                (java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem>) src.getSerializableExtra("selected_items");
 
         final int goodsOld = src.getIntExtra("goods_total_old",0);
         final int shipFee = src.getIntExtra("shipping_fee",0);
@@ -84,7 +84,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         }
         if(tvGrand!=null) tvGrand.setText(nf.format(grand)+"đ");
 
-        java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem> prods = (java.util.ArrayList<com.example.bepnhataapp.common.models.CartItem>) src.getSerializableExtra("selected_items");
+        java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> prods = (java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem>) src.getSerializableExtra("selected_items");
         TextView tvEmail = findViewById(R.id.tvAddressNote);
         TextView tvNote = findViewById(R.id.tvNote);
         String email = src.getStringExtra("email");
@@ -100,7 +100,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         android.widget.LinearLayout ll = findViewById(R.id.llProducts);
         if(ll!=null && prods!=null){
             ll.removeAllViews();
-            for(com.example.bepnhataapp.common.models.CartItem ci: prods){
+            for(com.example.bepnhataapp.common.model.CartItem ci: prods){
                 android.view.View item = inflater.inflate(R.layout.item_checkout_product, ll, false);
                 ((android.widget.TextView)item.findViewById(R.id.tvTitle)).setText(ci.getTitle());
                 java.text.NumberFormat nff = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));

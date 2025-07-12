@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.common.models;
+package com.example.bepnhataapp.common.model;
 
 import java.io.Serializable;
 

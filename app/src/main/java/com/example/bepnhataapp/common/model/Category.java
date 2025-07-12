@@ -1,4 +1,4 @@
-package com.example.bepnhataapp.common.models;
+package com.example.bepnhataapp.common.model;
 
 public class Category {
     public int iconResId;
@@ -8,4 +8,4 @@ public class Category {
         this.iconResId = iconResId;
         this.name = name;
     }
-}
+} 

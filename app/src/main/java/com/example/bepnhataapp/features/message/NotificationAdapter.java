@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.NotificationItem;
+import com.example.bepnhataapp.common.model.NotificationItem;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

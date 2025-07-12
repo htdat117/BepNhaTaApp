@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.model.BlogEntity;
-import com.example.bepnhataapp.common.models.Blog;
+import com.example.bepnhataapp.common.model.Blog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class BlogDetailActivity extends AppCompatActivity {
             return;
         }
 
-        com.example.bepnhataapp.common.models.Blog blog = (com.example.bepnhataapp.common.models.Blog) intent.getSerializableExtra(EXTRA_BLOG);
+        com.example.bepnhataapp.common.model.Blog blog = (com.example.bepnhataapp.common.model.Blog) intent.getSerializableExtra(EXTRA_BLOG);
         if (blog == null) {
             finish(); // Finish if blog data is null
             return;

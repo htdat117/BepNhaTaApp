@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.AddressItem;
+import com.example.bepnhataapp.common.model.AddressItem;
 import java.util.ArrayList;
 import java.util.List;
 

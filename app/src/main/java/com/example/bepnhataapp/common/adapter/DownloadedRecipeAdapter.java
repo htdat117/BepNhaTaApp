@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
-import com.example.bepnhataapp.common.models.DownloadedRecipe;
+import com.example.bepnhataapp.common.model.DownloadedRecipe;
 import com.example.bepnhataapp.features.offline.RecipeDetailOfflineActivity;
 import java.util.List;
 

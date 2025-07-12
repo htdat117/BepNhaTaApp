@@ -22,7 +22,7 @@ import com.example.bepnhataapp.common.model.Customer;
 import com.example.bepnhataapp.common.model.FavouriteRecipe;
 import com.example.bepnhataapp.common.model.RecipeEntity;
 import com.example.bepnhataapp.common.model.RecipeDetail;
-import com.example.bepnhataapp.common.models.Recipe;
+import com.example.bepnhataapp.common.model.Recipe;
 import com.example.bepnhataapp.common.utils.SessionManager;
 
 import java.util.ArrayList;
