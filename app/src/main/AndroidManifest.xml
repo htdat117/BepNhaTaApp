@@ -171,6 +171,9 @@
             android:name=".features.checkout.PaymentSuccessActivity"
             android:exported="false" />
         <activity
+            android:name=".features.checkout.WalletPaymentActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.point.PointActivity"
             android:exported="false" />
         <activity
