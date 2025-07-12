@@ -9,8 +9,8 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    // Bump version to trigger comprehensive schema upgrade that ensures all tables exist
-    private static final int DB_VERSION = 4; // was 3
+    // Increment to 5 to force recreation of CART_DETAILS with servingFactor in primary key
+    private static final int DB_VERSION = 5; // was 4
     private static final String DB_NAME = "BepNhaTa.db";
     private static final String DB_PATH_SUFFIX = "/databases/";
     // Alias for teacher-style constant name
@@ -513,8 +513,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        // If upgrading from a version prior to 3, recreate CART_DETAILS to include servingFactor in PK
-        if (oldV < 3) {
+        // If upgrading from a version prior to 5, recreate CART_DETAILS to ensure servingFactor column exists AND is included in primary key
+        if (oldV < 5) {
             db.execSQL("DROP TABLE IF EXISTS " + TBL_CART_DETAILS);
             db.execSQL(SQL_CREATE_CART_DETAIL);
         }

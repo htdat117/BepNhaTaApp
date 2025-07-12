@@ -56,16 +56,7 @@ public final class CartHelper {
             }
         }
         if(existing==null){
-            try{
-                helper(ctx).getWritableDatabase().execSQL("ALTER TABLE "+ com.example.bepnhataapp.common.databases.DBHelper.TBL_CART_DETAILS +" ADD COLUMN servingFactor INTEGER DEFAULT 1");
-            }catch(Exception ignored){}
-            // Re-open DAO to make sure SQLite re-parses the just-altered schema
-            detailDao = new CartDetailDao(ctx);
-            try{
-                detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, quantity));
-            }catch(Exception inner){
-                throw inner;
-            }
+            detailDao.insert(new CartDetail(cart.getCartID(), p.getProductID(), servingFactor, quantity));
         }else{
             existing.setQuantity(existing.getQuantity()+quantity);
             detailDao.update(existing);

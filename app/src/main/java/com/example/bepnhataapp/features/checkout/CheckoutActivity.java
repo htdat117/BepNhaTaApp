@@ -112,22 +112,38 @@ public class CheckoutActivity extends AppCompatActivity {
         // initial state
         if(SessionManager.isLoggedIn(this)){
             // load default address for current customer
-            com.example.bepnhataapp.common.model.Address def = new com.example.bepnhataapp.common.dao.AddressDao(this).getDefault(getCurrentCustomerId());
+            boolean addressAutoSelected = false;
+            com.example.bepnhataapp.common.dao.AddressDao addressDao = new com.example.bepnhataapp.common.dao.AddressDao(this);
+            com.example.bepnhataapp.common.model.Address def = addressDao.getDefault(getCurrentCustomerId());
+            if(def == null){
+                java.util.List<com.example.bepnhataapp.common.model.Address> list = addressDao.getByCustomer(getCurrentCustomerId());
+                if(!list.isEmpty()){
+                    def = list.get(0); // chọn địa chỉ đầu tiên khi không có mặc định
+                    addressAutoSelected = true;
+                }
+            }
             if(def!=null){
                 currentAddress = new com.example.bepnhataapp.common.model.AddressItem(def.getAddressID(),def.getReceiverName(),def.getPhone(),def.getAddressLine()+", "+def.getDistrict()+", "+def.getProvince(),def.isDefault());
                 currentShipNote = def.getNote();
+                if(addressAutoSelected || !def.isDefault()){
+                    android.widget.Toast.makeText(this,"Đã chọn địa chỉ giao hàng",android.widget.Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
             // Guest checkout: try to load the most recent address (customerID = 0)
             com.example.bepnhataapp.common.dao.AddressDao dao = new com.example.bepnhataapp.common.dao.AddressDao(this);
             com.example.bepnhataapp.common.model.Address defGuest = dao.getDefault(0);
+            boolean guestAuto=false;
             if(defGuest == null){
                 java.util.List<com.example.bepnhataapp.common.model.Address> guestList = dao.getByCustomer(0);
-                if(!guestList.isEmpty()) defGuest = guestList.get(0);
+                if(!guestList.isEmpty()) {defGuest = guestList.get(0); guestAuto=true;}
             }
             if(defGuest != null){
                 currentAddress = new com.example.bepnhataapp.common.model.AddressItem(defGuest.getAddressID(), defGuest.getReceiverName(), defGuest.getPhone(), defGuest.getAddressLine()+", "+defGuest.getDistrict()+", "+defGuest.getProvince(), defGuest.isDefault());
                 currentShipNote = defGuest.getNote();
+                if(guestAuto || !defGuest.isDefault()){
+                    android.widget.Toast.makeText(this,"Đã chọn địa chỉ giao hàng: "+defGuest.getAddressLine(),android.widget.Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -223,7 +239,12 @@ public class CheckoutActivity extends AppCompatActivity {
                 startActivity(it);
                 finish();
             }else{ // Các cổng thanh toán khác (VCB, Momo, ZaloPay, ...)
-                android.content.Intent it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.ConfirmPaymentActivity.class);
+                android.content.Intent it;
+                if(selectedPaymentIdx==2 || selectedPaymentIdx==3){
+                    it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.WalletPaymentActivity.class);
+                }else{
+                    it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.ConfirmPaymentActivity.class);
+                }
                 // pass data
                 if(currentAddress!=null){
                     it.putExtra("name", currentAddress.getName());

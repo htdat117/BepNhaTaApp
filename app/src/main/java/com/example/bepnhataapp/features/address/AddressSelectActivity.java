@@ -70,7 +70,7 @@ public class AddressSelectActivity extends AppCompatActivity {
                     android.widget.Toast.makeText(this, "Vui lòng chọn địa chỉ", android.widget.Toast.LENGTH_SHORT).show();
                     return;
                 }
-                android.widget.Toast.makeText(this,"Đã chọn địa chỉ",android.widget.Toast.LENGTH_SHORT).show();
+                android.widget.Toast.makeText(this,"Đã chọn địa chỉ giao hàng",android.widget.Toast.LENGTH_SHORT).show();
                 android.content.Intent res = new android.content.Intent();
                 res.putExtra("selected_address", sel);
                 // query email

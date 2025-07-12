@@ -134,10 +134,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         });
 
         holder.btnAddCart.setOnClickListener(v -> {
-            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product);
-            android.widget.Toast.makeText(context, "Đã thêm giỏ hàng thành công", android.widget.Toast.LENGTH_SHORT).show();
-            // Muốn mở giỏ ngay:
-            // context.startActivity(new Intent(context, com.example.bepnhataapp.features.cart.CartActivity.class));
+            int servingFactor = 1;
+            if(servingGroup != null && servingGroup.getCheckedButtonId() == R.id.btnFor4){
+                servingFactor = 2;
+            }
+            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product, servingFactor);
+            String msg = "Đã thêm vào giỏ hàng thành công";
+            android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_SHORT).show();
         });
 
         // Xử lý nút "Mua ngay"

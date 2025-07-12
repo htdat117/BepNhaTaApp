@@ -15,4 +15,6 @@
     <color name="black">#222222</color>
     <color name="gray_700">#666666</color>
     <color name="gray_500">#BFBFBF</color>
+    <color name="wallet_momo">#C3077A</color>
+    <color name="wallet_zalopay">#0088FF</color>
 </resources>
