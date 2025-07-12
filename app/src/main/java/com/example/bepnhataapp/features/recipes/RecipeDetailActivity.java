@@ -349,9 +349,11 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         });
 
         // Load comments for recipe
-        java.util.List<com.example.bepnhataapp.common.model.RecipeComment> commentList = new com.example.bepnhataapp.common.dao.RecipeCommentDao(this).getByRecipe(currentRecipeId);
-        if(txtCommentCount!=null) txtCommentCount.setText("("+commentList.size()+")");
-        final RecipeCommentAdapter cmtAdapter = new RecipeCommentAdapter(commentList);
+        java.util.List<com.example.bepnhataapp.common.model.RecipeComment> allComments = new com.example.bepnhataapp.common.dao.RecipeCommentDao(this).getByRecipe(currentRecipeId);
+        if(txtCommentCount!=null) txtCommentCount.setText("("+allComments.size()+")");
+        // Lấy 2 bình luận hữu ích nhất
+        java.util.List<com.example.bepnhataapp.common.model.RecipeComment> topComments = getTopUsefulComments(allComments, 2);
+        final RecipeCommentAdapter cmtAdapter = new RecipeCommentAdapter(topComments);
         rcComment.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
         rcComment.setAdapter(cmtAdapter);
 
@@ -414,10 +416,10 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                 rc.setUsefulness(0);
                 new RecipeCommentDao(this).insert(rc);
 
-                // Reload list
-                java.util.List<com.example.bepnhataapp.common.model.RecipeComment> updated = new RecipeCommentDao(this).getByRecipe(currentRecipeId);
-                cmtAdapter.updateData(updated);
-                if(txtCommentCount != null) txtCommentCount.setText("("+updated.size()+")");
+                // Reload list và hiển thị lại top 2
+                java.util.List<com.example.bepnhataapp.common.model.RecipeComment> updatedAll = new RecipeCommentDao(this).getByRecipe(currentRecipeId);
+                cmtAdapter.updateData(getTopUsefulComments(updatedAll, 2));
+                if(txtCommentCount != null) txtCommentCount.setText("("+updatedAll.size()+")");
                 if(edtComment != null) edtComment.setText("");
             });
         }
@@ -591,5 +593,19 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         if(tvProteinVal!=null) tvProteinVal.setText((int)protein + "g proteins");
         if(tvCaloVal!=null) tvCaloVal.setText((int)calo + " Kcal");
         if(tvFatVal!=null) tvFatVal.setText((int)fat + "g fat");
+    }
+
+    // Helper: lấy N bình luận có lượt hữu ích cao nhất
+    private java.util.List<com.example.bepnhataapp.common.model.RecipeComment> getTopUsefulComments(java.util.List<com.example.bepnhataapp.common.model.RecipeComment> list, int n){
+        java.util.List<com.example.bepnhataapp.common.model.RecipeComment> copy = new java.util.ArrayList<>(list);
+        copy.sort((a,b)->{
+            int cmp = Integer.compare(b.getUsefulness(), a.getUsefulness());
+            if(cmp==0){ // nếu bằng lượt hữu ích, ưu tiên mới hơn
+                return b.getCreatedAt().compareTo(a.getCreatedAt());
+            }
+            return cmp;
+        });
+        if(copy.size()>n) return new java.util.ArrayList<>(copy.subList(0,n));
+        return copy;
     }
 } 

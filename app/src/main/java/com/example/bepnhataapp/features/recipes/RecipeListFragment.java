@@ -33,6 +33,7 @@ public class RecipeListFragment extends Fragment {
     private RecipeAdapter adapter;
     private com.example.bepnhataapp.features.recipes.FilterRecipeBottomSheet.FilterCriteria currentCriteria;
     private boolean isSortAZ = true;
+    private java.util.List<RecipeItem> allRecipeItems = new java.util.ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,6 +90,8 @@ public class RecipeListFragment extends Fragment {
             item.setCommentCount(entity.getCommentAmount());
             recipeItems.add(item);
         }
+        // Keep a master copy for category filtering
+        allRecipeItems = new java.util.ArrayList<>(recipeItems);
 
         adapter = new RecipeAdapter(recipeItems, new RecipeAdapter.OnRecipeActionListener() {
             @Override
@@ -144,23 +147,32 @@ public class RecipeListFragment extends Fragment {
         View categoryContainer = view.findViewById(R.id.layoutCategoriesContainer);
         if (rvCategories != null) {
             rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            java.util.Set<String> categorySet = new java.util.HashSet<>();
+            for (RecipeEntity entity : allRecipeEntities) {
+                String cat = entity.getCategory();
+                if (cat != null && !cat.trim().isEmpty()) {
+                    categorySet.add(cat.trim());
+                }
+            }
             java.util.List<Category> categories = new java.util.ArrayList<>();
+            // Always have the "All" option first
             categories.add(new Category(R.drawable.cate_product_all, "Tất cả"));
-            categories.add(new Category(R.drawable.cate_product_grill, "Món nướng"));
-            categories.add(new Category(R.drawable.cate_product_kho, "Món kho"));
-            categories.add(new Category(R.drawable.cate_product_stir, "Món xào"));
-            categories.add(new Category(R.drawable.cate_product_noodle, "Món nước"));
-            categories.add(new Category(R.drawable.cate_product_vegetarian, "Món chay"));
+            for (String cat : categorySet) {
+                int iconRes = getCategoryIconRes(cat);
+                String displayName = getDisplayCategoryName(cat);
+                categories.add(new Category(iconRes, displayName));
+            }
             CategoryAdapter categoryAdapter = new CategoryAdapter(getContext(), categories);
             rvCategories.setAdapter(categoryAdapter);
             categoryAdapter.setOnCategoryClickListener(categoryName -> {
                 // Lọc công thức theo danh mục
                 java.util.List<RecipeItem> filtered = new java.util.ArrayList<>();
-                if (categoryName.equals("Tất cả")) {
-                    filtered.addAll(recipeItems);
+                if ("Tất cả".equalsIgnoreCase(categoryName)) {
+                    filtered.addAll(allRecipeItems);
                 } else {
-                    for (RecipeItem item : recipeItems) {
-                        if (item.getCategory() != null && item.getCategory().equals(categoryName)) {
+                    String targetKey = getCategoryKey(categoryName);
+                    for (RecipeItem item : allRecipeItems) {
+                        if (item.getCategory() != null && getCategoryKey(item.getCategory()).equals(targetKey)) {
                             filtered.add(item);
                         }
                     }
@@ -314,5 +326,49 @@ public class RecipeListFragment extends Fragment {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private int getCategoryIconRes(String categoryName) {
+        String key = unaccent(categoryName);
+        if (key.contains("nuong")) return R.drawable.cate_product_grill;
+        if (key.contains("kho")) return R.drawable.cate_product_kho;
+        if (key.contains("xao")) return R.drawable.cate_product_stir;
+        if (key.contains("nuoc")) return R.drawable.cate_product_noodle;
+        if (key.contains("chay")) return R.drawable.cate_product_vegetarian;
+        // fallback
+        return R.drawable.cate_product_all;
+    }
+
+    // Convert raw category slug from DB (e.g., "nuong") to display string "Món nướng"
+    private String getDisplayCategoryName(String raw) {
+        if (raw == null) return "";
+        String norm = unaccent(raw).trim();
+        // giữ lại accent nếu có sẵn
+        String base = raw.trim();
+        // Nếu đã có tiền tố "Món" thì trả nguyên
+        if (normalize("mon").equals(normalize(base.split(" ")[0]))) {
+            return base;
+        }
+        return "Món " + base;
+    }
+
+    // Lấy "slug" (không dấu, không tiền tố "món") để so sánh
+    private String getCategoryKey(String name) {
+        String key = unaccent(name).trim();
+        if (key.startsWith("mon ")) {
+            key = key.substring(4); // remove "mon "
+        }
+        return key.trim();
+    }
+
+    private String normalize(String str) {
+        return unaccent(str).trim().toLowerCase();
+    }
+
+    // Utility to remove Vietnamese accents & lowercase for insensitive compare
+    private String unaccent(String str) {
+        if (str == null) return "";
+        String n = java.text.Normalizer.normalize(str, java.text.Normalizer.Form.NFD);
+        return n.replaceAll("\\p{InCombiningDiacriticalMarks}+", "").toLowerCase();
     }
 }
