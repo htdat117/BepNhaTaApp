@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:background="@color/primary4"
+        android:fitsSystemWindows="true"
         tools:context=".features.login.RegistrationActivity">
 
         <!-- Close button -->

@@ -42,6 +42,16 @@ public class RecipeIngredientFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_ingredient, container, false);
+        // Set paddingTop cho header nếu có
+        View header = view.findViewById(R.id.custom_header);
+        if (header != null) {
+            int statusBarHeight = 0;
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            }
+            header.setPadding(0, statusBarHeight, 0, 0);
+        }
         if (getArguments() != null) {
             recipeId = getArguments().getLong(ARG_RECIPE_ID);
             servingFactor = getArguments().getInt("serving_factor", 1);

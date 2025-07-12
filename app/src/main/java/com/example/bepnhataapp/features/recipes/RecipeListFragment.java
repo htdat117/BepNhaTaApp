@@ -38,6 +38,16 @@ public class RecipeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_recipe_list, container, false);
+        // Set paddingTop cho header nếu có
+        View header = view.findViewById(R.id.custom_header);
+        if (header != null) {
+            int statusBarHeight = 0;
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            }
+            header.setPadding(0, statusBarHeight, 0, 0);
+        }
         // Remove automatic top inset padding to keep category bar flush with header
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

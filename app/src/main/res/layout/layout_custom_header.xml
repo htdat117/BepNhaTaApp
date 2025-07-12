@@ -8,7 +8,8 @@
     android:paddingRight="16dp"
     android:paddingTop="8dp"
     android:paddingBottom="12dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <!-- Top Row: Logo, Đăng nhập, Icons -->
     <LinearLayout
