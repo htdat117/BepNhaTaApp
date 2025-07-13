@@ -8,8 +8,25 @@ import com.example.bepnhataapp.R;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.bepnhataapp.common.dao.CustomerDao;
 import com.example.bepnhataapp.common.model.Customer;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
+import com.example.bepnhataapp.common.utils.SessionManager;
+import android.content.Intent;
+import android.util.Log;
 
 public class RegistrationActivity extends AppCompatActivity {
+    private static final int RC_GOOGLE_SIGN_IN = 1001;
+    private GoogleSignInClient googleClient;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,5 +105,79 @@ public class RegistrationActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        // Configure Google Sign-In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
+
+        android.widget.ImageView imgGoogle = findViewById(R.id.imgGoogleLoginReg);
+        if(imgGoogle!=null){
+            imgGoogle.setOnClickListener(v -> {
+                Intent i = googleClient.getSignInIntent();
+                startActivityForResult(i, RC_GOOGLE_SIGN_IN);
+            });
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_GOOGLE_SIGN_IN){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleGoogleResult(task);
+        }
+    }
+
+    private void handleGoogleResult(Task<GoogleSignInAccount> completed){
+        try{
+            GoogleSignInAccount acct = completed.getResult(ApiException.class);
+            if(acct == null){
+                android.widget.Toast.makeText(this,"Đăng nhập Google thất bại",android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            AuthCredential cred = GoogleAuthProvider.getCredential(acct.getIdToken(),null);
+            mAuth.signInWithCredential(cred).addOnCompleteListener(this,t->{
+                if(!t.isSuccessful()){
+                    android.widget.Toast.makeText(this,"Đăng nhập Google thất bại",android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                FirebaseUser fu = t.getResult().getUser();
+                if(fu==null){
+                    android.widget.Toast.makeText(this,"Đăng nhập Google thất bại",android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String email = fu.getEmail();
+                String name  = fu.getDisplayName();
+
+                // Kiểm tra email đã tồn tại
+                CustomerDao dao = new CustomerDao(this);
+                Customer existing = null;
+                for(Customer c: dao.getAll()){
+                    if(email!=null && email.equalsIgnoreCase(c.getEmail())){ existing = c; break; }
+                }
+                if(existing!=null){
+                    // Đã có tài khoản ➜ login
+                    SessionManager.login(this, existing.getPhone()!=null&&!existing.getPhone().isEmpty()? existing.getPhone(): email);
+                    android.content.Intent intent = new android.content.Intent(this, com.example.bepnhataapp.features.manage_account.ManageAccountActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    // Chưa có ➜ yêu cầu nhập SĐT
+                    android.content.Intent phoneIntent = new android.content.Intent(this, GooglePhoneInputActivity.class);
+                    phoneIntent.putExtra("google_email", email);
+                    phoneIntent.putExtra("google_name", name);
+                    startActivity(phoneIntent);
+                    finish();
+                }
+            });
+        }catch(ApiException e){
+            android.util.Log.e("RegistrationActivity","Google sign-in failed",e);
+            android.widget.Toast.makeText(this,"Đăng nhập Google thất bại",android.widget.Toast.LENGTH_SHORT).show();
+        }
     }
 } 

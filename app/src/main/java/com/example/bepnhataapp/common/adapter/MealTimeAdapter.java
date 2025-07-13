@@ -45,6 +45,7 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
         void onAddNew(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
         void onDeleteSection(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
         void onAddNote(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
+        void onSetReminder(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
         void onBuyAll(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
     }
 
@@ -127,6 +128,8 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
                     if(listener!=null) listener.onDeleteSection(slot);
                 } else if(id == com.example.bepnhataapp.R.id.menu_add_note){
                     if(listener!=null) listener.onAddNote(slot);
+                } else if(id == com.example.bepnhataapp.R.id.menu_set_reminder){
+                    if(listener!=null) listener.onSetReminder(slot);
                 } else if(id == com.example.bepnhataapp.R.id.menu_buy_all){
                     if(listener!=null) listener.onBuyAll(slot);
                 } else {

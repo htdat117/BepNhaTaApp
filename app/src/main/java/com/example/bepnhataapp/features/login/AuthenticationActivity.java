@@ -72,6 +72,30 @@ public class AuthenticationActivity extends AppCompatActivity {
                 startActivity(next);
                 finish();
                 return;
+            } else if ("register_google".equals(flow)) {
+                // Tạo customer mới dựa trên thông tin Google + phone
+                String gEmail = getIntent().getStringExtra("google_email");
+                String gName  = getIntent().getStringExtra("google_name");
+
+                com.example.bepnhataapp.common.dao.CustomerDao dao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                com.example.bepnhataapp.common.model.Customer c = new com.example.bepnhataapp.common.model.Customer();
+                c.setFullName(gName!=null?gName:phone);
+                c.setEmail(gEmail);
+                c.setPhone(phone);
+                c.setCustomerType("Bạc");
+                c.setLoyaltyPoint(0);
+                c.setCreatedAt(java.time.LocalDateTime.now().toString());
+                c.setStatus("active");
+                dao.insert(c);
+
+                // Đăng nhập session bằng phone (ưu tiên phone)
+                SessionManager.login(this, phone);
+
+                android.content.Intent intentHome = new android.content.Intent(this, com.example.bepnhataapp.features.manage_account.ManageAccountActivity.class);
+                intentHome.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentHome);
+                finish();
+                return;
             } else if ("login".equals(flow)) {
                 // Successful OTP login
                 SessionManager.login(this, phone);

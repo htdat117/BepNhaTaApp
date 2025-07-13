@@ -181,9 +181,9 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
                     }
                 }
                 if(url!=null)
-                    recoData.add(new RecommendedAdapter.RecoItem(url, mp.getTitle(), mp.getTotalDays()));
+                    recoData.add(new RecommendedAdapter.RecoItem(url, mp.getTitle(), mp.getTotalDays(), mp.getMealPlanID()));
                 else
-                    recoData.add(new RecommendedAdapter.RecoItem(imgRes, mp.getTitle(), mp.getTotalDays()));
+                    recoData.add(new RecommendedAdapter.RecoItem(imgRes, mp.getTitle(), mp.getTotalDays(), mp.getMealPlanID()));
             }
         }
         

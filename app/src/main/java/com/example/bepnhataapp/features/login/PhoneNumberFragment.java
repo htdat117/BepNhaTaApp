@@ -121,6 +121,16 @@ public class PhoneNumberFragment extends Fragment {
             startActivity(new android.content.Intent(getActivity(), RegistrationActivity.class));
         });
 
+        android.view.View btnGuest = view.findViewById(R.id.buy_nologin);
+        if(btnGuest!=null){
+            btnGuest.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(getContext(), com.example.bepnhataapp.features.home.HomeActivity.class);
+                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                if(getActivity()!=null) getActivity().finish();
+            });
+        }
+
         return view;
     }
 

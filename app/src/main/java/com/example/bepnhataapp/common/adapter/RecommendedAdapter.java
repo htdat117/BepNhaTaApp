@@ -21,10 +21,11 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public final String imageUrl; // may be null
         public final String title;
         public final int count;
-        public RecoItem(int img, String t){this(img,t,0,null);} // default
-        public RecoItem(int img, String t, int c){this(img,t,c,null);} // img resource
-        public RecoItem(String url,String t,int c){this(0,t,c,url);} // url variant
-        public RecoItem(int img,String t,int c,String url){imageRes=img;title=t;count=c;imageUrl=url;}
+        public final long planId;
+        public RecoItem(int img, String t, int c, long id){this(img,t,c,null,id);} // img resource
+        public RecoItem(String url, String t, int c, long id){this(0,t,c,url,id);} // url variant
+        public RecoItem(int img, String t){this(img,t,0,0);} // default
+        public RecoItem(int img,String t,int c,String url,long id){imageRes=img;title=t;count=c;imageUrl=url;planId=id;}
     }
 
     private static final int TYPE_HEADER = 0;
@@ -77,6 +78,30 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     vh.badge.setVisibility(View.VISIBLE);
                 }else vh.badge.setVisibility(View.GONE);
             }
+
+            // Click – choose ngày bắt đầu & mở review activity
+            vh.itemView.setOnClickListener(v -> {
+                if(item.planId<=0) return;
+                if(!(v.getContext() instanceof androidx.appcompat.app.AppCompatActivity)) return;
+                androidx.appcompat.app.AppCompatActivity act = (androidx.appcompat.app.AppCompatActivity) v.getContext();
+
+                com.google.android.material.datepicker.MaterialDatePicker<Long> picker = com.google.android.material.datepicker.MaterialDatePicker.Builder
+                        .datePicker()
+                        .setTitleText("Chọn ngày bắt đầu kế hoạch")
+                        .build();
+
+                picker.addOnPositiveButtonClickListener(sel -> {
+                    java.time.LocalDate date = java.time.Instant.ofEpochMilli(sel)
+                            .atZone(java.time.ZoneId.systemDefault())
+                            .toLocalDate();
+                    android.content.Intent intent = new android.content.Intent(act, com.example.bepnhataapp.features.mealplan.LoadMealPlanReviewActivity.class);
+                    intent.putExtra("PLAN_ID", item.planId);
+                    intent.putExtra("SELECTED_DATE", date.toString());
+                    act.startActivity(intent);
+                });
+
+                picker.show(act.getSupportFragmentManager(), "planStartPicker");
+            });
         }
     }
 

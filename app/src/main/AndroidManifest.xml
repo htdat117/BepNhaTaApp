@@ -115,6 +115,9 @@
             android:name=".features.login.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".features.login.GooglePhoneInputActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.customeridea.CustomerIdeaActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan|stateHidden" />
@@ -245,6 +248,7 @@
         <activity
             android:name=".features.favorite.FavoriteActivity"
             android:exported="false" />
+        <receiver android:name="com.example.bepnhataapp.common.utils.ReminderReceiver" />
 
         <meta-data
             android:name="preloaded_fonts"

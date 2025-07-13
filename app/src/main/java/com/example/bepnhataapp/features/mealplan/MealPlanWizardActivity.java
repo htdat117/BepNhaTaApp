@@ -38,4 +38,8 @@ public class MealPlanWizardActivity extends AppCompatActivity {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
     }
+
+    public int getCurrentStepIndex(){
+        return viewPager.getCurrentItem();
+    }
 } 

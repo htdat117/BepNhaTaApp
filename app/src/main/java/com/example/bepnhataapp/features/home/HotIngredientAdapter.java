@@ -56,11 +56,24 @@ public class HotIngredientAdapter extends RecyclerView.Adapter<HotIngredientAdap
         holder.itemTitle.setText(product.getProductName());
         holder.itemPrice.setText(String.format("%,dđ", product.getProductPrice()).replace(',', '.'));
 
-        // Add click listener for "Mua ngay" button
+        // "Mua ngay" -> build temporary CartItem list & open CheckoutActivity directly
         holder.itemBuyButton.setOnClickListener(v -> {
             Context ctx = v.getContext();
-            com.example.bepnhataapp.common.utils.CartHelper.addProduct(ctx, product);
-            android.widget.Toast.makeText(ctx, "Đã thêm vào giỏ hàng", android.widget.Toast.LENGTH_SHORT).show();
+            int salePrice = product.getProductPrice() * (100 - product.getSalePercent()) / 100;
+            com.example.bepnhataapp.common.model.CartItem ci = new com.example.bepnhataapp.common.model.CartItem(
+                    product.getProductID(),
+                    product.getProductName(),
+                    salePrice,
+                    product.getProductPrice(),
+                    1,
+                    product.getProductThumb()
+            );
+            java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> selected = new java.util.ArrayList<>();
+            selected.add(ci);
+
+            android.content.Intent intent = new android.content.Intent(ctx, com.example.bepnhataapp.features.checkout.CheckoutActivity.class);
+            intent.putExtra("selected_items", selected);
+            ctx.startActivity(intent);
         });
 
         holder.itemView.setOnClickListener(v -> {

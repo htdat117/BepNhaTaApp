@@ -46,7 +46,20 @@ public class StepPhysicalProfileFragment extends Fragment {
         ImageButton btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> {
             if (getActivity() instanceof MealPlanWizardActivity) {
-                ((MealPlanWizardActivity) getActivity()).moveToPreviousStep();
+                MealPlanWizardActivity act = (MealPlanWizardActivity) getActivity();
+                if(act!=null){
+                    if(act.getSupportFragmentManager()==null){
+                        act.finish();
+                        return;
+                    }
+                }
+                if(act!=null && act.getCurrentStepIndex()!=0){
+                    act.moveToPreviousStep();
+                }else{
+                    requireActivity().finish();
+                }
+            }else{
+                requireActivity().onBackPressed();
             }
         });
 

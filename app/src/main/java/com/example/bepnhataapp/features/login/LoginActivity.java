@@ -144,23 +144,20 @@ public class LoginActivity extends AppCompatActivity implements PhoneNumberFragm
                         if(email!=null && email.equalsIgnoreCase(cc.getEmail())){ c = cc; break; }
                     }
                     if(c==null){
-                        c = new Customer();
-                        c.setFullName(name!=null?name:email);
-                        c.setEmail(email);
-                        c.setPhone(email); // dùng email làm khoá đăng nhập trong session
-                        c.setCustomerType("Bạc");
-                        c.setLoyaltyPoint(0);
-                        c.setCreatedAt(java.time.LocalDateTime.now().toString());
-                        c.setStatus("active");
-                        dao.insert(c);
+                        // Chưa có tài khoản → yêu cầu xác thực số điện thoại trước khi tạo
+                        Intent phoneIntent = new Intent(this, GooglePhoneInputActivity.class);
+                        phoneIntent.putExtra("google_email", email);
+                        phoneIntent.putExtra("google_name", name);
+                        startActivity(phoneIntent);
+                        finish();
+                        return;
                     }
 
-                    // Mark session as logged-in (use email)
-                    SessionManager.login(this, email);
+                    // Đã có tài khoản → login bình thường
+                    SessionManager.login(this, c.getPhone()!=null && !c.getPhone().isEmpty()? c.getPhone() : email);
 
                     android.widget.Toast.makeText(this, "Đăng nhập Google thành công", android.widget.Toast.LENGTH_SHORT).show();
 
-                    // Navigate to ManageAccountActivity giống login thường
                     Intent intent = new Intent(this, com.example.bepnhataapp.features.manage_account.ManageAccountActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

@@ -8,6 +8,9 @@ import android.widget.Toast;
 import android.widget.LinearLayout;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,7 +40,9 @@ import com.example.bepnhataapp.common.model.InstructionRecipe;
 import com.example.bepnhataapp.common.model.FavouriteRecipe;
 import com.example.bepnhataapp.common.model.RecipeComment;
 import com.example.bepnhataapp.common.utils.SessionManager;
-import com.google.android.material.button.MaterialButtonToggleGroup;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -431,65 +436,28 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
                     Toast.makeText(this, "Vui lòng đăng nhập để sử dụng chức năng này", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String phone = SessionManager.getPhone(this);
-                CustomerDao customerDao = new CustomerDao(this);
-                Customer customer = customerDao.findByPhone(phone);
-                if (customer == null) {
-                    Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                long customerId = customer.getCustomerID();
-                com.example.bepnhataapp.common.dao.MealPlanDao mealPlanDao = new com.example.bepnhataapp.common.dao.MealPlanDao(this);
-                com.example.bepnhataapp.common.model.MealPlan personalPlan = mealPlanDao.getPersonalPlan(customerId);
-                if (personalPlan == null) {
-                    // Tạo mới meal plan cá nhân nếu chưa có
-                    personalPlan = new com.example.bepnhataapp.common.model.MealPlan();
-                    personalPlan.setCustomerID(customerId);
-                    personalPlan.setType("PERSONAL");
-                    personalPlan.setTitle("Kế hoạch của tôi");
-                    personalPlan.setCreatedAt(java.time.LocalDateTime.now().toString());
-                    long newPlanId = mealPlanDao.insert(personalPlan);
-                    personalPlan.setMealPlanID(newPlanId);
-                }
-                // Lấy hoặc tạo mới meal day cho ngày hôm nay
-                String today = java.time.LocalDate.now().toString();
-                com.example.bepnhataapp.common.dao.MealDayDao mealDayDao = new com.example.bepnhataapp.common.dao.MealDayDao(this);
-                com.example.bepnhataapp.common.model.MealDay mealDay = null;
-                java.util.List<com.example.bepnhataapp.common.model.MealDay> days = mealDayDao.getAllByDate(today);
-                for (com.example.bepnhataapp.common.model.MealDay d : days) {
-                    if (d.getMealPlanID() == personalPlan.getMealPlanID()) {
-                        mealDay = d;
-                        break;
-                    }
-                }
-                if (mealDay == null) {
-                    mealDay = new com.example.bepnhataapp.common.model.MealDay();
-                    mealDay.setMealPlanID(personalPlan.getMealPlanID());
-                    mealDay.setDate(today);
-                    long newDayId = mealDayDao.insert(mealDay);
-                    mealDay.setMealDayID(newDayId);
-                }
-                // Lấy hoặc tạo mới meal time cho bữa Trưa
-                com.example.bepnhataapp.common.dao.MealTimeDao mealTimeDao = new com.example.bepnhataapp.common.dao.MealTimeDao(this);
-                java.util.List<com.example.bepnhataapp.common.model.MealTime> times = mealTimeDao.getByMealDay(mealDay.getMealDayID());
-                com.example.bepnhataapp.common.model.MealTime mealTime = null;
-                for (com.example.bepnhataapp.common.model.MealTime t : times) {
-                    if ("Trưa".equalsIgnoreCase(t.getMealType())) {
-                        mealTime = t;
-                        break;
-                    }
-                }
-                if (mealTime == null) {
-                    mealTime = new com.example.bepnhataapp.common.model.MealTime();
-                    mealTime.setMealDayID(mealDay.getMealDayID());
-                    mealTime.setMealType("Trưa");
-                    long newTimeId = mealTimeDao.insert(mealTime);
-                    mealTime.setMealTimeID(newTimeId);
-                }
-                // Thêm công thức vào meal time
-                com.example.bepnhataapp.common.dao.MealRecipeDao mealRecipeDao = new com.example.bepnhataapp.common.dao.MealRecipeDao(this);
-                mealRecipeDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(mealTime.getMealTimeID(), currentRecipeId));
-                Toast.makeText(this, "Đã thêm công thức vào thực đơn trưa hôm nay!", Toast.LENGTH_SHORT).show();
+
+                // Bước 1: Chọn ngày
+                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder
+                        .datePicker()
+                        .setTitleText("Chọn ngày thêm món")
+                        .build();
+                datePicker.addOnPositiveButtonClickListener(selection -> {
+                    LocalDate selectedDate = Instant.ofEpochMilli(selection)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+
+                    // Bước 2: Chọn buổi
+                    String[] slots = {"Sáng", "Trưa", "Tối", "Snack"};
+                    new AlertDialog.Builder(this)
+                            .setTitle("Chọn buổi")
+                            .setItems(slots, (dialog, which) -> {
+                                String chosenSlot = slots[which];
+                                addRecipeToMealPlan(selectedDate, chosenSlot);
+                            })
+                            .show();
+                });
+                datePicker.show(getSupportFragmentManager(), "datePicker");
             });
         }
 
@@ -607,5 +575,73 @@ public class RecipeDetailActivity extends BaseActivity implements BaseActivity.O
         });
         if(copy.size()>n) return new java.util.ArrayList<>(copy.subList(0,n));
         return copy;
+    }
+
+    /**
+     * Thêm công thức hiện tại vào kế hoạch bữa ăn cá nhân ở ngày và buổi chỉ định.
+     */
+    private void addRecipeToMealPlan(LocalDate date, String mealType) {
+        String phone = SessionManager.getPhone(this);
+        CustomerDao customerDao = new CustomerDao(this);
+        Customer customer = customerDao.findByPhone(phone);
+        if (customer == null) {
+            Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        long customerId = customer.getCustomerID();
+        com.example.bepnhataapp.common.dao.MealPlanDao mealPlanDao = new com.example.bepnhataapp.common.dao.MealPlanDao(this);
+        com.example.bepnhataapp.common.model.MealPlan personalPlan = mealPlanDao.getPersonalPlan(customerId);
+        if (personalPlan == null) {
+            personalPlan = new com.example.bepnhataapp.common.model.MealPlan();
+            personalPlan.setCustomerID(customerId);
+            personalPlan.setType("PERSONAL");
+            personalPlan.setTitle("Kế hoạch của tôi");
+            personalPlan.setCreatedAt(java.time.LocalDateTime.now().toString());
+            long newPlanId = mealPlanDao.insert(personalPlan);
+            personalPlan.setMealPlanID(newPlanId);
+        }
+
+        String dateStr = date.toString();
+        com.example.bepnhataapp.common.dao.MealDayDao mealDayDao = new com.example.bepnhataapp.common.dao.MealDayDao(this);
+        com.example.bepnhataapp.common.model.MealDay mealDay = null;
+        java.util.List<com.example.bepnhataapp.common.model.MealDay> days = mealDayDao.getAllByDate(dateStr);
+        for (com.example.bepnhataapp.common.model.MealDay d : days) {
+            if (d.getMealPlanID() == personalPlan.getMealPlanID()) {
+                mealDay = d;
+                break;
+            }
+        }
+        if (mealDay == null) {
+            mealDay = new com.example.bepnhataapp.common.model.MealDay();
+            mealDay.setMealPlanID(personalPlan.getMealPlanID());
+            mealDay.setDate(dateStr);
+            long newDayId = mealDayDao.insert(mealDay);
+            mealDay.setMealDayID(newDayId);
+        }
+
+        // Lấy hoặc tạo meal time
+        com.example.bepnhataapp.common.dao.MealTimeDao mealTimeDao = new com.example.bepnhataapp.common.dao.MealTimeDao(this);
+        java.util.List<com.example.bepnhataapp.common.model.MealTime> times = mealTimeDao.getByMealDay(mealDay.getMealDayID());
+        com.example.bepnhataapp.common.model.MealTime mealTime = null;
+        for (com.example.bepnhataapp.common.model.MealTime t : times) {
+            if (mealType.equalsIgnoreCase(t.getMealType())) {
+                mealTime = t;
+                break;
+            }
+        }
+        if (mealTime == null) {
+            mealTime = new com.example.bepnhataapp.common.model.MealTime();
+            mealTime.setMealDayID(mealDay.getMealDayID());
+            mealTime.setMealType(mealType);
+            long newTimeId = mealTimeDao.insert(mealTime);
+            mealTime.setMealTimeID(newTimeId);
+        }
+
+        // Thêm công thức vào meal time
+        com.example.bepnhataapp.common.dao.MealRecipeDao mealRecipeDao = new com.example.bepnhataapp.common.dao.MealRecipeDao(this);
+        mealRecipeDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(mealTime.getMealTimeID(), currentRecipeId));
+
+        Toast.makeText(this, "Đã thêm công thức vào " + mealType + " ngày " + date + "!", Toast.LENGTH_SHORT).show();
     }
 } 
