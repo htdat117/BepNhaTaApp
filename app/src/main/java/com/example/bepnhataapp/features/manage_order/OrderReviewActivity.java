@@ -21,7 +21,7 @@ public class OrderReviewActivity extends AppCompatActivity {
         // TODO: Lấy thông tin đơn hàng từ DB và hiển thị lên giao diện
 
         TextView tvOrderCode = findViewById(R.id.tvOrderCode);
-        TextView tvOrderStatus = findViewById(R.id.tvOrderStatus);
+
         TextView tvProductName = findViewById(R.id.tvProductName);
         TextView tvVariant = findViewById(R.id.tvVariant);
         TextView tvOldPrice = findViewById(R.id.tvOldPrice);

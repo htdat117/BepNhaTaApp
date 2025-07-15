@@ -356,8 +356,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private List<CartItem> getSampleItems() {
         List<CartItem> list = new ArrayList<>();
-        list.add(new CartItem(0L,"Gói nguyên liệu Bò kho",90000,150000,1,null));
-        list.add(new CartItem(0L,"Gói nguyên liệu Bò kho",90000,150000,1,null));
+        // Đã xoá các dòng fix cứng sản phẩm mẫu
         return list;
     }
 

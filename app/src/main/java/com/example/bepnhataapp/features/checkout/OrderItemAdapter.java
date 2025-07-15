@@ -32,7 +32,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         CartItem item = items.get(position);
-        holder.tvTitle.setText(item.getTitle());
+        holder.tvProductName.setText(item.getTitle());
         java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
         int factor = item.getServing().startsWith("4")?2:1;
         holder.tvPrice.setText(nf.format(item.getPrice()*factor)+"đ");
@@ -52,12 +52,12 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     }
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvVariant, tvPrice, tvOldPrice, tvQuantity;
+        TextView tvProductName, tvVariant, tvPrice, tvOldPrice, tvQuantity;
         ImageView imgProduct;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProduct = itemView.findViewById(R.id.imgProduct);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvProductName = itemView.findViewById(R.id.tvProductName);
             tvVariant = itemView.findViewById(R.id.tvVariant);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvOldPrice = itemView.findViewById(R.id.tvOldPrice);

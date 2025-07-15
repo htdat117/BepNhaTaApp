@@ -23,12 +23,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/productName"
+                android:id="@+id/tvProductName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gói nguyên liệu bò kho"
-                android:textSize="@dimen/header4"
-                style="@style/Body.Bold.Ag4"/>
+                android:text=""
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
