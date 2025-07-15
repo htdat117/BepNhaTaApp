@@ -26,12 +26,12 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         final java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> purchasedItems =
                 (java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem>) src.getSerializableExtra("selected_items");
 
-        final int goodsOld = src.getIntExtra("goods_total_old",0);
-        final int shipFee = src.getIntExtra("shipping_fee",0);
-        final int discount = src.getIntExtra("discount",0);
-        final int saveDiscount = src.getIntExtra("save_discount", 0);
-        final int voucherDiscount = src.getIntExtra("voucher_discount", 0);
-        final int grand = src.getIntExtra("grand_total",0);
+        final double goodsOld = src.getDoubleExtra("goods_total_old",0);
+        final double shipFee = src.getDoubleExtra("shipping_fee",0);
+        final double discount = src.getDoubleExtra("discount",0);
+        final double saveDiscount = src.getDoubleExtra("save_discount", 0);
+        final double voucherDiscount = src.getDoubleExtra("voucher_discount", 0);
+        final double grand = src.getDoubleExtra("grand_total",0);
         final String paymentMethod = src.getStringExtra("payment_method");
         final String note = src.getStringExtra("note");
 
@@ -46,7 +46,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                         0,
                         shipFee,
                         discount,
-                        note
+                        note,
+                        grand
                 );
 
                 com.example.bepnhataapp.common.utils.CartHelper.removeProducts(ConfirmPaymentActivity.this, purchasedItems);

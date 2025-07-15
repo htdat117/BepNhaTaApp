@@ -32,10 +32,11 @@ public final class OrderHelper {
      * @param shippingFee phí ship
      * @param discount tổng giảm giá (voucher / sale)
      * @param note ghi chú đơn hàng
+     * @param grandTotal tổng tiền thực tế đã hiển thị ở trang thanh toán
      * @return orderID vừa tạo hoặc -1 nếu lỗi
      */
     public static long saveOrder(Context ctx, List<CartItem> items, String paymentMethod, long addressId,
-                                 int shippingFee, int discount, String note){
+                                 double shippingFee, double discount, String note, double grandTotal){
         if(items==null || items.isEmpty()) return -1;
 
         long customerId = SessionManager.isLoggedIn(ctx) ? getCurrentCustomerId(ctx) : 0;
@@ -55,7 +56,7 @@ public final class OrderHelper {
         for(CartItem ci: items){
             goodsTotal += ci.getTotal();
         }
-        double totalPrice = goodsTotal + shippingFee - discount;
+        double totalPrice = grandTotal > 0 ? grandTotal : (goodsTotal + shippingFee - discount);
 
         // Tạo order
         Order order = new Order();

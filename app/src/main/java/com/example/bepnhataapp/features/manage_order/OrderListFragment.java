@@ -110,7 +110,10 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderVH> {
         } catch (Exception e) {
             displayStatus = o.getStatus();
         }
-        if (h.tvTotal != null) h.tvTotal.setText("Tổng số tiền (" + getProductCount(o.getOrderID(), h) + " sản phẩm): " + formatMoney(o.getTotalPrice()) + "đ");
+        // Hiển thị tổng số tiền đã thanh toán (đã gồm ship, voucher nếu có)
+        if (h.tvTotal != null) {
+            h.tvTotal.setText("Tổng số tiền: " + formatMoney(o.getTotalPrice()) + "đ");
+        }
         // Hiển thị danh sách sản phẩm
         h.layoutOrderProducts.removeAllViews();
         List<OrderLine> lines = new OrderLineDao(h.itemView.getContext()).getByOrder(o.getOrderID());

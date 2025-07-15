@@ -80,7 +80,8 @@ public class WalletPaymentActivity extends AppCompatActivity {
                         0,
                         shipFee,
                         discount,
-                        note
+                        note,
+                        grand
                 );
                 com.example.bepnhataapp.common.utils.CartHelper.removeProducts(WalletPaymentActivity.this, purchasedItems);
             }

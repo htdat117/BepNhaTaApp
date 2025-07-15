@@ -38,8 +38,8 @@ public class CheckoutActivity extends AppCompatActivity {
     private int selectedPaymentIdx = -1; // 0 COD,1 VCB
     private static final int REQUEST_VOUCHER = 301;
     private com.example.bepnhataapp.common.model.Coupon selectedCoupon = null;
-    private int voucherDiscount = 0;
-    private int goodsTotalOld=0, shippingFee=0, discount=0, grandTotal=0;
+    private double voucherDiscount = 0;
+    private double goodsTotalOld=0, shippingFee=0, discount=0, grandTotal=0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class CheckoutActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // Calculate totals
-        int totalGoods=0, save=0;
+        double totalGoods=0, save=0;
         for(CartItem ci: items){
             totalGoods+=ci.getTotal();
             save+=ci.getTotalSave();
@@ -189,7 +189,7 @@ public class CheckoutActivity extends AppCompatActivity {
         if(tvVoucherLink!=null){
             tvVoucherLink.setOnClickListener(v->{
                 android.content.Intent it=new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.voucher.VoucherSelectActivity.class);
-                int orderSubtotal=0; for(CartItem ci:orderItems){ orderSubtotal+=ci.getTotal(); }
+                double orderSubtotal=0; for(CartItem ci:orderItems){ orderSubtotal+=ci.getTotal(); }
                 it.putExtra("order_subtotal", orderSubtotal);
                 if(selectedCoupon!=null){ it.putExtra("selected_coupon_id", selectedCoupon.getCouponID()); }
                 startActivityForResult(it, REQUEST_VOUCHER);
@@ -231,7 +231,8 @@ public class CheckoutActivity extends AppCompatActivity {
                         currentAddress!=null? currentAddress.getId():0,
                         shippingFee,
                         discount,
-                        noteStr
+                        noteStr,
+                        grandTotal
                 );
 
                 com.example.bepnhataapp.common.utils.CartHelper.removeProducts(CheckoutActivity.this, purchased);
@@ -257,7 +258,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 it.putExtra("shipping_fee", shippingFee);
                 it.putExtra("discount", discount);
                 // gửi chi tiết giảm giá riêng lẻ
-                int prodSave = 0; for(CartItem ci: orderItems){ prodSave += ci.getTotalSave(); }
+                double prodSave = 0; for(CartItem ci: orderItems){ prodSave += ci.getTotalSave(); }
                 it.putExtra("save_discount", prodSave);
                 it.putExtra("voucher_discount", voucherDiscount);
                 it.putExtra("grand_total", grandTotal);
@@ -306,7 +307,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 selectedCoupon = cp;
                 android.widget.Toast.makeText(this,"Đã áp dụng voucher thành công",android.widget.Toast.LENGTH_SHORT).show();
                 // Tính tổng giá trị đơn sau khuyến mãi sản phẩm
-                int orderSubtotal = 0;
+                double orderSubtotal = 0;
                 for(CartItem itm : orderItems){ orderSubtotal += itm.getTotal(); }
 
                 // Kiểm tra điều kiện tối thiểu
@@ -314,7 +315,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     android.widget.Toast.makeText(this, "Đơn hàng chưa đạt giá trị tối thiểu để dùng voucher", android.widget.Toast.LENGTH_SHORT).show();
                     selectedCoupon = null; voucherDiscount = 0;
                 }else{
-                    int disc;
+                    double disc;
                     if(cp.getCouponValue() <= 100){ // phần trăm
                         disc = orderSubtotal * cp.getCouponValue() / 100;
                         if(cp.getMaxDiscount()!=null) disc = Math.min(disc, cp.getMaxDiscount());
@@ -399,10 +400,10 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void recalcTotals(){
         java.text.NumberFormat nf = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
-        int save=0; // recalculate save from order items
+        double save=0; // recalculate save from order items
         for(CartItem ci: orderItems){save+=ci.getTotalSave();}
-        int newDiscount = save + voucherDiscount;
-        int newGrandTotal = goodsTotalOld + shippingFee - newDiscount;
+        double newDiscount = save + voucherDiscount;
+        double newGrandTotal = goodsTotalOld + shippingFee - newDiscount;
         // update fields
         discount = newDiscount; grandTotal = newGrandTotal;
 

@@ -123,7 +123,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         ImageButton btnPlus, btnMinus; Button btnServing; CheckBox checkbox; android.widget.ImageView imgProduct;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.tvTitle);
+            title = itemView.findViewById(R.id.tvProductName); // Sửa lại đúng id
             price = itemView.findViewById(R.id.tvPrice);
             oldPrice=itemView.findViewById(R.id.tvOldPrice);
             quantity=itemView.findViewById(R.id.tvQuantity);
