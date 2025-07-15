@@ -11,6 +11,7 @@ public class BlogEntity implements Serializable {
     private String imageThumb; // URL or base64 string stored as TEXT
     private String status;     // draft / published
     private String tag;
+    private int likes = 0;
 
     public BlogEntity() { }
 
@@ -49,4 +50,7 @@ public class BlogEntity implements Serializable {
 
     public String getTag() { return tag; }
     public void setTag(String tag) { this.tag = tag; }
+
+    public int getLikes() { return likes; }
+    public void setLikes(int likes) { this.likes = likes; }
 } 

@@ -52,6 +52,11 @@ public class CookingTipAdapter extends RecyclerView.Adapter<CookingTipAdapter.Vi
         holder.favoriteIcon.setOnClickListener(v -> {
             tip.setFavorite(!tip.isFavorite());
             notifyItemChanged(position);
+            if (tip.isFavorite()) {
+                android.widget.Toast.makeText(context, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+            } else {
+                android.widget.Toast.makeText(context, "Đã xoá khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+            }
             // Here you would also update the database
         });
 

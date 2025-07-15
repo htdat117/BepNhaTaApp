@@ -34,7 +34,13 @@ public class RecipeStepGuideAdapter extends RecyclerView.Adapter<RecipeStepGuide
         String title = step.getTitle()!=null? step.getTitle() : "";
         String displayTitle = "Bước " + step.getNumberSection() + ": " + title;
         holder.tvStepTitle.setText(displayTitle);
-        holder.tvStepContent.setText(step.getContent());
+        String content = step.getContent();
+        if(content != null) {
+            content = content.replace("\\n", "\n").replace("/n", "\n");
+            // Loại bỏ các dòng trống dư thừa (nhiều \n liên tiếp thành 1 \n)
+            content = content.replaceAll("(\n)+", "\n");
+        }
+        holder.tvStepContent.setText(content);
         holder.ivStepImage.setVisibility(View.VISIBLE);
         if (step.getImage() != null && !step.getImage().isEmpty() && (step.getImage().startsWith("http://") || step.getImage().startsWith("https://"))) {
             Glide.with(holder.ivStepImage.getContext())

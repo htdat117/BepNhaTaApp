@@ -76,6 +76,7 @@ public class BlogDao {
         if (b.getImageThumb() != null) v.put("imageThumb", b.getImageThumb()); else v.putNull("imageThumb");
         v.put("status", b.getStatus());
         v.put("tag", b.getTag());
+        v.put("likes", b.getLikes());
         return v;
     }
 
@@ -89,6 +90,8 @@ public class BlogDao {
         b.setImageThumb(cur.getString(cur.getColumnIndexOrThrow("imageThumb")));
         b.setStatus(cur.getString(cur.getColumnIndexOrThrow("status")));
         b.setTag(cur.getString(cur.getColumnIndexOrThrow("tag")));
+        int likesCol = cur.getColumnIndex("likes");
+        if (likesCol >= 0) b.setLikes(cur.getInt(likesCol));
         return b;
     }
 } 

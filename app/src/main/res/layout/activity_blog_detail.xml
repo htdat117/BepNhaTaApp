@@ -90,13 +90,30 @@
                 android:paddingEnd="16dp">
                 <ImageView android:id="@+id/ivLike"
                     android:src="@drawable/ic_like"
-                android:layout_width="20dp" android:layout_height="20dp"/>
-                <TextView android:id="@+id/tvLike" android:text="20" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:textColor="#6F6F6F"/>
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
+                <TextView android:id="@+id/tvLike"
+                    android:text="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textColor="#6F6F6F"/>
                 <ImageView android:id="@+id/ivComment"
-                    android:src="@drawable/ic_cmt" android:layout_width="20dp" android:layout_height="20dp" android:layout_marginStart="16dp"/>
-                <TextView android:id="@+id/tvComment" android:text="0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:textColor="#6F6F6F"/>
-                <ImageView android:id="@+id/ivShare"
-                    android:src="@drawable/ic_share" android:layout_width="20dp" android:layout_height="20dp" android:layout_marginStart="16dp"/>
+                    android:src="@drawable/ic_cmt"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="16dp"/>
+                <TextView android:id="@+id/tvComment"
+                    android:text="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textColor="#6F6F6F"/>
+                <ImageView android:id="@+id/ivFavorite"
+                    android:src="@drawable/ic_favorite_unchecked"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="16dp"/>
             </LinearLayout>
 
             <!-- Ảnh minh họa lớn -->

@@ -24,6 +24,9 @@ import java.util.Collections;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import com.example.bepnhataapp.features.blog.BlogCommentsActivity;
+import com.example.bepnhataapp.common.dao.FavouriteBlogDao;
+import com.example.bepnhataapp.common.model.FavouriteBlog;
+import com.example.bepnhataapp.common.model.Customer;
 
 public class BlogDetailActivity extends AppCompatActivity {
 
@@ -55,7 +58,6 @@ public class BlogDetailActivity extends AppCompatActivity {
         TextView tvCategory = findViewById(R.id.tvCategory);
         TextView tvTitle = findViewById(R.id.tvTitle);
         TextView tvDate = findViewById(R.id.tvDate);
-        TextView tvLike = findViewById(R.id.tvLike);
         TextView tvComment = findViewById(R.id.tvComment);
         TextView tvContent = findViewById(R.id.tvContent);
 
@@ -68,8 +70,12 @@ public class BlogDetailActivity extends AppCompatActivity {
         tvCategory.setText(blog.getCategory());
         tvTitle.setText(blog.getTitle());
         tvDate.setText(blog.getDate());
-        tvLike.setText(String.valueOf(blog.getLikes()));
-        tvComment.setText(String.valueOf(blog.getViews()));
+        // Lấy số like, comment, trạng thái yêu thích từ DB
+        BlogDao blogDao = new BlogDao(this);
+        BlogEntity blogEntity = blogDao.get(blog.getBlogID());
+        BlogCommentDao commentDao = new BlogCommentDao(this);
+        int commentCount = commentDao.getByBlog(blog.getBlogID()).size();
+        tvComment.setText(String.valueOf(commentCount));
         tvContent.setText(blog.getDescription());
 
         // Thêm sự kiện click cho nút 'Tất cả' bình luận
@@ -86,6 +92,93 @@ public class BlogDetailActivity extends AppCompatActivity {
         // This can be changed later to fetch real data based on the blog ID.
         setupCommentSection();
         setupSuggestionSection();
+
+        ImageView ivComment = findViewById(R.id.ivComment);
+        ImageView ivFavorite = findViewById(R.id.ivFavorite);
+        // Xử lý nút Comment: cuộn đến ô nhập bình luận
+        if (ivComment != null) {
+            ivComment.setOnClickListener(v -> {
+                EditText edtComment = findViewById(R.id.edtComment);
+                if (edtComment != null) {
+                    edtComment.requestFocus();
+                    android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) imm.showSoftInput(edtComment, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
+        }
+        // Xử lý nút Favorite (ivFavorite): chỉ thêm/xóa khỏi mục yêu thích
+        if (ivFavorite != null) {
+            final boolean[] isFav = {false};
+            if (com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this)) {
+                String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+                com.example.bepnhataapp.common.dao.CustomerDao cDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                com.example.bepnhataapp.common.model.Customer c = cDao.findByPhone(phone);
+                if (c != null) {
+                    FavouriteBlogDao favDao = new FavouriteBlogDao(this);
+                    isFav[0] = favDao.isFavourite(blog.getBlogID(), c.getCustomerID());
+                }
+            }
+            ivFavorite.setImageResource(isFav[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+            ivFavorite.setOnClickListener(v -> {
+                if (!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this)) {
+                    android.widget.Toast.makeText(this, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String phone = com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+                com.example.bepnhataapp.common.dao.CustomerDao cusDao = new com.example.bepnhataapp.common.dao.CustomerDao(this);
+                com.example.bepnhataapp.common.model.Customer cus = cusDao.findByPhone(phone);
+                if (cus == null) return;
+                FavouriteBlogDao favDao2 = new FavouriteBlogDao(this);
+                if (isFav[0]) {
+                    favDao2.delete(blog.getBlogID(), cus.getCustomerID());
+                    ivFavorite.setImageResource(R.drawable.ic_favorite_unchecked);
+                    android.widget.Toast.makeText(this, "Đã xóa khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                } else {
+                    favDao2.insert(new com.example.bepnhataapp.common.model.FavouriteBlog(blog.getBlogID(), cus.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
+                    ivFavorite.setImageResource(R.drawable.ic_favorite_checked);
+                    android.widget.Toast.makeText(this, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
+                }
+                isFav[0] = !isFav[0];
+            });
+        }
+
+        TextView tvLike = findViewById(R.id.tvLike);
+        ImageView ivLike = findViewById(R.id.ivLike);
+        // Sử dụng mảng để biến dùng được trong lambda
+        final int[] likeCount = {blogEntity != null ? blogEntity.getLikes() : 0};
+        tvLike.setText(String.valueOf(likeCount[0]));
+        // Kiểm tra trạng thái đã like của user (dùng SharedPreferences đơn giản cho mỗi user/blog)
+        String likeKey = "like_blog_" + blog.getBlogID() + "_user_" + com.example.bepnhataapp.common.utils.SessionManager.getPhone(this);
+        android.content.SharedPreferences prefs = getSharedPreferences("blog_likes", MODE_PRIVATE);
+        final boolean[] liked = {prefs.getBoolean(likeKey, false)};
+        ivLike.setImageResource(liked[0] ? R.drawable.ic_like_checked : R.drawable.ic_like);
+        ivLike.setOnClickListener(v -> {
+            if (!com.example.bepnhataapp.common.utils.SessionManager.isLoggedIn(this)) {
+                android.widget.Toast.makeText(this, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (liked[0]) {
+                // Bỏ like
+                likeCount[0] = Math.max(0, likeCount[0] - 1);
+                liked[0] = false;
+                ivLike.setImageResource(R.drawable.ic_like);
+            } else {
+                // Like
+                likeCount[0]++;
+                liked[0] = true;
+                ivLike.setImageResource(R.drawable.ic_like_checked);
+            }
+            tvLike.setText(String.valueOf(likeCount[0]));
+            // Lưu lại trạng thái like vào DB và SharedPreferences
+            if (blogEntity != null) {
+                blogEntity.setLikes(likeCount[0]);
+                blogDao.update(blogEntity);
+            }
+            prefs.edit().putBoolean(likeKey, liked[0]).apply();
+        });
+        // Hiển thị đúng số bình luận
+        commentCount = commentDao.getByBlog(blog.getBlogID()).size();
+        tvComment.setText(String.valueOf(commentCount));
     }
 
     private void setupCommentSection() {

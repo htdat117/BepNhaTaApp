@@ -80,8 +80,10 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 boolean isFav = favDao.isFavourite(blog.getBlogID(), c.getCustomerID());
                 if (isFav) {
                     favDao.delete(blog.getBlogID(), c.getCustomerID());
+                    android.widget.Toast.makeText(context, "Đã xoá khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                 } else {
                     favDao.insert(new com.example.bepnhataapp.common.model.FavouriteBlog(blog.getBlogID(), c.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
+                    android.widget.Toast.makeText(context, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                 }
 
                 blog.setFavorite(!isFav);
@@ -118,8 +120,10 @@ public class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 boolean isFav = favDao.isFavourite(blog.getBlogID(), c.getCustomerID());
                 if (isFav) {
                     favDao.delete(blog.getBlogID(), c.getCustomerID());
+                    android.widget.Toast.makeText(context, "Đã xoá khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                 } else {
                     favDao.insert(new com.example.bepnhataapp.common.model.FavouriteBlog(blog.getBlogID(), c.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
+                    android.widget.Toast.makeText(context, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
                 }
 
                 blog.setFavorite(!isFav);

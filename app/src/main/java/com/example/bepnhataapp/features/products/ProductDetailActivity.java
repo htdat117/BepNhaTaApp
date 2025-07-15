@@ -302,6 +302,17 @@ public class ProductDetailActivity extends BaseActivity {
         if(tvBackHeader != null) tvBackHeader.setText("Chi tiết sản phẩm");
         ImageView btnBack = findViewById(R.id.btnBack);
         if(btnBack != null) btnBack.setOnClickListener(v -> finish());
+
+        // Thêm sự kiện click cho nút 'Xem công thức'
+        binding.tvViewRecipe.setOnClickListener(v -> {
+            if (detail != null && detail.getRecipeID() != null) {
+                Intent intent = new Intent(ProductDetailActivity.this, com.example.bepnhataapp.features.recipes.RecipeDetailActivity.class);
+                intent.putExtra("recipeId", detail.getRecipeID());
+                startActivity(intent);
+            } else {
+                android.widget.Toast.makeText(ProductDetailActivity.this, "Sản phẩm này chưa có công thức liên kết!", android.widget.Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

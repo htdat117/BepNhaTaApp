@@ -120,8 +120,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             com.example.bepnhataapp.common.dao.FavouriteProductDao favDao = new com.example.bepnhataapp.common.dao.FavouriteProductDao(context);
             if (favState[0]) {
                 favDao.delete(product.getProductID(), cus.getCustomerID());
+                android.widget.Toast.makeText(context, "Đã xoá khỏi mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
             } else {
                 favDao.insert(new com.example.bepnhataapp.common.model.FavouriteProduct(product.getProductID(), cus.getCustomerID(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())));
+                android.widget.Toast.makeText(context, "Đã thêm vào mục yêu thích", android.widget.Toast.LENGTH_SHORT).show();
             }
             favState[0] = !favState[0];
             holder.imgFavorite.setImageResource(favState[0] ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
