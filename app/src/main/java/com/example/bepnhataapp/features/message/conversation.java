@@ -83,6 +83,12 @@ public class conversation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Chỉ cho phép sử dụng khi đã đăng nhập
+        if(!SessionManager.isLoggedIn(this)){
+            Toast.makeText(this, "Vui lòng đăng nhập để sử dụng", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_conversation);
 
         // Initialize views

@@ -113,6 +113,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (ivMessage != null) {
             ivMessage.setOnClickListener(v -> {
+                // Kiểm tra đăng nhập trước khi mở màn hình chat
+                if(!SessionManager.isLoggedIn(BaseActivity.this)){
+                    android.widget.Toast.makeText(BaseActivity.this, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!BaseActivity.this.getClass().equals(com.example.bepnhataapp.features.message.conversation.class)) {
                     android.content.Intent it = new android.content.Intent(BaseActivity.this, com.example.bepnhataapp.features.message.conversation.class);
                     it.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
