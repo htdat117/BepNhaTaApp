@@ -64,7 +64,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/img_dat"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/bg_avatar"
+                    android:background="@drawable/bg_avatar_round"
                     android:cropToPadding="true"
                     android:clipToOutline="true" />
 
@@ -84,8 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/bg_edittext_rounded"
-                android:padding="0dp"
+                android:background="@drawable/bg_account_info_round"
+                android:padding="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp">
 
