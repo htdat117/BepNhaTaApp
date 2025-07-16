@@ -199,7 +199,27 @@ public class TimelineFragment extends Fragment {
         }
         android.widget.TextView tvCal=root.findViewById(R.id.tvCalories);
         android.widget.TextView tvMacros=root.findViewById(R.id.tvMacros);
+        android.widget.TextView tvNote=root.findViewById(R.id.tvDayNote);
         if(tvCal!=null) tvCal.setText((int)totCals+" Calories");
         if(tvMacros!=null) tvMacros.setText((int)totCarb+"g Carbs, "+(int)totFat+"g Fat, "+(int)totPro+"g Protein");
+
+        if(tvNote!=null){
+            String noteStr = null;
+            if(getContext()!=null){
+                com.example.bepnhataapp.common.dao.MealDayDao dDao = new com.example.bepnhataapp.common.dao.MealDayDao(getContext());
+                java.time.LocalDate curDate = null;
+                if(getActivity() instanceof com.example.bepnhataapp.features.mealplan.MealPlanContentActivity){
+                    curDate = ((com.example.bepnhataapp.features.mealplan.MealPlanContentActivity)getActivity()).getCurrentDate();
+                }
+                com.example.bepnhataapp.common.model.MealDay dEnt = curDate!=null ? dDao.getByDate(curDate.toString()) : null;
+                if(dEnt!=null) noteStr = dEnt.getNote();
+            }
+            if(noteStr!=null && !noteStr.trim().isEmpty()){
+                tvNote.setText("Ghi chú: "+noteStr);
+                tvNote.setVisibility(View.VISIBLE);
+            } else {
+                tvNote.setVisibility(View.GONE);
+            }
+        }
     }
 } 

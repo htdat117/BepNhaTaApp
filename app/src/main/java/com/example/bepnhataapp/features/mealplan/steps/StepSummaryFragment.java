@@ -50,6 +50,17 @@ public class StepSummaryFragment extends Fragment {
 
             Toast.makeText(getContext(),"Đã lưu thông tin sức khỏe",Toast.LENGTH_SHORT).show();
 
+            // Tự động sinh thực đơn cho tuần hiện tại (thứ 2 → CN)
+            new Thread(() -> {
+                com.example.bepnhataapp.common.repository.LocalMealPlanRepository repo =
+                        new com.example.bepnhataapp.common.repository.LocalMealPlanRepository(requireContext());
+
+                java.time.LocalDate monday = java.time.LocalDate.now().with(java.time.DayOfWeek.MONDAY);
+                for (int i = 0; i < 7; i++) {
+                    repo.generateWeekPlan(monday.plusDays(i));
+                }
+            }).start();
+
             // Đánh dấu đã hoàn thành khảo sát
             SharedPreferences prefs = requireContext().getSharedPreferences("MealPlanPrefs", android.content.Context.MODE_PRIVATE);
             prefs.edit().putBoolean("onboarding_completed", true).apply();

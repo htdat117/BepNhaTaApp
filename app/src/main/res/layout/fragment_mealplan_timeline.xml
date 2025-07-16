@@ -67,6 +67,16 @@
         android:gravity="center"
         android:layout_marginBottom="8dp" />
 
+    <!-- Day note Text -->
+    <TextView
+        android:id="@+id/tvDayNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark2"
+        style="@style/Body.Regular.Ag3"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp" />
+
     <!-- Timeline RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTimeline"

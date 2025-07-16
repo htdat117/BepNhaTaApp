@@ -27,6 +27,9 @@ public class ManageOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_order);
 
+        // Seed dữ liệu đơn hàng mẫu nếu cần
+        com.example.bepnhataapp.common.utils.SampleOrderSeeder.seedOrdersForCustomer(this, 10);
+
         TabLayout tabLayout = findViewById(R.id.tabLayoutOrder);
         ViewPager2 viewPager = findViewById(R.id.viewPagerOrder);
         ImageButton btnBack = findViewById(R.id.btnBack);

@@ -289,7 +289,50 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
             } else if (id == R.id.menu_share_template) {
                 Toast.makeText(this, "Chia sẻ", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.menu_add_note) {
-                Toast.makeText(this, "Thêm ghi chú", Toast.LENGTH_SHORT).show();
+                // Hiển thị dialog nhập ghi chú cho ngày
+                android.widget.EditText input = new android.widget.EditText(this);
+                input.setHint("Nhập ghi chú cho ngày");
+                input.setMinLines(2);
+                input.setMaxLines(4);
+                new android.app.AlertDialog.Builder(this)
+                    .setTitle("Thêm ghi chú")
+                    .setView(input)
+                    .setPositiveButton("Lưu", (d, w) -> {
+                        String note = input.getText().toString().trim();
+                        new Thread(() -> {
+                            com.example.bepnhataapp.common.dao.MealDayDao dayDao = new com.example.bepnhataapp.common.dao.MealDayDao(getApplicationContext());
+                            java.util.List<com.example.bepnhataapp.common.model.MealDay> days = dayDao.getAllByDate(currentDate.toString());
+                            if(days.isEmpty()){
+                                // nếu chưa có MealDay cho ngày này (có thể do kế hoạch trống), tạo placeholder vào AUTO plan đầu tiên
+                                com.example.bepnhataapp.common.dao.MealPlanDao mpDao = new com.example.bepnhataapp.common.dao.MealPlanDao(getApplicationContext());
+                                java.util.List<com.example.bepnhataapp.common.model.MealPlan> autos = mpDao.getAutoPlans();
+                                long planId;
+                                if(autos.isEmpty()){
+                                    com.example.bepnhataapp.common.model.MealPlan np = new com.example.bepnhataapp.common.model.MealPlan();
+                                    np.setType("AUTO");
+                                    np.setTitle("Kế hoạch tự động");
+                                    np.setCreatedAt(java.time.LocalDateTime.now().toString());
+                                    planId = mpDao.insert(np);
+                                } else {
+                                    planId = autos.get(0).getMealPlanID();
+                                }
+                                com.example.bepnhataapp.common.model.MealDay nd = new com.example.bepnhataapp.common.model.MealDay(planId, currentDate.toString(), note);
+                                dayDao.insert(nd);
+                            } else {
+                                for(com.example.bepnhataapp.common.model.MealDay dDay: days){
+                                    dDay.setNote(note);
+                                    dayDao.update(dDay);
+                                }
+                            }
+                            runOnUiThread(() -> {
+                                mealPlanViewModel.refresh();
+                                refreshDayView();
+                                android.widget.Toast.makeText(this, "Đã lưu ghi chú", android.widget.Toast.LENGTH_SHORT).show();
+                            });
+                        }).start();
+                    })
+                    .setNegativeButton("Huỷ", null)
+                    .show();
             } else if (id == R.id.menu_delete_day) {
                 new AlertDialog.Builder(this)
                     .setTitle("Xác nhận xoá")
