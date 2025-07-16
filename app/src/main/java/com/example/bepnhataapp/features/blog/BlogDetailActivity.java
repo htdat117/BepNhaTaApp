@@ -28,7 +28,8 @@ import com.example.bepnhataapp.common.dao.FavouriteBlogDao;
 import com.example.bepnhataapp.common.model.FavouriteBlog;
 import com.example.bepnhataapp.common.model.Customer;
 
-public class BlogDetailActivity extends AppCompatActivity {
+// Đổi extends AppCompatActivity thành BaseActivity và implement OnNavigationItemReselectedListener
+public class BlogDetailActivity extends com.example.bepnhataapp.common.base.BaseActivity implements com.example.bepnhataapp.common.base.BaseActivity.OnNavigationItemReselectedListener {
 
     public static final String EXTRA_BLOG = "extra_blog";
 
@@ -36,6 +37,8 @@ public class BlogDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog_detail);
+        // Gắn bottom navigation fragment, chọn tab Trang chủ sáng
+        setupBottomNavigationFragment(R.id.nav_home);
 
         ImageView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
@@ -253,5 +256,16 @@ public class BlogDetailActivity extends AppCompatActivity {
         List<Blog> suggestBlogList = allBlogs.size() > maxSuggest ? allBlogs.subList(0, maxSuggest) : allBlogs;
         com.example.bepnhataapp.common.adapter.BlogAdapter suggestBlogAdapter = new com.example.bepnhataapp.common.adapter.BlogAdapter(suggestBlogList);
         rvSuggest.setAdapter(suggestBlogAdapter);
+    }
+
+    @Override
+    protected int getBottomNavigationContainerId() {
+        // id này phải trùng với id của ViewGroup chứa menu trong layout (sửa layout nếu cần)
+        return R.id.bottom_navigation;
+    }
+
+    @Override
+    public void onNavigationItemReselected(int itemId) {
+        handleNavigation(itemId);
     }
 } 

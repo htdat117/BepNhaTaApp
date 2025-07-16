@@ -27,6 +27,9 @@ import okhttp3.*;
 import org.json.*;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.LinearLayout;
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
 
 public class CaloCalculatorFragment extends Fragment {
 
@@ -34,7 +37,7 @@ public class CaloCalculatorFragment extends Fragment {
 
     private EditText editTextFoodName, editTextWeight;
     private Button btnSave, btnDelete;
-    private ListView listViewFoods;
+    private LinearLayout llHistory;
     private TextView textViewTotalCalories;
 
     private ArrayList<FoodItem> foodList;
@@ -73,8 +76,8 @@ public class CaloCalculatorFragment extends Fragment {
         Log.d(TAG, "btnSave: " + (btnSave != null ? "Found" : "Null"));
         btnDelete = view.findViewById(R.id.btnDelete);
         Log.d(TAG, "btnDelete: " + (btnDelete != null ? "Found" : "Null"));
-        listViewFoods = view.findViewById(R.id.listViewFoods);
-        Log.d(TAG, "listViewFoods: " + (listViewFoods != null ? "Found" : "Null"));
+        llHistory = view.findViewById(R.id.llHistory);
+        Log.d(TAG, "llHistory: " + (llHistory != null ? "Found" : "Null"));
         textViewTotalCalories = view.findViewById(R.id.textViewTotalCalories);
         Log.d(TAG, "textViewTotalCalories: " + (textViewTotalCalories != null ? "Found" : "Null"));
 
@@ -87,8 +90,9 @@ public class CaloCalculatorFragment extends Fragment {
         
         initializeFoodCalories();
 
-        adapter = new FoodItemAdapter(getContext(), R.layout.item_food_history, foodList);
-        listViewFoods.setAdapter(adapter);
+        // Bỏ ListView và adapter
+        // adapter = new FoodItemAdapter(getContext(), R.layout.item_food_history, foodList);
+        // listViewFoods.setAdapter(adapter);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,10 +110,11 @@ public class CaloCalculatorFragment extends Fragment {
             }
         });
 
-        listViewFoods.setOnItemClickListener((parent, view1, position, id) -> {
-            FoodItem selectedFood = foodList.get(position);
-            showFoodDetails(selectedFood);
-        });
+        // Xóa dòng này vì không còn ListView
+        // listViewFoods.setOnItemClickListener((parent, view1, position, id) -> {
+        //     FoodItem selectedFood = foodList.get(position);
+        //     showFoodDetails(selectedFood);
+        // });
 
         return view;
     }
@@ -160,6 +165,8 @@ public class CaloCalculatorFragment extends Fragment {
             foodCaloriesMap.put("Tôm tươi", new FoodData(99.0, R.drawable.food_placeholder));
             foodCaloriesMap.put("Chả cua", new FoodData(170.0, R.drawable.food_placeholder));
             foodCaloriesMap.put("Bánh canh", new FoodData(110.0, R.drawable.food_placeholder));
+            // Bổ sung cần tây đúng chuẩn
+            foodCaloriesMap.put("Cần tây", new FoodData(16.0, R.drawable.food_placeholder));
         }
     }
 
@@ -255,7 +262,8 @@ public class CaloCalculatorFragment extends Fragment {
             // Tạo FoodItem với thông tin từ database
             FoodItem foodItem = new FoodItem(foodName, weight, totalCalories, foodCalo.getFoodThumb());
             foodList.add(foodItem);
-            adapter.notifyDataSetChanged();
+            // Sau mỗi lần thêm/xóa món ăn, gọi updateHistoryList() thay vì adapter.notifyDataSetChanged()
+            updateHistoryList();
             
             updateTotalCalories();
             
@@ -277,27 +285,43 @@ public class CaloCalculatorFragment extends Fragment {
     }
 
     private FoodCalo findFoodCalo(String foodName) {
-        String normalizedName = normalizeString(foodName);
-
-        // 1. Tìm kiếm chính xác
-        FoodCalo exact = foodCaloDao.findByName(normalizedName);
+        if (foodName == null) return null;
+        String trimmedName = foodName.trim();
+        // 1. Tìm kiếm chính xác (không normalize, chỉ trim)
+        FoodCalo exact = foodCaloDao.findByName(trimmedName);
         if (exact != null) return exact;
 
         // 2. Tìm kiếm không phân biệt hoa thường
-        List<FoodCalo> results = foodCaloDao.searchByNameIgnoreCase(normalizedName);
+        List<FoodCalo> results = foodCaloDao.searchByNameIgnoreCase(trimmedName.toLowerCase());
         if (!results.isEmpty()) return results.get(0);
 
         // 3. Tìm kiếm LIKE
-        results = foodCaloDao.searchByName(normalizedName);
+        results = foodCaloDao.searchByName(trimmedName);
         if (!results.isEmpty()) return results.get(0);
 
-        // 4. Tìm kiếm nhiều từ khóa
-        String[] keywords = normalizedName.split("\\s+");
+        // 4. Tìm kiếm nhiều từ khóa (không normalize)
+        String[] keywords = trimmedName.split("\\s+");
         if (keywords.length > 1) {
             results = foodCaloDao.searchByMultipleKeywords(keywords);
             if (!results.isEmpty()) return results.get(0);
         }
 
+        // 5. Cuối cùng mới thử normalize (không dấu)
+        String normalizedName = normalizeString(foodName);
+        if (!normalizedName.equals(trimmedName)) {
+            // Thử lại các bước trên với tên không dấu
+            exact = foodCaloDao.findByName(normalizedName);
+            if (exact != null) return exact;
+            results = foodCaloDao.searchByNameIgnoreCase(normalizedName);
+            if (!results.isEmpty()) return results.get(0);
+            results = foodCaloDao.searchByName(normalizedName);
+            if (!results.isEmpty()) return results.get(0);
+            String[] normKeywords = normalizedName.split("\\s+");
+            if (normKeywords.length > 1) {
+                results = foodCaloDao.searchByMultipleKeywords(normKeywords);
+                if (!results.isEmpty()) return results.get(0);
+            }
+        }
         return null;
     }
 
@@ -350,7 +374,8 @@ public class CaloCalculatorFragment extends Fragment {
 
         builder.setPositiveButton("Có", (dialog, which) -> {
             foodList.remove(foodList.size() - 1);
-            adapter.notifyDataSetChanged();
+            // Sau mỗi lần thêm/xóa món ăn, gọi updateHistoryList() thay vì adapter.notifyDataSetChanged()
+            updateHistoryList();
             updateTotalCalories();
             Toast.makeText(getContext(), "Đã xóa món ăn", Toast.LENGTH_SHORT).show();
         });
@@ -366,7 +391,7 @@ public class CaloCalculatorFragment extends Fragment {
         String message = String.format(
             "Tên: %s\n" +
             "Khối lượng: %.1f g\n" +
-            "Calo: %d calo\n" +
+            "Calo: %.0f calo\n" +
             "Calo/100g: %.1f calo",
             food.getName(),
             food.getWeight(),
@@ -470,7 +495,94 @@ public class CaloCalculatorFragment extends Fragment {
                         // ignore
                     }
                 }
-                new Handler(Looper.getMainLooper()).post(() -> showNoResultsFound(foodName));
+                // Nếu tìm bằng tiếng Việt không có, thử dịch sang tiếng Anh rồi tìm lại
+                translateToEnglish(foodName, new TranslationCallback() {
+                    @Override
+                    public void onTranslated(String english) {
+                        if (english != null && !english.equalsIgnoreCase(foodName)) {
+                            searchFoodOnline_EnglishFallback(foodName, english);
+                        } else {
+                            new Handler(Looper.getMainLooper()).post(() -> showNoResultsFound(foodName));
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    // Hàm fallback: tìm lại bằng tiếng Anh, nếu vẫn không có thì báo không tìm thấy
+    private void searchFoodOnline_EnglishFallback(String original, String english) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://world.openfoodfacts.org/cgi/search.pl?search_terms=" +
+            english.replace(" ", "+") +
+            "&search_simple=1&action=process&json=1";
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                new Handler(Looper.getMainLooper()).post(() -> showNoResultsFound(original));
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JSONObject obj = new JSONObject(json);
+                        JSONArray products = obj.getJSONArray("products");
+                        if (products.length() > 0) {
+                            JSONObject first = products.getJSONObject(0);
+                            String name = first.optString("product_name", english);
+                            String imageUrl = first.optString("image_url", "");
+                            double calories = -1;
+                            if (first.has("nutriments")) {
+                                JSONObject nutriments = first.getJSONObject("nutriments");
+                                calories = nutriments.optDouble("energy-kcal_100g", -1);
+                            }
+                            double finalCalories = calories;
+                            new Handler(Looper.getMainLooper()).post(() -> showOnlineFoodResult(original + " (" + english + ")", imageUrl, finalCalories));
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        // ignore
+                    }
+                }
+                new Handler(Looper.getMainLooper()).post(() -> showNoResultsFound(original));
+            }
+        });
+    }
+
+    // Callback interface cho dịch tự động
+    private interface TranslationCallback {
+        void onTranslated(String english);
+    }
+
+    // Hàm dịch tự động sang tiếng Anh (dùng Google Translate API miễn phí hoặc endpoint public)
+    private void translateToEnglish(String text, TranslationCallback callback) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=vi&tl=en&dt=t&q=" + java.net.URLEncoder.encode(text);
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onTranslated(text));
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String body = response.body().string();
+                    try {
+                        // Kết quả là một mảng JSON lồng nhau
+                        JSONArray arr = new JSONArray(body);
+                        JSONArray arr2 = arr.getJSONArray(0);
+                        JSONArray arr3 = arr2.getJSONArray(0);
+                        String translated = arr3.getString(0);
+                        new Handler(Looper.getMainLooper()).post(() -> callback.onTranslated(translated));
+                        return;
+                    } catch (Exception e) {
+                        // ignore
+                    }
+                }
+                new Handler(Looper.getMainLooper()).post(() -> callback.onTranslated(text));
             }
         });
     }
@@ -492,6 +604,21 @@ public class CaloCalculatorFragment extends Fragment {
         builder.setMessage(msg.toString());
         builder.setPositiveButton("OK", null);
         builder.show();
+
+        // Nếu có calo, tự động thêm vào danh sách
+        if (calories > 0) {
+            double weight = 0;
+            try {
+                String weightText = editTextWeight.getText().toString().trim();
+                weight = Double.parseDouble(weightText);
+            } catch (Exception e) {
+                weight = 100;
+            }
+            foodList.add(new FoodItem(name, weight, weight * calories / 100.0, imageUrl));
+            // Sau mỗi lần thêm/xóa món ăn, gọi updateHistoryList() thay vì adapter.notifyDataSetChanged()
+            updateHistoryList();
+            updateTotalCalories();
+        }
     }
 
     private void showSearchResults(List<FoodCalo> results) {
@@ -573,5 +700,30 @@ public class CaloCalculatorFragment extends Fragment {
         }
         textViewTotalCalories.setText("Tổng calo: " + total + " calo");
         Log.d(TAG, "Total calories updated: " + total);
+    }
+
+    private void updateHistoryList() {
+        llHistory.removeAllViews();
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        for (FoodItem item : foodList) {
+            View v = inflater.inflate(R.layout.item_food_history, llHistory, false);
+            TextView tvName = v.findViewById(R.id.textViewFoodName);
+            TextView tvWeight = v.findViewById(R.id.textViewWeight);
+            TextView tvCalories = v.findViewById(R.id.textViewCalories);
+            ImageView imgFood = v.findViewById(R.id.imageViewFood);
+            if(tvName!=null) tvName.setText(item.getName());
+            if(tvWeight!=null) tvWeight.setText(String.format("Khối lượng: %.1f g", item.getWeight()));
+            if(tvCalories!=null) tvCalories.setText(String.format("Calo: %.1f kcal", item.getCalories()));
+            if(imgFood!=null) {
+                if(item.getImageUrl()!=null && !item.getImageUrl().isEmpty()) {
+                    Glide.with(getContext()).load(item.getImageUrl()).placeholder(R.drawable.food_placeholder).into(imgFood);
+                } else if(item.getImageResId()!=0) {
+                    imgFood.setImageResource(item.getImageResId());
+                } else {
+                    imgFood.setImageResource(R.drawable.food_placeholder);
+                }
+            }
+            llHistory.addView(v);
+        }
     }
 } 

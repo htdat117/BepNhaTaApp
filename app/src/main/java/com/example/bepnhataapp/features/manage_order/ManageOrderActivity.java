@@ -14,7 +14,7 @@ import com.example.bepnhataapp.common.model.OrderStatus;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class ManageOrderActivity extends AppCompatActivity {
+public class ManageOrderActivity extends com.example.bepnhataapp.common.base.BaseActivity implements com.example.bepnhataapp.common.base.BaseActivity.OnNavigationItemReselectedListener {
     private static final OrderStatus[] TAB_STATUS = new OrderStatus[]{
             OrderStatus.WAIT_CONFIRM, OrderStatus.WAIT_PICKUP, OrderStatus.OUT_FOR_DELIVERY, OrderStatus.DELIVERED, OrderStatus.RETURNED, OrderStatus.CANCELED
     };
@@ -26,6 +26,8 @@ public class ManageOrderActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_order);
+        // Gắn bottom navigation, chọn tab Trang chủ sáng (hoặc tab phù hợp)
+        setupBottomNavigationFragment(R.id.nav_home);
 
         // Seed dữ liệu đơn hàng mẫu nếu cần
         com.example.bepnhataapp.common.utils.SampleOrderSeeder.seedOrdersForCustomer(this, 10);
@@ -48,6 +50,16 @@ public class ManageOrderActivity extends AppCompatActivity {
         int tabIndex = intent.getIntExtra("tab_index", 0);
         ViewPager2 viewPager = findViewById(R.id.viewPagerOrder);
         viewPager.setCurrentItem(tabIndex, false);
+    }
+
+    @Override
+    protected int getBottomNavigationContainerId() {
+        return R.id.bottom_navigation_container;
+    }
+
+    @Override
+    public void onNavigationItemReselected(int itemId) {
+        handleNavigation(itemId);
     }
 
     class OrderPagerAdapter extends FragmentStateAdapter {
