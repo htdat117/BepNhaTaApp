@@ -13,10 +13,12 @@
         android:id="@+id/header"/>
 
     <!-- Main content inside scroll -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:fillViewport="true"
         android:padding="12dp">
 
         <LinearLayout
@@ -180,7 +182,7 @@
                     android:layout_marginStart="4dp"/>
             </LinearLayout>
 
-            <!-- Payment method card -->
+            <!-- Thêm lại cardPaymentMethod ngay dưới voucher -->
             <LinearLayout
                 android:id="@+id/cardPaymentMethod"
                 android:layout_width="match_parent"
@@ -188,16 +190,14 @@
                 android:orientation="vertical"
                 android:background="@drawable/bg_card_round"
                 android:padding="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="8dp"
                 android:elevation="4dp">
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Phương thức thanh toán"
                     android:textStyle="bold"
                     android:textSize="18sp"/>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerPayment"
                     android:layout_width="match_parent"
@@ -334,80 +334,82 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom bar -->
+    <!-- Dưới cùng chỉ còn nút Đặt hàng, tổng cộng, tiết kiệm -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/bg_bottom_bar_round"
-        android:padding="12dp"
+        android:orientation="vertical"
+        android:background="@android:color/white"
         android:elevation="8dp"
-        android:gravity="center_vertical">
-
-        <!-- totals -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center|end"
-            android:layout_marginEnd="16dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tổng cộng: "
-                    android:textColor="@color/dark2"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/inter_medium"
-                    android:textSize="@dimen/body2"/>
-                <TextView
-                    android:id="@+id/tvBottomTotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="90.000đ"
-                    android:textColor="@color/primary1"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="@dimen/header4"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tiết kiệm: "
-                    android:textColor="@color/dark2"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/inter_medium"
-                    android:textSize="@dimen/body3"/>
-                <TextView
-                    android:id="@+id/tvBottomSave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="30.000đ"
-                    android:textColor="@color/primary1"
-                    android:fontFamily="@font/inter_medium"
-                    android:textSize="@dimen/body3"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Buy button -->
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp">
         <Button
             android:id="@+id/btnPlaceOrder"
-            android:layout_width="160dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_button_primary"
-            android:text="Mua ngay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đặt hàng"
+            android:textAllCaps="false"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_button_orange"
             android:textColor="@android:color/white"
-            android:textStyle="bold"/>
+            android:textSize="18sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng cộng: "
+                android:textColor="@color/dark2"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/tvBottomTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="90.000đ"
+                android:textColor="@color/primary1"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiết kiệm: "
+                android:textColor="@color/dark2"
+                android:textSize="14sp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/tvBottomSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30.000đ"
+                android:textColor="@color/primary1"
+                android:textSize="14sp"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout> 

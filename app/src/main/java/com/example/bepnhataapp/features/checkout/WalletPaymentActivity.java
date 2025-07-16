@@ -61,12 +61,12 @@ public class WalletPaymentActivity extends AppCompatActivity {
         final java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem> purchasedItems =
                 (java.util.ArrayList<com.example.bepnhataapp.common.model.CartItem>) src.getSerializableExtra("selected_items");
 
-        final int goodsOld = src.getIntExtra("goods_total_old",0);
-        final int shipFee = src.getIntExtra("shipping_fee",0);
-        final int discount = src.getIntExtra("discount",0);
-        final int saveDiscount = src.getIntExtra("save_discount", 0);
-        final int voucherDiscount = src.getIntExtra("voucher_discount", 0);
-        final int grand = src.getIntExtra("grand_total",0);
+        final double goodsOld = src.getDoubleExtra("goods_total_old",0);
+        final double shipFee = src.getDoubleExtra("shipping_fee",0);
+        final double discount = src.getDoubleExtra("discount",0);
+        final double saveDiscount = src.getDoubleExtra("save_discount", 0);
+        final double voucherDiscount = src.getDoubleExtra("voucher_discount", 0);
+        final double grand = src.getDoubleExtra("grand_total",0);
         final String note = src.getStringExtra("note");
         final String email = src.getStringExtra("email");
 
@@ -133,16 +133,23 @@ public class WalletPaymentActivity extends AppCompatActivity {
             ll.removeAllViews();
             for(com.example.bepnhataapp.common.model.CartItem ci: purchasedItems){
                 android.view.View item = inflater.inflate(R.layout.item_checkout_product, ll, false);
-                ((android.widget.TextView)item.findViewById(R.id.tvTitle)).setText(ci.getTitle());
+                android.widget.TextView tvName = item.findViewById(R.id.tvProductName);
+                if(tvName!=null) tvName.setText(ci.getTitle());
                 java.text.NumberFormat nff = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
                 int factor = ci.getServing().startsWith("4")?2:1;
-                ((android.widget.TextView)item.findViewById(R.id.tvPrice)).setText(nff.format(ci.getPrice()*factor)+"đ");
+                android.widget.TextView tvPrice = item.findViewById(R.id.tvPrice);
+                if(tvPrice!=null) tvPrice.setText(nff.format(ci.getPrice()*factor)+"đ");
                 android.widget.TextView tvOld = item.findViewById(R.id.tvOldPrice);
-                tvOld.setText(nff.format(ci.getOldPrice()*factor)+"đ");
-                tvOld.setPaintFlags(tvOld.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
-                ((android.widget.TextView)item.findViewById(R.id.tvVariant)).setText("Phân loại: "+ci.getServing());
-                ((android.widget.TextView)item.findViewById(R.id.tvQuantity)).setText("x"+ci.getQuantity());
-                com.bumptech.glide.Glide.with(item.getContext()).load(ci.getThumb()).placeholder(R.drawable.sample_img).into((android.widget.ImageView)item.findViewById(R.id.imgProduct));
+                if(tvOld!=null){
+                    tvOld.setText(nff.format(ci.getOldPrice()*factor)+"đ");
+                    tvOld.setPaintFlags(tvOld.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+                android.widget.TextView tvVariant = item.findViewById(R.id.tvVariant);
+                if(tvVariant!=null) tvVariant.setText("Phân loại: "+ci.getServing());
+                android.widget.TextView tvQuantity = item.findViewById(R.id.tvQuantity);
+                if(tvQuantity!=null) tvQuantity.setText("x"+ci.getQuantity());
+                android.widget.ImageView imgProduct = item.findViewById(R.id.imgProduct);
+                if(imgProduct!=null) com.bumptech.glide.Glide.with(item.getContext()).load(ci.getThumb()).placeholder(R.drawable.sample_img).into(imgProduct);
                 ll.addView(item);
             }
         }

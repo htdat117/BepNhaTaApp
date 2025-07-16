@@ -239,7 +239,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 android.content.Intent it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.PaymentSuccessActivity.class);
                 startActivity(it);
                 finish();
-            }else{ // Các cổng thanh toán khác (VCB, Momo, ZaloPay, ...)
+            } else {
                 android.content.Intent it;
                 if(selectedPaymentIdx==2 || selectedPaymentIdx==3){
                     it = new android.content.Intent(CheckoutActivity.this, com.example.bepnhataapp.features.checkout.WalletPaymentActivity.class);
@@ -272,7 +272,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     default: paymentMethodStr="Other"; break;
                 }
                 it.putExtra("payment_method", paymentMethodStr);
-            startActivity(it);
+                startActivity(it);
             }
         });
 

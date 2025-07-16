@@ -14,9 +14,10 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_payment);
 
-        ImageView back = findViewById(R.id.btnBack);
-        TextView title = findViewById(R.id.txtContent);
-        TextView change = findViewById(R.id.txtChange);
+        View header = findViewById(R.id.header);
+        ImageView back = header.findViewById(R.id.btnBack);
+        TextView title = header.findViewById(R.id.txtContent);
+        TextView change = header.findViewById(R.id.txtChange);
         if(title!=null) title.setText("Xác nhận thanh toán");
         if(change!=null) change.setVisibility(View.GONE);
         if(back!=null) back.setOnClickListener(v -> finish());
@@ -103,16 +104,23 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
             ll.removeAllViews();
             for(com.example.bepnhataapp.common.model.CartItem ci: prods){
                 android.view.View item = inflater.inflate(R.layout.item_checkout_product, ll, false);
-                ((android.widget.TextView)item.findViewById(R.id.tvTitle)).setText(ci.getTitle());
+                android.widget.TextView tvName = item.findViewById(R.id.tvProductName);
+                if(tvName!=null) tvName.setText(ci.getTitle());
                 java.text.NumberFormat nff = java.text.NumberFormat.getInstance(new java.util.Locale("vi","VN"));
                 int factor = ci.getServing().startsWith("4")?2:1;
-                ((android.widget.TextView)item.findViewById(R.id.tvPrice)).setText(nff.format(ci.getPrice()*factor)+"đ");
+                android.widget.TextView tvPrice = item.findViewById(R.id.tvPrice);
+                if(tvPrice!=null) tvPrice.setText(nff.format(ci.getPrice()*factor)+"đ");
                 android.widget.TextView tvOld = item.findViewById(R.id.tvOldPrice);
-                tvOld.setText(nff.format(ci.getOldPrice()*factor)+"đ");
-                tvOld.setPaintFlags(tvOld.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
-                ((android.widget.TextView)item.findViewById(R.id.tvVariant)).setText("Phân loại: "+ci.getServing());
-                ((android.widget.TextView)item.findViewById(R.id.tvQuantity)).setText("x"+ci.getQuantity());
-                com.bumptech.glide.Glide.with(item.getContext()).load(ci.getThumb()).placeholder(R.drawable.sample_img).into((android.widget.ImageView)item.findViewById(R.id.imgProduct));
+                if(tvOld!=null){
+                    tvOld.setText(nff.format(ci.getOldPrice()*factor)+"đ");
+                    tvOld.setPaintFlags(tvOld.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+                android.widget.TextView tvVariant = item.findViewById(R.id.tvVariant);
+                if(tvVariant!=null) tvVariant.setText("Phân loại: "+ci.getServing());
+                android.widget.TextView tvQuantity = item.findViewById(R.id.tvQuantity);
+                if(tvQuantity!=null) tvQuantity.setText("x"+ci.getQuantity());
+                android.widget.ImageView imgProduct = item.findViewById(R.id.imgProduct);
+                if(imgProduct!=null) com.bumptech.glide.Glide.with(item.getContext()).load(ci.getThumb()).placeholder(R.drawable.sample_img).into(imgProduct);
                 ll.addView(item);
             }
         }
