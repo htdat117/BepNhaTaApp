@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.bepnhataapp.R;
 import com.example.bepnhataapp.common.model.Blog;
 import com.example.bepnhataapp.features.blog.BlogDetailActivity;
+import com.example.bepnhataapp.common.utils.SessionManager;
 
 import java.util.List;
 
@@ -47,9 +48,18 @@ public class CookingTipAdapter extends RecyclerView.Adapter<CookingTipAdapter.Vi
                 .error(R.drawable.placeholder_banner_background)
                 .into(holder.image);
 
-        holder.favoriteIcon.setImageResource(tip.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+        // Nếu chưa đăng nhập thì luôn hiển thị tim rỗng
+        if (!SessionManager.isLoggedIn(context)) {
+            holder.favoriteIcon.setImageResource(R.drawable.ic_favorite_unchecked);
+        } else {
+            holder.favoriteIcon.setImageResource(tip.isFavorite() ? R.drawable.ic_favorite_checked : R.drawable.ic_favorite_unchecked);
+        }
 
         holder.favoriteIcon.setOnClickListener(v -> {
+            if (!SessionManager.isLoggedIn(context)) {
+                android.widget.Toast.makeText(context, "Vui lòng đăng nhập để sử dụng", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
             tip.setFavorite(!tip.isFavorite());
             notifyItemChanged(position);
             if (tip.isFavorite()) {
