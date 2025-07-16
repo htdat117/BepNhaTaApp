@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,22 @@ import android.os.Looper;
 import android.widget.LinearLayout;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 public class CaloCalculatorFragment extends Fragment {
 
@@ -45,6 +62,12 @@ public class CaloCalculatorFragment extends Fragment {
     private Map<String, FoodData> foodCaloriesMap;
     private double totalCalories = 0;
     private FoodCaloDao foodCaloDao;
+
+    private ImageView ivBarcode, ivMic, ivCamera;
+    private static final int REQ_CODE_SPEECH = 1001;
+    private static final int REQ_CODE_CAMERA = 1002;
+    private Uri photoUri;
+    private String currentPhotoPath;
 
     public static class FoodData {
         double caloriesPer100g;
@@ -80,6 +103,14 @@ public class CaloCalculatorFragment extends Fragment {
         Log.d(TAG, "llHistory: " + (llHistory != null ? "Found" : "Null"));
         textViewTotalCalories = view.findViewById(R.id.textViewTotalCalories);
         Log.d(TAG, "textViewTotalCalories: " + (textViewTotalCalories != null ? "Found" : "Null"));
+
+        ivBarcode = view.findViewById(R.id.ivBarcode);
+        ivMic = view.findViewById(R.id.ivMic);
+        ivCamera = view.findViewById(R.id.ivCamera);
+
+        ivBarcode.setOnClickListener(v -> startBarcodeScan());
+        ivMic.setOnClickListener(v -> startVoiceInput());
+        ivCamera.setOnClickListener(v -> startCamera());
 
         foodList = new ArrayList<>();
         foodCaloriesMap = new HashMap<>();
@@ -724,6 +755,100 @@ public class CaloCalculatorFragment extends Fragment {
                 }
             }
             llHistory.addView(v);
+        }
+    }
+
+    // --- Barcode ---
+    private final androidx.activity.result.ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(), result -> {
+        if (result.getContents() != null) {
+            // Có thể tra cứu barcode ra tên món ăn nếu có DB, tạm thời điền vào ô nhập
+            editTextFoodName.setText(result.getContents());
+            editTextFoodName.requestFocus();
+            Toast.makeText(getContext(), "Đã quét mã: " + result.getContents(), Toast.LENGTH_SHORT).show();
+        }
+    });
+    private void startBarcodeScan() {
+        ScanOptions options = new ScanOptions();
+        options.setPrompt("Quét mã vạch sản phẩm");
+        options.setBeepEnabled(true);
+        options.setOrientationLocked(true);
+        barcodeLauncher.launch(options);
+    }
+
+    // --- Voice ---
+    private void startVoiceInput() {
+        if (!SpeechRecognizer.isRecognitionAvailable(getContext())) {
+            Toast.makeText(getContext(), "Thiết bị không hỗ trợ nhận diện giọng nói", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi-VN");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Nói tên món ăn...");
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Không thể mở mic", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // --- Camera ---
+    private void startCamera() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQ_CODE_CAMERA);
+            return;
+        }
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Toast.makeText(getContext(), "Không thể tạo file ảnh", Toast.LENGTH_SHORT).show();
+            }
+            if (photoFile != null) {
+                photoUri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(takePictureIntent, REQ_CODE_CAMERA);
+            }
+        }
+    }
+    private File createImageFile() throws IOException {
+        String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_SPEECH && resultCode == Activity.RESULT_OK && data != null) {
+            java.util.ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (result != null && !result.isEmpty()) {
+                editTextFoodName.setText(result.get(0));
+                editTextFoodName.requestFocus();
+            }
+        } else if (requestCode == REQ_CODE_CAMERA && resultCode == Activity.RESULT_OK) {
+            if (photoUri != null) {
+                // Có thể lưu ảnh này làm minh họa cho món ăn, hoặc hiển thị preview
+                Toast.makeText(getContext(), "Đã chụp ảnh thành công", Toast.LENGTH_SHORT).show();
+                // (Nâng cao: gán ảnh này cho món ăn mới thêm vào)
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_CODE_CAMERA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera();
+            } else {
+                Toast.makeText(getContext(), "Bạn cần cấp quyền camera để sử dụng chức năng này", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 } 

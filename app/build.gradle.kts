@@ -65,4 +65,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-safetynet:18.0.1")
     implementation("com.google.android.gms:play-services-phenotype:17.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    // ZXing Android Embedded for barcode scanning
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }
