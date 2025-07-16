@@ -17,14 +17,16 @@ import java.util.List;
 public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTimeVH> {
 
     public static class RecipeItem {
+        public final long recipeId;
         public final int imageRes;
         public final String imageUrl;
         public final String name;
         public final int kcal;
 
-        public RecipeItem(int resId, String n, int kc) { this(resId, null, n, kc); }
-        public RecipeItem(String url, String n, int kc) { this(0, url, n, kc); }
-        private RecipeItem(int resId, String url, String n, int kc) {
+        public RecipeItem(long id, int resId, String n, int kc) { this(id, resId, null, n, kc); }
+        public RecipeItem(long id, String url, String n, int kc) { this(id, 0, url, n, kc); }
+        private RecipeItem(long id, int resId, String url, String n, int kc) {
+            this.recipeId = id;
             this.imageRes = resId;
             this.imageUrl = url;
             this.name = n;
@@ -47,6 +49,11 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
         void onAddNote(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
         void onSetReminder(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
         void onBuyAll(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot);
+        void onDeleteRecipe(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId);
+        void onChangeRecipe(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId);
+        void onChangeDay(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId);
+        void onMoveMeal(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId);
+        void onBuyIngredients(long recipeId);
     }
 
     private final List<MealTimeSection> data;
@@ -94,9 +101,19 @@ public class MealTimeAdapter extends RecyclerView.Adapter<MealTimeAdapter.MealTi
                 } catch (Exception ignored) {}
 
                 popup.setOnMenuItemClickListener(item1 -> {
-                    android.widget.Toast.makeText(v1.getContext(), item1.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
-                    if (item1.getItemId() == com.example.bepnhataapp.R.id.menu_buy_ingredients) {
-                        // TODO: navigate to shopping list later
+                    int mid = item1.getItemId();
+                    if(mid == com.example.bepnhataapp.R.id.menu_buy_ingredients){
+                        if(listener!=null) listener.onBuyIngredients(r.recipeId);
+                    } else if(mid == com.example.bepnhataapp.R.id.menu_change_recipe){
+                        if(listener!=null) listener.onChangeRecipe(s.slot, r.recipeId);
+                    } else if(mid == com.example.bepnhataapp.R.id.menu_change_day){
+                        if(listener!=null) listener.onChangeDay(s.slot, r.recipeId);
+                    } else if(mid == com.example.bepnhataapp.R.id.menu_move_meal){
+                        if(listener!=null) listener.onMoveMeal(s.slot, r.recipeId);
+                    } else if(mid == com.example.bepnhataapp.R.id.menu_delete_recipe){
+                        if(listener!=null) listener.onDeleteRecipe(s.slot, r.recipeId);
+                    } else {
+                        android.widget.Toast.makeText(v1.getContext(), item1.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
                     }
                     return true;
                 });

@@ -35,4 +35,27 @@ public interface MealPlanRepository {
      * Thêm toàn bộ nguyên liệu của các món trong buổi đó vào giỏ hàng.
      */
     void addIngredientsToCart(LocalDate date, String mealType, android.content.Context ctx);
+
+    /**
+     * Xoá một công thức ra khỏi một buổi của ngày.
+     * @param date Ngày cần xoá.
+     * @param mealType "Sáng", "Trưa", "Tối", "Snack".
+     * @param recipeId ID của công thức cần xoá.
+     */
+    void deleteRecipe(LocalDate date, String mealType, long recipeId);
+
+    /**
+     * Thay thế 1 công thức trong buổi bằng công thức khác (random).
+     * @return ID công thức mới hoặc -1 nếu không thay.
+     */
+    long changeRecipe(LocalDate date, String mealType, long recipeId);
+
+    /** Di chuyển một công thức sang NGÀY khác, giữ nguyên mealType */
+    void moveRecipeToDate(LocalDate curDate, String mealType, long recipeId, LocalDate targetDate);
+
+    /** Di chuyển công thức sang buổi khác trong cùng ngày */
+    void moveRecipeToMeal(LocalDate date, String fromMealType, long recipeId, String targetMealType);
+
+    /** Thêm nguyên liệu của 1 công thức vào giỏ hàng */
+    void addIngredientsForRecipe(long recipeId, android.content.Context ctx);
 } 

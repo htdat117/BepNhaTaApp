@@ -74,9 +74,11 @@ public class WeekTimelineFragment extends Fragment {
                 // build mealTime slots order breakfast lunch dinner snack
                 for(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot : com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum.values()){
                     java.util.List<com.example.bepnhataapp.common.adapter.MealAdapter.MealRow> rows = new java.util.ArrayList<>();
+                    int slotCal = 0;
                     for(android.util.Pair<com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum, com.example.bepnhataapp.common.model.Meal> p : d.meals){
                         if(p.first == slot){
                             com.example.bepnhataapp.common.model.Meal m = p.second;
+                            slotCal += m.calories;
                             if(m.imageUrl!=null && !m.imageUrl.isEmpty()){
                                 rows.add(new com.example.bepnhataapp.common.adapter.MealAdapter.MealRow(m.title, m.imageUrl));
                             } else {
@@ -93,6 +95,7 @@ public class WeekTimelineFragment extends Fragment {
                             case DINNER: lbl = "Bữa tối"; break;
                             default: lbl = "Ăn nhẹ"; break;
                         }
+                        if(slotCal>0){ lbl += " - "+slotCal+" Kcal"; }
                         mealTimes.add(new com.example.bepnhataapp.common.adapter.MealTimeListAdapter.MealTimeWithMeals(lbl, rows));
                     }
                 }

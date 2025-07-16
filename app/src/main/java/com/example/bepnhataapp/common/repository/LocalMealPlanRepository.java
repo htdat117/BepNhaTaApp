@@ -431,14 +431,22 @@ public class LocalMealPlanRepository implements MealPlanRepository {
         MealTimeDao timeDao = new MealTimeDao(ctx);
         MealRecipeDao recDao = new MealRecipeDao(ctx);
 
-        MealDay day = dayDao.getByDate(date.toString());
-        if(day == null) return;
+        // Lặp qua TẤT CẢ MealDay của ngày (có thể thuộc nhiều MealPlan khác nhau)
+        java.util.List<MealDay> days = dayDao.getAllByDate(date.toString());
+        for(MealDay d : days){
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(d.getMealDayID());
+            for(com.example.bepnhataapp.common.model.MealTime t: times){
+                if(mealType.equalsIgnoreCase(t.getMealType())){
+                    // Xoá tất cả công thức trong MealTime trước
+                    recDao.deleteByMealTime(t.getMealTimeID());
+                    // Sau đó xoá MealTime
+                    timeDao.delete(t.getMealTimeID());
+                }
+            }
 
-        java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(day.getMealDayID());
-        for(com.example.bepnhataapp.common.model.MealTime t: times){
-            if(mealType.equalsIgnoreCase(t.getMealType())){
-                recDao.deleteByMealTime(t.getMealTimeID());
-                timeDao.delete(t.getMealTimeID());
+            // Kiểm tra nếu MealDay này không còn MealTime nào → xoá luôn MealDay để giữ DB sạch
+            if(timeDao.getByMealDay(d.getMealDayID()).isEmpty()){
+                dayDao.delete(d.getMealDayID());
             }
         }
     }
@@ -466,29 +474,220 @@ public class LocalMealPlanRepository implements MealPlanRepository {
         MealDayDao dayDao = new MealDayDao(ctx);
         MealTimeDao timeDao = new MealTimeDao(ctx);
         MealRecipeDao recDao = new MealRecipeDao(ctx);
-        com.example.bepnhataapp.common.dao.IngredientDao ingDao = new com.example.bepnhataapp.common.dao.IngredientDao(ctx);
+        com.example.bepnhataapp.common.dao.ProductDetailDao pdDao = new com.example.bepnhataapp.common.dao.ProductDetailDao(ctx);
+        com.example.bepnhataapp.common.dao.ProductDao productDao = new com.example.bepnhataapp.common.dao.ProductDao(ctx);
 
-        MealDay day = dayDao.getByDate(date.toString());
-        if(day == null) return;
+        // Lấy tất cả MealDay của ngày (phòng trường hợp meal nằm ở nhiều kế hoạch)
+        java.util.List<MealDay> days = dayDao.getAllByDate(date.toString());
+        java.util.Set<Long> addedProductIds = new java.util.HashSet<>(); // tránh thêm trùng cùng product
 
-        java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(day.getMealDayID());
-        java.util.List<com.example.bepnhataapp.common.model.Ingredient> ingredientsToAdd = new java.util.ArrayList<>();
-        for(com.example.bepnhataapp.common.model.MealTime t: times){
-            if(mealType.equalsIgnoreCase(t.getMealType())){
+        for(MealDay d : days){
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(d.getMealDayID());
+            for(com.example.bepnhataapp.common.model.MealTime t: times){
+                if(!mealType.equalsIgnoreCase(t.getMealType())) continue;
+
                 java.util.List<com.example.bepnhataapp.common.model.MealRecipe> recipes = recDao.getRecipesForMealTime(t.getMealTimeID());
                 for(com.example.bepnhataapp.common.model.MealRecipe mr: recipes){
-                    ingredientsToAdd.addAll(ingDao.getByRecipe(mr.getRecipeID()));
+                    // Tìm Product gắn với recipe này
+                    com.example.bepnhataapp.common.model.ProductDetail pd = pdDao.getByRecipeId(mr.getRecipeID());
+                    if(pd == null) continue; // bỏ qua nếu chưa mapping
+
+                    com.example.bepnhataapp.common.model.Product product = productDao.getById(pd.getProductID());
+                    if(product == null) continue;
+
+                    // Đảm bảo không thêm trùng sản phẩm
+                    if(addedProductIds.contains(product.getProductID())) continue;
+
+                    com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product);
+                    addedProductIds.add(product.getProductID());
                 }
             }
         }
+    }
 
-        // Convert ingredients to products and add to cart helper
-        for(com.example.bepnhataapp.common.model.Ingredient ing: ingredientsToAdd){
-            com.example.bepnhataapp.common.model.Product product = new com.example.bepnhataapp.common.model.Product();
-            product.setProductID(ing.getIngredientID());
-            product.setProductName(ing.getIngredientName());
-            product.setProductPrice(0);
-            com.example.bepnhataapp.common.utils.CartHelper.addProduct(context, product);
+    @Override
+    public void deleteRecipe(java.time.LocalDate date, String mealType, long recipeId){
+        MealDayDao dayDao = new MealDayDao(ctx);
+        MealTimeDao timeDao = new MealTimeDao(ctx);
+        MealRecipeDao recDao = new MealRecipeDao(ctx);
+
+        java.util.List<com.example.bepnhataapp.common.model.MealDay> days = dayDao.getAllByDate(date.toString());
+        for(com.example.bepnhataapp.common.model.MealDay d : days){
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(d.getMealDayID());
+            for(com.example.bepnhataapp.common.model.MealTime t : times){
+                if(!mealType.equalsIgnoreCase(t.getMealType())) continue;
+
+                // delete mapping
+                java.util.List<com.example.bepnhataapp.common.model.MealRecipe> recipes = recDao.getRecipesForMealTime(t.getMealTimeID());
+                for(com.example.bepnhataapp.common.model.MealRecipe mr : recipes){
+                    if(mr.getRecipeID() == recipeId){
+                        ctx.getApplicationContext(); // no op just to use ctx reference avoid warnings
+                        // direct delete by executing SQL
+                        helperDeleteMealRecipe(recDao, t.getMealTimeID(), recipeId);
+                        break;
+                    }
+                }
+
+                // Giữ lại MealTime rỗng để slot vẫn hiển thị dưới dạng trống
+            }
+
+            // Nếu MealDay rỗng -> xoá
+            boolean stillHas = false;
+            for(com.example.bepnhataapp.common.model.MealTime t : timeDao.getByMealDay(d.getMealDayID())){
+                if(!recDao.getRecipesForMealTime(t.getMealTimeID()).isEmpty()) { stillHas = true; break; }
+            }
+            if(!stillHas){
+                dayDao.delete(d.getMealDayID());
+            }
+        }
+    }
+
+    // Helper to delete single recipe mapping
+    private void helperDeleteMealRecipe(MealRecipeDao recDao, long mealTimeId, long recipeId){
+        ctx.getApplicationContext();
+        android.database.sqlite.SQLiteDatabase db = new com.example.bepnhataapp.common.databases.DBHelper(ctx).getWritableDatabase();
+        db.delete(com.example.bepnhataapp.common.databases.DBHelper.TBL_MEAL_RECIPES, "mealTimeID=? AND recipeID=?", new String[]{String.valueOf(mealTimeId), String.valueOf(recipeId)});
+    }
+
+    @Override
+    public long changeRecipe(java.time.LocalDate date, String mealType, long recipeId){
+        MealDayDao dayDao = new MealDayDao(ctx);
+        MealTimeDao timeDao = new MealTimeDao(ctx);
+        MealRecipeDao recDao = new MealRecipeDao(ctx);
+        com.example.bepnhataapp.common.dao.RecipeDao recipeDao = new com.example.bepnhataapp.common.dao.RecipeDao(ctx);
+
+        java.util.List<com.example.bepnhataapp.common.model.RecipeEntity> all = recipeDao.getAllRecipes();
+        if(all.isEmpty()) return -1;
+
+        java.util.Random rnd = new java.util.Random();
+        long newId = recipeId;
+        int tries = 0;
+        while(newId == recipeId && tries < 10){
+            int idx = rnd.nextInt(all.size());
+            newId = all.get(idx).getRecipeID();
+            tries++;
+        }
+        if(newId == recipeId) return -1; // couldn't find different
+
+        java.util.List<com.example.bepnhataapp.common.model.MealDay> days = dayDao.getAllByDate(date.toString());
+        for(com.example.bepnhataapp.common.model.MealDay d : days){
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(d.getMealDayID());
+            for(com.example.bepnhataapp.common.model.MealTime t: times){
+                if(!mealType.equalsIgnoreCase(t.getMealType())) continue;
+
+                // tìm mapping cũ
+                java.util.List<com.example.bepnhataapp.common.model.MealRecipe> recipes = recDao.getRecipesForMealTime(t.getMealTimeID());
+                for(com.example.bepnhataapp.common.model.MealRecipe mr: recipes){
+                    if(mr.getRecipeID()==recipeId){
+                        // xoá cũ
+                        helperDeleteMealRecipe(recDao, t.getMealTimeID(), recipeId);
+                        // thêm mới
+                        recDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(t.getMealTimeID(), newId));
+                        break;
+                    }
+                }
+            }
+        }
+        return newId;
+    }
+
+    @Override
+    public void moveRecipeToDate(java.time.LocalDate curDate, String mealType, long recipeId, java.time.LocalDate targetDate){
+        MealDayDao dayDao = new MealDayDao(ctx);
+        MealTimeDao timeDao = new MealTimeDao(ctx);
+        MealRecipeDao recDao = new MealRecipeDao(ctx);
+
+        // B1: Tìm MealTime nguồn và MealPlanID
+        com.example.bepnhataapp.common.model.MealTime sourceTime = null;
+        long planId = -1;
+        java.util.List<com.example.bepnhataapp.common.model.MealDay> curDays = dayDao.getAllByDate(curDate.toString());
+        for(com.example.bepnhataapp.common.model.MealDay d : curDays){
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(d.getMealDayID());
+            for(com.example.bepnhataapp.common.model.MealTime t: times){
+                if(mealType.equalsIgnoreCase(t.getMealType())){
+                    for(com.example.bepnhataapp.common.model.MealRecipe mr: recDao.getRecipesForMealTime(t.getMealTimeID())){
+                        if(mr.getRecipeID()==recipeId){
+                            sourceTime = t;
+                            planId = d.getMealPlanID();
+                            helperDeleteMealRecipe(recDao, t.getMealTimeID(), recipeId);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(sourceTime == null) return;
+
+        // B2: Tạo hoặc lấy MealDay đích
+        com.example.bepnhataapp.common.model.MealDay targetDay = null;
+        java.util.List<com.example.bepnhataapp.common.model.MealDay> targetDays = dayDao.getAllByDate(targetDate.toString());
+        for(com.example.bepnhataapp.common.model.MealDay d: targetDays){
+            if(d.getMealPlanID()==planId){ targetDay = d; break; }
+        }
+        if(targetDay==null){
+            targetDay = new com.example.bepnhataapp.common.model.MealDay(planId, targetDate.toString(), null);
+            long id = dayDao.insert(targetDay);
+            targetDay.setMealDayID(id);
+        }
+
+        // B3: Tạo hoặc lấy MealTime đích
+        com.example.bepnhataapp.common.model.MealTime targetTime = null;
+        for(com.example.bepnhataapp.common.model.MealTime t: timeDao.getByMealDay(targetDay.getMealDayID())){
+            if(mealType.equalsIgnoreCase(t.getMealType())){ targetTime = t; break; }
+        }
+        if(targetTime==null){
+            targetTime = new com.example.bepnhataapp.common.model.MealTime(targetDay.getMealDayID(), mealType, null);
+            long tid = timeDao.insert(targetTime);
+            targetTime.setMealTimeID(tid);
+        }
+
+        // B4: Insert mapping mới
+        recDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(targetTime.getMealTimeID(), recipeId));
+    }
+
+    @Override
+    public void moveRecipeToMeal(java.time.LocalDate date, String fromMealType, long recipeId, String targetMealType){
+        if(fromMealType.equalsIgnoreCase(targetMealType)) return;
+        MealDayDao dayDao = new MealDayDao(ctx);
+        MealTimeDao timeDao = new MealTimeDao(ctx);
+        MealRecipeDao recDao = new MealRecipeDao(ctx);
+
+        // Lấy tất cả MealDay ngày
+        java.util.List<com.example.bepnhataapp.common.model.MealDay> days = dayDao.getAllByDate(date.toString());
+        for(com.example.bepnhataapp.common.model.MealDay d: days){
+            com.example.bepnhataapp.common.model.MealTime fromTime = null;
+            com.example.bepnhataapp.common.model.MealTime toTime = null;
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(d.getMealDayID());
+            for(com.example.bepnhataapp.common.model.MealTime t: times){
+                if(fromMealType.equalsIgnoreCase(t.getMealType())) fromTime = t;
+                if(targetMealType.equalsIgnoreCase(t.getMealType())) toTime = t;
+            }
+            if(fromTime==null) continue;
+
+            if(toTime==null){
+                toTime = new com.example.bepnhataapp.common.model.MealTime(d.getMealDayID(), targetMealType, null);
+                long tid = timeDao.insert(toTime);
+                toTime.setMealTimeID(tid);
+            }
+
+            // Xoá khỏi from
+            helperDeleteMealRecipe(recDao, fromTime.getMealTimeID(), recipeId);
+
+            // Thêm vào to
+            recDao.insert(new com.example.bepnhataapp.common.model.MealRecipe(toTime.getMealTimeID(), recipeId));
+        }
+    }
+
+    @Override
+    public void addIngredientsForRecipe(long recipeId, android.content.Context ctx){
+        com.example.bepnhataapp.common.dao.IngredientDao ingDao = new com.example.bepnhataapp.common.dao.IngredientDao(this.ctx);
+        java.util.List<com.example.bepnhataapp.common.model.Ingredient> ings = ingDao.getByRecipe(recipeId);
+        for(com.example.bepnhataapp.common.model.Ingredient ing : ings){
+            com.example.bepnhataapp.common.model.Product p = new com.example.bepnhataapp.common.model.Product();
+            p.setProductID(ing.getIngredientID());
+            p.setProductName(ing.getIngredientName());
+            p.setProductPrice(0);
+            com.example.bepnhataapp.common.utils.CartHelper.addProduct(ctx, p);
         }
     }
 } 

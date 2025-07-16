@@ -53,6 +53,7 @@ public class LoadMealPlanReviewActivity extends BaseActivity implements BaseActi
             ((TextView) findViewById(R.id.tvDetailCarbs)).setText(info.avgCarbs + "g");
             ((TextView) findViewById(R.id.tvDetailFat)).setText(info.avgFat + "g");
             ((TextView) findViewById(R.id.tvDetailProtein)).setText(info.avgProtein + "g");
+            setupPreviewList(info.mealPlanId);
         }
 
         ((TextView) findViewById(R.id.tvDetailLoadDate)).setText(selectedDateFinal != null ? buildVietnameseDateString(selectedDateFinal) : "");
@@ -171,5 +172,52 @@ public class LoadMealPlanReviewActivity extends BaseActivity implements BaseActi
 
         targetPlan.setTotalDays(dayDao.getByMealPlan(targetPlan.getMealPlanID()).size());
         mpDao.update(targetPlan);
+    }
+
+    private void setupPreviewList(long templatePlanId){
+        androidx.recyclerview.widget.RecyclerView rv = findViewById(R.id.rvPreview);
+        if(rv==null) return;
+        rv.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+        java.util.List<com.example.bepnhataapp.common.adapter.DayPreviewAdapter.DayData> dayDataList = new java.util.ArrayList<>();
+
+        com.example.bepnhataapp.common.dao.MealDayDao dayDao = new com.example.bepnhataapp.common.dao.MealDayDao(this);
+        com.example.bepnhataapp.common.dao.MealTimeDao timeDao = new com.example.bepnhataapp.common.dao.MealTimeDao(this);
+        com.example.bepnhataapp.common.dao.MealRecipeDao recDao = new com.example.bepnhataapp.common.dao.MealRecipeDao(this);
+        com.example.bepnhataapp.common.dao.RecipeDao recipeDao = new com.example.bepnhataapp.common.dao.RecipeDao(this);
+
+        java.util.List<com.example.bepnhataapp.common.model.MealDay> days = dayDao.getByMealPlan(templatePlanId);
+        java.util.Collections.sort(days, (a,b)-> a.getDate().compareTo(b.getDate()));
+
+        for(com.example.bepnhataapp.common.model.MealDay d : days){
+            java.util.List<com.example.bepnhataapp.common.model.MealTime> times = timeDao.getByMealDay(d.getMealDayID());
+            java.util.List<com.example.bepnhataapp.common.adapter.MealTimeListAdapter.MealTimeWithMeals> mealTimesList = new java.util.ArrayList<>();
+            for(com.example.bepnhataapp.common.model.MealTime t : times){
+                java.util.List<com.example.bepnhataapp.common.adapter.MealAdapter.MealRow> rows = new java.util.ArrayList<>();
+                for(com.example.bepnhataapp.common.model.MealRecipe mr : recDao.getRecipesForMealTime(t.getMealTimeID())){
+                    com.example.bepnhataapp.common.model.RecipeEntity re = recipeDao.getById(mr.getRecipeID());
+                    String name = re!=null? re.getRecipeName():"Món";
+                    String url = re!=null? re.getImageThumb():null;
+                    if(url!=null && url.startsWith("http"))
+                        rows.add(new com.example.bepnhataapp.common.adapter.MealAdapter.MealRow(name, url));
+                    else {
+                        int res = getResources().getIdentifier(url!=null?url.trim():"",
+                                "drawable", getPackageName());
+                        if(res==0) res = com.example.bepnhataapp.R.drawable.placeholder_banner_background;
+                        rows.add(new com.example.bepnhataapp.common.adapter.MealAdapter.MealRow(name, res));
+                    }
+                }
+                if(!rows.isEmpty()){
+                    String label = t.getMealType();
+                    mealTimesList.add(new com.example.bepnhataapp.common.adapter.MealTimeListAdapter.MealTimeWithMeals(label, rows));
+                }
+            }
+            if(!mealTimesList.isEmpty()){
+                String vietnameseDate = buildVietnameseDateString(java.time.LocalDate.parse(d.getDate()));
+                dayDataList.add(new com.example.bepnhataapp.common.adapter.DayPreviewAdapter.DayData(vietnameseDate, mealTimesList));
+            }
+        }
+
+        com.example.bepnhataapp.common.adapter.DayPreviewAdapter adapter = new com.example.bepnhataapp.common.adapter.DayPreviewAdapter(dayDataList);
+        rv.setAdapter(adapter);
     }
 } 

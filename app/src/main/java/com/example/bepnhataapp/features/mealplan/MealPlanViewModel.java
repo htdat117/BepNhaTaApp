@@ -107,4 +107,28 @@ public class MealPlanViewModel extends ViewModel {
     public void addIngredientsToCart(LocalDate date, String mealType, android.content.Context ctx){
         repository.addIngredientsToCart(date, mealType, ctx);
     }
+
+    public void deleteRecipe(LocalDate date, String mealType, long recipeId){
+        repository.deleteRecipe(date, mealType, recipeId);
+        refresh();
+    }
+
+    public void changeRecipe(LocalDate date, String mealType, long recipeId){
+        repository.changeRecipe(date, mealType, recipeId);
+        refresh();
+    }
+
+    public void moveRecipeToDate(LocalDate curDate, String mealType, long recipeId, LocalDate targetDate){
+        repository.moveRecipeToDate(curDate, mealType, recipeId, targetDate);
+        refresh();
+    }
+
+    public void moveRecipeToMeal(LocalDate date, String fromMealType, long recipeId, String targetMealType){
+        repository.moveRecipeToMeal(date, fromMealType, recipeId, targetMealType);
+        refresh();
+    }
+
+    public void addIngredientsForRecipe(long recipeId, android.content.Context ctx){
+        repository.addIngredientsForRecipe(recipeId, ctx);
+    }
 } 

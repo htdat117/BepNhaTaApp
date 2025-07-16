@@ -265,6 +265,17 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
             e.printStackTrace();
         }
 
+        // Ẩn / hiện tuỳ chọn "Xoá ghi chú" tuỳ theo ngày hiện tại có ghi chú hay không
+        try {
+            com.example.bepnhataapp.common.dao.MealDayDao dayDaoCheck = new com.example.bepnhataapp.common.dao.MealDayDao(this);
+            java.util.List<com.example.bepnhataapp.common.model.MealDay> daysCheck = dayDaoCheck.getAllByDate(currentDate.toString());
+            boolean hasNote = false;
+            for(com.example.bepnhataapp.common.model.MealDay dDay: daysCheck){
+                if(dDay.getNote()!=null && !dDay.getNote().trim().isEmpty()) { hasNote = true; break; }
+            }
+            popup.getMenu().findItem(R.id.menu_delete_note).setVisible(hasNote);
+        } catch (Exception ignored) {}
+
         popup.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.menu_refresh_day) {
@@ -333,6 +344,27 @@ public class MealPlanContentActivity extends BaseActivity implements BaseActivit
                     })
                     .setNegativeButton("Huỷ", null)
                     .show();
+            } else if (id == R.id.menu_delete_note) {
+                new AlertDialog.Builder(this)
+                     .setTitle("Xoá ghi chú")
+                     .setMessage("Bạn có chắc chắn muốn xoá ghi chú cho ngày này không?")
+                     .setPositiveButton("Xoá", (d, w) -> {
+                        new Thread(() -> {
+                            com.example.bepnhataapp.common.dao.MealDayDao dDao = new com.example.bepnhataapp.common.dao.MealDayDao(getApplicationContext());
+                            java.util.List<com.example.bepnhataapp.common.model.MealDay> days = dDao.getAllByDate(currentDate.toString());
+                            for(com.example.bepnhataapp.common.model.MealDay dDay: days){
+                                dDay.setNote(null);
+                                dDao.update(dDay);
+                            }
+                            runOnUiThread(() -> {
+                                mealPlanViewModel.refresh();
+                                refreshDayView();
+                                android.widget.Toast.makeText(this, "Đã xoá ghi chú", android.widget.Toast.LENGTH_SHORT).show();
+                            });
+                        }).start();
+                     })
+                     .setNegativeButton("Huỷ", null)
+                     .show();
             } else if (id == R.id.menu_delete_day) {
                 new AlertDialog.Builder(this)
                     .setTitle("Xác nhận xoá")

@@ -32,6 +32,11 @@
         android:icon="@android:drawable/ic_menu_edit"/>
 
     <item
+        android:id="@+id/menu_delete_note"
+        android:title="Xoá ghi chú"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"/>
+
+    <item
         android:id="@+id/menu_delete_day"
         android:title="Xoá thực đơn"
         android:icon="@android:drawable/ic_menu_delete"/>

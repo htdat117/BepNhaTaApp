@@ -84,6 +84,60 @@ public class TimelineFragment extends Fragment {
             }
 
             @Override
+            public void onDeleteRecipe(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId) {
+                new android.app.AlertDialog.Builder(getContext())
+                        .setTitle("Xoá món khỏi buổi")
+                        .setMessage("Bạn có chắc chắn muốn xoá món này ra khỏi buổi không?")
+                        .setPositiveButton("Xoá", (d, w) -> {
+                            MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                            java.time.LocalDate dt = ((MealPlanContentActivity) requireActivity()).getCurrentDate();
+                            vm.deleteRecipe(dt, slotToString(slot), recipeId);
+                        })
+                        .setNegativeButton("Huỷ", null)
+                        .show();
+            }
+
+            @Override
+            public void onChangeRecipe(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId) {
+                MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                java.time.LocalDate dt = ((MealPlanContentActivity) requireActivity()).getCurrentDate();
+                vm.changeRecipe(dt, slotToString(slot), recipeId);
+            }
+
+            @Override
+            public void onChangeDay(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId) {
+                java.time.LocalDate cur = ((MealPlanContentActivity) requireActivity()).getCurrentDate();
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                cal.set(cur.getYear(), cur.getMonthValue()-1, cur.getDayOfMonth());
+                new android.app.DatePickerDialog(getContext(), (dp, y, m, d) -> {
+                    java.time.LocalDate newDate = java.time.LocalDate.of(y, m+1, d);
+                    MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                    vm.moveRecipeToDate(cur, slotToString(slot), recipeId, newDate);
+                }, cal.get(java.util.Calendar.YEAR), cal.get(java.util.Calendar.MONTH), cal.get(java.util.Calendar.DAY_OF_MONTH)).show();
+            }
+
+            @Override
+            public void onMoveMeal(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot, long recipeId) {
+                String[] options = {"Sáng", "Trưa", "Tối", "Snack"};
+                new android.app.AlertDialog.Builder(getContext())
+                        .setTitle("Chọn bữa chuyển đến")
+                        .setItems(options, (d, which) -> {
+                            String target = options[which];
+                            MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                            java.time.LocalDate dt = ((MealPlanContentActivity) requireActivity()).getCurrentDate();
+                            vm.moveRecipeToMeal(dt, slotToString(slot), recipeId, target);
+                        })
+                        .show();
+            }
+
+            @Override
+            public void onBuyIngredients(long recipeId) {
+                MealPlanViewModel vm = new ViewModelProvider(requireActivity()).get(MealPlanViewModel.class);
+                vm.addIngredientsForRecipe(recipeId, getContext());
+                android.widget.Toast.makeText(getContext(), "Đã thêm vào giỏ hàng", android.widget.Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
             public void onSetReminder(com.example.bepnhataapp.common.model.DayPlan.MealTimeEnum slot) {
                 java.util.Calendar cal = java.util.Calendar.getInstance();
                 new android.app.TimePickerDialog(getContext(), (tp, hour, minute) -> {
@@ -148,30 +202,25 @@ public class TimelineFragment extends Fragment {
                     for (android.util.Pair<DayPlan.MealTimeEnum, Meal> p : day.meals) {
                         if (p.first == slot) {
                             Meal m = p.second;
+                            if(m.id==0) continue; // skip placeholder mục trống
                             if(m.imageUrl!=null){
-                                recipes.add(new MealTimeAdapter.RecipeItem(m.imageUrl, m.title, m.calories));
+                                recipes.add(new MealTimeAdapter.RecipeItem(m.id, m.imageUrl, m.title, m.calories));
                             } else {
-                                recipes.add(new MealTimeAdapter.RecipeItem(m.imageResId, m.title, m.calories));
+                                recipes.add(new MealTimeAdapter.RecipeItem(m.id, m.imageResId, m.title, m.calories));
                             }
                             cals += m.calories;
                         }
                     }
-                    // Bỏ qua section nếu chỉ toàn placeholder "Chưa có món"
-                    boolean onlyPlaceholder = true;
-                    for(MealTimeAdapter.RecipeItem it : recipes){
-                        if(it.name != null && !"Chưa có món".equalsIgnoreCase(it.name.trim())){
-                            onlyPlaceholder = false; break;
-                        }
-                    }
-                    if (!recipes.isEmpty() && !onlyPlaceholder) {
-                        String title;
+                    // Luôn thêm section kể cả khi danh sách món trống
+                    {
+                        String lbl;
                         switch (slot) {
-                            case BREAKFAST: title = "Bữa sáng"; break;
-                            case LUNCH: title = "Bữa trưa"; break;
-                            case DINNER: title = "Bữa tối"; break;
-                            default: title = "Ăn nhẹ"; break;
+                            case BREAKFAST: lbl = "Bữa sáng"; break;
+                            case LUNCH: lbl = "Bữa trưa"; break;
+                            case DINNER: lbl = "Bữa tối"; break;
+                            default: lbl = "Ăn nhẹ"; break;
                         }
-                        sections.add(new MealTimeAdapter.MealTimeSection(title, cals, recipes, slot));
+                        sections.add(new MealTimeAdapter.MealTimeSection(lbl, cals, recipes, slot));
                     }
                 }
             }
